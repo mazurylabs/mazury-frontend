@@ -83,7 +83,7 @@ const Profile: NextPage<Props> = ({ address }) => {
       <hr />
 
       <div className='flex py-10 px-24 gap-12'>
-        <div className='flex flex-col gap-4 justify-start'>
+        <div className='flex flex-col gap-4 justify-start w-2/12'>
           {profileSections.map((sectionName) => (
             <NavButton
               key={sectionName}
@@ -95,7 +95,7 @@ const Profile: NextPage<Props> = ({ address }) => {
           ))}
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-10/12'>
           <h3 className='text-lg font-bold'>Recent activity</h3>
           <div className='mt-4 flex flex-col gap-8'>
             <div className='flex gap-8'>

@@ -10,7 +10,9 @@ interface Props {
 }
 
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
-  const baseString = `text-black px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 bg-opacity-3 hover:bg-opacity-3 flex gap-4 ${
+  const baseString = `${
+    !active && 'text-black'
+  } px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 bg-opacity-3 hover:bg-opacity-3 flex gap-4 ${
     active && 'font-bold'
   }`;
 
