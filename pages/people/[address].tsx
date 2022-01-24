@@ -2,9 +2,8 @@ import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { useEnsLookup } from 'wagmi';
-import { Button, Avatar } from '../../components';
-import { NavButton } from '../../components/NavButton';
-import { Color, ColorName, ProfileSections } from '../../types';
+import { Button, Avatar, NavButton } from '../../components';
+import { ColorName, ProfileSection } from '../../types';
 import { getTruncatedAddress } from '../../utils';
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
   ens?: string;
 }
 
-const profileSections: ProfileSections[] = [
+const profileSections: ProfileSection[] = [
   'Activity',
   'Badges',
   'Referrals',
@@ -20,7 +19,7 @@ const profileSections: ProfileSections[] = [
   'DAOs',
 ];
 
-const sectionToColor: { [key in ProfileSections]: ColorName } = {
+const sectionToColor: { [key in ProfileSection]: ColorName } = {
   Activity: 'purple',
   Badges: 'pink',
   Referrals: 'green',
@@ -33,7 +32,7 @@ const Profile: NextPage<Props> = ({ address }) => {
     address,
   });
   const [activeSection, setActiveSection] =
-    React.useState<ProfileSections>('Activity');
+    React.useState<ProfileSection>('Activity');
 
   return (
     <div>

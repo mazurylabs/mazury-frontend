@@ -5,4 +5,4 @@ export interface Color {
   hex: string;
 }
 
-export type ProfileSections = 'Activity' | 'Badges' | 'Referrals' | 'Blog posts' | 'DAOs';
+export type ProfileSection = 'Activity' | 'Badges' | 'Referrals' | 'Blog posts' | 'DAOs';

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
-import { ColorName, ProfileSections as Labels } from '../types';
+import { ColorName, ProfileSection as Labels } from '../types';
+import Badge from '../public/icons/badge.svg';
 
 interface Props {
   label: Labels;
