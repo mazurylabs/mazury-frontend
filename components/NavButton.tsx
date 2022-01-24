@@ -8,11 +8,13 @@ interface Props {
   label: Labels;
   color?: ColorName;
   onClick?: () => void;
+  active?: boolean;
 }
 
-const getClassName = (color: ColorName = 'black') => {
-  const baseString =
-    'text-black px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 hover:bg-opacity-3 flex gap-4';
+const getClassName = (color: ColorName = 'black', active: boolean = false) => {
+  const baseString = `text-black px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 hover:bg-opacity-3 flex gap-4 ${
+    active && 'font-bold'
+  }`;
 
   switch (color) {
     case 'purple':
@@ -55,9 +57,14 @@ const labelToIconName = {
   DAOs: 'zap',
 };
 
-export const NavButton: React.FC<Props> = ({ label, color, onClick }) => {
+export const NavButton: React.FC<Props> = ({
+  label,
+  color,
+  onClick,
+  active = false,
+}) => {
   return (
-    <button className={getClassName(color)} onClick={onClick}>
+    <button className={getClassName(color, active)} onClick={onClick}>
       <Image
         src={`/icons/${labelToIconName[label]}.svg`}
         width={24}
@@ -65,7 +72,7 @@ export const NavButton: React.FC<Props> = ({ label, color, onClick }) => {
         alt={`${label} icon`}
         className={getIconClassName(color)}
       />
-      {label}
+      {label.toUpperCase()}
     </button>
   );
 };

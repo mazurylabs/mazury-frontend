@@ -64,7 +64,7 @@ const Profile: NextPage<Props> = ({ address }) => {
 
       <div className='flex py-10 px-24 gap-12'>
         <div className='flex flex-col gap-4 justify-start'>
-          <NavButton label='Activity' color='purple' />
+          <NavButton label='Activity' color='purple' active />
           <NavButton label='Badges' color='pink' />
           <NavButton label='Referrals' color='green' />
           <NavButton label='Blog posts' color='brown' />
