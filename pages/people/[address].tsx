@@ -1,8 +1,10 @@
 import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
+import React from 'react';
 import { useEnsLookup } from 'wagmi';
 import { Button, Avatar } from '../../components';
 import { NavButton } from '../../components/NavButton';
+import { Color, ColorName, ProfileSections } from '../../types';
 import { getTruncatedAddress } from '../../utils';
 
 interface Props {
@@ -10,10 +12,28 @@ interface Props {
   ens?: string;
 }
 
+const profileSections: ProfileSections[] = [
+  'Activity',
+  'Badges',
+  'Referrals',
+  'Blog posts',
+  'DAOs',
+];
+
+const sectionToColor: { [key in ProfileSections]: ColorName } = {
+  Activity: 'purple',
+  Badges: 'pink',
+  Referrals: 'green',
+  'Blog posts': 'brown',
+  DAOs: 'lemon',
+};
+
 const Profile: NextPage<Props> = ({ address }) => {
   const [{ data: ens }] = useEnsLookup({
     address,
   });
+  const [activeSection, setActiveSection] =
+    React.useState<ProfileSections>('Activity');
 
   return (
     <div>
@@ -64,17 +84,15 @@ const Profile: NextPage<Props> = ({ address }) => {
 
       <div className='flex py-10 px-24 gap-12'>
         <div className='flex flex-col gap-4 justify-start'>
-          <NavButton label='Activity' color='purple' active />
-          <NavButton label='Badges' color='pink' />
-          <NavButton label='Referrals' color='green' />
-          <NavButton label='Blog posts' color='brown' />
-          <NavButton label='DAOs' color='lemon' />
-          {/* <p className='text-purple'>purple</p>
-          <p className='text-pink'>pink</p>
-          <p className='text-green'>green</p>
-          <p className='text-brown'>brown</p>
-          <p className='text-lemon'>lemon</p> */}
-
+          {profileSections.map((sectionName) => (
+            <NavButton
+              key={sectionName}
+              label={sectionName}
+              active={sectionName === activeSection}
+              color={sectionToColor[sectionName]}
+              onClick={() => setActiveSection(sectionName)}
+            />
+          ))}
         </div>
 
         <div className='flex flex-col'>

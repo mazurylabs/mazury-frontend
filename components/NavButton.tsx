@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { ColorName } from '../types';
-
-type Labels = 'Activity' | 'Badges' | 'Referrals' | 'Blog posts' | 'DAOs';
+import { ColorName, ProfileSections as Labels } from '../types';
 
 interface Props {
   label: Labels;
@@ -12,23 +10,35 @@ interface Props {
 }
 
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
-  const baseString = `text-black px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 hover:bg-opacity-3 flex gap-4 ${
+  const baseString = `text-black px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 bg-opacity-3 hover:bg-opacity-3 flex gap-4 ${
     active && 'font-bold'
   }`;
 
   switch (color) {
     case 'purple':
-      return `${baseString} hover:text-purple hover:bg-purple`;
+      return `${baseString} hover:text-purple hover:bg-purple ${
+        active && 'text-purple bg-purple'
+      }`;
     case 'pink':
-      return `${baseString} hover:text-pink hover:bg-pink`;
+      return `${baseString} hover:text-pink hover:bg-pink ${
+        active && 'text-pink bg-pink'
+      }`;
     case 'green':
-      return `${baseString} hover:text-green hover:bg-green`;
+      return `${baseString} hover:text-green hover:bg-green ${
+        active && 'text-green bg-green'
+      }`;
     case 'brown':
-      return `${baseString} hover:text-brown hover:bg-brown`;
+      return `${baseString} hover:text-brown hover:bg-brown ${
+        active && 'text-brown bg-brown'
+      }`;
     case 'lemon':
-      return `${baseString} hover:text-lemon hover:bg-lemon`;
+      return `${baseString} hover:text-lemon hover:bg-lemon ${
+        active && 'text-lemon bg-lemon'
+      }`;
     default:
-      return `${baseString} hover:text-black hover:bg-black`;
+      return `${baseString} hover:text-black hover:bg-black ${
+        active && 'text-black bg-black'
+      }`;
   }
 };
 
