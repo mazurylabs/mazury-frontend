@@ -35,7 +35,7 @@ const sectionToColor: { [key in ProfileSection]: ColorName } = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
-  const { profile, error } = useProfile(address);
+  const { profile, badges, error } = useProfile(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -171,29 +171,17 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div className='w-1/2'>
               <h3 className='mt-8 text-lg font-bold'>Recent badges</h3>
               <div className='flex mt-4 gap-8'>
-                <div className='flex flex-col'>
-                  <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                  <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                  <p className='text-sm'>Moon school</p>
-                </div>
-
-                <div className='flex flex-col'>
-                  <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                  <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                  <p className='text-sm'>Moon school</p>
-                </div>
-
-                <div className='flex flex-col'>
-                  <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                  <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                  <p className='text-sm'>Moon school</p>
-                </div>
-
-                <div className='flex flex-col'>
-                  <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                  <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                  <p className='text-sm'>Moon school</p>
-                </div>
+                {badges?.slice(0, 3).map((badge) => {
+                  return (
+                    <div key={badge.id} className='flex flex-col'>
+                      <Avatar src={badge.badge_type.image} borderRadius='7px' />
+                      <p className='font-bold text-xl mt-2'>
+                        {badge.badge_type.title}
+                      </p>
+                      <p className='text-sm'>{badge.badge_type.description}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

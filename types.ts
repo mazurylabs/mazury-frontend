@@ -26,7 +26,7 @@ interface PersonBasicDetails {
   avatar: string;
 }
 
-interface BadgeType {
+export interface BadgeType {
   id: string;
   created_at: string;
   updated_at: string;
@@ -90,4 +90,11 @@ export interface Profile {
   onboarded: boolean;
   email: string;
   website: string;
+}
+
+export interface ListResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 }
