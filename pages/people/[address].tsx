@@ -34,6 +34,7 @@ const sectionToColor: { [key in ProfileSection]: ColorName } = {
 };
 
 const Profile: React.FC<Props> = ({ address }) => {
+  // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
@@ -56,7 +57,9 @@ const Profile: React.FC<Props> = ({ address }) => {
 
         <div className='flex flex-col gap-2'>
           <h1 className='font-bold text-4xl'>{profile.username}</h1>
-          <p>{profile.ens_name || getTruncatedAddress(profile.eth_address, 5)}</p>
+          <p>
+            {profile.ens_name || getTruncatedAddress(profile.eth_address, 5)}
+          </p>
 
           <div className='flex gap-6'>
             <Button>@{profile.twitter}</Button>
@@ -218,6 +221,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
       address: context.query.address,
+      // we pass a fallback to SWR so that it always has something to render and not show a loading indicator
       fallback: {
         [`/profiles/${address}`]: profile,
       },
