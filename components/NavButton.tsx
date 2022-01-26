@@ -64,9 +64,9 @@ const getIconClassName = (color: ColorName = 'black') => {
 
 const labelToIconName = {
   Activity: 'coffee',
-  Badges: 'badge',
-  Referrals: 'referrals',
-  'Blog posts': 'blog',
+  Badges: 'award',
+  Referrals: 'message-circle',
+  'Blog posts': 'edit',
   DAOs: 'zap',
 };
 
@@ -79,7 +79,9 @@ export const NavButton: React.FC<Props> = ({
   return (
     <button className={getClassName(color, active)} onClick={onClick}>
       <Image
-        src={`/icons/${labelToIconName[label]}.svg`}
+        src={`/icons/${labelToIconName[label]} ${
+          active ? 'coloured' : 'black'
+        }.svg`}
         width={24}
         height={24}
         alt={`${label} icon`}
