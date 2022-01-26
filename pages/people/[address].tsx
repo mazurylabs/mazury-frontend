@@ -35,7 +35,7 @@ const sectionToColor: { [key in ProfileSection]: ColorName } = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
-  const { profile, badges, error } = useProfile(address);
+  const { profile, error } = useProfile(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -171,7 +171,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div className='w-1/2'>
               <h3 className='mt-8 text-lg font-bold'>Recent badges</h3>
               <div className='flex mt-4 gap-8'>
-                {badges?.slice(0, 3).map((badge) => {
+                {profile.top_badges?.slice(0, 3).map((badge) => {
                   return (
                     <div key={badge.id} className='flex flex-col'>
                       <Avatar src={badge.badge_type.image} borderRadius='7px' />
