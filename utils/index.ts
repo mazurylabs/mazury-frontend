@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const getTruncatedAddress = (
   address: string,
   length: number = 10
@@ -6,3 +8,7 @@ export const getTruncatedAddress = (
     address.length - length
   )}`;
 };
+
+export const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});

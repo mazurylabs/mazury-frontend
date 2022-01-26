@@ -13,7 +13,7 @@ interface Props {
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
   const baseString = `${
     !active && 'text-black'
-  } px-6 py-2 rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 bg-opacity-3 hover:bg-opacity-3 flex gap-4 ${
+  } px-6 py-2 flex items-center rounded-lg bg-none hover:cursor-pointer transition-colors duration-500 bg-opacity-3 hover:bg-opacity-3 flex gap-4 ${
     active && 'font-bold'
   }`;
 
@@ -82,8 +82,8 @@ export const NavButton: React.FC<Props> = ({
         src={`/icons/${labelToIconName[label]} ${
           active ? 'coloured' : 'black'
         }.svg`}
-        width={24}
-        height={24}
+        width={18}
+        height={18}
         alt={`${label} icon`}
         className={getIconClassName(color)}
       />

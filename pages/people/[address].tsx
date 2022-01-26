@@ -1,14 +1,20 @@
 import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { useEnsLookup } from 'wagmi';
+import { SWRConfig } from 'swr';
 import { Button, Avatar, NavButton } from '../../components';
-import { ColorName, ProfileSection } from '../../types';
+import { useProfile } from '../../hooks/useProfile';
+import { ColorName, Profile as IProfile, ProfileSection } from '../../types';
 import { getTruncatedAddress } from '../../utils';
+import { getProfile } from '../../utils/api';
 
 interface Props {
   address: string;
   ens?: string;
+}
+
+interface PageProps extends Props {
+  fallback: IProfile;
 }
 
 const profileSections: ProfileSection[] = [
@@ -27,10 +33,8 @@ const sectionToColor: { [key in ProfileSection]: ColorName } = {
   DAOs: 'lemon',
 };
 
-const Profile: NextPage<Props> = ({ address }) => {
-  const [{ data: ens }] = useEnsLookup({
-    address,
-  });
+const Profile: React.FC<Props> = ({ address }) => {
+  const { profile, error } = useProfile(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -38,7 +42,7 @@ const Profile: NextPage<Props> = ({ address }) => {
     <div>
       <div className='flex gap-8 py-12 px-24 items-center'>
         <Button>&lt;</Button>
-        <p>{ens || getTruncatedAddress(address)}</p>
+        <p>{profile.username}</p>
 
         <input
           type='text'
@@ -51,13 +55,11 @@ const Profile: NextPage<Props> = ({ address }) => {
         <Avatar src='/avi.png' />
 
         <div className='flex flex-col gap-2'>
-          <h1 className='font-bold text-4xl'>
-            {ens || getTruncatedAddress(address, 5)}
-          </h1>
-          <p>{getTruncatedAddress(address, 5)}</p>
+          <h1 className='font-bold text-4xl'>{profile.username}</h1>
+          <p>{profile.ens_name || getTruncatedAddress(profile.eth_address, 5)}</p>
 
           <div className='flex gap-6'>
-            <Button>Twitter</Button>
+            <Button>@{profile.twitter}</Button>
             <Button>E-mail</Button>
             <Button>Discord</Button>
           </div>
@@ -200,12 +202,25 @@ const Profile: NextPage<Props> = ({ address }) => {
   );
 };
 
-export default Profile;
+const Page: NextPage<PageProps> = ({ fallback, address }) => {
+  return (
+    <SWRConfig value={{ fallback }}>
+      <Profile address={address} />
+    </SWRConfig>
+  );
+};
+
+export default Page;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const { address } = context.query;
+  const profile = await getProfile(address as string);
   return {
     props: {
       address: context.query.address,
+      fallback: {
+        [`/profiles/${address}`]: profile,
+      },
     },
   };
 };

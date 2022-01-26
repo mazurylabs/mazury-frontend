@@ -8,6 +8,9 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 import { Layout } from '../components';
+import { SWRConfig } from 'swr';
+import { api } from '../utils';
+import axios from 'axios';
 
 // Get environment variables
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
@@ -58,22 +61,35 @@ const webSocketProvider = ({ chainId }: ProviderConfig) =>
     ? new providers.InfuraWebSocketProvider(chainId, infuraId)
     : undefined;
 
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+const fetcher = async (url: string) => {
+  try {
+    const res = await axios.get(url);
+    return res.data;
+  } catch (err: any) {
+    throw err;
+  }
+};
+
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <Provider
-      autoConnect
-      connectors={connectors}
-      provider={provider}
-      webSocketProvider={webSocketProvider}
-    >
-      <NextHead>
-        <title>Mazury</title>
-      </NextHead>
+    <SWRConfig value={{ fetcher }}>
+      <Provider
+        autoConnect
+        connectors={connectors}
+        provider={provider}
+        webSocketProvider={webSocketProvider}
+      >
+        <NextHead>
+          <title>Mazury</title>
+        </NextHead>
 
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
+    </SWRConfig>
   );
 };
 
