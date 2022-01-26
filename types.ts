@@ -19,6 +19,25 @@ export type ProfileSection =
   | 'Blog posts'
   | 'DAOs';
 
+type Skill =
+  | 'frontendDev'
+  | 'backendDev'
+  | 'smartContractDev'
+  | 'protocolDev'
+  | 'design'
+  | 'growthMarketing'
+  | 'writing'
+  | 'productManagement'
+  | 'projectManagement'
+  | 'dataScience'
+  | 'art'
+  | 'defiDegen'
+  | 'nftDegen'
+  | 'teaching'
+  | 'memes'
+  | 'community'
+  | 'content';
+
 interface PersonBasicDetails {
   eth_address: string;
   ens_name: string;
@@ -46,7 +65,20 @@ export interface Badge {
   updated_at: string;
 }
 
-export interface Profile {
+export type MappedSkills<T> = {
+  [Key in Skill]: T;
+};
+
+export interface Referral extends MappedSkills<boolean> {
+  id: string;
+  receiver: PersonBasicDetails;
+  author: PersonBasicDetails;
+  created_at: string;
+  updated_at: string;
+  datetime: string;
+}
+
+export interface Profile extends MappedSkills<number> {
   id: string;
   top_badges: Badge[];
   referred_by: PersonBasicDetails[];
@@ -58,22 +90,6 @@ export interface Profile {
   username: string;
   ens_name: string;
   claimed: boolean;
-  frontendDev: number;
-  backendDev: number;
-  smartContractDev: number;
-  protocolDev: number;
-  design: number;
-  growthMarketing: number;
-  writing: number;
-  productManagement: number;
-  proejctManagement: number;
-  dataScience: number;
-  art: number;
-  defiDegen: number;
-  nftDegen: number;
-  teaching: number;
-  memes: number;
-  community: number;
   signing_nonce: number;
   verified: boolean;
   github: string;
