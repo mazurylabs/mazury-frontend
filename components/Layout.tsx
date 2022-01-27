@@ -11,7 +11,7 @@ export const Layout: React.FC = ({ children }) => {
     <div className='w-full flex'>
       {/* SIDEBAR ON THE LEFT */}
       {showSidebar && (
-        <aside className='w-2/12 sticky top-0 border-2 h-screen py-10 px-5'>
+        <aside className='w-1/12 sticky top-0 border-2 h-screen py-10 px-5'>
           <menu className='flex flex-col gap-12 mt-12 text-xl font-bold items-center'>
             <Link href='/' passHref>
               <a>Home</a>
@@ -30,7 +30,7 @@ export const Layout: React.FC = ({ children }) => {
       )}
 
       {/* APP */}
-      <main className='container w-10/12'>{children}</main>
+      <main className='container w-11/12'>{children}</main>
     </div>
   );
 };

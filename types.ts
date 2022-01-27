@@ -78,7 +78,20 @@ export interface Referral extends MappedSkills<boolean> {
   datetime: string;
 }
 
-export interface Profile extends MappedSkills<number> {
+export type Role =
+  | 'role_developer'
+  | 'role_designer'
+  | 'role_trader'
+  | 'role_creator'
+  | 'role_researcher'
+  | 'role_investor'
+  | 'role_community_manager';
+
+export type MappedRoles<T> = {
+  [Key in Role]: T;
+};
+
+export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {
   id: string;
   top_badges: Badge[];
   referred_by: PersonBasicDetails[];
@@ -96,13 +109,6 @@ export interface Profile extends MappedSkills<number> {
   twitter: string;
   github_last_checked: string;
   open_to_opportunities: boolean;
-  role_developer: boolean;
-  role_designer: boolean;
-  role_trader: boolean;
-  role_creator: boolean;
-  role_researcher: boolean;
-  role_investor: boolean;
-  role_community_manager: boolean;
   onboarded: boolean;
   email: string;
   website: string;

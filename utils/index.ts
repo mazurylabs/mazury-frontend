@@ -12,3 +12,7 @@ export const getTruncatedAddress = (
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
+
+export const goToLink = (link: string) => {
+  window.open(link, '_blank');
+};
