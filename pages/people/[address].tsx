@@ -2,7 +2,7 @@ import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { SWRConfig } from 'swr';
-import { Button, Avatar, NavButton } from '../../components';
+import { Button, Avatar, NavButton, ActivityPreview } from '../../components';
 import { BlueOutlineButton } from '../../components/Button';
 import { useProfile } from '../../hooks/useProfile';
 import {
@@ -15,7 +15,7 @@ import {
 import { getTruncatedAddress, goToLink } from '../../utils';
 import { getProfile } from '../../utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
-import Head from 'next/head'
+import Head from 'next/head';
 
 interface Props {
   address: string;
@@ -175,26 +175,25 @@ const Profile: React.FC<Props> = ({ address }) => {
 
           <div className='flex flex-col w-10/12'>
             <h3 className='text-3xl font-bold font-serif'>Activity</h3>
-            <div className='mt-4 flex flex-col gap-8'>
-              <div className='flex gap-8'>
-                <Avatar src='/blue-ph.png' width='80px' height='80px' />
-                <div className='flex flex-col justify-center'>
-                  <p className='text-sm'>Event</p>
-                  <p>
-                    Getting seen in web3 with Alec.eth (head of talent @
-                    ConsenSys mesh, building peepledao) — mazury community call
-                    #1
-                  </p>
-                </div>
-              </div>
-
-              <div className='flex gap-8'>
-                <Avatar src='/blue-ph.png' width='80px' height='80px' />
-                <div className='flex flex-col justify-center'>
-                  <p className='text-sm'>Vote</p>
-                  <p>Partnership & Mutual Grant with Gitcoin</p>
-                </div>
-              </div>
+            <div className='mt-8 flex flex-col gap-6 w-10/12'>
+              <ActivityPreview
+                activityType='event'
+                thumbnailSrc='/blue-ph.png'
+                label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
+                time='3 days ago'
+              />
+              <ActivityPreview
+                activityType='referral'
+                thumbnailSrc='/blue-ph.png'
+                label='Mikela wrote a referral for luc'
+                time='3 days ago'
+              />
+              <ActivityPreview
+                activityType='vote'
+                thumbnailSrc='/blue-ph.png'
+                label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
+                time='3 days ago'
+              />
             </div>
 
             <div className='flex gap-12 w-full'>
