@@ -23,8 +23,8 @@ const getClassName = (color: ColorName = 'black', active: boolean = false) => {
         active && 'text-purple bg-purple'
       }`;
     case 'pink':
-      return `${baseString} hover:text-pink hover:bg-pink ${
-        active && 'text-pink bg-pink'
+      return `${baseString} hover:text-pink-500 hover:bg-pink-500 ${
+        active && 'text-pink-500 bg-pink-500'
       }`;
     case 'green':
       return `${baseString} hover:text-green hover:bg-green ${
@@ -50,7 +50,7 @@ const getIconClassName = (color: ColorName = 'black') => {
     case 'purple':
       return 'text-purple';
     case 'pink':
-      return 'text-pink';
+      return 'text-pink-500';
     case 'green':
       return 'text-green';
     case 'brown':
