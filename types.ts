@@ -19,7 +19,7 @@ export type ProfileSection =
   | 'Blog posts'
   | 'DAOs';
 
-type Skill =
+export type Skill =
   | 'frontendDev'
   | 'backendDev'
   | 'smartContractDev'
@@ -35,8 +35,7 @@ type Skill =
   | 'nftDegen'
   | 'teaching'
   | 'memes'
-  | 'community'
-  | 'content';
+  | 'community';
 
 interface PersonBasicDetails {
   eth_address: string;
@@ -76,6 +75,7 @@ export interface Referral extends MappedSkills<boolean> {
   created_at: string;
   updated_at: string;
   datetime: string;
+  content: string;
 }
 
 export type Role =

@@ -24,7 +24,11 @@ export const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export const BlueOutlineButton: React.FC<ButtonProps> = ({ children, className, ...props }) => {
+export const OutlineButton: React.FC<ButtonProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <Button
       className={`border-2 border-blue-800 text-blue-800 shadow rounded-lg bg-white px-8 flex gap-2 items-center ${className}`}

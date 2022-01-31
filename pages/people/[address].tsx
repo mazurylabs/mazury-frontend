@@ -2,8 +2,14 @@ import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { SWRConfig } from 'swr';
-import { Button, Avatar, NavButton, ActivityPreview } from '../../components';
-import { BlueOutlineButton } from '../../components/Button';
+import {
+  Button,
+  Avatar,
+  NavButton,
+  ActivityPreview,
+  BadgePreview,
+} from '../../components';
+import { OutlineButton } from '../../components/Button';
 import { useProfile } from '../../hooks/useProfile';
 import {
   ColorName,
@@ -16,6 +22,9 @@ import { getTruncatedAddress, goToLink } from '../../utils';
 import { getProfile } from '../../utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
+import { ReferralPreview } from '../../components/ReferralPreview';
+import { useReferrals } from '../../hooks/useReferrals';
+import { useBadges } from '../../hooks/useBadges';
 
 interface Props {
   address: string;
@@ -55,6 +64,8 @@ const roleFieldToLabel: MappedRoles<string> = {
 const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
+  const { referrals, error: referralError } = useReferrals(address);
+  const { badges, error: badgesError } = useBadges(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -73,7 +84,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           className='flex gap-8 px-8 rounded-lg py-6 items-center'
           style={{
             background:
-              'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%);',
+              'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
           }}
         >
           <div className='flex flex-col gap-8'>
@@ -138,23 +149,23 @@ const Profile: React.FC<Props> = ({ address }) => {
 
         <div className='flex gap-4 mt-6 px-24'>
           {profile.twitter && (
-            <BlueOutlineButton
+            <OutlineButton
               onClick={() => goToLink(`https://twitter.com/${profile.twitter}`)}
             >
               <FaTwitter /> {profile.twitter}
-            </BlueOutlineButton>
+            </OutlineButton>
           )}
           {profile.website && (
-            <BlueOutlineButton onClick={() => goToLink(profile.website)}>
+            <OutlineButton onClick={() => goToLink(profile.website)}>
               <FaGlobe /> {profile.website}
-            </BlueOutlineButton>
+            </OutlineButton>
           )}
           {profile.github && (
-            <BlueOutlineButton
+            <OutlineButton
               onClick={() => goToLink(`https://github.com/${profile.twitter}`)}
             >
               <FaGithub /> {profile.github}
-            </BlueOutlineButton>
+            </OutlineButton>
           )}
         </div>
 
@@ -174,7 +185,9 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
 
           <div className='flex flex-col w-10/12'>
-            <h3 className='text-3xl font-bold font-serif'>Activity</h3>
+            <h3 className='text-3xl font-bold font-serif text-indigoGray-90'>
+              Activity
+            </h3>
             <div className='mt-8 flex flex-col gap-6 w-10/12'>
               <ActivityPreview
                 activityType='event'
@@ -194,6 +207,49 @@ const Profile: React.FC<Props> = ({ address }) => {
                 label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
                 time='3 days ago'
               />
+            </div>
+
+            <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
+              Recent referrals
+            </h3>
+            <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+              {referrals?.slice(0, 2).map((referral) => {
+                return (
+                  <ReferralPreview
+                    key={referral.id}
+                    referredBy={{
+                      username: referral.author.username,
+                      avatarSrc: referral.author.avatar,
+                    }}
+                    text={referral.content}
+                    skills={['community', 'frontendDev']}
+                  />
+                );
+              })}
+            </div>
+
+            <hr className='my-12 border-indigoGray-20' />
+
+            <div>
+              <h3 className='text-3xl font-bold font-serif text-indigoGray-90'>
+                Badges
+              </h3>
+              <div className='grid grid-cols-2 gap-12 mt-8'>
+                {badges?.map((badge) => {
+                  const { badge_type, id } = badge;
+                  const { image, description, title } = badge_type;
+
+                  return (
+                    <BadgePreview
+                      key={id}
+                      description={description}
+                      heading={title}
+                      imgSrc={image}
+                      totalCount={100}
+                    />
+                  );
+                })}
+              </div>
             </div>
 
             <div className='flex gap-12 w-full'>
@@ -219,48 +275,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <div className='flex mt-4 gap-8'>
                   <Avatar src='/blue-ph.png' />
                   <Avatar src='/blue-ph.png' />
-                </div>
-              </div>
-            </div>
-
-            <hr className='my-8' />
-
-            <div>
-              <h2 className='text-3xl font-bold'>Badges</h2>
-              <div className='flex gap-8 mt-4'>
-                <Link href='#' passHref>
-                  <a className='text-xl font-bold'>Mazury badges</a>
-                </Link>
-                <Link href='#' passHref>
-                  <a className='text-xl'>Badges</a>
-                </Link>
-                <Link href='#' passHref>
-                  <a className='text-xl'>Badges</a>
-                </Link>
-                <Link href='#' passHref>
-                  <a className='text-xl'>Badges</a>
-                </Link>
-              </div>
-
-              <div className='w-1/2'>
-                <h3 className='mt-8 text-lg font-bold'>Recent badges</h3>
-                <div className='flex mt-4 gap-8'>
-                  {profile.top_badges?.slice(0, 3).map((badge) => {
-                    return (
-                      <div key={badge.id} className='flex flex-col'>
-                        <Avatar
-                          src={badge.badge_type.image}
-                          borderRadius='7px'
-                        />
-                        <p className='font-bold text-xl mt-2'>
-                          {badge.badge_type.title}
-                        </p>
-                        <p className='text-sm'>
-                          {badge.badge_type.description}
-                        </p>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
             </div>
