@@ -1,9 +1,9 @@
 export type ColorName =
+  | 'indigo'
+  | 'fuchsia'
+  | 'emerald'
+  | 'amber'
   | 'purple'
-  | 'pink'
-  | 'green'
-  | 'brown'
-  | 'lemon'
   | 'white'
   | 'black';
 
@@ -16,7 +16,7 @@ export type ProfileSection =
   | 'Activity'
   | 'Badges'
   | 'Referrals'
-  | 'Blog posts'
+  | 'Writing'
   | 'DAOs';
 
 export type Skill =

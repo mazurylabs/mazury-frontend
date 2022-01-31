@@ -1,6 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import Link from 'next/link';
-import React from 'react';
+import React, { useRef } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
@@ -8,6 +7,7 @@ import {
   NavButton,
   ActivityPreview,
   BadgePreview,
+  HR,
 } from '../../components';
 import { OutlineButton } from '../../components/Button';
 import { useProfile } from '../../hooks/useProfile';
@@ -25,6 +25,8 @@ import Head from 'next/head';
 import { ReferralPreview } from '../../components/ReferralPreview';
 import { useReferrals } from '../../hooks/useReferrals';
 import { useBadges } from '../../hooks/useBadges';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 interface Props {
   address: string;
@@ -39,16 +41,16 @@ const profileSections: ProfileSection[] = [
   'Activity',
   'Badges',
   'Referrals',
-  'Blog posts',
+  'Writing',
   'DAOs',
 ];
 
 const sectionToColor: { [key in ProfileSection]: ColorName } = {
-  Activity: 'purple',
-  Badges: 'pink',
-  Referrals: 'green',
-  'Blog posts': 'brown',
-  DAOs: 'lemon',
+  Activity: 'indigo',
+  Badges: 'fuchsia',
+  Referrals: 'emerald',
+  Writing: 'amber',
+  DAOs: 'purple',
 };
 
 const roleFieldToLabel: MappedRoles<string> = {
@@ -62,12 +64,18 @@ const roleFieldToLabel: MappedRoles<string> = {
 };
 
 const Profile: React.FC<Props> = ({ address }) => {
+  const router = useRouter();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const { referrals, error: referralError } = useReferrals(address);
   const { badges, error: badgesError } = useBadges(address);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
+
+  const activityRef = useRef<HTMLHeadingElement>(null);
+  const badgesRef = useRef<HTMLHeadingElement>(null);
+  const referralsRef = useRef<HTMLHeadingElement>(null);
+  const writingRef = useRef<HTMLHeadingElement>(null);
 
   return (
     <>
@@ -76,7 +84,14 @@ const Profile: React.FC<Props> = ({ address }) => {
       </Head>
       <div>
         <div className='flex gap-8 py-4 px-24 items-center'>
-          <Button>&lt;</Button>
+          <Image
+            onClick={() => router.back()}
+            className='hover:cursor-pointer'
+            src='/icons/back.svg'
+            alt='Back'
+            width={16}
+            height={16}
+          />
           <p className='font-demi'>{profile.username}</p>
         </div>
 
@@ -172,20 +187,50 @@ const Profile: React.FC<Props> = ({ address }) => {
         <hr className='mt-8' />
 
         <div className='flex py-10 px-24 gap-12'>
-          <div className='flex flex-col gap-4 justify-start w-2/12'>
+          <div className='flex flex-col gap-4 justify-start w-2/12 sticky top-12 left-0 h-fit'>
             {profileSections.map((sectionName) => (
               <NavButton
                 key={sectionName}
                 label={sectionName}
                 active={sectionName === activeSection}
                 color={sectionToColor[sectionName]}
-                onClick={() => setActiveSection(sectionName)}
+                onClick={() => {
+                  let currRef;
+                  switch (sectionName) {
+                    case 'Activity':
+                      currRef = activityRef;
+                      break;
+                    case 'Badges':
+                      currRef = badgesRef;
+                      break;
+                    case 'Referrals':
+                      currRef = referralsRef;
+                      break;
+                    case 'Writing':
+                      currRef = writingRef;
+                      break;
+                    case 'DAOs':
+                      currRef = writingRef;
+                      break;
+                    default:
+                      break;
+                  }
+                  window.scrollTo({
+                    top: currRef?.current?.offsetTop,
+                    behavior: 'smooth',
+                  });
+                  setActiveSection(sectionName);
+                }}
               />
             ))}
           </div>
 
           <div className='flex flex-col w-10/12'>
-            <h3 className='text-3xl font-bold font-serif text-indigoGray-90'>
+            <h3
+              ref={activityRef}
+              id='activity'
+              className='text-3xl font-bold font-serif text-indigoGray-90'
+            >
               Activity
             </h3>
             <div className='mt-8 flex flex-col gap-6 w-10/12'>
@@ -228,10 +273,13 @@ const Profile: React.FC<Props> = ({ address }) => {
               })}
             </div>
 
-            <hr className='my-12 border-indigoGray-20' />
+            <HR />
 
             <div>
-              <h3 className='text-3xl font-bold font-serif text-indigoGray-90'>
+              <h3
+                ref={badgesRef}
+                className='text-3xl font-bold font-serif text-indigoGray-90'
+              >
                 Badges
               </h3>
               <div className='grid grid-cols-2 gap-12 mt-8'>
@@ -252,36 +300,44 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             </div>
 
-            <div className='flex gap-12 w-full'>
-              <div className='w-1/2'>
-                <h3 className='mt-8 text-lg font-bold'>Recent badges</h3>
-                <div className='flex mt-4 gap-8'>
-                  <div className='flex flex-col'>
-                    <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                    <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                    <p className='text-sm'>Moon school</p>
-                  </div>
+            <HR />
 
-                  <div className='flex flex-col'>
-                    <Avatar src='/yellow-ph.png' borderRadius='7px' />
-                    <p className='font-bold text-xl mt-2'>Web3 on wheels</p>
-                    <p className='text-sm'>Moon school</p>
-                  </div>
-                </div>
+            <div>
+              <h3
+                ref={referralsRef}
+                className='text-3xl font-serif font-bold text-indigoGray-90'
+              >
+                Referrals
+              </h3>
+              <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+                {referrals?.slice(0, 4).map((referral) => {
+                  return (
+                    <ReferralPreview
+                      key={referral.id}
+                      referredBy={{
+                        username: referral.author.username,
+                        avatarSrc: referral.author.avatar,
+                      }}
+                      text={referral.content}
+                      skills={['community', 'frontendDev']}
+                    />
+                  );
+                })}
               </div>
+            </div>
 
-              <div className='w-1/2'>
-                <h3 className='mt-8 text-lg font-bold'>Recent POAPs</h3>
-                <div className='flex mt-4 gap-8'>
-                  <Avatar src='/blue-ph.png' />
-                  <Avatar src='/blue-ph.png' />
-                </div>
-              </div>
+            <HR />
+
+            <div>
+              <h3
+                ref={writingRef}
+                className='text-3xl font-serif font-bold text-indigoGray-90'
+              >
+                Writing
+              </h3>
             </div>
           </div>
         </div>
-
-        <hr className='mb-20' />
       </div>
     </>
   );
