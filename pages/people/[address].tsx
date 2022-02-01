@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
@@ -27,6 +27,7 @@ import { useReferrals } from '../../hooks/useReferrals';
 import { useBadges } from '../../hooks/useBadges';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useScrollPosition } from '../../hooks/useScrollPosition';
 
 interface Props {
   address: string;
@@ -69,6 +70,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   const { profile, error } = useProfile(address);
   const { referrals, error: referralError } = useReferrals(address);
   const { badges, error: badgesError } = useBadges(address);
+  const scrollPos = useScrollPosition();
+  const shouldCollapseHeader = scrollPos && scrollPos > 0;
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -83,7 +86,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         <title>{profile.username} | Mazury</title>
       </Head>
       <div>
-        <div className='sticky top-0 left-0 bg-white z-10'>
+        <div className={`sticky top-0 left-0 bg-white z-10`}>
           <div className='flex gap-8 py-4 px-24 items-center'>
             <Image
               onClick={() => router.back()}
@@ -97,7 +100,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
 
           <div
-            className='flex gap-8 px-8 rounded-2xl py-6 items-center bg-white'
+            className='flex gap-8 px-8 rounded-2xl py-6 items-center bg-white transition duration-1000 ease-in-out'
             style={{
               background:
                 'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
@@ -105,16 +108,34 @@ const Profile: React.FC<Props> = ({ address }) => {
           >
             <div className='flex flex-col gap-8'>
               <div className='flex gap-6 items-center'>
-                <Avatar src={profile.avatar} />
+                <Avatar
+                  src={profile.avatar}
+                  width={shouldCollapseHeader ? '48px' : '100px'}
+                  height={shouldCollapseHeader ? '48px' : '100px'}
+                />
                 <div className='flex flex-col'>
                   <div className='flex gap-4 items-baseline'>
-                    <h1 className='font-demi text-5xl text-indigoGray-90'>
+                    <h1
+                      className={`font-demi ${
+                        shouldCollapseHeader ? 'text-2xl' : 'text-5xl'
+                      } text-indigoGray-90`}
+                    >
                       {profile.username}
                     </h1>
-                    <h3 className='text-indigoGray-40'>Michael Scott</h3>
+                    <h3
+                      className={`text-indigoGray-40 ${
+                        shouldCollapseHeader ? 'text-sm' : 'text-lg'
+                      }`}
+                    >
+                      Michael Scott
+                    </h3>
                   </div>
 
-                  <p className='text-indigoGray-70'>
+                  <p
+                    className={`text-indigoGray-70 ${
+                      shouldCollapseHeader ? 'text-sm' : 'text-base'
+                    }`}
+                  >
                     {profile.ens_name && `${profile.ens_name} `}
                     <span className='text-indigoGray-40'>
                       ({getTruncatedAddress(profile.eth_address, 3)})
@@ -198,7 +219,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         <div className='flex pb-10 px-24 gap-12'>
           <div
             className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
-            style={{ top: '28rem !important' }}
+            style={{ top: '25rem !important' }}
           >
             {profileSections.map((sectionName) => (
               <Pill
