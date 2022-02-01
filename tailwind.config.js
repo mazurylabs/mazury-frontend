@@ -8,10 +8,6 @@ module.exports = {
         demi: ['Masqualero DemiBold', 'serif'],
       },
       colors: {
-        purple: '#070490',
-        green: '#429004',
-        brown: '#900404',
-        lemon: '#908204',
         indigoGray: {
           5: '#F8F9FC',
           10: '#F1F3F9',
@@ -262,6 +258,9 @@ module.exports = {
         sm: '0.3125rem',
         default: '0.375rem',
         lg: '0.5rem',
+      },
+      borderWidth: {
+        DEFAULT: '1px',
       },
     },
     container: {

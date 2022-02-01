@@ -18,7 +18,7 @@ export const ReferralPreview: React.FC<Props> = ({
   skills,
 }) => {
   return (
-    <div className='flex flex-col gap-2 p-4 rounded-lg border-2 border-indigoGray-20 w-full'>
+    <div className='flex flex-col gap-2 p-6 rounded-2xl border border-indigoGray-20 w-full'>
       <div className='flex items-center gap-2'>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Avatar
