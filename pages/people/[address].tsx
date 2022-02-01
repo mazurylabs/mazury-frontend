@@ -28,6 +28,7 @@ import { useBadges } from '../../hooks/useBadges';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
+import { useTotalBadgeCounts } from '../../hooks/useBadgeTypes';
 
 interface Props {
   address: string;
@@ -70,6 +71,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const { profile, error } = useProfile(address);
   const { referrals, error: referralError } = useReferrals(address);
   const { badges, error: badgesError } = useBadges(address);
+  const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
   const [activeSection, setActiveSection] =
@@ -166,14 +168,16 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div className='ml-auto flex gap-16 pr-24'>
               <div className='flex flex-col items-center gap-0'>
                 <div className='font-serif font-bold text-4xl'>
-                  {profile.referred_by.length}
+                  {referrals?.length || '-'}
                 </div>
                 <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
                   Referrals
                 </div>
               </div>
               <div className='flex flex-col items-center gap-0'>
-                <div className='font-serif font-bold text-4xl'>62k</div>
+                <div className='font-serif font-bold text-4xl'>
+                  {badges?.length || '-'}
+                </div>
                 <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
                   Badges
                 </div>
@@ -341,7 +345,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       description={description}
                       heading={title}
                       imgSrc={image}
-                      totalCount={100}
+                      totalCount={totalBadgeCounts[badge_type.id]}
                     />
                   );
                 })}

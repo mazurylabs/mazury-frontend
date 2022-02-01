@@ -1,4 +1,5 @@
 import { Avatar } from '.';
+import NumberFormat from 'react-number-format';
 
 interface Props {
   imgSrc: string;
@@ -23,7 +24,12 @@ export const BadgePreview: React.FC<Props> = ({
         </h5>
         <p className='text-sm font-medium text-indigoGray-80'>{description}</p>
         <span className='text-indigoGray-50 text-sm font-medium'>
-          {totalCount} people have this badge
+          <NumberFormat
+            value={totalCount}
+            displayType='text'
+            thousandSeparator
+          />{' '}
+          people have this badge
         </span>
       </div>
     </div>
