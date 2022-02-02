@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import React from 'react';
 import { Avatar } from '.';
@@ -27,7 +28,7 @@ export const Sidebar: React.FC = () => {
         />
         <Link href='/' passHref>
           <a className='flex items-center gap-2 text-sm font-medium text-indigoGray-50'>
-            <img src='/icons/home.svg' /> Home
+            <img src='/icons/home.svg' alt='Home icon' /> Home
           </a>
         </Link>
 
@@ -36,13 +37,13 @@ export const Sidebar: React.FC = () => {
           passHref
         >
           <a className='flex items-center gap-2 text-sm font-medium text-indigoGray-50'>
-            <img src='/profile-active.svg' /> Profile
+            <img src='/profile-active.svg' alt='Profile icon' /> Profile
           </a>
         </Link>
 
         <Link href='/' passHref>
           <a className='flex items-center gap-2 text-sm font-medium text-indigoGray-50 mt-auto pb-12'>
-            <img src='/icons/sliders.svg' /> Settings
+            <img src='/icons/sliders.svg' alt='Settings icon' /> Settings
           </a>
         </Link>
       </menu>

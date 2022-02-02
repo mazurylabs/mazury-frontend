@@ -8,6 +8,8 @@ import {
   ActivityPreview,
   BadgePreview,
   HR,
+  GMPost,
+  MirrorPost,
 } from '../../components';
 import { OutlineButton } from '../../components/Button';
 import { useProfile } from '../../hooks/useProfile';
@@ -350,7 +352,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <LoadMoreButton />
+              <div className='w-10/12'>
+                <LoadMoreButton />
+              </div>
             </div>
 
             <HR />
@@ -388,18 +392,91 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <LoadMoreButton />
+              <div className='w-10/12'>
+                <LoadMoreButton />
+              </div>
             </div>
 
             <HR />
 
             <div>
-              <h3
-                ref={writingRef}
-                className='text-3xl font-serif font-bold text-indigoGray-90'
-              >
-                Writing
-              </h3>
+              <div className='flex gap-4 items-center'>
+                <h3
+                  ref={writingRef}
+                  className='text-3xl font-serif font-bold text-indigoGray-90'
+                >
+                  Writing
+                </h3>
+
+                <Pill color='amber' label='All posts' className='ml-8' active />
+                <Pill color='amber' label='GM' />
+                <Pill color='amber' label='Mirror' />
+              </div>
+
+              <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+                <GMPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                  upvoteCount={3}
+                  commentCount={3}
+                  link='https://github.com/dhaiwat10'
+                />
+                <MirrorPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  link='https://github.com/dhaiwat10'
+                  bgImageSrc='/post-bg.jpeg'
+                  title='Why is the internet so lonely?'
+                />
+                <GMPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                  upvoteCount={3}
+                  commentCount={3}
+                  link='https://github.com/dhaiwat10'
+                />
+                <GMPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                  upvoteCount={3}
+                  commentCount={3}
+                  link='https://github.com/dhaiwat10'
+                />
+                <MirrorPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  link='https://github.com/dhaiwat10'
+                  bgImageSrc='/post-bg.jpeg'
+                  title='Why is the internet so lonely?'
+                />
+                <GMPost
+                  author={{
+                    username: 'mikela.eth',
+                    avatarSrc: '/avatar-2.png',
+                  }}
+                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                  upvoteCount={3}
+                  commentCount={3}
+                  link='https://github.com/dhaiwat10'
+                />
+              </div>
+
+              <div className='w-10/12'>
+                <LoadMoreButton />
+              </div>
             </div>
           </div>
         </div>
