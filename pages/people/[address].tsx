@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { useTotalBadgeCounts } from '../../hooks/useBadgeTypes';
 import { LoadMoreButton } from '../../components/Pill';
+import { motion } from 'framer-motion';
 
 interface Props {
   address: string;
@@ -114,20 +115,26 @@ const Profile: React.FC<Props> = ({ address }) => {
             >
               <div className='flex flex-col gap-8'>
                 <div className='flex gap-6 items-center'>
-                  <Avatar
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <motion.img
+                    animate={{
+                      width: shouldCollapseHeader ? '48px' : '100px',
+                      height: shouldCollapseHeader ? '48px' : '100px',
+                    }}
                     src={profile.avatar}
-                    width={shouldCollapseHeader ? '48px' : '100px'}
-                    height={shouldCollapseHeader ? '48px' : '100px'}
+                    alt={`${profile.username}'s avatar`}
+                    className='rounded-full'
                   />
                   <div className='flex flex-col'>
                     <div className='flex gap-4 items-baseline'>
-                      <h1
-                        className={`font-demi ${
-                          shouldCollapseHeader ? 'text-2xl' : 'text-5xl'
-                        } text-indigoGray-90`}
+                      <motion.h1
+                        animate={{
+                          fontSize: shouldCollapseHeader ? '24px' : '48px',
+                        }}
+                        className={`font-demi text-indigoGray-90`}
                       >
                         {profile.username}
-                      </h1>
+                      </motion.h1>
                       <h3
                         className={`text-indigoGray-40 ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
