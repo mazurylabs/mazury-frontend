@@ -30,7 +30,7 @@ export const Layout: React.FC = ({ children }) => {
       )}
 
       {/* APP */}
-      <main className='container w-11/12'>{children}</main>
+      <main className='w-11/12'>{children}</main>
     </div>
   );
 };

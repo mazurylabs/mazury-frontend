@@ -29,6 +29,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { useTotalBadgeCounts } from '../../hooks/useBadgeTypes';
+import { LoadMoreButton } from '../../components/Pill';
 
 interface Props {
   address: string;
@@ -89,138 +90,140 @@ const Profile: React.FC<Props> = ({ address }) => {
       </Head>
       <div>
         <div className={`sticky top-0 left-0 bg-white z-10`}>
-          <div className='flex gap-8 py-4 px-24 items-center'>
-            <Image
-              onClick={() => router.back()}
-              className='hover:cursor-pointer'
-              src='/icons/back.svg'
-              alt='Back'
-              width={16}
-              height={16}
-            />
-            <p className='font-demi'>{profile.username}</p>
-          </div>
+          <div className='container'>
+            <div className='flex gap-8 py-4 px-24 items-center'>
+              <Image
+                onClick={() => router.back()}
+                className='hover:cursor-pointer'
+                src='/icons/back.svg'
+                alt='Back'
+                width={16}
+                height={16}
+              />
+              <p className='font-demi'>{profile.username}</p>
+            </div>
 
-          <div
-            className='flex gap-8 px-8 rounded-2xl py-6 items-center bg-white transition duration-1000 ease-in-out'
-            style={{
-              background:
-                'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
-            }}
-          >
-            <div className='flex flex-col gap-8'>
-              <div className='flex gap-6 items-center'>
-                <Avatar
-                  src={profile.avatar}
-                  width={shouldCollapseHeader ? '48px' : '100px'}
-                  height={shouldCollapseHeader ? '48px' : '100px'}
-                />
-                <div className='flex flex-col'>
-                  <div className='flex gap-4 items-baseline'>
-                    <h1
-                      className={`font-demi ${
-                        shouldCollapseHeader ? 'text-2xl' : 'text-5xl'
-                      } text-indigoGray-90`}
-                    >
-                      {profile.username}
-                    </h1>
-                    <h3
-                      className={`text-indigoGray-40 ${
-                        shouldCollapseHeader ? 'text-sm' : 'text-lg'
+            <div
+              className='flex gap-8 px-8 rounded-2xl py-6 items-center bg-white transition duration-1000 ease-in-out'
+              style={{
+                background:
+                  'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
+              }}
+            >
+              <div className='flex flex-col gap-8'>
+                <div className='flex gap-6 items-center'>
+                  <Avatar
+                    src={profile.avatar}
+                    width={shouldCollapseHeader ? '48px' : '100px'}
+                    height={shouldCollapseHeader ? '48px' : '100px'}
+                  />
+                  <div className='flex flex-col'>
+                    <div className='flex gap-4 items-baseline'>
+                      <h1
+                        className={`font-demi ${
+                          shouldCollapseHeader ? 'text-2xl' : 'text-5xl'
+                        } text-indigoGray-90`}
+                      >
+                        {profile.username}
+                      </h1>
+                      <h3
+                        className={`text-indigoGray-40 ${
+                          shouldCollapseHeader ? 'text-sm' : 'text-lg'
+                        }`}
+                      >
+                        Michael Scott
+                      </h3>
+                    </div>
+
+                    <p
+                      className={`text-indigoGray-70 ${
+                        shouldCollapseHeader ? 'text-sm' : 'text-base'
                       }`}
                     >
-                      Michael Scott
-                    </h3>
+                      {profile.ens_name && `${profile.ens_name} `}
+                      <span className='text-indigoGray-40'>
+                        ({getTruncatedAddress(profile.eth_address, 3)})
+                      </span>
+                    </p>
                   </div>
+                </div>
 
-                  <p
-                    className={`text-indigoGray-70 ${
-                      shouldCollapseHeader ? 'text-sm' : 'text-base'
-                    }`}
-                  >
-                    {profile.ens_name && `${profile.ens_name} `}
-                    <span className='text-indigoGray-40'>
-                      ({getTruncatedAddress(profile.eth_address, 3)})
-                    </span>
-                  </p>
+                <p className='text-indigoGray-70'>{profile.bio}</p>
+
+                <div className='flex gap-6'>
+                  {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
+                  {Object.keys(roleFieldToLabel).map((role: Role) => {
+                    if (profile[role] === true) {
+                      return (
+                        <Button
+                          key={role}
+                          className='bg-white font-bold text-sm text-indigoGray-90'
+                        >
+                          {roleFieldToLabel[role]}
+                        </Button>
+                      );
+                    }
+                  })}
                 </div>
               </div>
 
-              <p className='text-indigoGray-70'>{profile.bio}</p>
+              <div className='ml-auto flex gap-16 pr-24'>
+                <div className='flex flex-col items-center gap-0'>
+                  <div className='font-serif font-bold text-4xl'>
+                    {referrals?.length || '-'}
+                  </div>
+                  <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
+                    Referrals
+                  </div>
+                </div>
+                <div className='flex flex-col items-center gap-0'>
+                  <div className='font-serif font-bold text-4xl'>
+                    {badges?.length || '-'}
+                  </div>
+                  <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
+                    Badges
+                  </div>
+                </div>
+                <div className='flex flex-col items-center gap-0'>
+                  <div className='font-serif font-bold text-4xl'>23</div>
+                  <div className='text-xs uppercase text-indigoGray-60 opacity-60'>
+                    Posts
+                  </div>
+                </div>
+              </div>
+            </div>
 
-              <div className='flex gap-6'>
-                {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
-                {Object.keys(roleFieldToLabel).map((role: Role) => {
-                  if (profile[role] === true) {
-                    return (
-                      <Button
-                        key={role}
-                        className='bg-white font-bold text-sm text-indigoGray-90'
-                      >
-                        {roleFieldToLabel[role]}
-                      </Button>
-                    );
+            <div className='flex gap-4 mt-6 px-24 text-sm font-medium'>
+              {profile.twitter && (
+                <OutlineButton
+                  onClick={() =>
+                    goToLink(`https://twitter.com/${profile.twitter}`)
                   }
-                })}
-              </div>
+                >
+                  <FaTwitter /> {profile.twitter}
+                </OutlineButton>
+              )}
+              {profile.website && (
+                <OutlineButton onClick={() => goToLink(profile.website)}>
+                  <FaGlobe /> {profile.website}
+                </OutlineButton>
+              )}
+              {profile.github && (
+                <OutlineButton
+                  onClick={() =>
+                    goToLink(`https://github.com/${profile.twitter}`)
+                  }
+                >
+                  <FaGithub /> {profile.github}
+                </OutlineButton>
+              )}
             </div>
-
-            <div className='ml-auto flex gap-16 pr-24'>
-              <div className='flex flex-col items-center gap-0'>
-                <div className='font-serif font-bold text-4xl'>
-                  {referrals?.length || '-'}
-                </div>
-                <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
-                  Referrals
-                </div>
-              </div>
-              <div className='flex flex-col items-center gap-0'>
-                <div className='font-serif font-bold text-4xl'>
-                  {badges?.length || '-'}
-                </div>
-                <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
-                  Badges
-                </div>
-              </div>
-              <div className='flex flex-col items-center gap-0'>
-                <div className='font-serif font-bold text-4xl'>23</div>
-                <div className='text-xs uppercase text-indigoGray-60 opacity-60'>
-                  Posts
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='flex gap-4 mt-6 px-24 text-sm font-medium'>
-            {profile.twitter && (
-              <OutlineButton
-                onClick={() =>
-                  goToLink(`https://twitter.com/${profile.twitter}`)
-                }
-              >
-                <FaTwitter /> {profile.twitter}
-              </OutlineButton>
-            )}
-            {profile.website && (
-              <OutlineButton onClick={() => goToLink(profile.website)}>
-                <FaGlobe /> {profile.website}
-              </OutlineButton>
-            )}
-            {profile.github && (
-              <OutlineButton
-                onClick={() =>
-                  goToLink(`https://github.com/${profile.twitter}`)
-                }
-              >
-                <FaGithub /> {profile.github}
-              </OutlineButton>
-            )}
           </div>
 
           <HR className='my-8' />
         </div>
 
-        <div className='flex pb-10 px-24 gap-12'>
+        <div className='flex pb-10 px-24 gap-12 container'>
           <div
             className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
             style={{ top: '25rem !important' }}
@@ -327,11 +330,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   color='fuchsia'
                   className='h-fit w-fit ml-8'
                 />
-                <Pill
-                  label='Mazury badges'
-                  color='fuchsia'
-                  className='h-fit w-fit'
-                />
+                <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
               </div>
 
               <div className='grid grid-cols-2 gap-12 mt-8'>
@@ -350,6 +349,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                   );
                 })}
               </div>
+
+              <LoadMoreButton />
             </div>
 
             <HR />
@@ -386,6 +387,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                   );
                 })}
               </div>
+
+              <LoadMoreButton />
             </div>
 
             <HR />

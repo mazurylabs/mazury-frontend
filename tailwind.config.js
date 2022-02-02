@@ -241,16 +241,16 @@ module.exports = {
         '6xl': '4rem',
       },
       boxShadow: {
-        'shadow-base':
+        'base':
           '0px 1px 3px 0px rgba(0,0,0,0.1), 0px 1px 2px 0px rgba(0,0,0,0.06)',
-        'shadow-lg':
+        'lg':
           '0px 4px 6px 0px rgba(0,0,0,0.05), 0px 10px 15px 0px rgba(0,0,0,0.1)',
-        'shadow-md':
+        'md':
           '0px 4px 6px 0px rgba(0,0,0,0.1), 0px 2px 4px 0px rgba(0,0,0,0.06)',
-        'shadow-xl':
+        'xl':
           '0px 10px 10px 0px rgba(0,0,0,0.04), 0px 20px 25px 0px rgba(0,0,0,0.1)',
-        'shadow-2xl': '0px 25px 50px 0px rgba(0,0,0,0.25)',
-        'shadow-inner': 'inset 0px 2px 4px 0px rgba(0,0,0,0.06)',
+        '2xl': '0px 25px 50px 0px rgba(0,0,0,0.25)',
+        'inner': 'inset 0px 2px 4px 0px rgba(0,0,0,0.06)',
       },
       borderRadius: {
         none: '0',

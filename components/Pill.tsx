@@ -87,3 +87,32 @@ export const Pill: React.FC<Props> = ({
     </button>
   );
 };
+
+interface LoadMoreProps {
+  label?: string;
+  color?: ColorName;
+  onClick?: () => void;
+  className?: string;
+  active?: boolean;
+  isNav?: boolean;
+}
+
+export const LoadMoreButton: React.FC<LoadMoreProps> = ({
+  label = 'Load More',
+  color,
+  onClick,
+  active = false,
+  isNav = false,
+  className,
+}) => {
+  return (
+    <Pill
+      label={label}
+      color={color}
+      onClick={onClick}
+      active={active}
+      isNav={isNav}
+      className={`border-2 border-indigoGray-90 shadow-base mx-auto mt-8 ${className}`}
+    />
+  );
+};
