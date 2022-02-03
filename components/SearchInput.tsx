@@ -18,16 +18,16 @@ export const InputWithIcon: React.FC<
 
   return (
     <div
-      className={`bg-indigoGray-20 flex p-[12px] rounded-xl items-center justify-center gap-2 font-normal text-[14px]`}
+      className={`bg-indigoGray-20 flex ${
+        expanded ? 'p-[12px]' : 'p-2 hover:cursor-pointer'
+      } rounded-xl items-center justify-center gap-2 font-normal text-[14px]`}
       onClick={onClick}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={iconSrc}
         alt={iconAlt}
-        className={`w-[16px] h-[16px] ${expanded ? 'w-1/4' : 'w-full'} ${
-          !expanded && 'hover:cursor-pointer'
-        }`}
+        className={`w-[16px] h-[16px] ${!expanded && 'hover:cursor-pointer'}`}
       />
       {expanded && (
         <input

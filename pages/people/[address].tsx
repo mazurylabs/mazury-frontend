@@ -121,6 +121,10 @@ const Profile: React.FC<Props> = ({ address }) => {
                       width: shouldCollapseHeader ? '48px' : '100px',
                       height: shouldCollapseHeader ? '48px' : '100px',
                     }}
+                    initial={{
+                      width: shouldCollapseHeader ? '48px' : '100px',
+                      height: shouldCollapseHeader ? '48px' : '100px',
+                    }}
                     src={profile.avatar}
                     alt={`${profile.username}'s avatar`}
                     className='rounded-full'
@@ -235,7 +239,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         <div className='flex pb-10 px-24 gap-12 container'>
           <div
             className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
-            style={{ top: '25rem !important' }}
+            style={{ top: '27rem !important' }}
           >
             {profileSections.map((sectionName) => (
               <Pill
