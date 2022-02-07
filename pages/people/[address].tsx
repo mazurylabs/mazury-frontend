@@ -233,13 +233,21 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
           </div>
 
-          <HR className='my-8' />
+          <motion.hr
+            animate={{
+              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
+            }}
+            initial={{
+              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
+            }}
+            className={`my-8 border-indigoGray-20`}
+          />
         </div>
 
         <div className='flex pb-10 px-24 gap-12 container'>
           <div
             className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
-            style={{ top: '27rem !important' }}
+            style={{ top: '25rem !important' }}
           >
             {profileSections.map((sectionName) => (
               <Pill

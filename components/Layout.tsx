@@ -13,7 +13,7 @@ export const Layout: React.FC = ({ children }) => {
       {showSidebar && <Sidebar />}
 
       {/* APP */}
-      <main className='w-11/12 mx-auto'>{children}</main>
+      <main className='w-full mx-auto'>{children}</main>
     </div>
   );
 };
