@@ -2,12 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf') format('true');
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Regular.ttf') format('true');
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Bold.otf') format('opentype');
+    font-weight: bold;
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Black.otf') format('opentype');
+    font-weight: black;
+  }
+
+  @font-face {
+    font-family: 'Masqualero DemiBold';
+    src: url('/fonts/Masqualero DemiBold.otf') format('opentype');
+    font-weight: normal;
+  }
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
