@@ -244,7 +244,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           />
         </div>
 
-        <div className='flex pb-10 px-24 gap-12 container'>
+        <div className='flex pb-10 mr-0 gap-12 container w-full'>
           <div
             className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
             style={{ top: '25rem !important' }}
