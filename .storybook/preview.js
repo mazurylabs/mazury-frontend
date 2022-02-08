@@ -16,7 +16,7 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  previewTabs: {
-    'storybook/docs/panel': { index: -1 },
-  },
+  // previewTabs: {
+  //   'storybook/docs/panel': { index: -1 },
+  // },
 };
