@@ -1,15 +1,15 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
-  Avatar,
   Pill,
   ActivityPreview,
   BadgePreview,
   HR,
   GMPost,
   MirrorPost,
+  Layout,
 } from '../../components';
 import { OutlineButton } from '../../components/Button';
 import { useProfile } from '../../hooks/useProfile';
@@ -33,6 +33,7 @@ import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { useTotalBadgeCounts } from '../../hooks/useBadgeTypes';
 import { LoadMoreButton } from '../../components/Pill';
 import { motion } from 'framer-motion';
+import { Sidebar } from '../../components/Sidebar';
 
 interface Props {
   address: string;
@@ -91,9 +92,10 @@ const Profile: React.FC<Props> = ({ address }) => {
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
-      <div>
-        <div className={`sticky top-0 left-0 bg-white z-10`}>
-          <div className='container'>
+      <Layout
+        sidebarContent={<Sidebar />}
+        headerContent={
+          <div className={`sticky top-0 left-0 bg-white z-10`}>
             <div className='flex gap-8 py-4 px-24 items-center'>
               <Image
                 onClick={() => router.back()}
@@ -231,26 +233,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </OutlineButton>
               )}
             </div>
+
+            <hr className={`mt-8 mb-0 border-indigoGray-20`} />
           </div>
-
-          <motion.hr
-            animate={{
-              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
-            }}
-            initial={{
-              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
-            }}
-            className={`my-8 border-indigoGray-20`}
-          />
-        </div>
-
-        <div className='flex pb-10 mr-0 gap-12 container w-full'>
-          <div
-            className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
-            style={{ top: '25rem !important' }}
-          >
+        }
+        innerLeftContent={
+          <div className='flex flex-col gap-4 justify-start sticky left-0 h-fit top-[25rem]'>
             {profileSections.map((sectionName) => (
               <Pill
+                className='w-1/2 mx-auto'
                 key={sectionName}
                 isNav
                 label={sectionName}
@@ -286,117 +277,43 @@ const Profile: React.FC<Props> = ({ address }) => {
               />
             ))}
           </div>
-
-          <div className='flex flex-col w-10/12'>
-            <h3
-              ref={activityRef}
-              id='activity'
-              className='text-3xl font-bold font-serif text-indigoGray-90'
-            >
-              Activity
-            </h3>
-            <div className='mt-8 flex flex-col gap-6 w-10/12'>
-              <ActivityPreview
-                activityType='event'
-                thumbnailSrc='/blue-ph.png'
-                label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
-                time='3 days ago'
-              />
-              <ActivityPreview
-                activityType='referral'
-                thumbnailSrc='/blue-ph.png'
-                label='Mikela wrote a referral for luc'
-                time='3 days ago'
-              />
-              <ActivityPreview
-                activityType='vote'
-                thumbnailSrc='/blue-ph.png'
-                label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
-                time='3 days ago'
-              />
-            </div>
-
-            <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
-              Recent referrals
-            </h3>
-            <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
-              {referrals?.slice(0, 2).map((referral) => {
-                return (
-                  <ReferralPreview
-                    key={referral.id}
-                    referredBy={{
-                      username: referral.author.username,
-                      avatarSrc: referral.author.avatar,
-                    }}
-                    text={referral.content}
-                    skills={['community', 'frontendDev']}
-                  />
-                );
-              })}
-            </div>
-
-            <HR />
-
-            <div>
-              <div className='flex gap-4 items-center'>
-                <h3
-                  ref={badgesRef}
-                  className='text-3xl font-bold font-serif text-indigoGray-90'
-                >
-                  Badges
-                </h3>
-                <Pill
-                  label='Mazury badges'
-                  active
-                  color='fuchsia'
-                  className='h-fit w-fit ml-8'
+        }
+        innerRightContent={
+          <div className='flex pb-10 mr-0 gap-12 container w-full'>
+            <div className='flex flex-col w-10/12'>
+              <h3
+                ref={activityRef}
+                id='activity'
+                className='text-3xl font-bold font-serif text-indigoGray-90'
+              >
+                Activity
+              </h3>
+              <div className='mt-8 flex flex-col gap-6 w-10/12'>
+                <ActivityPreview
+                  activityType='event'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
+                  time='3 days ago'
                 />
-                <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
-              </div>
-
-              <div className='grid grid-cols-2 gap-12 mt-8'>
-                {badges?.slice(0, 4).map((badge) => {
-                  const { badge_type, id } = badge;
-                  const { image, description, title } = badge_type;
-
-                  return (
-                    <BadgePreview
-                      key={id}
-                      description={description}
-                      heading={title}
-                      imgSrc={image}
-                      totalCount={totalBadgeCounts[badge_type.id]}
-                    />
-                  );
-                })}
-              </div>
-
-              <div className='w-10/12'>
-                <LoadMoreButton />
-              </div>
-            </div>
-
-            <HR />
-
-            <div>
-              <div className='flex gap-4 items-center'>
-                <h3
-                  ref={referralsRef}
-                  className='text-3xl font-serif font-bold text-indigoGray-90'
-                >
-                  Referrals
-                </h3>
-                <Pill
-                  label='Received'
-                  active
-                  color='emerald'
-                  className='h-fit w-fit ml-8'
+                <ActivityPreview
+                  activityType='referral'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Mikela wrote a referral for luc'
+                  time='3 days ago'
                 />
-                <Pill label='Given' color='emerald' className='h-fit w-fit' />
+                <ActivityPreview
+                  activityType='vote'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
+                  time='3 days ago'
+                />
               </div>
 
+              <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
+                Recent referrals
+              </h3>
               <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
-                {referrals?.slice(0, 4).map((referral) => {
+                {referrals?.slice(0, 2).map((referral) => {
                   return (
                     <ReferralPreview
                       key={referral.id}
@@ -411,95 +328,177 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <div className='w-10/12'>
-                <LoadMoreButton />
-              </div>
-            </div>
+              <HR />
 
-            <HR />
+              <div>
+                <div className='flex gap-4 items-center'>
+                  <h3
+                    ref={badgesRef}
+                    className='text-3xl font-bold font-serif text-indigoGray-90'
+                  >
+                    Badges
+                  </h3>
+                  <Pill
+                    label='Mazury badges'
+                    active
+                    color='fuchsia'
+                    className='h-fit w-fit ml-8'
+                  />
+                  <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
+                </div>
 
-            <div>
-              <div className='flex gap-4 items-center'>
-                <h3
-                  ref={writingRef}
-                  className='text-3xl font-serif font-bold text-indigoGray-90'
-                >
-                  Writing
-                </h3>
+                <div className='grid grid-cols-2 gap-12 mt-8'>
+                  {badges?.slice(0, 4).map((badge) => {
+                    const { badge_type, id } = badge;
+                    const { image, description, title } = badge_type;
 
-                <Pill color='amber' label='All posts' className='ml-8' active />
-                <Pill color='amber' label='GM' />
-                <Pill color='amber' label='Mirror' />
-              </div>
+                    return (
+                      <BadgePreview
+                        key={id}
+                        description={description}
+                        heading={title}
+                        imgSrc={image}
+                        totalCount={totalBadgeCounts[badge_type.id]}
+                      />
+                    );
+                  })}
+                </div>
 
-              <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link='https://github.com/dhaiwat10'
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link='https://github.com/dhaiwat10'
-                  bgImageSrc='/post-bg.jpeg'
-                  title='Why is the internet so lonely?'
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link='https://github.com/dhaiwat10'
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link='https://github.com/dhaiwat10'
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link='https://github.com/dhaiwat10'
-                  bgImageSrc='/post-bg.jpeg'
-                  title='Why is the internet so lonely?'
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link='https://github.com/dhaiwat10'
-                />
+                <div className='w-10/12'>
+                  <LoadMoreButton />
+                </div>
               </div>
 
-              <div className='w-10/12'>
-                <LoadMoreButton />
+              <HR />
+
+              <div>
+                <div className='flex gap-4 items-center'>
+                  <h3
+                    ref={referralsRef}
+                    className='text-3xl font-serif font-bold text-indigoGray-90'
+                  >
+                    Referrals
+                  </h3>
+                  <Pill
+                    label='Received'
+                    active
+                    color='emerald'
+                    className='h-fit w-fit ml-8'
+                  />
+                  <Pill label='Given' color='emerald' className='h-fit w-fit' />
+                </div>
+
+                <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+                  {referrals?.slice(0, 4).map((referral) => {
+                    return (
+                      <ReferralPreview
+                        key={referral.id}
+                        referredBy={{
+                          username: referral.author.username,
+                          avatarSrc: referral.author.avatar,
+                        }}
+                        text={referral.content}
+                        skills={['community', 'frontendDev']}
+                      />
+                    );
+                  })}
+                </div>
+
+                <div className='w-10/12'>
+                  <LoadMoreButton />
+                </div>
+              </div>
+
+              <HR />
+
+              <div>
+                <div className='flex gap-4 items-center'>
+                  <h3
+                    ref={writingRef}
+                    className='text-3xl font-serif font-bold text-indigoGray-90'
+                  >
+                    Writing
+                  </h3>
+
+                  <Pill
+                    color='amber'
+                    label='All posts'
+                    className='ml-8'
+                    active
+                  />
+                  <Pill color='amber' label='GM' />
+                  <Pill color='amber' label='Mirror' />
+                </div>
+
+                <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+                  <GMPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                    upvoteCount={3}
+                    commentCount={3}
+                    link='https://github.com/dhaiwat10'
+                  />
+                  <MirrorPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    link='https://github.com/dhaiwat10'
+                    bgImageSrc='/post-bg.jpeg'
+                    title='Why is the internet so lonely?'
+                  />
+                  <GMPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                    upvoteCount={3}
+                    commentCount={3}
+                    link='https://github.com/dhaiwat10'
+                  />
+                  <GMPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                    upvoteCount={3}
+                    commentCount={3}
+                    link='https://github.com/dhaiwat10'
+                  />
+                  <MirrorPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    link='https://github.com/dhaiwat10'
+                    bgImageSrc='/post-bg.jpeg'
+                    title='Why is the internet so lonely?'
+                  />
+                  <GMPost
+                    author={{
+                      username: 'mikela.eth',
+                      avatarSrc: '/avatar-2.png',
+                    }}
+                    content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
+                    upvoteCount={3}
+                    commentCount={3}
+                    link='https://github.com/dhaiwat10'
+                  />
+                </div>
+
+                <div className='w-10/12'>
+                  <LoadMoreButton />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
     </>
   );
 };

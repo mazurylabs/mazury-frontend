@@ -85,9 +85,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           <title>Mazury</title>
         </NextHead>
 
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
       </Provider>
     </SWRConfig>
   );
