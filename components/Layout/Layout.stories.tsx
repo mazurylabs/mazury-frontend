@@ -1,9 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import Link from 'next/link';
-import React, { useContext } from 'react';
-import { Avatar } from '..';
-import { SidebarContext } from '../../contexts';
-import { InputWithIcon } from '../SearchInput';
+import React from 'react';
 import { Sidebar } from '../Sidebar';
 
 import { Layout } from './Layout';
