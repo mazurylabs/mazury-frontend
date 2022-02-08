@@ -6,6 +6,8 @@ module.exports = {
   stories: [
     '../components/*.stories.mdx',
     '../components/*.stories.@(js|jsx|ts|tsx)',
+    '../components/**/*.stories.mdx',
+    '../components/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   /** Expose public folder to storybook as static */
   staticDirs: ['../public'],
@@ -35,7 +37,10 @@ module.exports = {
      */
     config.resolve.alias = {
       ...config.resolve?.alias,
-      '@': [path.resolve(__dirname, '../components/'), path.resolve(__dirname, '../')],
+      '@': [
+        path.resolve(__dirname, '../components/'),
+        path.resolve(__dirname, '../'),
+      ],
     };
 
     /**
