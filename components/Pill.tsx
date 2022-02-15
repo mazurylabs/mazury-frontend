@@ -112,7 +112,7 @@ export const LoadMoreButton: React.FC<LoadMoreProps> = ({
       onClick={onClick}
       active={active}
       isNav={isNav}
-      className={`border-2 border-indigoGray-90 shadow-base mx-auto mt-8 ${className}`}
+      className={`mx-auto mt-8 border-2 border-indigoGray-90 shadow-base ${className}`}
     />
   );
 };

@@ -16,7 +16,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`bg-slate-200 px-4 py-1 rounded ${className} disabled:opacity-50`}
+      className={`rounded bg-slate-200 px-4 py-1 ${className} disabled:opacity-50`}
       disabled={disabled}
     >
       {children}
@@ -31,7 +31,7 @@ export const OutlineButton: React.FC<ButtonProps> = ({
 }) => {
   return (
     <Button
-      className={`border-2 border-blue-800 text-blue-800 shadow rounded-xl bg-white px-8 flex gap-2 items-center ${className}`}
+      className={`flex items-center gap-2 rounded-xl border-2 border-blue-800 bg-white px-8 text-blue-800 shadow ${className}`}
       {...props}
     >
       {children}

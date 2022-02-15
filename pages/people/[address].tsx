@@ -124,40 +124,40 @@ const Profile: React.FC<Props> = ({ address }) => {
       <Layout
         sidebarContent={<Sidebar />}
         headerContent={
-          <div className={`sticky top-0 left-0 bg-white z-10`}>
-            <div className='hidden md:flex gap-8 py-4 px-24 items-center'>
+          <div className={`sticky top-0 left-0 z-10 bg-white`}>
+            <div className="hidden items-center gap-8 py-4 px-24 md:flex">
               <Image
                 onClick={() => router.back()}
-                className='hover:cursor-pointer'
-                src='/icons/back.svg'
-                alt='Back'
+                className="hover:cursor-pointer"
+                src="/icons/back.svg"
+                alt="Back"
                 width={16}
                 height={16}
               />
-              <p className='font-demi'>{profile.username}</p>
+              <p className="font-demi">{profile.username}</p>
             </div>
 
             <div
-              className='flex gap-8 px-8 py-4 md:py-6 rounded-none md:rounded-2xl items-center bg-white transition duration-1000 ease-in-out w-full'
+              className="flex w-full items-center gap-8 rounded-none bg-white px-8 py-4 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
               }}
             >
-              <div className='flex flex-col gap-4 lg:gap-8'>
-                <div className='flex flex-col gap-2'>
-                  <div className='flex md:hidden gap-4'>
+              <div className="flex flex-col gap-4 lg:gap-8">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-4 md:hidden">
                     <Image
                       onClick={() => router.back()}
-                      className='hover:cursor-pointer'
-                      src='/icons/back.svg'
-                      alt='Back'
+                      className="hover:cursor-pointer"
+                      src="/icons/back.svg"
+                      alt="Back"
                       width={16}
                       height={16}
                     />
-                    <p className='font-demi'>{profile.username}</p>
+                    <p className="font-demi">{profile.username}</p>
                   </div>
-                  <div className='flex gap-6 items-center'>
+                  <div className="flex items-center gap-6">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <motion.img
                       animate={{
@@ -170,20 +170,20 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       src={profile.avatar}
                       alt={`${profile.username}'s avatar`}
-                      className='rounded-full'
+                      className="rounded-full"
                     />
-                    <div className='flex flex-col'>
-                      <div className='flex gap-4 items-baseline'>
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline gap-4">
                         <motion.h1
                           animate={{
                             fontSize: shouldCollapseHeader ? '24px' : '48px',
                           }}
-                          className={`font-demi text-indigoGray-90 overflow-x-scroll md:overflow-auto no-scrollbar`}
+                          className={`no-scrollbar overflow-x-scroll font-demi text-indigoGray-90 md:overflow-auto`}
                         >
                           {profile.username}
                         </motion.h1>
                         <h3
-                          className={`hidden md:inline-block text-indigoGray-40 ${
+                          className={`hidden text-indigoGray-40 md:inline-block ${
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
@@ -192,7 +192,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
 
                       <h3
-                        className={`md:hidden text-indigoGray-40 ${
+                        className={`text-indigoGray-40 md:hidden ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
@@ -201,11 +201,11 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                       <p
                         className={`text-indigoGray-70 md:block ${
-                          shouldCollapseHeader ? 'text-sm hidden' : 'text-base'
+                          shouldCollapseHeader ? 'hidden text-sm' : 'text-base'
                         }`}
                       >
                         {profile.ens_name && `${profile.ens_name} `}
-                        <span className='text-indigoGray-40'>
+                        <span className="text-indigoGray-40">
                           ({getTruncatedAddress(profile.eth_address, 3)})
                         </span>
                       </p>
@@ -222,7 +222,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </p>
 
                 <div
-                  className={`flex gap-6 overflow-x-scroll md:overflow-auto w-full no-scrollbar ${
+                  className={`no-scrollbar flex w-full gap-6 overflow-x-scroll md:overflow-auto ${
                     shouldCollapseHeader && 'hidden md:flex'
                   }`}
                 >
@@ -232,7 +232,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       return (
                         <Button
                           key={role}
-                          className='bg-white font-bold text-sm text-indigoGray-90'
+                          className="bg-white text-sm font-bold text-indigoGray-90"
                         >
                           {roleFieldToLabel[role]}
                         </Button>
@@ -242,59 +242,59 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
 
                 <div
-                  className={`lg:hidden flex gap-4 ${
+                  className={`flex gap-4 lg:hidden ${
                     shouldCollapseHeader && 'hidden'
                   }`}
                 >
-                  <div className='flex gap-1 items-baseline'>
-                    <span className='text-xs font-bold text-indigoGray-50'>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-bold text-indigoGray-50">
                       {referrals?.length || '-'}
                     </span>
-                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                    <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Referrals
                     </span>
                   </div>
 
-                  <div className='flex gap-1 items-baseline'>
-                    <span className='text-xs font-bold text-indigoGray-50'>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-bold text-indigoGray-50">
                       {badges?.length || '-'}
                     </span>
-                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                    <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Badges
                     </span>
                   </div>
 
-                  <div className='flex gap-1 items-baseline'>
-                    <span className='text-xs font-bold text-indigoGray-50'>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-bold text-indigoGray-50">
                       23
                     </span>
-                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                    <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Posts
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className='ml-auto hidden lg:flex gap-16 pr-24'>
-                <div className='flex flex-col items-center gap-0'>
-                  <div className='font-serif font-bold text-4xl'>
+              <div className="ml-auto hidden gap-16 pr-24 lg:flex">
+                <div className="flex flex-col items-center gap-0">
+                  <div className="font-serif text-4xl font-bold">
                     {referrals?.length || '-'}
                   </div>
-                  <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
+                  <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Referrals
                   </div>
                 </div>
-                <div className='flex flex-col items-center gap-0'>
-                  <div className='font-serif font-bold text-4xl'>
+                <div className="flex flex-col items-center gap-0">
+                  <div className="font-serif text-4xl font-bold">
                     {badges?.length || '-'}
                   </div>
-                  <div className='text-sm uppercase text-indigoGray-60 opacity-60'>
+                  <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Badges
                   </div>
                 </div>
-                <div className='flex flex-col items-center gap-0'>
-                  <div className='font-serif font-bold text-4xl'>23</div>
-                  <div className='text-xs uppercase text-indigoGray-60 opacity-60'>
+                <div className="flex flex-col items-center gap-0">
+                  <div className="font-serif text-4xl font-bold">23</div>
+                  <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
                   </div>
                 </div>
@@ -302,7 +302,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className={`flex gap-4 mt-4 md:mt-6 px-4 lg:px-24 text-sm font-medium overflow-x-scroll md:overflow-x-auto no-scrollbar ${
+              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:mt-6 md:overflow-x-auto lg:px-24 ${
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
@@ -334,10 +334,10 @@ const Profile: React.FC<Props> = ({ address }) => {
             <hr
               className={`${
                 shouldCollapseHeader && 'mt-0 md:mt-8'
-              } mt-4 md:mt-8 mb-0 border-indigoGray-20`}
+              } mt-4 mb-0 border-indigoGray-20 md:mt-8`}
             />
 
-            <div className='px-4 py-4 md:hidden flex gap-4 font-serif text-lg font-bold overflow-x-scroll no-scrollbar'>
+            <div className="no-scrollbar flex gap-4 overflow-x-scroll px-4 py-4 font-serif text-lg font-bold md:hidden">
               {profileSections.map((item) => (
                 <button
                   key={`${item}-mobile-nav`}
@@ -357,10 +357,10 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
         innerLeftContent={
-          <div className='flex flex-col gap-4 justify-start sticky left-0 h-fit top-[25rem]'>
+          <div className="sticky left-0 top-[25rem] flex h-fit flex-col justify-start gap-4">
             {profileSections.map((sectionName) => (
               <Pill
-                className='w-full xl:w-1/2 mx-auto'
+                className="mx-auto w-full xl:w-1/2"
                 key={sectionName}
                 isNav
                 label={sectionName}
@@ -377,41 +377,41 @@ const Profile: React.FC<Props> = ({ address }) => {
           <>
             <div>
               <h3
-                id='activity'
-                className='text-3xl font-bold font-serif text-indigoGray-90 hidden md:block'
+                id="activity"
+                className="hidden font-serif text-3xl font-bold text-indigoGray-90 md:block"
               >
                 Activity
               </h3>
               <div
                 ref={activityRef}
-                className='mt-0 md:mt-8 flex flex-col gap-6 lg:w-10/12'
+                className="mt-0 flex flex-col gap-6 md:mt-8 lg:w-10/12"
               >
                 <ActivityPreview
-                  activityType='event'
-                  thumbnailSrc='/blue-ph.png'
-                  label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
-                  time='3 days ago'
+                  activityType="event"
+                  thumbnailSrc="/blue-ph.png"
+                  label="Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1"
+                  time="3 days ago"
                 />
                 <ActivityPreview
-                  activityType='referral'
-                  thumbnailSrc='/blue-ph.png'
-                  label='Mikela wrote a referral for luc'
-                  time='3 days ago'
+                  activityType="referral"
+                  thumbnailSrc="/blue-ph.png"
+                  label="Mikela wrote a referral for luc"
+                  time="3 days ago"
                 />
                 <ActivityPreview
-                  activityType='vote'
-                  thumbnailSrc='/blue-ph.png'
-                  label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
-                  time='3 days ago'
+                  activityType="vote"
+                  thumbnailSrc="/blue-ph.png"
+                  label="Voted Yes - Create $CODE on P-5: Governance Token Proposal"
+                  time="3 days ago"
                 />
               </div>
             </div>
 
             <div>
-              <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
+              <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
                 Recent referrals
               </h3>
-              <div className='mt-4 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
+              <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
                 {referrals?.slice(0, 2).map((referral) => {
                   return (
                     <ReferralPreview
@@ -430,25 +430,25 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div>
-              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
+              <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   ref={badgesRef}
-                  className='text-3xl font-bold font-serif text-indigoGray-90'
+                  className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
                   Badges
                 </h3>
-                <div className='flex gap-[24px]'>
+                <div className="flex gap-[24px]">
                   <Pill
-                    label='Mazury badges'
+                    label="Mazury badges"
                     active
-                    color='fuchsia'
-                    className='h-fit w-fit md:ml-8'
+                    color="fuchsia"
+                    className="h-fit w-fit md:ml-8"
                   />
-                  <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
+                  <Pill label="POAPs" color="fuchsia" className="h-fit w-fit" />
                 </div>
               </div>
 
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8'>
+              <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
                 {badges?.slice(0, 4).map((badge) => {
                   const { badge_type, id } = badge;
                   const { image, description, title } = badge_type;
@@ -465,32 +465,32 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <div className='lg:w-10/12'>
+              <div className="lg:w-10/12">
                 <LoadMoreButton />
               </div>
               <HR />
             </div>
 
             <div>
-              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
+              <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   ref={referralsRef}
-                  className='text-3xl font-serif font-bold text-indigoGray-90'
+                  className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
                   Referrals
                 </h3>
-                <div className='flex gap-[24px]'>
+                <div className="flex gap-[24px]">
                   <Pill
-                    label='Received'
+                    label="Received"
                     active
-                    color='emerald'
-                    className='h-fit w-fit md:ml-8'
+                    color="emerald"
+                    className="h-fit w-fit md:ml-8"
                   />
-                  <Pill label='Given' color='emerald' className='h-fit w-fit' />
+                  <Pill label="Given" color="emerald" className="h-fit w-fit" />
                 </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
+              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
                 {referrals?.slice(0, 4).map((referral) => {
                   return (
                     <ReferralPreview
@@ -506,34 +506,34 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <div className='lg:w-10/12'>
+              <div className="lg:w-10/12">
                 <LoadMoreButton />
               </div>
               <HR />
             </div>
 
             <div>
-              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
+              <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   ref={writingRef}
-                  className='text-3xl font-serif font-bold text-indigoGray-90'
+                  className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
                   Writing
                 </h3>
 
-                <div className='flex gap-[24px]'>
+                <div className="flex gap-[24px]">
                   <Pill
-                    color='amber'
-                    label='All posts'
-                    className='md:ml-8'
+                    color="amber"
+                    label="All posts"
+                    className="md:ml-8"
                     active
                   />
-                  <Pill color='amber' label='GM' />
-                  <Pill color='amber' label='Mirror' />
+                  <Pill color="amber" label="GM" />
+                  <Pill color="amber" label="Mirror" />
                 </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
+              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
                 <GMPost
                   author={{
                     username: 'mikela.eth',
@@ -542,16 +542,16 @@ const Profile: React.FC<Props> = ({ address }) => {
                   content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
                   upvoteCount={3}
                   commentCount={3}
-                  link='https://github.com/dhaiwat10'
+                  link="https://github.com/dhaiwat10"
                 />
                 <MirrorPost
                   author={{
                     username: 'mikela.eth',
                     avatarSrc: '/avatar-2.png',
                   }}
-                  link='https://github.com/dhaiwat10'
-                  bgImageSrc='/post-bg.jpeg'
-                  title='Why is the internet so lonely?'
+                  link="https://github.com/dhaiwat10"
+                  bgImageSrc="/post-bg.jpeg"
+                  title="Why is the internet so lonely?"
                 />
                 <GMPost
                   author={{
@@ -561,7 +561,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
                   upvoteCount={3}
                   commentCount={3}
-                  link='https://github.com/dhaiwat10'
+                  link="https://github.com/dhaiwat10"
                 />
                 <GMPost
                   author={{
@@ -571,16 +571,16 @@ const Profile: React.FC<Props> = ({ address }) => {
                   content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
                   upvoteCount={3}
                   commentCount={3}
-                  link='https://github.com/dhaiwat10'
+                  link="https://github.com/dhaiwat10"
                 />
                 <MirrorPost
                   author={{
                     username: 'mikela.eth',
                     avatarSrc: '/avatar-2.png',
                   }}
-                  link='https://github.com/dhaiwat10'
-                  bgImageSrc='/post-bg.jpeg'
-                  title='Why is the internet so lonely?'
+                  link="https://github.com/dhaiwat10"
+                  bgImageSrc="/post-bg.jpeg"
+                  title="Why is the internet so lonely?"
                 />
                 <GMPost
                   author={{
@@ -590,11 +590,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                   content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
                   upvoteCount={3}
                   commentCount={3}
-                  link='https://github.com/dhaiwat10'
+                  link="https://github.com/dhaiwat10"
                 />
               </div>
 
-              <div className='lg:w-10/12'>
+              <div className="lg:w-10/12">
                 <LoadMoreButton />
               </div>
             </div>

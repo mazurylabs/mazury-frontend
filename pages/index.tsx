@@ -12,18 +12,18 @@ const Home: NextPage = () => {
 
   if (connected) {
     return (
-      <div className='text-center py-24'>
+      <div className="py-24 text-center">
         <Image
-          src='/waves.png'
-          alt='Mazury logo'
-          height='50'
-          width='50'
-          className='rounded-full'
+          src="/waves.png"
+          alt="Mazury logo"
+          height="50"
+          width="50"
+          className="rounded-full"
         />
-        <p className='text-2xl font-bold'>
+        <p className="text-2xl font-bold">
           Welcome {accountData?.ens?.name || accountData?.address}
         </p>
-        <Button className='mt-10' onClick={disconnect}>
+        <Button className="mt-10" onClick={disconnect}>
           Disconnect
         </Button>
       </div>
@@ -31,20 +31,20 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className='text-center py-24'>
+    <div className="py-24 text-center">
       <Image
-        src='/waves.png'
-        alt='Mazury logo'
-        height='50'
-        width='50'
-        className='rounded-full'
+        src="/waves.png"
+        alt="Mazury logo"
+        height="50"
+        width="50"
+        className="rounded-full"
       />
-      <h1 className='text-2xl font-bold'>Welcome to Mazury</h1>
-      <p className='mt-10'>Connect your wallet:</p>
-      <div className='flex gap-6 justify-center mt-5'>
+      <h1 className="text-2xl font-bold">Welcome to Mazury</h1>
+      <p className="mt-10">Connect your wallet:</p>
+      <div className="mt-5 flex justify-center gap-6">
         {data.connectors.map((x) => (
           <Button
-            className='bg-slate-200 p-2 rounded'
+            className="rounded bg-slate-200 p-2"
             key={x.id}
             onClick={() => connect(x)}
           >
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
       </div>
 
       {error && (
-        <p className='text-red-500'>{error?.message ?? 'Failed to connect'}</p>
+        <p className="text-red-500">{error?.message ?? 'Failed to connect'}</p>
       )}
     </div>
   );
