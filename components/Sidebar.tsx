@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { FC, useContext } from 'react';
 import { Avatar } from '.';
-import { SidebarContext } from '../contexts';
+import { SidebarContext } from 'contexts';
 import { InputWithIcon } from './SearchInput';
 
 export const Sidebar: FC = () => {

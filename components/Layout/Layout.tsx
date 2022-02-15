@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FC, useState } from 'react';
-import { SidebarContext } from '../../contexts';
+import { SidebarContext } from 'contexts';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 
 interface LayoutProps {

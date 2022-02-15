@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useAccount, useConnect } from 'wagmi';
-import { Button } from '../components';
+import { Button } from 'components';
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
