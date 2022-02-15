@@ -1,26 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import React from 'react';
+import React, { FC, useContext } from 'react';
 import { Avatar } from '.';
+import { SidebarContext } from '../contexts';
 import { InputWithIcon } from './SearchInput';
 
-export const Sidebar: React.FC = () => {
-  const [expand, setExpand] = React.useState(false);
+export const Sidebar: FC = () => {
+  const { isOpen } = useContext(SidebarContext);
 
   return (
-    <motion.aside
-      className={`fixed w-[75px] top-0 border h-screen py-10 px-5 shadow-inner flex flex-col z-20`}
-      style={{
-        background:
-          'linear-gradient(184.64deg, #FFFFFF -5.13%, #E7E8E9 103.54%)',
-      }}
-      whileHover={{
-        width: '266px',
-      }}
-      onMouseEnter={() => setExpand(true)}
-      onMouseLeave={() => setExpand(false)}
-    >
+    <>
       <Avatar
         src='/waves.png'
         height='40px'
@@ -30,17 +19,17 @@ export const Sidebar: React.FC = () => {
       />
       <menu
         className={`flex flex-col gap-12 mt-12 text-xl font-bold ${
-          expand ? 'items-start' : 'items-center'
-        } h-[100%] ${expand && 'px-4'}`}
+          isOpen ? 'items-start' : 'items-center'
+        } h-[100%] ${isOpen && 'px-4'}`}
       >
         <InputWithIcon
           iconAlt='Search icon'
           iconSrc='/icons/search.svg'
-          expanded={expand}
+          expanded={isOpen}
         />
         <Link href='/' passHref>
           <a className='flex items-center gap-4 text-sm font-medium text-indigoGray-50'>
-            <img src='/icons/home.svg' alt='Home icon' /> {expand && 'Home'}
+            <img src='/icons/home.svg' alt='Home icon' /> {isOpen && 'Home'}
           </a>
         </Link>
 
@@ -50,17 +39,17 @@ export const Sidebar: React.FC = () => {
         >
           <a className='flex items-center gap-4 text-sm font-medium text-indigoGray-50'>
             <img src='/profile-active.svg' alt='Profile icon' />{' '}
-            {expand && 'Profile'}
+            {isOpen && 'Profile'}
           </a>
         </Link>
 
         <Link href='/' passHref>
           <a className='flex items-center gap-4 text-sm font-medium text-indigoGray-50 mt-auto pb-12'>
             <img src='/icons/sliders.svg' alt='Settings icon' />{' '}
-            {expand && 'Settings'}
+            {isOpen && 'Settings'}
           </a>
         </Link>
       </menu>
-    </motion.aside>
+    </>
   );
 };

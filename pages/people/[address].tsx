@@ -1,18 +1,17 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
-  Avatar,
   Pill,
   ActivityPreview,
   BadgePreview,
   HR,
   GMPost,
   MirrorPost,
+  Layout,
 } from '../../components';
 import { OutlineButton } from '../../components/Button';
-import { useProfile } from '../../hooks/useProfile';
 import {
   ColorName,
   MappedRoles,
@@ -25,14 +24,18 @@ import { getProfile } from '../../utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
 import { ReferralPreview } from '../../components/ReferralPreview';
-import { useReferrals } from '../../hooks/useReferrals';
-import { useBadges } from '../../hooks/useBadges';
+import {
+  useBadges,
+  useReferrals,
+  useScrollPosition,
+  useTotalBadgeCounts,
+  useProfile,
+} from '../../hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useScrollPosition } from '../../hooks/useScrollPosition';
-import { useTotalBadgeCounts } from '../../hooks/useBadgeTypes';
 import { LoadMoreButton } from '../../components/Pill';
 import { motion } from 'framer-motion';
+import { Sidebar } from '../../components/Sidebar';
 
 interface Props {
   address: string;
@@ -86,15 +89,43 @@ const Profile: React.FC<Props> = ({ address }) => {
   const referralsRef = useRef<HTMLHeadingElement>(null);
   const writingRef = useRef<HTMLHeadingElement>(null);
 
+  const handleSectionClick = (section: ProfileSection) => {
+    setActiveSection(section);
+    let ref;
+    switch (section) {
+      case 'Activity':
+        ref = activityRef;
+        break;
+      case 'Badges':
+        ref = badgesRef;
+        break;
+      case 'Referrals':
+        ref = referralsRef;
+        break;
+      case 'Writing':
+        ref = writingRef;
+        break;
+      case 'DAOs':
+        ref = writingRef;
+        break;
+      default:
+        ref = activityRef;
+    }
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
-      <div>
-        <div className={`sticky top-0 left-0 bg-white z-10`}>
-          <div className='container'>
-            <div className='flex gap-8 py-4 px-24 items-center'>
+      <Layout
+        sidebarContent={<Sidebar />}
+        headerContent={
+          <div className={`sticky top-0 left-0 bg-white z-10`}>
+            <div className='hidden md:flex gap-8 py-4 px-24 items-center'>
               <Image
                 onClick={() => router.back()}
                 className='hover:cursor-pointer'
@@ -107,63 +138,94 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className='flex gap-8 px-8 rounded-2xl py-6 items-center bg-white transition duration-1000 ease-in-out'
+              className='flex gap-8 px-8 py-4 md:py-6 rounded-none md:rounded-2xl items-center bg-white transition duration-1000 ease-in-out w-full'
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
               }}
             >
-              <div className='flex flex-col gap-8'>
-                <div className='flex gap-6 items-center'>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <motion.img
-                    animate={{
-                      width: shouldCollapseHeader ? '48px' : '100px',
-                      height: shouldCollapseHeader ? '48px' : '100px',
-                    }}
-                    initial={{
-                      width: shouldCollapseHeader ? '48px' : '100px',
-                      height: shouldCollapseHeader ? '48px' : '100px',
-                    }}
-                    src={profile.avatar}
-                    alt={`${profile.username}'s avatar`}
-                    className='rounded-full'
-                  />
-                  <div className='flex flex-col'>
-                    <div className='flex gap-4 items-baseline'>
-                      <motion.h1
-                        animate={{
-                          fontSize: shouldCollapseHeader ? '24px' : '48px',
-                        }}
-                        className={`font-demi text-indigoGray-90`}
-                      >
-                        {profile.username}
-                      </motion.h1>
+              <div className='flex flex-col gap-4 lg:gap-8'>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex md:hidden gap-4'>
+                    <Image
+                      onClick={() => router.back()}
+                      className='hover:cursor-pointer'
+                      src='/icons/back.svg'
+                      alt='Back'
+                      width={16}
+                      height={16}
+                    />
+                    <p className='font-demi'>{profile.username}</p>
+                  </div>
+                  <div className='flex gap-6 items-center'>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <motion.img
+                      animate={{
+                        width: shouldCollapseHeader ? '48px' : '100px',
+                        height: shouldCollapseHeader ? '48px' : '100px',
+                      }}
+                      initial={{
+                        width: shouldCollapseHeader ? '48px' : '100px',
+                        height: shouldCollapseHeader ? '48px' : '100px',
+                      }}
+                      src={profile.avatar}
+                      alt={`${profile.username}'s avatar`}
+                      className='rounded-full'
+                    />
+                    <div className='flex flex-col'>
+                      <div className='flex gap-4 items-baseline'>
+                        <motion.h1
+                          animate={{
+                            fontSize: shouldCollapseHeader ? '24px' : '48px',
+                          }}
+                          className={`font-demi text-indigoGray-90 overflow-x-scroll no-scrollbar`}
+                        >
+                          {profile.username}
+                        </motion.h1>
+                        <h3
+                          className={`hidden md:inline-block text-indigoGray-40 ${
+                            shouldCollapseHeader ? 'text-sm' : 'text-lg'
+                          }`}
+                        >
+                          Michael Scott
+                        </h3>
+                      </div>
+
                       <h3
-                        className={`text-indigoGray-40 ${
+                        className={`md:hidden text-indigoGray-40 ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
                         Michael Scott
                       </h3>
-                    </div>
 
-                    <p
-                      className={`text-indigoGray-70 ${
-                        shouldCollapseHeader ? 'text-sm' : 'text-base'
-                      }`}
-                    >
-                      {profile.ens_name && `${profile.ens_name} `}
-                      <span className='text-indigoGray-40'>
-                        ({getTruncatedAddress(profile.eth_address, 3)})
-                      </span>
-                    </p>
+                      <p
+                        className={`text-indigoGray-70 md:block ${
+                          shouldCollapseHeader ? 'text-sm hidden' : 'text-base'
+                        }`}
+                      >
+                        {profile.ens_name && `${profile.ens_name} `}
+                        <span className='text-indigoGray-40'>
+                          ({getTruncatedAddress(profile.eth_address, 3)})
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                <p className='text-indigoGray-70'>{profile.bio}</p>
+                <p
+                  className={`text-indigoGray-70 md:block ${
+                    shouldCollapseHeader && 'hidden'
+                  }`}
+                >
+                  {profile.bio}
+                </p>
 
-                <div className='flex gap-6'>
+                <div
+                  className={`flex gap-6 overflow-x-scroll w-full no-scrollbar ${
+                    shouldCollapseHeader && 'hidden md:flex'
+                  }`}
+                >
                   {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
                   {Object.keys(roleFieldToLabel).map((role: Role) => {
                     if (profile[role] === true) {
@@ -178,9 +240,42 @@ const Profile: React.FC<Props> = ({ address }) => {
                     }
                   })}
                 </div>
+
+                <div
+                  className={`lg:hidden flex gap-4 ${
+                    shouldCollapseHeader && 'hidden'
+                  }`}
+                >
+                  <div className='flex gap-1 items-baseline'>
+                    <span className='text-xs font-bold text-indigoGray-50'>
+                      {referrals?.length || '-'}
+                    </span>
+                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                      Referrals
+                    </span>
+                  </div>
+
+                  <div className='flex gap-1 items-baseline'>
+                    <span className='text-xs font-bold text-indigoGray-50'>
+                      {badges?.length || '-'}
+                    </span>
+                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                      Badges
+                    </span>
+                  </div>
+
+                  <div className='flex gap-1 items-baseline'>
+                    <span className='text-xs font-bold text-indigoGray-50'>
+                      23
+                    </span>
+                    <span className='text-xs font-medium uppercase text-indigoGray-40'>
+                      Posts
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className='ml-auto flex gap-16 pr-24'>
+              <div className='ml-auto hidden lg:flex gap-16 pr-24'>
                 <div className='flex flex-col items-center gap-0'>
                   <div className='font-serif font-bold text-4xl'>
                     {referrals?.length || '-'}
@@ -206,7 +301,11 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             </div>
 
-            <div className='flex gap-4 mt-6 px-24 text-sm font-medium'>
+            <div
+              className={`flex gap-4 mt-4 md:mt-6 px-4 lg:px-24 text-sm font-medium overflow-x-scroll md:overflow-x-auto no-scrollbar ${
+                shouldCollapseHeader && 'hidden md:flex'
+              }`}
+            >
               {profile.twitter && (
                 <OutlineButton
                   onClick={() =>
@@ -231,130 +330,125 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </OutlineButton>
               )}
             </div>
+
+            <hr
+              className={`${
+                shouldCollapseHeader && 'mt-0 md:mt-8'
+              } mt-4 md:mt-8 mb-0 border-indigoGray-20`}
+            />
+
+            <div className='px-4 py-4 md:hidden flex gap-4 font-serif text-lg font-bold overflow-x-scroll no-scrollbar'>
+              {profileSections.map((item) => (
+                <button
+                  key={`${item}-mobile-nav`}
+                  className={`${
+                    activeSection === item
+                      ? 'text-indigoGray-90'
+                      : 'text-indigoGray-30'
+                  }`}
+                  onClick={() => handleSectionClick(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <hr />
           </div>
-
-          <motion.hr
-            animate={{
-              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
-            }}
-            initial={{
-              marginBottom: shouldCollapseHeader ? '1rem' : '2rem',
-            }}
-            className={`my-8 border-indigoGray-20`}
-          />
-        </div>
-
-        <div className='flex pb-10 mr-0 gap-12 container w-full'>
-          <div
-            className='flex flex-col gap-4 justify-start w-2/12 sticky left-0 h-fit'
-            style={{ top: '25rem !important' }}
-          >
+        }
+        innerLeftContent={
+          <div className='flex flex-col gap-4 justify-start sticky left-0 h-fit top-[25rem]'>
             {profileSections.map((sectionName) => (
               <Pill
+                className='w-full xl:w-1/2 mx-auto'
                 key={sectionName}
                 isNav
                 label={sectionName}
                 active={sectionName === activeSection}
                 color={sectionToColor[sectionName]}
                 onClick={() => {
-                  let currRef;
-                  switch (sectionName) {
-                    case 'Activity':
-                      currRef = activityRef;
-                      break;
-                    case 'Badges':
-                      currRef = badgesRef;
-                      break;
-                    case 'Referrals':
-                      currRef = referralsRef;
-                      break;
-                    case 'Writing':
-                      currRef = writingRef;
-                      break;
-                    case 'DAOs':
-                      currRef = writingRef;
-                      break;
-                    default:
-                      break;
-                  }
-                  window.scrollTo({
-                    top: currRef?.current?.offsetTop,
-                    behavior: 'smooth',
-                  });
-                  setActiveSection(sectionName);
+                  handleSectionClick(sectionName);
                 }}
               />
             ))}
           </div>
-
-          <div className='flex flex-col w-10/12'>
-            <h3
-              ref={activityRef}
-              id='activity'
-              className='text-3xl font-bold font-serif text-indigoGray-90'
-            >
-              Activity
-            </h3>
-            <div className='mt-8 flex flex-col gap-6 w-10/12'>
-              <ActivityPreview
-                activityType='event'
-                thumbnailSrc='/blue-ph.png'
-                label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
-                time='3 days ago'
-              />
-              <ActivityPreview
-                activityType='referral'
-                thumbnailSrc='/blue-ph.png'
-                label='Mikela wrote a referral for luc'
-                time='3 days ago'
-              />
-              <ActivityPreview
-                activityType='vote'
-                thumbnailSrc='/blue-ph.png'
-                label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
-                time='3 days ago'
-              />
+        }
+        innerRightContent={
+          <>
+            <div>
+              <h3
+                id='activity'
+                className='text-3xl font-bold font-serif text-indigoGray-90 hidden md:block'
+              >
+                Activity
+              </h3>
+              <div
+                ref={activityRef}
+                className='mt-0 md:mt-8 flex flex-col gap-6 lg:w-10/12'
+              >
+                <ActivityPreview
+                  activityType='event'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1'
+                  time='3 days ago'
+                />
+                <ActivityPreview
+                  activityType='referral'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Mikela wrote a referral for luc'
+                  time='3 days ago'
+                />
+                <ActivityPreview
+                  activityType='vote'
+                  thumbnailSrc='/blue-ph.png'
+                  label='Voted Yes - Create $CODE on P-5: Governance Token Proposal'
+                  time='3 days ago'
+                />
+              </div>
             </div>
-
-            <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
-              Recent referrals
-            </h3>
-            <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
-              {referrals?.slice(0, 2).map((referral) => {
-                return (
-                  <ReferralPreview
-                    key={referral.id}
-                    referredBy={{
-                      username: referral.author.username,
-                      avatarSrc: referral.author.avatar,
-                    }}
-                    text={referral.content}
-                    skills={['community', 'frontendDev']}
-                  />
-                );
-              })}
-            </div>
-
-            <HR />
 
             <div>
-              <div className='flex gap-4 items-center'>
+              <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
+                Recent referrals
+              </h3>
+              <div className='mt-4 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
+                {referrals?.slice(0, 2).map((referral) => {
+                  return (
+                    <ReferralPreview
+                      key={referral.id}
+                      referredBy={{
+                        username: referral.author.username,
+                        avatarSrc: referral.author.avatar,
+                      }}
+                      text={referral.content}
+                      skills={['community', 'frontendDev']}
+                    />
+                  );
+                })}
+              </div>
+              <HR />
+            </div>
+
+            <div>
+              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
                 <h3
                   ref={badgesRef}
                   className='text-3xl font-bold font-serif text-indigoGray-90'
                 >
                   Badges
                 </h3>
-                <Pill
-                  label='Mazury badges'
-                  active
-                  color='fuchsia'
-                  className='h-fit w-fit ml-8'
-                />
-                <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
+                <div className='flex gap-[24px]'>
+                  <Pill
+                    label='Mazury badges'
+                    active
+                    color='fuchsia'
+                    className='h-fit w-fit md:ml-8'
+                  />
+                  <Pill label='POAPs' color='fuchsia' className='h-fit w-fit' />
+                </div>
               </div>
 
-              <div className='grid grid-cols-2 gap-12 mt-8'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8'>
                 {badges?.slice(0, 4).map((badge) => {
                   const { badge_type, id } = badge;
                   const { image, description, title } = badge_type;
@@ -371,31 +465,32 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <div className='w-10/12'>
+              <div className='lg:w-10/12'>
                 <LoadMoreButton />
               </div>
+              <HR />
             </div>
 
-            <HR />
-
             <div>
-              <div className='flex gap-4 items-center'>
+              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
                 <h3
                   ref={referralsRef}
                   className='text-3xl font-serif font-bold text-indigoGray-90'
                 >
                   Referrals
                 </h3>
-                <Pill
-                  label='Received'
-                  active
-                  color='emerald'
-                  className='h-fit w-fit ml-8'
-                />
-                <Pill label='Given' color='emerald' className='h-fit w-fit' />
+                <div className='flex gap-[24px]'>
+                  <Pill
+                    label='Received'
+                    active
+                    color='emerald'
+                    className='h-fit w-fit md:ml-8'
+                  />
+                  <Pill label='Given' color='emerald' className='h-fit w-fit' />
+                </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
                 {referrals?.slice(0, 4).map((referral) => {
                   return (
                     <ReferralPreview
@@ -411,15 +506,14 @@ const Profile: React.FC<Props> = ({ address }) => {
                 })}
               </div>
 
-              <div className='w-10/12'>
+              <div className='lg:w-10/12'>
                 <LoadMoreButton />
               </div>
+              <HR />
             </div>
 
-            <HR />
-
             <div>
-              <div className='flex gap-4 items-center'>
+              <div className='flex flex-col md:flex-row gap-4 md:items-center'>
                 <h3
                   ref={writingRef}
                   className='text-3xl font-serif font-bold text-indigoGray-90'
@@ -427,12 +521,19 @@ const Profile: React.FC<Props> = ({ address }) => {
                   Writing
                 </h3>
 
-                <Pill color='amber' label='All posts' className='ml-8' active />
-                <Pill color='amber' label='GM' />
-                <Pill color='amber' label='Mirror' />
+                <div className='flex gap-[24px]'>
+                  <Pill
+                    color='amber'
+                    label='All posts'
+                    className='md:ml-8'
+                    active
+                  />
+                  <Pill color='amber' label='GM' />
+                  <Pill color='amber' label='Mirror' />
+                </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-2 gap-6 w-10/12'>
+              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
                 <GMPost
                   author={{
                     username: 'mikela.eth',
@@ -493,13 +594,13 @@ const Profile: React.FC<Props> = ({ address }) => {
                 />
               </div>
 
-              <div className='w-10/12'>
+              <div className='lg:w-10/12'>
                 <LoadMoreButton />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
     </>
   );
 };

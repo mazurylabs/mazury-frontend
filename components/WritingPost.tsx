@@ -36,7 +36,7 @@ export const GMPost: React.FC<GMPostProps> = ({
           {author.username}
         </h5>
 
-        <span className='border-2 border-blue-600 text-blue-600 rounded-xl px-6 py-2 ml-auto'>
+        <span className='border-2 border-blue-600 text-blue-600 rounded-xl px-6 py-1 ml-auto text-sm'>
           gm
         </span>
       </div>
