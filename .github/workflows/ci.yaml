@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  lint-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,5 +25,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install Dependencies
         run: yarn install
+      - name: Lint code
+        run: yarn lint
       - name: Test code
         run: yarn test

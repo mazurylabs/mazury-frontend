@@ -31,7 +31,7 @@ export const InputWithIcon: React.FC<
       />
       {expanded && (
         <input
-          className='bg-indigoGray-20 w-3/4 outline-none'
+          className="bg-indigoGray-20 w-3/4 outline-none"
           placeholder={placeholder}
         />
       )}

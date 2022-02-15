@@ -24,7 +24,7 @@ Default.args = {
 export const WithIcon = Template.bind({});
 WithIcon.args = {
   children: (
-    <div className='flex gap-2 items-center'>
+    <div className="flex gap-2 items-center">
       <HiSearch />
       <span>Search</span>
     </div>

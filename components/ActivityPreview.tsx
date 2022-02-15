@@ -42,21 +42,21 @@ export const ActivityPreview: React.FC<Props> = ({
   const { iconSrc, className } = activityDetails[activityType];
 
   return (
-    <div className='flex gap-4'>
-      <Avatar src={thumbnailSrc} height='64px' width='64px' />
-      <div className='flex flex-col'>
-        <div className='flex gap-4'>
-          <div className='flex gap-2'>
+    <div className="flex gap-4">
+      <Avatar src={thumbnailSrc} height="64px" width="64px" />
+      <div className="flex flex-col">
+        <div className="flex gap-4">
+          <div className="flex gap-2">
             <Image
               src={iconSrc}
               alt={`${activityType} icon`}
-              width='16px'
-              height='16px'
+              width="16px"
+              height="16px"
             />
             <span className={className}>{activityType}</span>
           </div>
 
-          <span className='text-xs'>{time}</span>
+          <span className="text-xs">{time}</span>
         </div>
         <p>{label}</p>
       </div>
