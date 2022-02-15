@@ -89,6 +89,33 @@ const Profile: React.FC<Props> = ({ address }) => {
   const referralsRef = useRef<HTMLHeadingElement>(null);
   const writingRef = useRef<HTMLHeadingElement>(null);
 
+  const handleSectionClick = (section: ProfileSection) => {
+    setActiveSection(section);
+    let ref;
+    switch (section) {
+      case 'Activity':
+        ref = activityRef;
+        break;
+      case 'Badges':
+        ref = badgesRef;
+        break;
+      case 'Referrals':
+        ref = referralsRef;
+        break;
+      case 'Writing':
+        ref = writingRef;
+        break;
+      case 'DAOs':
+        ref = writingRef;
+        break;
+      default:
+        ref = activityRef;
+    }
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -111,76 +138,78 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className='flex gap-8 px-8 rounded-none md:rounded-2xl py-6 items-center bg-white transition duration-1000 ease-in-out w-full'
+              className='flex gap-8 px-8 py-4 md:py-6 rounded-none md:rounded-2xl items-center bg-white transition duration-1000 ease-in-out w-full'
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
               }}
             >
               <div className='flex flex-col gap-4 lg:gap-8'>
-                <div className='flex md:hidden gap-4'>
-                  <Image
-                    onClick={() => router.back()}
-                    className='hover:cursor-pointer'
-                    src='/icons/back.svg'
-                    alt='Back'
-                    width={16}
-                    height={16}
-                  />
-                  <p className='font-demi'>{profile.username}</p>
-                </div>
-                <div className='flex gap-6 items-center'>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <motion.img
-                    animate={{
-                      width: shouldCollapseHeader ? '48px' : '100px',
-                      height: shouldCollapseHeader ? '48px' : '100px',
-                    }}
-                    initial={{
-                      width: shouldCollapseHeader ? '48px' : '100px',
-                      height: shouldCollapseHeader ? '48px' : '100px',
-                    }}
-                    src={profile.avatar}
-                    alt={`${profile.username}'s avatar`}
-                    className='rounded-full'
-                  />
-                  <div className='flex flex-col'>
-                    <div className='flex gap-4 items-baseline'>
-                      <motion.h1
-                        animate={{
-                          fontSize: shouldCollapseHeader ? '24px' : '48px',
-                        }}
-                        className={`font-demi text-indigoGray-90 overflow-x-scroll no-scrollbar`}
-                      >
-                        {profile.username}
-                      </motion.h1>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex md:hidden gap-4'>
+                    <Image
+                      onClick={() => router.back()}
+                      className='hover:cursor-pointer'
+                      src='/icons/back.svg'
+                      alt='Back'
+                      width={16}
+                      height={16}
+                    />
+                    <p className='font-demi'>{profile.username}</p>
+                  </div>
+                  <div className='flex gap-6 items-center'>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <motion.img
+                      animate={{
+                        width: shouldCollapseHeader ? '48px' : '100px',
+                        height: shouldCollapseHeader ? '48px' : '100px',
+                      }}
+                      initial={{
+                        width: shouldCollapseHeader ? '48px' : '100px',
+                        height: shouldCollapseHeader ? '48px' : '100px',
+                      }}
+                      src={profile.avatar}
+                      alt={`${profile.username}'s avatar`}
+                      className='rounded-full'
+                    />
+                    <div className='flex flex-col'>
+                      <div className='flex gap-4 items-baseline'>
+                        <motion.h1
+                          animate={{
+                            fontSize: shouldCollapseHeader ? '24px' : '48px',
+                          }}
+                          className={`font-demi text-indigoGray-90 overflow-x-scroll no-scrollbar`}
+                        >
+                          {profile.username}
+                        </motion.h1>
+                        <h3
+                          className={`hidden md:inline-block text-indigoGray-40 ${
+                            shouldCollapseHeader ? 'text-sm' : 'text-lg'
+                          }`}
+                        >
+                          Michael Scott
+                        </h3>
+                      </div>
+
                       <h3
-                        className={`hidden md:inline-block text-indigoGray-40 ${
+                        className={`md:hidden text-indigoGray-40 ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
                         Michael Scott
                       </h3>
+
+                      <p
+                        className={`text-indigoGray-70 md:block ${
+                          shouldCollapseHeader ? 'text-sm hidden' : 'text-base'
+                        }`}
+                      >
+                        {profile.ens_name && `${profile.ens_name} `}
+                        <span className='text-indigoGray-40'>
+                          ({getTruncatedAddress(profile.eth_address, 3)})
+                        </span>
+                      </p>
                     </div>
-
-                    <h3
-                      className={`md:hidden text-indigoGray-40 ${
-                        shouldCollapseHeader ? 'text-sm' : 'text-lg'
-                      }`}
-                    >
-                      Michael Scott
-                    </h3>
-
-                    <p
-                      className={`text-indigoGray-70 ${
-                        shouldCollapseHeader ? 'text-sm' : 'text-base'
-                      }`}
-                    >
-                      {profile.ens_name && `${profile.ens_name} `}
-                      <span className='text-indigoGray-40'>
-                        ({getTruncatedAddress(profile.eth_address, 3)})
-                      </span>
-                    </p>
                   </div>
                 </div>
 
@@ -272,7 +301,11 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             </div>
 
-            <div className='flex gap-4 mt-6 px-4 lg:px-24 text-sm font-medium overflow-x-scroll md:overflow-x-auto no-scrollbar'>
+            <div
+              className={`flex gap-4 mt-4 md:mt-6 px-4 lg:px-24 text-sm font-medium overflow-x-scroll md:overflow-x-auto no-scrollbar ${
+                shouldCollapseHeader && 'hidden md:flex'
+              }`}
+            >
               {profile.twitter && (
                 <OutlineButton
                   onClick={() =>
@@ -298,7 +331,29 @@ const Profile: React.FC<Props> = ({ address }) => {
               )}
             </div>
 
-            <hr className={`mt-8 mb-0 border-indigoGray-20`} />
+            <hr
+              className={`${
+                shouldCollapseHeader && 'mt-0 md:mt-8'
+              } mt-4 md:mt-8 mb-0 border-indigoGray-20`}
+            />
+
+            <div className='px-4 py-4 md:hidden flex gap-4 font-serif text-lg font-bold overflow-x-scroll no-scrollbar'>
+              {profileSections.map((item) => (
+                <button
+                  key={`${item}-mobile-nav`}
+                  className={`${
+                    activeSection === item
+                      ? 'text-indigoGray-90'
+                      : 'text-indigoGray-30'
+                  }`}
+                  onClick={() => handleSectionClick(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <hr />
           </div>
         }
         innerLeftContent={
@@ -312,31 +367,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 active={sectionName === activeSection}
                 color={sectionToColor[sectionName]}
                 onClick={() => {
-                  let currRef;
-                  switch (sectionName) {
-                    case 'Activity':
-                      currRef = activityRef;
-                      break;
-                    case 'Badges':
-                      currRef = badgesRef;
-                      break;
-                    case 'Referrals':
-                      currRef = referralsRef;
-                      break;
-                    case 'Writing':
-                      currRef = writingRef;
-                      break;
-                    case 'DAOs':
-                      currRef = writingRef;
-                      break;
-                    default:
-                      break;
-                  }
-                  window.scrollTo({
-                    top: currRef?.current?.offsetTop,
-                    behavior: 'smooth',
-                  });
-                  setActiveSection(sectionName);
+                  handleSectionClick(sectionName);
                 }}
               />
             ))}
@@ -346,13 +377,15 @@ const Profile: React.FC<Props> = ({ address }) => {
           <>
             <div>
               <h3
-                ref={activityRef}
                 id='activity'
-                className='text-3xl font-bold font-serif text-indigoGray-90'
+                className='text-3xl font-bold font-serif text-indigoGray-90 hidden md:block'
               >
                 Activity
               </h3>
-              <div className='mt-8 flex flex-col gap-6 lg:w-10/12'>
+              <div
+                ref={activityRef}
+                className='mt-0 md:mt-8 flex flex-col gap-6 lg:w-10/12'
+              >
                 <ActivityPreview
                   activityType='event'
                   thumbnailSrc='/blue-ph.png'
@@ -378,7 +411,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               <h3 className='text-xl font-bold font-serif mt-12 text-indigoGray-90'>
                 Recent referrals
               </h3>
-              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:w-10/12'>
+              <div className='mt-4 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
                 {referrals?.slice(0, 2).map((referral) => {
                   return (
                     <ReferralPreview
@@ -404,7 +437,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Badges
                 </h3>
-                <div className='flex'>
+                <div className='flex gap-[24px]'>
                   <Pill
                     label='Mazury badges'
                     active
@@ -446,7 +479,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Referrals
                 </h3>
-                <div className='flex'>
+                <div className='flex gap-[24px]'>
                   <Pill
                     label='Received'
                     active
@@ -457,7 +490,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:w-10/12'>
+              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
                 {referrals?.slice(0, 4).map((referral) => {
                   return (
                     <ReferralPreview
@@ -488,7 +521,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   Writing
                 </h3>
 
-                <div className='flex'>
+                <div className='flex gap-[24px]'>
                   <Pill
                     color='amber'
                     label='All posts'
@@ -500,7 +533,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:w-10/12'>
+              <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 xl:w-10/12 w-full'>
                 <GMPost
                   author={{
                     username: 'mikela.eth',

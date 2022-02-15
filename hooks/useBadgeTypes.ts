@@ -27,10 +27,6 @@ export const useTotalBadgeCounts = () => {
     }
   }, [badgeTypes]);
 
-  useEffect(() => {
-    console.log(totalBadgeCounts);
-  }, [totalBadgeCounts]);
-
   return {
     totalBadgeCounts,
     error,
