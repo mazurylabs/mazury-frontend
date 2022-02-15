@@ -178,7 +178,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           animate={{
                             fontSize: shouldCollapseHeader ? '24px' : '48px',
                           }}
-                          className={`font-demi text-indigoGray-90 overflow-x-scroll no-scrollbar`}
+                          className={`font-demi text-indigoGray-90 overflow-x-scroll md:overflow-auto no-scrollbar`}
                         >
                           {profile.username}
                         </motion.h1>
@@ -222,7 +222,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </p>
 
                 <div
-                  className={`flex gap-6 overflow-x-scroll w-full no-scrollbar ${
+                  className={`flex gap-6 overflow-x-scroll md:overflow-auto w-full no-scrollbar ${
                     shouldCollapseHeader && 'hidden md:flex'
                   }`}
                 >
