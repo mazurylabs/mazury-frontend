@@ -18,7 +18,7 @@ export const Sidebar: FC = () => {
         className="mx-auto"
       />
       <menu
-        className={`flex flex-col gap-12 mt-12 text-xl font-bold ${
+        className={`mt-12 flex flex-col gap-12 text-xl font-bold ${
           isOpen ? 'items-start' : 'items-center'
         } h-[100%] ${isOpen && 'px-4'}`}
       >
@@ -44,7 +44,7 @@ export const Sidebar: FC = () => {
         </Link>
 
         <Link href="/" passHref>
-          <a className="flex items-center gap-4 text-sm font-medium text-indigoGray-50 mt-auto pb-12">
+          <a className="mt-auto flex items-center gap-4 pb-12 text-sm font-medium text-indigoGray-50">
             <img src="/icons/sliders.svg" alt="Settings icon" />{' '}
             {isOpen && 'Settings'}
           </a>

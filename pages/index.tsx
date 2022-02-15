@@ -12,7 +12,7 @@ const Home: NextPage = () => {
 
   if (connected) {
     return (
-      <div className="text-center py-24">
+      <div className="py-24 text-center">
         <Image
           src="/waves.png"
           alt="Mazury logo"
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="text-center py-24">
+    <div className="py-24 text-center">
       <Image
         src="/waves.png"
         alt="Mazury logo"
@@ -41,10 +41,10 @@ const Home: NextPage = () => {
       />
       <h1 className="text-2xl font-bold">Welcome to Mazury</h1>
       <p className="mt-10">Connect your wallet:</p>
-      <div className="flex gap-6 justify-center mt-5">
+      <div className="mt-5 flex justify-center gap-6">
         {data.connectors.map((x) => (
           <Button
-            className="bg-slate-200 p-2 rounded"
+            className="rounded bg-slate-200 p-2"
             key={x.id}
             onClick={() => connect(x)}
           >

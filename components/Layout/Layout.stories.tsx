@@ -29,10 +29,10 @@ export const Default = Template.bind({});
 Default.args = {
   sidebarContent: <Sidebar />,
   innerLeftContent: (
-    <div className="h-screen border-dashed border-emerald-500 border" />
+    <div className="h-screen border border-dashed border-emerald-500" />
   ),
   innerRightContent: (
-    <div className="h-screen border-dashed border-fuchsia-500 border" />
+    <div className="h-screen border border-dashed border-fuchsia-500" />
   ),
 };
 
@@ -40,12 +40,12 @@ export const WithHeader = Template.bind({});
 WithHeader.args = {
   sidebarContent: <Sidebar />,
   innerLeftContent: (
-    <div className="h-screen border-dashed border-emerald-500 border" />
+    <div className="h-screen border border-dashed border-emerald-500" />
   ),
   innerRightContent: (
-    <div className="h-screen border-dashed border-fuchsia-500 border" />
+    <div className="h-screen border border-dashed border-fuchsia-500" />
   ),
   headerContent: (
-    <div className="h-32 sticky top-0 bg-blue-400 shadow-lg rounded-lg" />
+    <div className="sticky top-0 h-32 rounded-lg bg-blue-400 shadow-lg" />
   ),
 };

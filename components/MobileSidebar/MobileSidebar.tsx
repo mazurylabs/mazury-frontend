@@ -7,7 +7,7 @@ interface MobileSidebarProps {
 
 export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
   return (
-    <div className="w-screen fixed bottom-0 left-0 bg-white gap-8 border p-2 flex items-center justify-center lg:hidden">
+    <div className="fixed bottom-0 left-0 flex w-screen items-center justify-center gap-8 border bg-white p-2 lg:hidden">
       {children || (
         <>
           <Link href="/" passHref>

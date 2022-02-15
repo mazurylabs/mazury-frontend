@@ -22,7 +22,7 @@ export const GMPost: React.FC<GMPostProps> = ({
 }) => {
   return (
     <div
-      className="border shadow-base rounded-xl p-6 flex flex-col gap-4 hover:cursor-pointer hover:shadow-lg transition-shadow"
+      className="flex flex-col gap-4 rounded-xl border p-6 shadow-base transition-shadow hover:cursor-pointer hover:shadow-lg"
       onClick={() => window.open(link, '_blank')}
     >
       <div className="flex items-center gap-2">
@@ -32,15 +32,15 @@ export const GMPost: React.FC<GMPostProps> = ({
           width="32px"
           height="32px"
         />
-        <h5 className="font-bold font-serif text-xl text-indigoGray-90">
+        <h5 className="font-serif text-xl font-bold text-indigoGray-90">
           {author.username}
         </h5>
 
-        <span className="border-2 border-blue-600 text-blue-600 rounded-xl px-6 py-1 ml-auto text-sm">
+        <span className="ml-auto rounded-xl border-2 border-blue-600 px-6 py-1 text-sm text-blue-600">
           gm
         </span>
       </div>
-      <p className="text-indigoGray-80 text-[16px]">{content}</p>
+      <p className="text-[16px] text-indigoGray-80">{content}</p>
       <div className="flex items-center">
         <Image
           src="/icons/arrow-circle-up.svg"
@@ -48,7 +48,7 @@ export const GMPost: React.FC<GMPostProps> = ({
           width="16px"
           height="16px"
         />
-        <span className="text-indigoGray-90 text-xs mx-1">{upvoteCount}</span>
+        <span className="mx-1 text-xs text-indigoGray-90">{upvoteCount}</span>
         <Image
           src="/icons/arrow-circle-down.svg"
           alt="Downvote post"
@@ -63,7 +63,7 @@ export const GMPost: React.FC<GMPostProps> = ({
           width="16px"
           height="16px"
         />
-        <span className="text-indigoGray-90 text-xs ml-1">{commentCount}</span>
+        <span className="ml-1 text-xs text-indigoGray-90">{commentCount}</span>
       </div>
     </div>
   );
@@ -88,7 +88,7 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
   return (
     <div className="relative">
       <div
-        className="border shadow-base rounded-xl p-6 flex flex-col gap-4 hover:cursor-pointer hover:shadow-lg transition-shadow bg-transparent z-10 h-full"
+        className="z-10 flex h-full flex-col gap-4 rounded-xl border bg-transparent p-6 shadow-base transition-shadow hover:cursor-pointer hover:shadow-lg"
         onClick={() => window.open(link, '_blank')}
       >
         <div className="flex items-center gap-2">
@@ -98,11 +98,11 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
             width="32px"
             height="32px"
           />
-          <h5 className="font-bold font-serif text-xl text-indigoGray-90">
+          <h5 className="font-serif text-xl font-bold text-indigoGray-90">
             {author.username}
           </h5>
 
-          <span className="border-2 border-lime-600 text-lime-600 rounded-xl px-6 py-2 ml-auto">
+          <span className="ml-auto rounded-xl border-2 border-lime-600 px-6 py-2 text-lime-600">
             <Image
               src="/icons/mirror-icon.svg"
               alt="Mirror icon"
@@ -111,10 +111,10 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
             />
           </span>
         </div>
-        <h4 className="font-demi text-3xl text-indigoGray-80 mt-12">{title}</h4>
+        <h4 className="mt-12 font-demi text-3xl text-indigoGray-80">{title}</h4>
       </div>
       <div
-        className="absolute rounded-lg inset-0 h-full w-full opacity-20 -z-10 bg-cover"
+        className="absolute inset-0 -z-10 h-full w-full rounded-lg bg-cover opacity-20"
         style={{ backgroundImage: `url(${bgImageSrc})` }}
       />
     </div>

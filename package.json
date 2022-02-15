@@ -10,7 +10,8 @@
     "build-storybook": "build-storybook",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "npx prettier --write ."
   },
   "dependencies": {
     "axios": "^0.25.0",
