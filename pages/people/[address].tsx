@@ -10,32 +10,32 @@ import {
   GMPost,
   MirrorPost,
   Layout,
-} from '../../components';
-import { OutlineButton } from '../../components/Button';
+} from 'components';
+import { OutlineButton } from 'components/Button';
 import {
   ColorName,
   MappedRoles,
   Profile as IProfile,
   ProfileSection,
   Role,
-} from '../../types';
-import { getTruncatedAddress, goToLink } from '../../utils';
-import { getProfile } from '../../utils/api';
+} from 'types';
+import { getTruncatedAddress, goToLink } from 'utils';
+import { getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
-import { ReferralPreview } from '../../components/ReferralPreview';
+import { ReferralPreview } from 'components/ReferralPreview';
 import {
   useBadges,
   useReferrals,
   useScrollPosition,
   useTotalBadgeCounts,
   useProfile,
-} from '../../hooks';
+} from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { LoadMoreButton } from '../../components/Pill';
+import { LoadMoreButton } from 'components/Pill';
 import { motion } from 'framer-motion';
-import { Sidebar } from '../../components/Sidebar';
+import { Sidebar } from 'components/Sidebar';
 
 interface Props {
   address: string;

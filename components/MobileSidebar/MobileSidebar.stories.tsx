@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import Link from 'next/link';
 import React from 'react';
 import { MobileSidebar } from './MobileSidebar';
 

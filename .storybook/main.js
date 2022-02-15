@@ -1,6 +1,7 @@
 // .storybook/main.js
 
 const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   stories: [
@@ -42,6 +43,15 @@ module.exports = {
         path.resolve(__dirname, '../'),
       ],
     };
+
+    /**
+     * Add support for tsconfig-paths-webpack-plugin
+     * @see https://stackoverflow.com/a/70272640
+     */
+    config.resolve.plugins = [
+      ...(config.resolve.plugins || []),
+      new TsconfigPathsPlugin(),
+    ];
 
     /**
      * Fixes font import with /

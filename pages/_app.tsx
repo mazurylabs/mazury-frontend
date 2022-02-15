@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/globals.css';
+import 'styles/globals.css';
 import type { AppProps } from 'next/app';
 import { providers } from 'ethers';
 import NextHead from 'next/head';
@@ -7,9 +7,7 @@ import { Connector, Provider, chain, defaultChains } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
-import { Layout } from '../components';
 import { SWRConfig } from 'swr';
-import { api } from '../utils';
 import axios from 'axios';
 
 // Get environment variables

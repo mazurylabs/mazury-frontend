@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import React from 'react';
 import { Avatar } from '.';
-import { Skill } from '../types';
+import { Skill } from 'types';
 
 interface Props {
   referredBy: {
