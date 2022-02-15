@@ -9,7 +9,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^0.25.0",
@@ -40,7 +41,9 @@
     "babel-loader": "^8.2.3",
     "eslint": "8.7.0",
     "eslint-config-next": "12.0.8",
+    "husky": "^7.0.4",
     "jest": "^27.5.0",
+    "lint-staged": "^12.3.4",
     "postcss": "^8.4.5",
     "prettier": "2.5.1",
     "tailwindcss": "^3.0.15",
@@ -48,5 +51,8 @@
   },
   "resolutions": {
     "webpack": "^5"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
