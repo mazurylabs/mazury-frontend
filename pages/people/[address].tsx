@@ -11,7 +11,6 @@ import {
   MirrorPost,
   Layout,
 } from 'components';
-import { OutlineButton } from 'components/Button';
 import {
   ColorName,
   MappedRoles,
@@ -36,6 +35,7 @@ import { useRouter } from 'next/router';
 import { LoadMoreButton } from 'components/Pill';
 import { motion } from 'framer-motion';
 import { Sidebar } from 'components/Sidebar';
+import { BlueSocialButton } from 'components/Button/Button';
 
 interface Props {
   address: string;
@@ -230,12 +230,12 @@ const Profile: React.FC<Props> = ({ address }) => {
                   {Object.keys(roleFieldToLabel).map((role: Role) => {
                     if (profile[role] === true) {
                       return (
-                        <Button
+                        <button
                           key={role}
-                          className="bg-white text-sm font-bold text-indigoGray-90"
+                          className="rounded bg-white px-4 py-1 text-sm font-bold text-indigoGray-90"
                         >
                           {roleFieldToLabel[role]}
-                        </Button>
+                        </button>
                       );
                     }
                   })}
@@ -307,27 +307,32 @@ const Profile: React.FC<Props> = ({ address }) => {
               }`}
             >
               {profile.twitter && (
-                <OutlineButton
+                <BlueSocialButton
+                  variant="secondary"
                   onClick={() =>
                     goToLink(`https://twitter.com/${profile.twitter}`)
                   }
                 >
                   <FaTwitter /> {profile.twitter}
-                </OutlineButton>
+                </BlueSocialButton>
               )}
               {profile.website && (
-                <OutlineButton onClick={() => goToLink(profile.website)}>
+                <BlueSocialButton
+                  variant="secondary"
+                  onClick={() => goToLink(profile.website)}
+                >
                   <FaGlobe /> {profile.website}
-                </OutlineButton>
+                </BlueSocialButton>
               )}
               {profile.github && (
-                <OutlineButton
+                <BlueSocialButton
+                  variant="secondary"
                   onClick={() =>
                     goToLink(`https://github.com/${profile.twitter}`)
                   }
                 >
                   <FaGithub /> {profile.github}
-                </OutlineButton>
+                </BlueSocialButton>
               )}
             </div>
 

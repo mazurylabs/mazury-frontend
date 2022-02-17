@@ -10,23 +10,36 @@ export default {
   argTypes: {
     children: {
       control: { type: 'text' },
+      disabled: { type: 'boolean' },
     },
   },
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
-  children: 'Button',
+export const Primary = Template.bind({});
+Primary.args = {
+  children: 'BUTTON',
+};
+
+export const Secondary = Template.bind({});
+Secondary.args = {
+  children: 'BUTTON',
+  variant: 'secondary',
+};
+
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+  children: 'BUTTON',
+  variant: 'tertiary',
 };
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
   children: (
-    <div className="flex items-center gap-2">
+    <>
       <HiSearch />
-      <span>Search</span>
-    </div>
+      <span>BUTTON</span>
+    </>
   ),
 };
