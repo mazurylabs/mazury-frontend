@@ -1,4 +1,4 @@
-import { Button } from 'components';
+import { Button, Input } from 'components';
 import { NextPage } from 'next';
 import Image from 'next/image';
 
@@ -43,28 +43,15 @@ const OnboardingPage: NextPage = () => {
       </div>
 
       <form className="mt-4 flex flex-col">
-        <label
-          htmlFor="username"
-          className="text-sm font-medium text-indigoGray-40"
-        >
-          Username
-        </label>
-        <input
-          id="username"
-          className="rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-50 placeholder:text-indigoGray-50"
-          placeholder="Insert username"
-        />
-
-        <label
-          htmlFor="full-name"
-          className="mt-4 text-sm font-medium text-indigoGray-40"
-        >
-          Full name <span className="text-indigoGray-20">(optional)</span>
-        </label>
-        <input
+        <Input id="username" label="Username" />
+        <Input
           id="full-name"
-          className="rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-50 placeholder:text-indigoGray-50"
-          placeholder="Insert full name"
+          marginTop={4}
+          label={
+            <>
+              Full name <span className="text-indigoGray-20">(optional)</span>
+            </>
+          }
         />
 
         <div className="mt-6 flex items-center justify-center gap-6 p-4">
