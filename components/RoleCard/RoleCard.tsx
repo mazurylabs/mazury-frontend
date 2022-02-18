@@ -51,6 +51,7 @@ export const RoleCard: FC<RoleCardProps> = ({
 
   return (
     <div
+      // TODO: Fix mobile hover behaviour
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={getClassName(role, selected)}

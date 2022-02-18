@@ -1,9 +1,10 @@
 import { Button } from 'components';
-import { OnboardingContext } from 'contexts';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import { OnboardingLayoutProps } from './OnboardingLayout.types';
+
+const onboardingRoutes = ['/', 'role', 'redirect'];
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   children,
@@ -12,14 +13,21 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   bottomButtonText = 'CONTINUE',
 }) => {
   const router = useRouter();
-  const { currentStep, setCurrentStep } = useContext(OnboardingContext);
+
+  const goForward = () => {
+    const currentRoute = [...router.pathname.split('/'), '/'][2];
+    console.log(router.pathname.split('/'));
+    console.log(currentRoute);
+    const nextRoute =
+      onboardingRoutes[onboardingRoutes.indexOf(currentRoute) + 1];
+    router.push(`/onboarding/${nextRoute}`);
+  };
 
   const goBack = () => {
-    if (currentStep === 1) {
-      router.back();
-    } else {
-      setCurrentStep(currentStep - 1);
-    }
+    const currentRoute = router.pathname.split('/')[2];
+    const prevRoute =
+      onboardingRoutes[onboardingRoutes.indexOf(currentRoute) - 1];
+    router.push(`/onboarding/${prevRoute}`);
   };
 
   return (
@@ -44,10 +52,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       {children}
 
       <div className="sticky bottom-8 mx-auto mt-auto w-full">
-        <Button
-          onClick={() => setCurrentStep(currentStep + 1)}
-          className="w-full justify-center"
-        >
+        <Button onClick={goForward} className="w-full justify-center">
           {bottomButtonText}
         </Button>
       </div>
