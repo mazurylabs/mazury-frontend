@@ -1,18 +1,19 @@
 import { Button, Input } from 'components';
+import { OnboardingLayout } from 'components/OnboardingLayout/OnboardingLayout';
 import { NextPage } from 'next';
 import Image from 'next/image';
 
 const OnboardingPage: NextPage = () => {
   return (
-    <main className="min-h-screen px-4 py-4">
-      <Image src="/icons/back.svg" alt="Back" width="16px" height="16px" />
-
-      <h1 className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
-        Profile information
-      </h1>
-      <h3 className="mt-2 font-demi text-4xl text-indigoGray-90">
-        Hi, wojtek.eth!
-      </h3>
+    <OnboardingLayout
+      firstHeading="Profile information"
+      secondHeading="Hi, wojtek.eth!"
+      bottomContent={
+        <Button disabled className="w-full justify-center">
+          CONTINUE
+        </Button>
+      }
+    >
       <p className="mt-3 text-sm font-medium text-indigoGray-60">
         We&apos;re glad you&apos;re joining us. Let&apos;s take a moment to
         polish your profile a bit!
@@ -72,13 +73,8 @@ const OnboardingPage: NextPage = () => {
             </Button>
           </div>
         </div>
-
-        {/* TODO: Make this button sticky */}
-        <Button className="mt-20 w-full justify-center uppercase" disabled>
-          Continue
-        </Button>
       </form>
-    </main>
+    </OnboardingLayout>
   );
 };
 
