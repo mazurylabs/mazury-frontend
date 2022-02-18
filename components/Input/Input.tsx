@@ -38,7 +38,7 @@ export const Input: FC<InputProps> = ({
           }
         }}
         placeholder={placeholder}
-        className={`block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-50 placeholder:text-indigoGray-50 ${className}`}
+        className={`block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-90 placeholder:text-indigoGray-50 ${className}`}
       />
     </div>
   );
