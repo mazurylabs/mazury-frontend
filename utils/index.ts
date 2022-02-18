@@ -16,3 +16,12 @@ export const api = axios.create({
 export const goToLink = (link: string) => {
   window.open(link, '_blank');
 };
+
+function capitalize(word: string) {
+  return word.charAt(0).toUpperCase() + word.substring(1);
+}
+
+export function toCapitalizedWord(word: string) {
+  var words = word.match(/[A-Za-z][a-z]*/g) || [];
+  return words.map(capitalize).join(' ');
+}

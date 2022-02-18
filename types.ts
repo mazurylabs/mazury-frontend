@@ -88,8 +88,21 @@ export type Role =
   | 'role_investor'
   | 'role_community_manager';
 
+export type TrimmedRole =
+  | 'developer'
+  | 'designer'
+  | 'trader'
+  | 'creator'
+  | 'researcher'
+  | 'investor'
+  | 'community_manager';
+
 export type MappedRoles<T> = {
   [Key in Role]: T;
+};
+
+export type MappedTrimmedRoles<T> = {
+  [Key in TrimmedRole]: T;
 };
 
 export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {

@@ -9,6 +9,7 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
   >
     <img
       alt="Back"
+      class="hover:cursor-pointer"
       data-nimg="fixed"
       decoding="async"
       src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
@@ -32,7 +33,9 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
   <div
     class="sticky bottom-8 mx-auto mt-auto w-full"
   >
-    <button>
+    <button
+      class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 w-full justify-center"
+    >
       Bottom content
     </button>
   </div>

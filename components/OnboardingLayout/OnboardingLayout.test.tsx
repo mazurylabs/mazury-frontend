@@ -7,7 +7,7 @@ describe('OnboardingLaout', () => {
       <OnboardingLayout
         firstHeading="First heading"
         secondHeading="Second heading"
-        bottomContent={<button>Bottom content</button>}
+        bottomButtonText="Bottom content"
       >
         <p>Content</p>
       </OnboardingLayout>

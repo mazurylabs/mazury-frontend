@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf') format('true');
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Regular.ttf') format('true');
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Bold.otf') format('opentype');
+    font-weight: bold;
+  }
+
+  @font-face {
+    font-family: 'Masqualero';
+    src: url('/fonts/Masqualero Black.otf') format('opentype');
+    font-weight: black;
+  }
+
+  @font-face {
+    font-family: 'Masqualero DemiBold';
+    src: url('/fonts/Masqualero DemiBold.otf') format('opentype');
+    font-weight: normal;
+  }
+}
+
+@layer components {
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge /
+    scrollbar-width: none;  / Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

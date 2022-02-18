@@ -8,6 +8,5 @@ export interface InputProps {
   id?: string;
   type?: HTMLInputTypeAttribute;
   className?: string;
-  marginTop?: number;
   outerClassName?: string;
 }

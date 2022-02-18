@@ -10,19 +10,12 @@ export const Input: FC<InputProps> = ({
   type = 'text',
   className,
   /*
-  Margin top value in tailwind units
-  */
-  marginTop = 0,
-  /*
   The className that will be applied to the outer div containing the label and the input
   */
   outerClassName,
 }) => {
   return (
-    <div
-      style={{ marginTop: `${marginTop / 4} rem` }}
-      className={`flex flex-col ${outerClassName}`}
-    >
+    <div className={`flex flex-col ${outerClassName}`}>
       {label && (
         <label className="text-sm font-medium text-indigoGray-40" htmlFor={id}>
           {label}

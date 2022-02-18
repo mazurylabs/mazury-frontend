@@ -4,5 +4,5 @@ export interface OnboardingLayoutProps {
   firstHeading: ReactNode;
   secondHeading: ReactNode;
   children: ReactNode;
-  bottomContent: ReactNode;
+  bottomButtonText?: ReactNode;
 }

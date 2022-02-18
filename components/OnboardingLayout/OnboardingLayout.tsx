@@ -1,21 +1,37 @@
+import { Button } from 'components';
+import { OnboardingContext } from 'contexts';
 import Image from 'next/image';
-import { FC } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useContext } from 'react';
 import { OnboardingLayoutProps } from './OnboardingLayout.types';
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   children,
   firstHeading,
   secondHeading,
-  bottomContent,
+  bottomButtonText = 'CONTINUE',
 }) => {
+  const router = useRouter();
+  const { currentStep, setCurrentStep } = useContext(OnboardingContext);
+
+  const goBack = () => {
+    if (currentStep === 1) {
+      router.back();
+    } else {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col px-4 py-4 align-top">
       <Image
+        onClick={goBack}
         src="/icons/back.svg"
         alt="Back"
         width="16px"
         height="16px"
         layout="fixed"
+        className="hover:cursor-pointer"
       />
 
       <h1 className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
@@ -28,7 +44,12 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       {children}
 
       <div className="sticky bottom-8 mx-auto mt-auto w-full">
-        {bottomContent}
+        <Button
+          onClick={() => setCurrentStep(currentStep + 1)}
+          className="w-full justify-center"
+        >
+          {bottomButtonText}
+        </Button>
       </div>
     </main>
   );
