@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { OnboardingLayoutProps } from './OnboardingLayout.types';
 
-const onboardingRoutes = ['/', 'role', 'redirect'];
+const onboardingRoutes = ['/', 'role', 'refer', 'redirect'];
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   children,
@@ -16,8 +16,6 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
 
   const goForward = () => {
     const currentRoute = [...router.pathname.split('/'), '/'][2];
-    console.log(router.pathname.split('/'));
-    console.log(currentRoute);
     const nextRoute =
       onboardingRoutes[onboardingRoutes.indexOf(currentRoute) + 1];
     router.push(`/onboarding/${nextRoute}`);

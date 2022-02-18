@@ -2,7 +2,7 @@
 
 exports[`Button disabled state 1`] = `
 <button
-  class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
+  class="flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
   disabled=""
 >
   Button
@@ -11,7 +11,7 @@ exports[`Button disabled state 1`] = `
 
 exports[`Button multiple children (SVG icon) 1`] = `
 <button
-  class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
+  class="flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
 >
   <svg
     data-testid="icon"
@@ -36,7 +36,7 @@ exports[`Button multiple children (SVG icon) 1`] = `
 
 exports[`Button renders a button 1`] = `
 <button
-  class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
+  class="flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
 >
   Button
 </button>
@@ -44,7 +44,7 @@ exports[`Button renders a button 1`] = `
 
 exports[`Button secondary variant 1`] = `
 <button
-  class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
+  class="flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
 >
   Button
 </button>
@@ -52,7 +52,7 @@ exports[`Button secondary variant 1`] = `
 
 exports[`Button tertiary variant 1`] = `
 <button
-  class="flex items-center gap-2 rounded-[8px] py-3 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
+  class="flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
 >
   Button
 </button>
