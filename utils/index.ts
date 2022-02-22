@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
   address: string,
@@ -25,3 +26,5 @@ export function toCapitalizedWord(word: string) {
   var words = word.match(/[A-Za-z][a-z]*/g) || [];
   return words.map(capitalize).join(' ');
 }
+
+export const colors = theme.extend.colors;

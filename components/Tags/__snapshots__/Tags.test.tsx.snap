@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tags renders correctly, onRemove works correctly 1`] = `
+<div
+  class="flex flex-wrap gap-1"
+  role="tags"
+>
+  <div
+    class="flex w-fit items-center gap-1 rounded px-2 py-1 text-xs font-bold undefined"
+    role="tag"
+    style="background-color: rgb(238, 242, 255); color: rgb(49, 46, 129);"
+  >
+    <span
+      class="cursor-default"
+    >
+      Frontend development
+    </span>
+    <button
+      class="flex items-center hover:cursor-pointer"
+    >
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Remove Frontend development"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
+    </button>
+  </div>
+  <div
+    class="flex w-fit items-center gap-1 rounded px-2 py-1 text-xs font-bold undefined"
+    role="tag"
+    style="background-color: rgb(255, 251, 235); color: rgb(120, 53, 15);"
+  >
+    <span
+      class="cursor-default"
+    >
+      Solidity
+    </span>
+    <button
+      class="flex items-center hover:cursor-pointer"
+    >
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Remove Solidity"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
+    </button>
+  </div>
+  <div
+    class="flex w-fit items-center gap-1 rounded px-2 py-1 text-xs font-bold undefined"
+    role="tag"
+    style="background-color: rgb(236, 253, 245); color: rgb(6, 78, 59);"
+  >
+    <span
+      class="cursor-default"
+    >
+      Community
+    </span>
+    <button
+      class="flex items-center hover:cursor-pointer"
+    >
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Remove Community"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
+    </button>
+  </div>
+</div>
+`;
