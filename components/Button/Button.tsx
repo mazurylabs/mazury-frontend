@@ -9,8 +9,13 @@ const BaseButton: FC<BaseButtonProps> = ({
 }) => {
   return (
     <button
-      className={`flex items-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${className}`}
-      onClick={onClick}
+      className={`flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${className}`}
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) {
+          onClick();
+        }
+      }}
       disabled={disabled}
     >
       {children}

@@ -1,8 +1,31 @@
 import { Button, Input, OnboardingLayout } from 'components';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 export const ProfileView: FC = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File>();
+  const [fileUrl, setFileUrl] = useState<string>();
+
+  const onAddPicClick = () => {
+    if (fileInputRef.current) {
+      console.log(fileInputRef);
+      fileInputRef.current.click();
+    }
+  };
+
+  const onRemovePicClick = () => {
+    setFileUrl('');
+    setFile(undefined);
+  };
+
+  useEffect(() => {
+    if (file) {
+      const fileUrl = URL.createObjectURL(file as Blob);
+      setFileUrl(fileUrl);
+    }
+  }, [file]);
+
   return (
     <OnboardingLayout
       firstHeading="Profile information"
@@ -51,20 +74,43 @@ export const ProfileView: FC = () => {
 
         <div className="mt-6 flex items-center justify-center gap-6 p-4">
           <Image
-            src="/default-avi.png"
+            src={fileUrl || '/default-avi.png'}
             height="100px"
             width="100px"
             alt="Your profile picture"
-            className="rounded-full border-[1.5px] border-indigoGray-30"
+            className="rounded-full border-[1.5px] border-indigoGray-30 object-cover"
           />
 
           <div className="flex flex-col items-center gap-2">
-            <Button variant="secondary" className="uppercase">
+            <Button
+              onClick={onAddPicClick}
+              variant="secondary"
+              className="w-full uppercase"
+            >
               Add picture
             </Button>
-            <Button variant="tertiary" className="uppercase">
-              Remove picture
-            </Button>
+            <input
+              ref={fileInputRef}
+              accept="image/*"
+              type="file"
+              hidden
+              onChange={(e) => {
+                if (e.target.files) {
+                  setFile(e.target.files[0]);
+                } else {
+                  console.error('Couldnt get file frome the input.');
+                }
+              }}
+            />
+            {fileUrl && (
+              <Button
+                onClick={onRemovePicClick}
+                variant="tertiary"
+                className="w-full uppercase"
+              >
+                Remove picture
+              </Button>
+            )}
           </div>
         </div>
       </form>
