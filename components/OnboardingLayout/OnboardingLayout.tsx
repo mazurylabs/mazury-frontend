@@ -11,6 +11,7 @@ const onboardingRoutes = [
   'write',
   'whitelist',
   'socials',
+  'finish',
   'redirect',
 ];
 
@@ -58,7 +59,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       {children}
 
       <div className="sticky bottom-8 mx-auto mt-auto w-full">
-        <Button onClick={goForward} className="w-full justify-center">
+        <Button onClick={goForward} className="w-full justify-center uppercase">
           {bottomButtonText}
         </Button>
       </div>
