@@ -37,7 +37,7 @@ describe('Tags', () => {
     expect(container).toBeInTheDocument();
     expect(container).toMatchSnapshot();
     const frontendTag = screen.getByText('Frontend development');
-    const removeFrontendButton = screen.getByAltText(
+    const removeFrontendButton = screen.getByLabelText(
       'Remove Frontend development'
     );
     fireEvent.click(removeFrontendButton);

@@ -14,28 +14,30 @@ exports[`TagItem renders correctly and fires onRemove as intended 1`] = `
   <button
     class="flex items-center hover:cursor-pointer"
   >
-    <span
-      style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+    <svg
+      aria-label="Remove Frontend engineer"
+      fill="none"
+      height="16px"
+      role="img"
+      viewBox="0 0 16 16"
+      width="16px"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <span
-        style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
-      >
-        <img
-          alt=""
-          aria-hidden="true"
-          src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
-          style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
-        />
-      </span>
-      <img
-        alt="Remove Frontend engineer"
-        data-nimg="intrinsic"
-        decoding="async"
-        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+      <path
+        d="M12 4L4 12"
+        stroke="#312e81"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.33"
       />
-      <noscript />
-    </span>
+      <path
+        d="M4 4L12 12"
+        stroke="#312e81"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.33"
+      />
+    </svg>
   </button>
 </div>
 `;

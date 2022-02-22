@@ -12,3 +12,4 @@ export { OnboardingLayout } from './OnboardingLayout';
 export { RoleCard } from './RoleCard';
 export { InfoBox } from './InfoBox';
 export * from './Tags';
+export * from './Icons';

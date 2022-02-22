@@ -1,3 +1,4 @@
+import { XIcon } from 'components';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 import { ThemeColor } from 'types';
@@ -50,11 +51,11 @@ export const TagItem: FC<TagItemProps> = ({
           }}
           className="flex items-center hover:cursor-pointer"
         >
-          <Image
-            src="/icons/x.svg"
+          <XIcon
             width="16px"
             height="16px"
-            alt={`Remove ${label}`}
+            color={color[900]}
+            label={`Remove ${label}`}
           />
         </button>
       )}
