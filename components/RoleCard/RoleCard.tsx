@@ -7,7 +7,7 @@ import { RoleCardProps } from './RoleCard.types';
 
 const getClassName = (role: Role, selected: boolean = false) => {
   const baseClassName =
-    'flex flex-col items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center';
+    'transition-all duration-300 flex flex-col items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center';
 
   switch (role) {
     case 'developer':

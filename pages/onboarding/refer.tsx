@@ -1,6 +1,5 @@
-import { Avatar, Button, Input, OnboardingLayout } from 'components';
+import { Avatar, Button, InfoBox, Input, OnboardingLayout } from 'components';
 import { NextPage } from 'next';
-import Image from 'next/image';
 import { FC } from 'react';
 
 interface PersonProps {
@@ -40,21 +39,10 @@ const ReferPage: NextPage = () => {
       bottomButtonText="SKIP"
     >
       <div className="mt-3 flex flex-col">
-        <div className="flex items-center gap-3 rounded-md bg-indigoGray-10 p-3">
-          <div className="w-2/12">
-            <Image
-              src="/icons/info.svg"
-              width="20px"
-              height="20px"
-              alt="Info icon"
-            />
-          </div>
-
-          <p className="text-sm font-medium text-indigoGray-90">
-            This is a big thing on Mazury. Referrals make your profile pop and
-            make sure you get credit for your reputation on web3.
-          </p>
-        </div>
+        <InfoBox>
+          This is a big thing on Mazury. Referrals make your profile pop and
+          make sure you get credit for your reputation on web3.
+        </InfoBox>
 
         {/* TODO: Add search icon */}
         <Input className="mt-6" placeholder="Search for a user" />

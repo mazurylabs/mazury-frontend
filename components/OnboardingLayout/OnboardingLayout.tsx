@@ -4,7 +4,15 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { OnboardingLayoutProps } from './OnboardingLayout.types';
 
-const onboardingRoutes = ['/', 'role', 'refer', 'write', 'redirect'];
+const onboardingRoutes = [
+  '/',
+  'role',
+  'refer',
+  'write',
+  'whitelist',
+  'socials',
+  'redirect',
+];
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   children,

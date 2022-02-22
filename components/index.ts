@@ -10,4 +10,5 @@ export { GMPost, MirrorPost } from './WritingPost';
 export { Input } from './Input';
 export { OnboardingLayout } from './OnboardingLayout';
 export { RoleCard } from './RoleCard';
+export { InfoBox } from './InfoBox';
 export * from './Tags';
