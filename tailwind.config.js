@@ -3,6 +3,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    './views/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -227,6 +228,23 @@ module.exports = {
           700: '#be123c',
           800: '#9f1239',
           900: '#881337',
+        },
+        black: {
+          900: '#18191F',
+          300: '#9FA4B4',
+          700: '#969BAB',
+        },
+        gray: {
+          50: '#F8F9FC',
+          100: '#F1F3F9',
+          200: '#E2E5F0',
+          300: '#CBD0E1',
+          400: '#949BB8',
+          500: '#646B8B',
+          600: '#474A69',
+          700: '#333655',
+          800: '#1E1E3B',
+          900: '#110F2A',
         },
       },
       opacity: {

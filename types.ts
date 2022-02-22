@@ -77,6 +77,7 @@ export interface Referral extends MappedSkills<boolean> {
   updated_at: string;
   datetime: string;
   content: string;
+  skills?: Skill[];
 }
 
 export type Role =
@@ -88,8 +89,21 @@ export type Role =
   | 'role_investor'
   | 'role_community_manager';
 
+export type TrimmedRole =
+  | 'developer'
+  | 'designer'
+  | 'trader'
+  | 'creator'
+  | 'researcher'
+  | 'investor'
+  | 'community_manager';
+
 export type MappedRoles<T> = {
   [Key in Role]: T;
+};
+
+export type MappedTrimmedRoles<T> = {
+  [Key in TrimmedRole]: T;
 };
 
 export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {
@@ -120,4 +134,26 @@ export interface ListResponse<T> {
   next: string | null;
   previous: string | null;
   results: T[];
+}
+
+export interface ThemeColor {
+  [5]?: string;
+  [10]?: string;
+  [20]?: string;
+  [30]?: string;
+  [40]?: string;
+  [50]?: string;
+  [60]?: string;
+  [70]?: string;
+  [80]?: string;
+  [90]?: string;
+  [100]?: string;
+  [200]?: string;
+  [300]?: string;
+  [400]?: string;
+  [500]?: string;
+  [600]?: string;
+  [700]?: string;
+  [800]?: string;
+  [900]?: string;
 }

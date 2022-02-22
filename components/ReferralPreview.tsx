@@ -1,6 +1,7 @@
-import React from 'react';
-import { Avatar } from '.';
+import React, { useState, useEffect } from 'react';
+import { Avatar, ITagItem, Tags } from '.';
 import { Skill } from 'types';
+import { colors, toCapitalizedWord } from 'utils';
 
 interface Props {
   referredBy: {
@@ -16,6 +17,19 @@ export const ReferralPreview: React.FC<Props> = ({
   text,
   skills,
 }) => {
+  const [tags, setTags] = useState<ITagItem[]>([]);
+
+  useEffect(() => {
+    setTags(
+      skills.map((skill) => ({
+        color: colors.gray,
+        label: toCapitalizedWord(skill),
+        value: skill,
+        showRemove: false,
+      }))
+    );
+  }, [skills]);
+
   return (
     <div className="flex w-full flex-col gap-2 rounded-2xl border border-indigoGray-20 p-6">
       <div className="flex items-center gap-2">
@@ -33,6 +47,8 @@ export const ReferralPreview: React.FC<Props> = ({
       </div>
 
       <p className="text-base text-indigoGray-80">{text}</p>
+
+      <Tags tags={tags} />
     </div>
   );
 };

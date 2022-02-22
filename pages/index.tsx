@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         <p className="text-2xl font-bold">
           Welcome {accountData?.ens?.name || accountData?.address}
         </p>
-        <Button className="mt-10" onClick={disconnect}>
+        <Button className="mx-auto mt-10" onClick={disconnect}>
           Disconnect
         </Button>
       </div>

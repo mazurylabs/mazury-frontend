@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input input with label and placeholder 1`] = `
+<input
+  class="block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-90 placeholder:text-indigoGray-50 undefined"
+  id="input-1"
+  placeholder="Placeholder"
+  type="text"
+  value=""
+/>
+`;
