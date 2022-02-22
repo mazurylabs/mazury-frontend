@@ -426,7 +426,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         avatarSrc: referral.author.avatar,
                       }}
                       text={referral.content}
-                      skills={['community', 'frontendDev']}
+                      skills={referral.skills || []}
                     />
                   );
                 })}
@@ -505,7 +505,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         avatarSrc: referral.author.avatar,
                       }}
                       text={referral.content}
-                      skills={['community', 'frontendDev']}
+                      skills={referral.skills || []}
                     />
                   );
                 })}

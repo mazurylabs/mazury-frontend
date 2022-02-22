@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ThemeColor } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
