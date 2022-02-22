@@ -1,7 +1,33 @@
 import { Avatar, OnboardingLayout } from 'components';
+import { Tags, ITagItem } from 'components';
 import { NextPage } from 'next';
+import { useState } from 'react';
+import { colors } from 'utils';
 
 const WritePage: NextPage = () => {
+  const [tags, setTags] = useState<ITagItem[]>([
+    {
+      label: 'Frontend development',
+      color: colors.indigo,
+      value: 'frontend',
+    },
+    {
+      label: 'Solidity',
+      color: colors.amber,
+      value: 'solidity',
+    },
+    {
+      label: 'Community',
+      color: colors.emerald,
+      value: 'community',
+    },
+  ]);
+
+  const onRemove = (val: string) => {
+    const newTags = tags.filter((tag) => tag.value !== val);
+    setTags(newTags);
+  };
+
   return (
     <OnboardingLayout
       firstHeading="Referrals"
@@ -39,6 +65,8 @@ const WritePage: NextPage = () => {
         <span className="mt-6 text-base font-medium text-indigoGray-60">
           This person is excellent at...
         </span>
+
+        <Tags tags={tags} onRemove={onRemove} className="mt-2" />
       </div>
     </OnboardingLayout>
   );

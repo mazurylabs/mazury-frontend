@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { FaSearch } from 'react-icons/fa';
 import { Button } from './Button';
 
@@ -52,5 +52,15 @@ describe('Button', () => {
     });
     expect(btn).toBeInTheDocument();
     expect(btn).toMatchSnapshot();
+  });
+
+  test('onClick works as intended', () => {
+    const onClick = jest.fn();
+    render(<Button onClick={onClick}>Button</Button>);
+    const btn = screen.getByRole('button', {
+      name: 'Button',
+    });
+    fireEvent.click(btn);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

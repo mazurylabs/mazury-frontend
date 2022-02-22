@@ -2,12 +2,12 @@ import { FC, useState } from 'react';
 import { TagItem } from '.';
 import { TagItemProps } from './TagItem';
 
-interface TagItem extends Omit<TagItemProps, 'className' & 'onRemove'> {
+export interface ITagItem extends Omit<TagItemProps, 'className' & 'onRemove'> {
   value: string;
 }
 
 interface TagsProps {
-  tags: TagItem[];
+  tags: ITagItem[];
   className?: string;
   onRemove?: (value: string) => void;
   allowInput?: boolean;
