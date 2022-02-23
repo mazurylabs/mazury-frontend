@@ -33,7 +33,6 @@ import {
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { LoadMoreButton } from 'components/Pill';
 import { motion } from 'framer-motion';
 import { BlueSocialButton } from 'components/Button/Button';
 
@@ -83,6 +82,9 @@ const Profile: React.FC<Props> = ({ address }) => {
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
+
+  const [badgesExpanded, setBadgesExpanded] = React.useState(false);
+  const [referralsExpanded, setReferralsExpanded] = React.useState(false);
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const badgesRef = useRef<HTMLHeadingElement>(null);
@@ -454,25 +456,36 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
-                {badges?.slice(0, 4).map((badge) => {
-                  const { badge_type, id } = badge;
-                  const { image, description, title } = badge_type;
+                {badges
+                  ?.slice(0, badgesExpanded ? badges.length : 4)
+                  .map((badge) => {
+                    const { badge_type, id } = badge;
+                    const { image, description, title } = badge_type;
 
-                  return (
-                    <BadgePreview
-                      key={id}
-                      description={description}
-                      heading={title}
-                      imgSrc={image}
-                      totalCount={totalBadgeCounts[badge_type.id]}
-                    />
-                  );
-                })}
+                    return (
+                      <BadgePreview
+                        key={id}
+                        description={description}
+                        heading={title}
+                        imgSrc={image}
+                        totalCount={totalBadgeCounts[badge_type.id]}
+                      />
+                    );
+                  })}
               </div>
 
-              <div className="lg:w-10/12">
-                <LoadMoreButton />
-              </div>
+              {badges?.length && badges?.length > 4 && (
+                <div className="lg:w-10/12">
+                  <Button
+                    onClick={() => setBadgesExpanded((v) => !v)}
+                    variant="secondary"
+                    className="mx-auto mt-6"
+                  >
+                    {badgesExpanded ? 'COLLAPSE' : 'LOAD MORE'}
+                  </Button>
+                </div>
+              )}
+
               <HR />
             </div>
 
@@ -496,24 +509,34 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                {referrals?.slice(0, 4).map((referral) => {
-                  return (
-                    <ReferralPreview
-                      key={referral.id}
-                      referredBy={{
-                        username: referral.author.username,
-                        avatarSrc: referral.author.avatar,
-                      }}
-                      text={referral.content}
-                      skills={referral.skills || []}
-                    />
-                  );
-                })}
+                {referrals
+                  ?.slice(0, referralsExpanded ? referrals.length : 4)
+                  .map((referral) => {
+                    return (
+                      <ReferralPreview
+                        key={referral.id}
+                        referredBy={{
+                          username: referral.author.username,
+                          avatarSrc: referral.author.avatar,
+                        }}
+                        text={referral.content}
+                        skills={referral.skills || []}
+                      />
+                    );
+                  })}
               </div>
 
-              <div className="lg:w-10/12">
-                <LoadMoreButton />
-              </div>
+              {referrals?.length && referrals?.length > 4 && (
+                <div className="lg:w-10/12">
+                  <Button
+                    onClick={() => setReferralsExpanded((v) => !v)}
+                    variant="secondary"
+                    className="mx-auto mt-6"
+                  >
+                    {referralsExpanded ? 'COLLAPSE' : 'LOAD MORE'}
+                  </Button>
+                </div>
+              )}
               <HR />
             </div>
 
@@ -600,7 +623,9 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="lg:w-10/12">
-                <LoadMoreButton />
+                <Button variant="secondary" className="mx-auto mt-6">
+                  LOAD MORE
+                </Button>
               </div>
             </div>
           </>
