@@ -28,7 +28,7 @@ export const Sidebar: FC = () => {
           expanded={isOpen}
         />
         <Link href="/" passHref>
-          <a className="flex items-center gap-4 text-sm font-medium text-indigoGray-50">
+          <a className="flex h-[40px] items-center gap-4 text-sm font-medium text-indigoGray-50">
             <img src="/icons/home.svg" alt="Home icon" /> {isOpen && 'Home'}
           </a>
         </Link>
@@ -37,14 +37,14 @@ export const Sidebar: FC = () => {
           href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
           passHref
         >
-          <a className="flex items-center gap-4 text-sm font-medium text-indigoGray-50">
+          <a className="flex h-[40px] items-center gap-4 text-sm font-medium text-indigoGray-50">
             <img src="/profile-active.svg" alt="Profile icon" />{' '}
             {isOpen && 'Profile'}
           </a>
         </Link>
 
         <Link href="/" passHref>
-          <a className="mt-auto flex items-center gap-4 pb-12 text-sm font-medium text-indigoGray-50">
+          <a className="mt-auto flex h-[40px] items-center gap-4 pb-12 text-sm font-medium text-indigoGray-50">
             <img src="/icons/sliders.svg" alt="Settings icon" />{' '}
             {isOpen && 'Settings'}
           </a>

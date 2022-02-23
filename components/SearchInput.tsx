@@ -18,9 +18,7 @@ export const InputWithIcon: React.FC<
 
   return (
     <div
-      className={`flex bg-indigoGray-20 ${
-        expanded ? 'p-[12px]' : 'p-2 hover:cursor-pointer'
-      } items-center justify-center gap-2 rounded-xl text-[14px] font-normal`}
+      className={`flex items-center justify-center gap-2 rounded-xl bg-indigoGray-20 p-4 text-[14px] font-normal`}
       onClick={onClick}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -31,7 +29,7 @@ export const InputWithIcon: React.FC<
       />
       {expanded && (
         <input
-          className="w-3/4 bg-indigoGray-20 outline-none"
+          className="h-[16px] w-3/4 bg-indigoGray-20 outline-none"
           placeholder={placeholder}
         />
       )}
