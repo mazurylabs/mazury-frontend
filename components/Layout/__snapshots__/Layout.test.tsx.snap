@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout all parts are being rendered correctly 1`] = `
+<div
+  class="flex min-h-screen w-full"
+  data-testid="layout-container"
+>
+  <aside
+    class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 false shadow-inner lg:flex"
+    role="menu"
+  >
+    <span>
+      Sidebar content
+    </span>
+  </aside>
+  <main
+    class="mx-auto flex min-h-screen w-full flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12"
+  >
+    <span>
+      Header content
+    </span>
+    <div
+      class="flex flex-col gap-8 md:flex-row"
+    >
+      <div
+        class="hidden w-full flex-col gap-8 md:flex md:w-3/12"
+      >
+        <span>
+          Inner left content
+        </span>
+      </div>
+      <div
+        class="flex w-full flex-col gap-8 px-4 pb-16 md:w-9/12 md:px-0 md:pb-8"
+      >
+        <span>
+          Inner right content
+        </span>
+      </div>
+    </div>
+  </main>
+  <div
+    class="fixed bottom-0 left-0 flex w-screen items-center justify-center gap-8 border bg-white p-2 lg:hidden"
+  >
+    <a
+      href="/"
+    >
+      <img
+        alt="Home icon"
+        src="/icons/home.svg"
+      />
+    </a>
+    <a
+      href="/"
+    >
+      <img
+        alt="Home icon"
+        src="/icons/search.svg"
+      />
+    </a>
+    <a
+      href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+    >
+      <img
+        alt="Profile icon"
+        src="/profile-active.svg"
+      />
+       
+    </a>
+    <a
+      href="/"
+    >
+      <img
+        alt="Settings icon"
+        src="/icons/sliders.svg"
+      />
+       
+    </a>
+  </div>
+</div>
+`;
