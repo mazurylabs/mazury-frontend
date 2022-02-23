@@ -19,10 +19,12 @@ export const Layout: FC<LayoutProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full" data-testid="layout-container">
       <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
         <motion.aside
-          className={`fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 px-5 shadow-inner lg:flex`}
+          className={`fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 ${
+            isOpen && 'px-5'
+          } shadow-inner lg:flex`}
           style={{
             background:
               'linear-gradient(184.64deg, #FFFFFF -5.13%, #E7E8E9 103.54%)',
@@ -32,6 +34,7 @@ export const Layout: FC<LayoutProps> = ({
           }}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
+          role="menu"
         >
           {sidebarContent}
         </motion.aside>

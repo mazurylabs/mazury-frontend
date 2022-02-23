@@ -10,6 +10,7 @@ import {
   GMPost,
   MirrorPost,
   Layout,
+  Sidebar,
 } from 'components';
 import {
   ColorName,
@@ -34,7 +35,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { LoadMoreButton } from 'components/Pill';
 import { motion } from 'framer-motion';
-import { Sidebar } from 'components/Sidebar';
 import { BlueSocialButton } from 'components/Button/Button';
 
 interface Props {
