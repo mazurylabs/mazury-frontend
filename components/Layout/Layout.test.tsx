@@ -7,7 +7,7 @@ describe('Layout', () => {
   test('all parts are being rendered correctly', () => {
     render(
       <Layout
-        sidebarContent={<Sidebar />}
+        sidebarContent={<span>Sidebar content</span>}
         innerLeftContent={<span>Inner left content</span>}
         innerRightContent={<span>Inner right content</span>}
         headerContent={<span>Header content</span>}
