@@ -1,5 +1,5 @@
 export { Layout } from './Layout/Layout';
-export { Button } from './Button';
+export * from './Button';
 export { Avatar } from './Avatar';
 export { Pill } from './Pill';
 export { ActivityPreview } from './ActivityPreview';
