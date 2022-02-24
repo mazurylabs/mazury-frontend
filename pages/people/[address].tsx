@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
@@ -19,7 +19,7 @@ import {
   ProfileSection,
   Role,
 } from 'types';
-import { getTruncatedAddress, goToLink } from 'utils';
+import { getTruncatedAddress, goToLink, toCapitalizedWord } from 'utils';
 import { getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
@@ -30,6 +30,8 @@ import {
   useScrollPosition,
   useTotalBadgeCounts,
   useProfile,
+  useActiveProfileSection,
+  useMobile,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -87,16 +89,21 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [referralsExpanded, setReferralsExpanded] = React.useState(false);
 
   const activityRef = useRef<HTMLHeadingElement>(null);
+  const altActivityRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLHeadingElement>(null);
   const referralsRef = useRef<HTMLHeadingElement>(null);
   const writingRef = useRef<HTMLHeadingElement>(null);
+  const headerRef = useRef<HTMLHRElement>(null);
+
+  const currActiveSection = useActiveProfileSection();
+  const isMobile = useMobile();
 
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
     let ref;
     switch (section) {
       case 'Activity':
-        ref = activityRef;
+        ref = activityRef || altActivityRef;
         break;
       case 'Badges':
         ref = badgesRef;
@@ -114,9 +121,24 @@ const Profile: React.FC<Props> = ({ address }) => {
         ref = activityRef;
     }
     if (ref && ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
+      let offsetTop = 390;
+      offsetTop = isMobile
+        ? scrollPos! < 10
+          ? offsetTop + 60
+          : offsetTop - 200
+        : offsetTop;
+      window?.scrollTo({
+        top: ref.current.offsetTop - offsetTop,
+        behavior: 'smooth',
+      });
     }
   };
+
+  useEffect(() => {
+    if (currActiveSection) {
+      setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
+    }
+  }, [currActiveSection]);
 
   return (
     <>
@@ -126,7 +148,7 @@ const Profile: React.FC<Props> = ({ address }) => {
       <Layout
         sidebarContent={<Sidebar />}
         headerContent={
-          <div className={`sticky top-0 left-0 z-10 bg-white`}>
+          <div className="sticky top-0 left-0 z-10 bg-white">
             <div className="hidden items-center gap-8 py-4 px-24 md:flex">
               <Image
                 onClick={() => router.back()}
@@ -360,7 +382,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               ))}
             </div>
 
-            <hr />
+            <hr ref={headerRef} />
           </div>
         }
         innerLeftContent={
@@ -385,12 +407,14 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div>
               <h3
                 id="activity"
+                ref={activityRef}
                 className="hidden font-serif text-3xl font-bold text-indigoGray-90 md:block"
               >
                 Activity
               </h3>
               <div
-                ref={activityRef}
+                id="activity-alt"
+                ref={altActivityRef}
                 className="mt-0 flex flex-col gap-6 md:mt-8 lg:w-10/12"
               >
                 <ActivityPreview
@@ -439,6 +463,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
+                  id="badges"
                   ref={badgesRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
@@ -492,6 +517,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
+                  id="referrals"
                   ref={referralsRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
@@ -543,6 +569,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
+                  id="writing"
                   ref={writingRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >

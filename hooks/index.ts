@@ -6,3 +6,4 @@ export { useScrollPosition } from './useScrollPosition';
 export { useScreenWidth } from './useScreenWidth';
 export { useCurrentBreakpoint } from './useCurrentBreakpoint';
 export { useMobile } from './useMobile';
+export { useIntersection, useActiveProfileSection } from './useIntersection';
