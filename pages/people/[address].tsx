@@ -11,6 +11,8 @@ import {
   MirrorPost,
   Layout,
   Sidebar,
+  ReferralPreview,
+  BlueSocialButton,
 } from 'components';
 import {
   ColorName,
@@ -23,7 +25,6 @@ import { getTruncatedAddress, goToLink, toCapitalizedWord } from 'utils';
 import { getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
-import { ReferralPreview } from 'components/ReferralPreview';
 import {
   useBadges,
   useReferrals,
@@ -36,7 +37,6 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import { BlueSocialButton } from 'components/Button/Button';
 
 interface Props {
   address: string;
@@ -140,6 +140,14 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [currActiveSection]);
 
+  useEffect(() => {
+    console.log({
+      isMobile,
+      username: profile.username.length,
+      val: isMobile && profile.username.length > 8,
+    });
+  }, [isMobile, profile.username]);
+
   return (
     <>
       <Head>
@@ -200,11 +208,17 @@ const Profile: React.FC<Props> = ({ address }) => {
                       <div className="flex items-baseline gap-4">
                         <motion.h1
                           animate={{
-                            fontSize: shouldCollapseHeader ? '24px' : '48px',
+                            fontSize: shouldCollapseHeader
+                              ? '24px'
+                              : isMobile && profile.username.length > 8
+                              ? '32px'
+                              : '48px',
                           }}
                           className={`no-scrollbar overflow-x-scroll font-demi text-indigoGray-90 md:overflow-auto`}
                         >
-                          {profile.username}
+                          {profile.username.length > 15 && isMobile
+                            ? profile.username.slice(0, 10) + '...'
+                            : profile.username}
                         </motion.h1>
                         <h3
                           className={`hidden text-indigoGray-40 md:inline-block ${
