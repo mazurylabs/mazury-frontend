@@ -31,6 +31,9 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   };
 
   const goBack = () => {
+    if (router.pathname === '/onboarding') {
+      return router.push('/');
+    }
     const currentRoute = router.pathname.split('/')[2];
     const prevRoute =
       onboardingRoutes[onboardingRoutes.indexOf(currentRoute) - 1];
