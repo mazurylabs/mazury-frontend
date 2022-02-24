@@ -9,6 +9,8 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 import { SWRConfig } from 'swr';
 import axios from 'axios';
+import { ErrorBoundary } from '@sentry/nextjs';
+import { ErrorFallback } from 'components';
 
 // Get environment variables
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
@@ -72,20 +74,22 @@ const fetcher = async (url: string) => {
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <SWRConfig value={{ fetcher }}>
-      <Provider
-        autoConnect
-        connectors={connectors}
-        provider={provider}
-        webSocketProvider={webSocketProvider}
-      >
-        <NextHead>
-          <title>Mazury</title>
-        </NextHead>
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <SWRConfig value={{ fetcher }}>
+        <Provider
+          autoConnect
+          connectors={connectors}
+          provider={provider}
+          webSocketProvider={webSocketProvider}
+        >
+          <NextHead>
+            <title>Mazury</title>
+          </NextHead>
 
-        <Component {...pageProps} />
-      </Provider>
-    </SWRConfig>
+          <Component {...pageProps} />
+        </Provider>
+      </SWRConfig>
+    </ErrorBoundary>
   );
 };
 
