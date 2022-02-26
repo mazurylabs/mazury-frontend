@@ -446,7 +446,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               <div
                 id="activity-alt"
                 ref={altActivityRef}
-                className="mt-0 flex flex-col gap-6 md:mt-8 lg:w-10/12"
+                className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
               >
                 <ActivityPreview
                   activityType="event"
@@ -513,7 +513,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
+              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges
                     ?.slice(0, badgesExpanded ? badges.length : 4)
@@ -537,7 +537,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               {badges && badges.length > 4 && (
-                <div className="lg:w-10/12">
+                <div className="xl:w-10/12">
                   <Button
                     onClick={() => setBadgesExpanded((v) => !v)}
                     variant="secondary"
@@ -596,7 +596,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               {referrals && referrals.length > 4 && (
-                <div className="lg:w-10/12">
+                <div className="xl:w-10/12">
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}
                     variant="secondary"
@@ -692,7 +692,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 />
               </div>
 
-              <div className="lg:w-10/12">
+              <div className="xl:w-10/12">
                 <Button variant="secondary" className="mx-auto mt-6">
                   LOAD MORE
                 </Button>
