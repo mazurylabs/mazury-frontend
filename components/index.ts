@@ -14,3 +14,4 @@ export { InfoBox } from './InfoBox';
 export * from './Tags';
 export * from './Icons';
 export { Sidebar } from './Sidebar';
+export * from './Checkbox';
