@@ -195,12 +195,12 @@ const Profile: React.FC<Props> = ({ address }) => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <motion.img
                       animate={{
-                        width: shouldCollapseHeader ? '48px' : '100px',
-                        height: shouldCollapseHeader ? '48px' : '100px',
+                        width: shouldCollapseHeader ? '56px' : '100px',
+                        height: shouldCollapseHeader ? '56px' : '100px',
                       }}
                       initial={{
-                        width: shouldCollapseHeader ? '48px' : '100px',
-                        height: shouldCollapseHeader ? '48px' : '100px',
+                        width: shouldCollapseHeader ? '56px' : '100px',
+                        height: shouldCollapseHeader ? '56px' : '100px',
                       }}
                       src={profile.avatar}
                       alt={`${profile.username}'s avatar`}
@@ -211,7 +211,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         <motion.h1
                           animate={{
                             fontSize: shouldCollapseHeader
-                              ? '24px'
+                              ? '30px'
                               : isMobile && profile.username.length > 8
                               ? '32px'
                               : '48px',
@@ -254,16 +254,16 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
 
                 <p
-                  className={`text-indigoGray-70 md:block ${
-                    shouldCollapseHeader && 'hidden'
+                  className={`text-indigoGray-70 ${
+                    shouldCollapseHeader ? 'hidden' : 'block'
                   }`}
                 >
                   {profile.bio}
                 </p>
 
                 <div
-                  className={`no-scrollbar flex w-full gap-6 overflow-x-scroll md:overflow-auto ${
-                    shouldCollapseHeader && 'hidden md:flex'
+                  className={`no-scrollbar w-full gap-6 overflow-x-scroll md:overflow-auto ${
+                    shouldCollapseHeader ? 'hidden' : 'flex'
                   }`}
                 >
                   {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
@@ -317,23 +317,34 @@ const Profile: React.FC<Props> = ({ address }) => {
 
               <div className="ml-auto hidden gap-16 pr-24 lg:flex">
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
                     {referrals?.length || '-'}
-                  </div>
+                  </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Referrals
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
                     {badges?.length || '-'}
-                  </div>
+                  </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Badges
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">23</div>
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
+                    23
+                  </motion.span>
                   <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
                   </div>
@@ -404,7 +415,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         innerLeftContent={
           <div
             className={`sticky left-0 ${
-              hasAnySocial ? 'top-[23rem]' : 'top-[18.5rem]'
+              hasAnySocial ? 'top-[16.5rem]' : 'top-[14.5rem]'
             } flex h-fit flex-col justify-start gap-4`}
           >
             {profileSections.map((sectionName) => (
