@@ -14,7 +14,7 @@ interface Props {
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
   const baseString = `${
     !active && 'text-black'
-  } text-sm px-6 py-2 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
+  } text-sm py-2 px-4 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
     active ? 'font-bold' : 'font-medium'
   }`;
 
@@ -77,8 +77,8 @@ export const Pill: React.FC<Props> = ({
           src={`/icons/${labelToIconName[label as Labels]} ${
             active ? 'coloured' : 'black'
           }.svg`}
-          width={18}
-          height={18}
+          width={'16px'}
+          height={'16px'}
           alt={`${label} icon`}
         />
       )}

@@ -409,7 +409,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           >
             {profileSections.map((sectionName) => (
               <Pill
-                className="mx-auto w-full xl:w-1/2"
+                className="mx-auto w-[150px] justify-start"
                 key={sectionName}
                 isNav
                 label={sectionName}
