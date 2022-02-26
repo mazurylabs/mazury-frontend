@@ -1,5 +1,6 @@
 import { Avatar, Button, InfoBox, Input, OnboardingLayout } from 'components';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 interface PersonProps {
@@ -10,6 +11,8 @@ interface PersonProps {
 }
 
 const Person: FC<PersonProps> = ({ date, avatarSrc, username, role }) => {
+  const router = useRouter();
+
   return (
     <div className="flex items-center">
       <Avatar src={avatarSrc} width="56px" height="56px" />
@@ -24,7 +27,11 @@ const Person: FC<PersonProps> = ({ date, avatarSrc, username, role }) => {
         </span>
       </div>
 
-      <Button variant="secondary" className="ml-auto h-fit">
+      <Button
+        onClick={() => router.push('/onboarding/write')}
+        variant="secondary"
+        className="ml-auto h-fit"
+      >
         REFER
       </Button>
     </div>
