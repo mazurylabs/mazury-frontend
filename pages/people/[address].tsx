@@ -159,7 +159,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         sidebarContent={<Sidebar />}
         headerContent={
           <div className="sticky top-0 left-0 z-10 bg-white">
-            <div className="hidden items-center gap-8 py-4 px-24 md:flex">
+            <div className="hidden items-center gap-4 py-4 px-[39.5px] md:flex">
               <Image
                 onClick={() => router.back()}
                 className="hover:cursor-pointer"
@@ -172,7 +172,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className="flex w-full items-center gap-8 rounded-none bg-white px-8 py-4 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
+              className="flex w-full items-center gap-8 rounded-none bg-white px-[39.5px] py-6 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
@@ -342,7 +342,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:mt-6 md:overflow-x-auto lg:px-24 ${
+              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:mt-6 md:overflow-x-auto lg:px-[39.5px] ${
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
