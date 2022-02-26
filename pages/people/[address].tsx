@@ -272,7 +272,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       return (
                         <button
                           key={role}
-                          className="rounded bg-white px-4 py-1 text-sm font-bold text-indigoGray-90"
+                          className="rounded bg-white bg-opacity-80 px-4 py-1 text-xs font-bold text-indigoGray-90"
                         >
                           {roleFieldToLabel[role]}
                         </button>
