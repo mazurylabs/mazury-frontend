@@ -98,6 +98,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   const currActiveSection = useActiveProfileSection();
   const isMobile = useMobile();
 
+  const hasAnySocial = profile.github || profile.website || profile.twitter;
+
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
     let ref;
@@ -400,7 +402,11 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
         innerLeftContent={
-          <div className="sticky left-0 top-[25rem] flex h-fit flex-col justify-start gap-4">
+          <div
+            className={`sticky left-0 ${
+              hasAnySocial ? 'top-[25rem]' : 'top-[20.5rem]'
+            } flex h-fit flex-col justify-start gap-4`}
+          >
             {profileSections.map((sectionName) => (
               <Pill
                 className="mx-auto w-full xl:w-1/2"
@@ -452,27 +458,29 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             </div>
 
-            <div>
-              <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
-                Recent referrals
-              </h3>
-              <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                {referrals?.slice(0, 2).map((referral) => {
-                  return (
-                    <ReferralPreview
-                      key={referral.id}
-                      referredBy={{
-                        username: referral.author.username,
-                        avatarSrc: referral.author.avatar,
-                      }}
-                      text={referral.content}
-                      skills={referral.skills || []}
-                    />
-                  );
-                })}
+            {referrals.length > 0 && (
+              <div>
+                <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
+                  Recent referrals
+                </h3>
+                <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
+                  {referrals?.slice(0, 2).map((referral) => {
+                    return (
+                      <ReferralPreview
+                        key={referral.id}
+                        referredBy={{
+                          username: referral.author.username,
+                          avatarSrc: referral.author.avatar,
+                        }}
+                        text={referral.content}
+                        skills={referral.skills || []}
+                      />
+                    );
+                  })}
+                </div>
+                <HR />
               </div>
-              <HR />
-            </div>
+            )}
 
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
@@ -495,25 +503,29 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
-                {badges
-                  ?.slice(0, badgesExpanded ? badges.length : 4)
-                  .map((badge) => {
-                    const { badge_type, id } = badge;
-                    const { image, description, title } = badge_type;
+                {badges && badges.length > 0 ? (
+                  badges
+                    ?.slice(0, badgesExpanded ? badges.length : 4)
+                    .map((badge) => {
+                      const { badge_type, id } = badge;
+                      const { image, description, title } = badge_type;
 
-                    return (
-                      <BadgePreview
-                        key={id}
-                        description={description}
-                        heading={title}
-                        imgSrc={image}
-                        totalCount={totalBadgeCounts[badge_type.id]}
-                      />
-                    );
-                  })}
+                      return (
+                        <BadgePreview
+                          key={id}
+                          description={description}
+                          heading={title}
+                          imgSrc={image}
+                          totalCount={totalBadgeCounts[badge_type.id]}
+                        />
+                      );
+                    })
+                ) : (
+                  <p className="text-sm text-indigoGray-50">No badges found.</p>
+                )}
               </div>
 
-              {badges?.length && badges?.length > 4 && (
+              {badges && badges.length > 4 && (
                 <div className="lg:w-10/12">
                   <Button
                     onClick={() => setBadgesExpanded((v) => !v)}
@@ -549,24 +561,30 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                {referrals
-                  ?.slice(0, referralsExpanded ? referrals.length : 4)
-                  .map((referral) => {
-                    return (
-                      <ReferralPreview
-                        key={referral.id}
-                        referredBy={{
-                          username: referral.author.username,
-                          avatarSrc: referral.author.avatar,
-                        }}
-                        text={referral.content}
-                        skills={referral.skills || []}
-                      />
-                    );
-                  })}
+                {referrals && referrals.length > 0 ? (
+                  referrals
+                    ?.slice(0, referralsExpanded ? referrals.length : 4)
+                    .map((referral) => {
+                      return (
+                        <ReferralPreview
+                          key={referral.id}
+                          referredBy={{
+                            username: referral.author.username,
+                            avatarSrc: referral.author.avatar,
+                          }}
+                          text={referral.content}
+                          skills={referral.skills || []}
+                        />
+                      );
+                    })
+                ) : (
+                  <p className="text-sm text-indigoGray-50">
+                    No referrals found.
+                  </p>
+                )}
               </div>
 
-              {referrals?.length && referrals?.length > 4 && (
+              {referrals && referrals.length > 4 && (
                 <div className="lg:w-10/12">
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}
