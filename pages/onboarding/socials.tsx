@@ -19,7 +19,7 @@ const SocialButton: FC<SocialButtonProps> = ({
   return (
     <button
       style={{ backgroundColor }}
-      className={`flex items-center justify-center gap-2 rounded-lg py-4 text-sm font-bold uppercase text-indigoGray-5 shadow-base ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base ${className}`}
     >
       <Image
         src={iconSrc}
