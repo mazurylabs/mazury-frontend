@@ -23,7 +23,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
       class="flex flex-col gap-8 md:flex-row"
     >
       <div
-        class="hidden w-full flex-col gap-8 md:flex md:w-3/12"
+        class="hidden w-full flex-col gap-4 md:flex md:w-3/12"
       >
         <span>
           Inner left content

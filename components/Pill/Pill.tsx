@@ -1,15 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
-import { ColorName, ProfileSection as Labels } from '../types';
-
-interface Props {
-  label: Labels | string;
-  color?: ColorName;
-  onClick?: () => void;
-  active?: boolean;
-  isNav?: boolean;
-  className?: string;
-}
+import { ColorName, ProfileSection as Labels } from 'types';
+import { PillProps } from './Pill.types';
 
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
   const baseString = `${
@@ -59,7 +51,7 @@ const labelToIconName = {
   DAOs: 'zap',
 };
 
-export const Pill: React.FC<Props> = ({
+export const Pill: React.FC<PillProps> = ({
   label,
   color,
   onClick,
