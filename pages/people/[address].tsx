@@ -342,7 +342,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:mt-6 md:overflow-x-auto lg:px-[39.5px] ${
+              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:overflow-x-auto lg:px-[39.5px] ${
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
@@ -378,8 +378,8 @@ const Profile: React.FC<Props> = ({ address }) => {
 
             <hr
               className={`${
-                shouldCollapseHeader && 'mt-0 md:mt-8'
-              } mt-4 mb-0 border-indigoGray-20 md:mt-8`}
+                shouldCollapseHeader && 'mt-0 md:mt-4'
+              } mt-4 mb-0 border-indigoGray-20 md:mt-4`}
             />
 
             <div className="no-scrollbar flex gap-4 overflow-x-scroll px-4 py-4 font-serif text-lg font-bold md:hidden">
@@ -404,7 +404,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         innerLeftContent={
           <div
             className={`sticky left-0 ${
-              hasAnySocial ? 'top-[25rem]' : 'top-[20.5rem]'
+              hasAnySocial ? 'top-[23rem]' : 'top-[18.5rem]'
             } flex h-fit flex-col justify-start gap-4`}
           >
             {profileSections.map((sectionName) => (
