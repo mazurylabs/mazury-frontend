@@ -1,17 +1,18 @@
 import { Input, OnboardingLayout } from 'components';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
+import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
 
 interface SocialButtonProps {
-  iconSrc: string;
+  icon: ReactNode;
   label: string;
   backgroundColor: string;
   className?: string;
 }
 
 const SocialButton: FC<SocialButtonProps> = ({
-  iconSrc,
+  icon,
   label,
   backgroundColor,
   className,
@@ -19,15 +20,16 @@ const SocialButton: FC<SocialButtonProps> = ({
   return (
     <button
       style={{ backgroundColor }}
-      className={`flex items-center justify-center gap-2 rounded-lg py-4 text-sm font-bold uppercase text-indigoGray-5 shadow-base ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base ${className}`}
     >
-      <Image
+      {icon}
+      {/* <Image
         src={iconSrc}
         width="20px"
         height="20px"
         alt={`${label} icon`}
         className="border-[1.33px] border-indigoGray-5"
-      />
+      /> */}
       {label}
     </button>
   );
@@ -64,19 +66,37 @@ const SocialsPage: NextPage = () => {
       </form>
 
       <SocialButton
-        iconSrc="/icons/twitter.svg"
+        icon={
+          <FaTwitter
+            width="20px"
+            height="20px"
+            className="border-[1.33px border-indigoGray-5"
+          />
+        }
         label="Twitter"
         backgroundColor="#4A99E9"
         className="mt-12"
       />
       <SocialButton
-        iconSrc="/icons/github.svg"
+        icon={
+          <FaGithub
+            width="20px"
+            height="20px"
+            className="border-[1.33px border-indigoGray-5"
+          />
+        }
         label="Github"
         backgroundColor="#262626"
         className="mt-4"
       />
       <SocialButton
-        iconSrc="/icons/discord.svg"
+        icon={
+          <FaDiscord
+            width="20px"
+            height="20px"
+            className="border-[1.33px border-indigoGray-5"
+          />
+        }
         label="Discord"
         backgroundColor="#5A65EA"
         className="mt-4"

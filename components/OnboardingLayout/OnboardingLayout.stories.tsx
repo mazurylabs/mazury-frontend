@@ -1,7 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Button } from 'components';
 import * as React from 'react';
-import { useState } from 'react';
 
 import { OnboardingLayout } from './OnboardingLayout';
 

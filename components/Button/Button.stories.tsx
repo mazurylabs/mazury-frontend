@@ -43,3 +43,9 @@ WithIcon.args = {
     </>
   ),
 };
+
+export const Large = Template.bind({});
+Large.args = {
+  children: 'BUTTON',
+  size: 'large',
+};

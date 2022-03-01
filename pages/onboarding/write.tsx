@@ -60,6 +60,7 @@ const WritePage: NextPage = () => {
           placeholder="Write your referral here..."
           className="mt-6 resize-none p-4 text-base font-medium text-indigoGray-50 placeholder:text-indigoGray-50"
           rows={8}
+          maxLength={400}
         />
 
         <span className="mt-6 text-base font-medium text-indigoGray-60">

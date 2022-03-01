@@ -62,7 +62,11 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       {children}
 
       <div className="sticky bottom-8 mx-auto mt-auto w-full">
-        <Button onClick={goForward} className="w-full justify-center uppercase">
+        <Button
+          size="large"
+          onClick={goForward}
+          className="w-full justify-center uppercase"
+        >
           {bottomButtonText}
         </Button>
       </div>

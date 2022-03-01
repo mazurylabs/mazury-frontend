@@ -63,4 +63,14 @@ describe('Button', () => {
     fireEvent.click(btn);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  test('size prop works as intended', () => {
+    render(<Button size="large">Button</Button>);
+    const btn = screen.getByRole('button', {
+      name: 'Button',
+    });
+    expect(btn).toBeInTheDocument();
+    expect(btn).toMatchSnapshot();
+    expect(btn).toHaveClass('py-3');
+  });
 });

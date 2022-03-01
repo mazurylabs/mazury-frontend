@@ -6,10 +6,13 @@ const BaseButton: FC<BaseButtonProps> = ({
   onClick,
   className,
   disabled = false,
+  size = 'small',
 }) => {
   return (
     <button
-      className={`flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-xs font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-[8px] ${
+        size === 'small' ? 'py-2' : 'py-3'
+      } px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${className}`}
       onClick={(e) => {
         e.preventDefault();
         if (onClick) {
@@ -29,6 +32,7 @@ export const Button: FC<ButtonProps> = ({
   variant = 'primary',
   disabled = false,
   className,
+  size = 'small',
 }) => {
   if (variant === 'primary') {
     return (
@@ -36,6 +40,7 @@ export const Button: FC<ButtonProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={`bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 ${className}`}
+        size={size}
       >
         {children}
       </BaseButton>
@@ -48,6 +53,7 @@ export const Button: FC<ButtonProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={`border-[1.5px] border-indigoGray-90 bg-white text-indigoGray-90 hover:border-indigoGray-70 hover:text-indigoGray-70 active:border-indigoGray-80 active:text-indigoGray-80 disabled:border-indigoGray-30 disabled:text-indigoGray-30 ${className}`}
+        size={size}
       >
         {children}
       </BaseButton>
@@ -60,6 +66,7 @@ export const Button: FC<ButtonProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={`bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 ${className}`}
+        size={size}
       >
         {children}
       </BaseButton>
@@ -67,7 +74,12 @@ export const Button: FC<ButtonProps> = ({
   }
 
   return (
-    <BaseButton onClick={onClick} disabled={disabled} className={className}>
+    <BaseButton
+      onClick={onClick}
+      disabled={disabled}
+      className={className}
+      size={size}
+    >
       {children}
     </BaseButton>
   );

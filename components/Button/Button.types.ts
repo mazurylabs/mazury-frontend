@@ -4,6 +4,7 @@ export interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'tertiary';
   disabled?: boolean;
   className?: string;
+  size?: 'small' | 'large';
 }
 
 export interface BaseButtonProps extends Omit<ButtonProps, 'variant'> {}

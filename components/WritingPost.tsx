@@ -22,7 +22,7 @@ export const GMPost: React.FC<GMPostProps> = ({
 }) => {
   return (
     <div
-      className="flex flex-col gap-4 rounded-xl border p-6 shadow-base transition-shadow hover:cursor-pointer hover:shadow-lg"
+      className="flex flex-col gap-4 rounded-xl border p-6 transition-shadow hover:cursor-pointer hover:shadow-lg"
       onClick={() => window.open(link, '_blank')}
     >
       <div className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export const GMPost: React.FC<GMPostProps> = ({
           {author.username}
         </h5>
 
-        <span className="ml-auto rounded-xl border-2 border-blue-600 px-6 py-1 text-sm text-blue-600">
+        <span className="ml-auto flex h-[32px] w-[64px] items-center justify-center rounded-xl border-2 border-blue-600 px-6 py-1 text-sm text-blue-600">
           gm
         </span>
       </div>
@@ -102,11 +102,11 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
             {author.username}
           </h5>
 
-          <span className="ml-auto rounded-xl border-2 border-lime-600 px-6 py-2 text-lime-600">
+          <span className="ml-auto flex h-[32px] w-[64px] items-center justify-center rounded-xl border-2 border-lime-600 px-6 py-2 text-lime-600">
             <Image
               src="/icons/mirror-icon.svg"
               alt="Mirror icon"
-              width="16px"
+              width="11.79px"
               height="16px"
             />
           </span>

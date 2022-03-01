@@ -1,9 +1,10 @@
-import { OnboardingLayout, RoleCard } from 'components';
+import { Checkbox, OnboardingLayout, RoleCard } from 'components';
 import { FC, useState } from 'react';
 import { TrimmedRole } from 'types';
 
 export const RoleView: FC = () => {
   const [selectedRoles, setSelectedRoles] = useState<TrimmedRole[]>([]);
+  const [openToNew, setOpenToNew] = useState(false);
 
   const handleRoleClick = (role: TrimmedRole) => {
     setSelectedRoles(
@@ -71,13 +72,13 @@ export const RoleView: FC = () => {
         <span className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
           New projects
         </span>
-        {/* TODO: Custom checkbox */}
-        <div className="mt-3 flex items-center">
-          <input type="checkbox" />
-          <span className="ml-3 text-base font-medium text-indigoGray-70">
-            I&apos;m open to contribute to new projects
-          </span>
-        </div>
+        <Checkbox
+          checked={openToNew}
+          setChecked={setOpenToNew}
+          label="I'm open to contribute to new projects"
+          id="open-to-new-checkbox"
+          outerClassName="mt-3"
+        />
       </div>
     </OnboardingLayout>
   );

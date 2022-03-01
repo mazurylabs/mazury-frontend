@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pill active state 1`] = `
+<button
+  class="false text-sm py-2 px-4 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 font-bold hover:bg-blue-50 text-black bg-black undefined"
+>
+  LABEL
+</button>
+`;
+
+exports[`Pill inactive state 1`] = `
+<button
+  class="text-black text-sm py-2 px-4 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 font-medium hover:bg-blue-50 false undefined"
+>
+  LABEL
+</button>
+`;

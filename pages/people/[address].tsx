@@ -159,7 +159,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         sidebarContent={<Sidebar />}
         headerContent={
           <div className="sticky top-0 left-0 z-10 bg-white">
-            <div className="hidden items-center gap-8 py-4 px-24 md:flex">
+            <div className="hidden items-center gap-4 py-4 px-[39.5px] md:flex">
               <Image
                 onClick={() => router.back()}
                 className="hover:cursor-pointer"
@@ -172,7 +172,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className="flex w-full items-center gap-8 rounded-none bg-white px-8 py-4 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
+              className="flex w-full items-center gap-8 rounded-none bg-white px-[39.5px] py-6 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
@@ -195,12 +195,12 @@ const Profile: React.FC<Props> = ({ address }) => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <motion.img
                       animate={{
-                        width: shouldCollapseHeader ? '48px' : '100px',
-                        height: shouldCollapseHeader ? '48px' : '100px',
+                        width: shouldCollapseHeader ? '56px' : '100px',
+                        height: shouldCollapseHeader ? '56px' : '100px',
                       }}
                       initial={{
-                        width: shouldCollapseHeader ? '48px' : '100px',
-                        height: shouldCollapseHeader ? '48px' : '100px',
+                        width: shouldCollapseHeader ? '56px' : '100px',
+                        height: shouldCollapseHeader ? '56px' : '100px',
                       }}
                       src={profile.avatar}
                       alt={`${profile.username}'s avatar`}
@@ -211,7 +211,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         <motion.h1
                           animate={{
                             fontSize: shouldCollapseHeader
-                              ? '24px'
+                              ? '30px'
                               : isMobile && profile.username.length > 8
                               ? '32px'
                               : '48px',
@@ -254,16 +254,16 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
 
                 <p
-                  className={`text-indigoGray-70 md:block ${
-                    shouldCollapseHeader && 'hidden'
+                  className={`text-indigoGray-70 ${
+                    shouldCollapseHeader ? 'hidden' : 'block'
                   }`}
                 >
                   {profile.bio}
                 </p>
 
                 <div
-                  className={`no-scrollbar flex w-full gap-6 overflow-x-scroll md:overflow-auto ${
-                    shouldCollapseHeader && 'hidden md:flex'
+                  className={`no-scrollbar w-full gap-6 overflow-x-scroll md:overflow-auto ${
+                    shouldCollapseHeader ? 'hidden' : 'flex'
                   }`}
                 >
                   {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
@@ -272,7 +272,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       return (
                         <button
                           key={role}
-                          className="rounded bg-white px-4 py-1 text-sm font-bold text-indigoGray-90"
+                          className="rounded bg-white bg-opacity-80 px-4 py-1 text-xs font-bold text-indigoGray-90"
                         >
                           {roleFieldToLabel[role]}
                         </button>
@@ -317,23 +317,34 @@ const Profile: React.FC<Props> = ({ address }) => {
 
               <div className="ml-auto hidden gap-16 pr-24 lg:flex">
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
                     {referrals?.length || '-'}
-                  </div>
+                  </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Referrals
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
                     {badges?.length || '-'}
-                  </div>
+                  </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Badges
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-0">
-                  <div className="font-serif text-4xl font-bold">23</div>
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
+                    23
+                  </motion.span>
                   <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
                   </div>
@@ -342,7 +353,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:mt-6 md:overflow-x-auto lg:px-24 ${
+              className={`no-scrollbar mt-4 flex gap-4 overflow-x-scroll px-4 text-sm font-medium md:overflow-x-auto lg:px-[39.5px] ${
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
@@ -378,8 +389,8 @@ const Profile: React.FC<Props> = ({ address }) => {
 
             <hr
               className={`${
-                shouldCollapseHeader && 'mt-0 md:mt-8'
-              } mt-4 mb-0 border-indigoGray-20 md:mt-8`}
+                shouldCollapseHeader && 'mt-0 md:mt-4'
+              } mt-4 mb-0 border-indigoGray-20 md:mt-4`}
             />
 
             <div className="no-scrollbar flex gap-4 overflow-x-scroll px-4 py-4 font-serif text-lg font-bold md:hidden">
@@ -404,12 +415,12 @@ const Profile: React.FC<Props> = ({ address }) => {
         innerLeftContent={
           <div
             className={`sticky left-0 ${
-              hasAnySocial ? 'top-[25rem]' : 'top-[20.5rem]'
+              hasAnySocial ? 'top-[16.5rem]' : 'top-[14.5rem]'
             } flex h-fit flex-col justify-start gap-4`}
           >
             {profileSections.map((sectionName) => (
               <Pill
-                className="mx-auto w-full xl:w-1/2"
+                className="mx-auto w-[150px] justify-start"
                 key={sectionName}
                 isNav
                 label={sectionName}
@@ -435,7 +446,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               <div
                 id="activity-alt"
                 ref={altActivityRef}
-                className="mt-0 flex flex-col gap-6 md:mt-8 lg:w-10/12"
+                className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
               >
                 <ActivityPreview
                   activityType="event"
@@ -474,6 +485,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }}
                         text={referral.content}
                         skills={referral.skills || []}
+                        date={referral.created_at}
                       />
                     );
                   })}
@@ -502,7 +514,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
+              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges
                     ?.slice(0, badgesExpanded ? badges.length : 4)
@@ -526,7 +538,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               {badges && badges.length > 4 && (
-                <div className="lg:w-10/12">
+                <div className="xl:w-10/12">
                   <Button
                     onClick={() => setBadgesExpanded((v) => !v)}
                     variant="secondary"
@@ -574,6 +586,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }}
                           text={referral.content}
                           skills={referral.skills || []}
+                          date={referral.created_at}
                         />
                       );
                     })
@@ -585,7 +598,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               {referrals && referrals.length > 4 && (
-                <div className="lg:w-10/12">
+                <div className="xl:w-10/12">
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}
                     variant="secondary"
@@ -681,7 +694,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 />
               </div>
 
-              <div className="lg:w-10/12">
+              <div className="xl:w-10/12">
                 <Button variant="secondary" className="mx-auto mt-6">
                   LOAD MORE
                 </Button>

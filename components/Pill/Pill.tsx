@@ -1,20 +1,12 @@
 import Image from 'next/image';
 import React from 'react';
-import { ColorName, ProfileSection as Labels } from '../types';
-
-interface Props {
-  label: Labels | string;
-  color?: ColorName;
-  onClick?: () => void;
-  active?: boolean;
-  isNav?: boolean;
-  className?: string;
-}
+import { ColorName, ProfileSection as Labels } from 'types';
+import { PillProps } from './Pill.types';
 
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
   const baseString = `${
     !active && 'text-black'
-  } text-sm px-6 py-2 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
+  } text-sm py-2 px-4 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
     active ? 'font-bold' : 'font-medium'
   }`;
 
@@ -59,7 +51,7 @@ const labelToIconName = {
   DAOs: 'zap',
 };
 
-export const Pill: React.FC<Props> = ({
+export const Pill: React.FC<PillProps> = ({
   label,
   color,
   onClick,
@@ -77,8 +69,8 @@ export const Pill: React.FC<Props> = ({
           src={`/icons/${labelToIconName[label as Labels]} ${
             active ? 'coloured' : 'black'
           }.svg`}
-          width={18}
-          height={18}
+          width={'16px'}
+          height={'16px'}
           alt={`${label} icon`}
         />
       )}
