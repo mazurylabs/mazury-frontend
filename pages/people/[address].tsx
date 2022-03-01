@@ -485,6 +485,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }}
                         text={referral.content}
                         skills={referral.skills || []}
+                        date={referral.created_at}
                       />
                     );
                   })}
@@ -585,6 +586,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }}
                           text={referral.content}
                           skills={referral.skills || []}
+                          date={referral.created_at}
                         />
                       );
                     })
