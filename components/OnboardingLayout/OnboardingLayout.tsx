@@ -41,7 +41,14 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   };
 
   return (
-    <main className="flex min-h-screen flex-col px-4 py-4 align-top">
+    <main className="mx-auto flex min-h-screen flex-col px-4 py-4 align-top sm:w-[530px]">
+      <Image
+        src="/wave.png"
+        className="absolute top-6 left-4 hidden xl:flex"
+        alt="Mazury logo"
+        width="40px"
+        height="40px"
+      />
       <Image
         onClick={goBack}
         src="/icons/back.svg"
