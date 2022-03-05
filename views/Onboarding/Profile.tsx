@@ -1,8 +1,10 @@
 import { Button, Input, OnboardingLayout } from 'components';
+import { OnboardingContext } from 'contexts';
 import Image from 'next/image';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 
 export const ProfileView: FC = () => {
+  const { formData, setFormData } = useContext(OnboardingContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File>();
   const [fileUrl, setFileUrl] = useState<string>();
@@ -25,6 +27,10 @@ export const ProfileView: FC = () => {
       setFileUrl(fileUrl);
     }
   }, [file]);
+
+  useEffect(() => {
+    console.log({ formData, setFormData });
+  }, [formData, setFormData]);
 
   return (
     <OnboardingLayout
@@ -61,7 +67,16 @@ export const ProfileView: FC = () => {
       </div>
 
       <form className="mt-4 flex flex-col">
-        <Input id="username" label="Username" />
+        <Input
+          id="username"
+          label="Username"
+          value={formData.username}
+          onChange={(val) => {
+            console.log(val);
+            const newFd = { ...formData, username: val };
+            setFormData(newFd);
+          }}
+        />
         <Input
           id="full-name"
           outerClassName="mt-4"

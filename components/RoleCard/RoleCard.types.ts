@@ -1,7 +1,7 @@
-import { TrimmedRole } from 'types';
+import { Role } from 'types';
 
 export interface RoleCardProps {
-  role: TrimmedRole;
+  role: Role;
   iconSrc: string;
   coloredSrc: string;
   selected?: boolean;

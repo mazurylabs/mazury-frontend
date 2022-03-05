@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useAccount, useConnect } from 'wagmi';
 import { Button } from 'components';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
@@ -9,6 +10,7 @@ const Home: NextPage = () => {
     fetchEns: true,
   });
   const { connected } = data;
+  const router = useRouter();
 
   if (connected) {
     return (
@@ -25,6 +27,14 @@ const Home: NextPage = () => {
         </p>
         <Button className="mx-auto mt-10" onClick={disconnect}>
           Disconnect
+        </Button>
+
+        <Button
+          variant="secondary"
+          className="mx-auto mt-6"
+          onClick={() => router.push('/onboarding')}
+        >
+          Start onboarding
         </Button>
       </div>
     );

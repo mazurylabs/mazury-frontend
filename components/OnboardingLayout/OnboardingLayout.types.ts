@@ -5,4 +5,5 @@ export interface OnboardingLayoutProps {
   secondHeading: ReactNode;
   children: ReactNode;
   bottomButtonText?: ReactNode;
+  bottomButtonOnClick?: () => Promise<void>;
 }

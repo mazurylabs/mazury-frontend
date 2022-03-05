@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'styles/globals.css';
 import type { AppProps } from 'next/app';
 import { providers } from 'ethers';
@@ -9,6 +9,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 import { SWRConfig } from 'swr';
 import axios from 'axios';
+import { OnboardingContext, OnboardingFormDataType } from 'contexts';
 
 // Get environment variables
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
@@ -71,6 +72,24 @@ const fetcher = async (url: string) => {
 };
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const [onboardingFormData, setOnboardingFormData] =
+    useState<OnboardingFormDataType>({
+      username: '',
+      role_community_manager: false,
+      role_creator: false,
+      role_investor: false,
+      role_developer: false,
+      role_designer: false,
+      role_researcher: false,
+      role_trader: false,
+      open_to_opportunities: false,
+    });
+  const [fetchedProfile, setFetchedProfile] = useState(false);
+
+  useEffect(() => {
+    console.log({ onboardingFormData });
+  }, [onboardingFormData]);
+
   return (
     <SWRConfig value={{ fetcher }}>
       <Provider
@@ -79,11 +98,20 @@ const App = ({ Component, pageProps }: AppProps) => {
         provider={provider}
         webSocketProvider={webSocketProvider}
       >
-        <NextHead>
-          <title>Mazury</title>
-        </NextHead>
+        <OnboardingContext.Provider
+          value={{
+            formData: onboardingFormData,
+            setFormData: setOnboardingFormData,
+            fetched: fetchedProfile,
+            setFetched: setFetchedProfile,
+          }}
+        >
+          <NextHead>
+            <title>Mazury</title>
+          </NextHead>
 
-        <Component {...pageProps} />
+          <Component {...pageProps} />
+        </OnboardingContext.Provider>
       </Provider>
     </SWRConfig>
   );
