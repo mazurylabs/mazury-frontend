@@ -72,7 +72,7 @@ export const RoleCard: FC<RoleCardProps> = ({
         alt="Role icon"
       />
       <span className="text-xs font-bold uppercase">
-        {toCapitalizedWord(role).split('Role')[1]}
+        {toCapitalizedWord(role).split('Role')[1].trim()}
       </span>
     </div>
   );

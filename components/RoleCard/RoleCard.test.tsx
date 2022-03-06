@@ -6,7 +6,7 @@ describe('RoleCard', () => {
     render(
       <div data-testid="container">
         <RoleCard
-          role="developer"
+          role="role_developer"
           iconSrc="/icons/developer.svg"
           coloredSrc="/icons/roles/colored/developer.svg"
         />

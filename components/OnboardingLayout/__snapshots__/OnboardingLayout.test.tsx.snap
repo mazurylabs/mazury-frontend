@@ -4,42 +4,34 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
 <main
   class="mx-auto flex min-h-screen flex-col px-4 py-4 align-top sm:w-[530px]"
 >
-  <span
-    style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+  <div
+    class="absolute top-6 left-4 hidden w-full xl:flex"
   >
-    <span
-      style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
-    >
-      <img
-        alt=""
-        aria-hidden="true"
-        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
-        style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
-      />
-    </span>
     <img
       alt="Mazury logo"
-      class="absolute top-6 left-4 hidden xl:flex"
-      data-nimg="intrinsic"
-      decoding="async"
-      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-      style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+      class="rounded-full"
+      height="40px"
+      src="/waves.png"
+      width="40px"
     />
-    <noscript />
-  </span>
-  <span
-    style="box-sizing: border-box; display: inline-block; overflow: hidden; width: 16px; height: 16px; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative;"
+  </div>
+  <div
+    class="xl:mt-20"
   >
-    <img
-      alt="Back"
-      class="hover:cursor-pointer"
-      data-nimg="fixed"
-      decoding="async"
-      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-      style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
-    />
-    <noscript />
-  </span>
+    <span
+      style="box-sizing: border-box; display: inline-block; overflow: hidden; width: 16px; height: 16px; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative;"
+    >
+      <img
+        alt="Back"
+        class="hover:cursor-pointer"
+        data-nimg="fixed"
+        decoding="async"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+      />
+      <noscript />
+    </span>
+  </div>
   <h1
     class="mt-6 text-sm font-medium uppercase text-indigoGray-40"
   >
@@ -54,7 +46,7 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
     Content
   </p>
   <div
-    class="sticky bottom-8 mx-auto mt-auto w-full"
+    class="mx-auto mb-8 mt-8 w-full"
   >
     <button
       class="flex items-center justify-center gap-2 rounded-[8px] py-3 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 w-full justify-center uppercase"
