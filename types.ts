@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 export type ColorName =
   | 'indigo'
   | 'fuchsia'
@@ -157,3 +159,8 @@ export interface ThemeColor {
   [800]?: string;
   [900]?: string;
 }
+
+export type APIResponse<T = any> = {
+  data: T;
+  error: Error | unknown;
+};

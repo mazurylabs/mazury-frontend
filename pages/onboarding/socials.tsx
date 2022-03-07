@@ -33,14 +33,21 @@ const SocialButton: FC<SocialButtonProps> = ({
 
 const SocialsPage: NextPage = () => {
   const { formData, setFormData } = useContext(OnboardingContext);
-  const [{ data: accountData }] = useAccount();
   const [_, signMessage] = useSignMessage();
 
   const onSubmit = async () => {
-    if (!accountData?.address) {
+    if (!formData.eth_address) {
       return alert('Please connect your wallet first');
     }
-    const messageToBeSigned = await getMessageToBeSigned(accountData.address);
+    const { data: messageToBeSigned, error: messageSignError } =
+      await getMessageToBeSigned(formData.eth_address);
+
+    if (!messageToBeSigned || messageSignError) {
+      return alert(
+        'Couldnt get the message to be signed. Please try again later.'
+      );
+    }
+
     const { data: signature, error: signatureError } = await signMessage({
       message: messageToBeSigned,
     });
@@ -49,7 +56,15 @@ const SocialsPage: NextPage = () => {
       return alert('Error signing message');
     }
 
-    await updateProfile(accountData.address, signature, formData);
+    const { error: updateProfileError } = await updateProfile(
+      formData.eth_address,
+      signature,
+      formData
+    );
+
+    if (updateProfileError) {
+      return alert('Error updating profile.');
+    }
   };
 
   return (

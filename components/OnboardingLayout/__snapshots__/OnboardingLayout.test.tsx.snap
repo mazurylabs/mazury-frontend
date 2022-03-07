@@ -9,7 +9,7 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
   >
     <img
       alt="Mazury logo"
-      class="rounded-full"
+      class="rounded-full hover:cursor-pointer"
       height="40px"
       src="/waves.png"
       width="40px"

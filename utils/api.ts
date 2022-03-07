@@ -1,29 +1,44 @@
 import { OnboardingFormDataType } from 'contexts';
+import { APIResponse } from 'types';
 import { api } from '.';
 
 export const getProfile = async (address: string) => {
   try {
     const res = await api.get(`/profiles/${address}`);
-    return res.data;
+    return {
+      data: res.data,
+      error: null,
+    };
   } catch (error) {
-    throw error;
+    return {
+      data: null,
+      error,
+    };
   }
 };
 
-export const getMessageToBeSigned = async (address: string) => {
+export const getMessageToBeSigned: (
+  address: string
+) => Promise<APIResponse<string | null>> = async (address) => {
   try {
     const res = await api.get(`/auth/message?address=${address}`);
-    return res.data as string;
+    return {
+      data: res.data,
+      error: null,
+    };
   } catch (error) {
-    throw error;
+    return {
+      data: null,
+      error,
+    };
   }
 };
 
-export const updateProfile = async (
+export const updateProfile: (
   address: string,
   signature: string,
   data: OnboardingFormDataType
-) => {
+) => Promise<APIResponse> = async (address, signature, data) => {
   try {
     const formData = new FormData();
     for (let key in data) {
@@ -35,8 +50,14 @@ export const updateProfile = async (
         'ETH-AUTH': signature,
       },
     });
-    console.log({ res });
+    return {
+      data,
+      error: null,
+    };
   } catch (err) {
-    throw err;
+    return {
+      data: null,
+      error: err,
+    };
   }
 };

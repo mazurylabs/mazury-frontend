@@ -66,6 +66,8 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         open_to_opportunities,
         email,
         website,
+        ens_name,
+        eth_address,
       } = profileData;
       setFormData({
         bio,
@@ -80,6 +82,8 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         open_to_opportunities,
         email,
         website,
+        ens_name,
+        eth_address,
       });
       setFetched(true);
     }
@@ -100,10 +104,11 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/waves.png"
-          className="rounded-full"
+          className="rounded-full hover:cursor-pointer"
           alt="Mazury logo"
           width="40px"
           height="40px"
+          onClick={() => router.push('/')}
         />
       </div>
 
