@@ -12,6 +12,7 @@ export default {
     placeholder: { control: { type: 'text' } },
     label: { control: { type: 'text' } },
     type: { control: { type: 'text' } },
+    disabled: { control: { type: 'boolean' } },
   },
 } as ComponentMeta<typeof Input>;
 
@@ -27,4 +28,18 @@ Default.args = {
   placeholder: 'Placeholder',
   label: 'Label',
   type: 'text',
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  id: 'input-1',
+  type: 'text',
+  disabled: true,
+};
+
+export const Error = Template.bind({});
+Error.args = {
+  id: 'input-1',
+  type: 'text',
+  error: true,
 };

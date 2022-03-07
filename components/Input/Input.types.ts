@@ -9,4 +9,6 @@ export interface InputProps {
   type?: HTMLInputTypeAttribute;
   className?: string;
   outerClassName?: string;
+  disabled?: boolean;
+  error?: boolean;
 }
