@@ -15,7 +15,6 @@ export const ProfileView: FC = () => {
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
-      console.log(fileInputRef);
       fileInputRef.current.click();
     }
   };
