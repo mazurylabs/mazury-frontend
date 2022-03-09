@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import Image from 'next/image';
+import { FC, KeyboardEvent, useState } from 'react';
 import { TagItem } from '.';
 import { TagItemProps } from './TagItem';
 
@@ -19,15 +20,20 @@ export const Tags: FC<TagsProps> = ({
   className,
   onRemove,
   allowInput = false,
+  onAdd,
 }) => {
+  const [newTag, setNewTag] = useState('');
+
   return (
-    <div role="tags" className="flex flex-wrap gap-1">
+    <div
+      role="tags"
+      className={`flex flex-wrap items-center gap-1 ${className}`}
+    >
       {tags.map((tag) => {
         return (
           <TagItem
             key={tag.value}
             onRemove={onRemove}
-            className={className}
             value={tag.value}
             color={tag.color}
             label={tag.label}
@@ -36,6 +42,49 @@ export const Tags: FC<TagsProps> = ({
         );
       })}
       {/* TODO: allow input */}
+      {allowInput && (
+        <div
+          role="button"
+          className="flex w-fit items-center rounded-[4px] border border-indigoGray-20 py-1 px-2 hover:cursor-pointer hover:bg-indigoGray-5"
+          onKeyUp={(e) => {
+            if (!newTag) {
+              return alert('Please enter something');
+            }
+            if (!onAdd) {
+              return console.error('Please pass in onAdd prop');
+            }
+            if (e.key === 'Enter') {
+              onAdd(newTag);
+              setNewTag('');
+            }
+          }}
+        >
+          <Image
+            role="button"
+            src="/icons/plus.svg"
+            height="10.67px"
+            width="10.67px"
+            alt="Plus icon"
+            onClick={() => {
+              if (!newTag) {
+                return alert('Please enter something');
+              }
+              if (!onAdd) {
+                return console.error('Please pass in onAdd prop');
+              }
+              onAdd(newTag);
+              setNewTag('');
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Add your tag"
+            className="ml-1 w-20 bg-transparent text-xs font-bold text-indigoGray-90 outline-none focus:font-medium"
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+          />
+        </div>
+      )}
     </div>
   );
 };

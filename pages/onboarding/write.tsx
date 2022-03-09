@@ -67,7 +67,23 @@ const WritePage: NextPage = () => {
           This person is excellent at...
         </span>
 
-        <Tags tags={tags} onRemove={onRemove} className="mt-2" />
+        <Tags
+          tags={tags}
+          onRemove={onRemove}
+          className="mt-2"
+          allowInput
+          onAdd={(val) =>
+            setTags([
+              ...tags,
+              // TODO: We need to do something about the value that we pass to the backend and the color
+              {
+                label: val,
+                color: colors.gray,
+                value: val,
+              },
+            ])
+          }
+        />
       </div>
     </OnboardingLayout>
   );
