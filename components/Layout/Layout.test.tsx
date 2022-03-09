@@ -1,13 +1,18 @@
 import { render, screen } from '@testing-library/react';
-// TODO: Mock the router and test with the actual sidebar
-// import { Sidebar } from 'components';
+import { Sidebar } from 'components';
 import { Layout } from './Layout';
+import * as nextRouter from 'next/router';
 
 describe('Layout', () => {
   test('all parts are being rendered correctly', () => {
+    const mockRouter = jest.spyOn(nextRouter, 'useRouter');
+    // @ts-ignore we are not mocking the entire router, just pathname
+    mockRouter.mockReturnValue({
+      pathname: '/',
+    });
     render(
       <Layout
-        sidebarContent={<span>Sidebar content</span>}
+        sidebarContent={<Sidebar />}
         innerLeftContent={<span>Inner left content</span>}
         innerRightContent={<span>Inner right content</span>}
         headerContent={<span>Header content</span>}

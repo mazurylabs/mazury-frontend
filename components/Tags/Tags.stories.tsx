@@ -35,5 +35,10 @@ export const Default = () => {
     setTags(newTags);
   };
 
-  return <Tags tags={tags} onRemove={onRemove} allowInput />;
+  const onAdd = (val: string) => {
+    const newTags = [...tags, { label: val, color: colors.gray, value: val }];
+    setTags(newTags);
+  };
+
+  return <Tags tags={tags} onRemove={onRemove} allowInput onAdd={onAdd} />;
 };

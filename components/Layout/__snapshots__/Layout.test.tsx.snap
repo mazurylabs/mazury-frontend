@@ -9,9 +9,55 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 false shadow-inner lg:flex"
     role="menu"
   >
-    <span>
-      Sidebar content
-    </span>
+    <img
+      alt="Mazury logo"
+      class="mx-auto"
+      src="/waves.png"
+      style="border-radius: 100%; width: 40px; height: 40px;"
+    />
+    <menu
+      class="mt-12 flex flex-col gap-12 text-xl font-bold items-center h-[100%] false"
+    >
+      <div
+        class="flex items-center justify-center gap-2 rounded-xl bg-indigoGray-20 p-4 text-[14px] font-normal"
+      >
+        <img
+          alt="Search icon"
+          class="h-[16px] w-[16px] hover:cursor-pointer"
+          src="/icons/search.svg"
+        />
+      </div>
+      <a
+        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80 undefined"
+        href="/"
+      >
+        <img
+          alt="Home icon"
+          src="/icons/home.svg"
+        />
+         
+      </a>
+      <a
+        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
+        href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+      >
+        <img
+          alt="Profile icon"
+          src="/profile-active.svg"
+        />
+         
+      </a>
+      <a
+        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-auto mb-12"
+        href="/settings"
+      >
+        <img
+          alt="Settings icon"
+          src="/icons/sliders.svg"
+        />
+         
+      </a>
+    </menu>
   </aside>
   <main
     class="mx-auto flex min-h-screen w-full flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12"

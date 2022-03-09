@@ -1,17 +1,20 @@
 import { Checkbox, OnboardingLayout, RoleCard } from 'components';
-import { FC, useState } from 'react';
-import { TrimmedRole } from 'types';
+import { OnboardingContext } from 'contexts';
+import { FC, useContext, useState } from 'react';
+import { Role } from 'types';
 
 export const RoleView: FC = () => {
-  const [selectedRoles, setSelectedRoles] = useState<TrimmedRole[]>([]);
-  const [openToNew, setOpenToNew] = useState(false);
+  const { formData, setFormData } = useContext(OnboardingContext);
 
-  const handleRoleClick = (role: TrimmedRole) => {
-    setSelectedRoles(
-      selectedRoles.includes(role)
-        ? selectedRoles.filter((r) => r !== role)
-        : [...selectedRoles, role]
-    );
+  const handleRoleClick = (role: Role) => {
+    setFormData({
+      ...formData,
+      [role]: !formData[role],
+    });
+  };
+
+  const handleCheckClick = (v: boolean) => {
+    setFormData({ ...formData, open_to_opportunities: v });
   };
 
   return (
@@ -19,53 +22,53 @@ export const RoleView: FC = () => {
       <div className="mt-6 flex flex-col">
         <div className="grid grid-cols-3 gap-3">
           <RoleCard
-            role="developer"
+            role="role_developer"
             iconSrc="/icons/roles/developer.svg"
             coloredSrc="/icons/roles/colored/developer.svg"
-            onClick={() => handleRoleClick('developer')}
-            selected={selectedRoles.includes('developer')}
+            onClick={() => handleRoleClick('role_developer')}
+            selected={formData.role_developer}
           />
           <RoleCard
-            role="designer"
+            role="role_designer"
             iconSrc="/icons/roles/designer.svg"
             coloredSrc="/icons/roles/colored/designer.svg"
-            onClick={() => handleRoleClick('designer')}
-            selected={selectedRoles.includes('designer')}
+            onClick={() => handleRoleClick('role_designer')}
+            selected={formData.role_designer}
           />
           <RoleCard
-            role="trader"
+            role="role_trader"
             iconSrc="/icons/roles/trader.svg"
             coloredSrc="/icons/roles/colored/trader.svg"
-            onClick={() => handleRoleClick('trader')}
-            selected={selectedRoles.includes('trader')}
+            onClick={() => handleRoleClick('role_trader')}
+            selected={formData.role_trader}
           />
           <RoleCard
-            role="creator"
+            role="role_creator"
             iconSrc="/icons/roles/creator.svg"
             coloredSrc="/icons/roles/colored/creator.svg"
-            onClick={() => handleRoleClick('creator')}
-            selected={selectedRoles.includes('creator')}
+            onClick={() => handleRoleClick('role_creator')}
+            selected={formData.role_creator}
           />
           <RoleCard
-            role="researcher"
+            role="role_researcher"
             iconSrc="/icons/roles/researcher.svg"
             coloredSrc="/icons/roles/colored/researcher.svg"
-            onClick={() => handleRoleClick('researcher')}
-            selected={selectedRoles.includes('researcher')}
+            onClick={() => handleRoleClick('role_researcher')}
+            selected={formData.role_researcher}
           />
           <RoleCard
-            role="investor"
+            role="role_investor"
             iconSrc="/icons/roles/investor.svg"
             coloredSrc="/icons/roles/colored/investor.svg"
-            onClick={() => handleRoleClick('investor')}
-            selected={selectedRoles.includes('investor')}
+            onClick={() => handleRoleClick('role_investor')}
+            selected={formData.role_investor}
           />
           <RoleCard
-            role="community_manager"
+            role="role_community_manager"
             iconSrc="/icons/roles/community.svg"
             coloredSrc="/icons/roles/colored/community.svg"
-            onClick={() => handleRoleClick('community_manager')}
-            selected={selectedRoles.includes('community_manager')}
+            onClick={() => handleRoleClick('role_community_manager')}
+            selected={formData.role_community_manager}
           />
         </div>
 
@@ -73,8 +76,8 @@ export const RoleView: FC = () => {
           New projects
         </span>
         <Checkbox
-          checked={openToNew}
-          setChecked={setOpenToNew}
+          checked={formData.open_to_opportunities as boolean}
+          setChecked={(v) => handleCheckClick(v)}
           label="I'm open to contribute to new projects"
           id="open-to-new-checkbox"
           outerClassName="mt-3"

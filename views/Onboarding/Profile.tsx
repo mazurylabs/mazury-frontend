@@ -1,15 +1,20 @@
 import { Button, Input, OnboardingLayout } from 'components';
+import { OnboardingContext } from 'contexts';
 import Image from 'next/image';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 export const ProfileView: FC = () => {
+  const { formData, setFormData } = useContext(OnboardingContext);
+  const [{ data: accountData }] = useAccount({
+    fetchEns: true,
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File>();
   const [fileUrl, setFileUrl] = useState<string>();
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
-      console.log(fileInputRef);
       fileInputRef.current.click();
     }
   };
@@ -26,10 +31,16 @@ export const ProfileView: FC = () => {
     }
   }, [file]);
 
+  useEffect(() => {
+    console.log({ formData, setFormData });
+  }, [formData, setFormData]);
+
   return (
     <OnboardingLayout
       firstHeading="Profile information"
-      secondHeading="Hi, wojtek.eth!"
+      secondHeading={`Hi, ${
+        formData.ens_name || formData.username || accountData?.ens || '...'
+      }`}
     >
       <p className="mt-3 text-sm font-medium text-indigoGray-60">
         We&apos;re glad you&apos;re joining us. Let&apos;s take a moment to
@@ -42,26 +53,38 @@ export const ProfileView: FC = () => {
             ENS Name
           </span>
           <span className="text-black mt-1 text-lg font-medium">
-            wojtek.eth
+            {formData.ens_name || '...'}
           </span>
           {/* TODO: Fix overflowing text */}
           <span className="mt-1 text-xs font-medium text-black-700">
-            0xF417ACe7b13c0ef4fcb55483 90a450A4B75D3eB3
+            {formData.eth_address || '...'}
           </span>
         </div>
 
-        <div className="mr-6 flex w-1/4 items-center justify-end">
+        {/* <div className="mr-6 flex w-1/4 items-center justify-end">
           <Image
             src="/icons/refresh.svg"
             height="24px"
             width="24px"
             alt="Refresh ENS"
+            className="hover:cursor-pointer"
+            role="button"
+            // TODO: implement this
           />
-        </div>
+        </div> */}
       </div>
 
       <form className="mt-4 flex flex-col">
-        <Input id="username" label="Username" />
+        <Input
+          id="username"
+          label="Username"
+          value={formData.username}
+          onChange={(val) => {
+            console.log(val);
+            const newFd = { ...formData, username: val };
+            setFormData(newFd);
+          }}
+        />
         <Input
           id="full-name"
           outerClassName="mt-4"

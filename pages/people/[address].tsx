@@ -719,7 +719,7 @@ export default Page;
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { address } = context.query;
-  const profile = await getProfile(address as string);
+  const { data: profile } = await getProfile(address as string);
   return {
     props: {
       address: context.query.address,

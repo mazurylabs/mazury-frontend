@@ -10,12 +10,33 @@ export const SidebarContext = createContext<SidebarContextType>({
   setIsOpen: () => {},
 });
 
+export interface OnboardingFormDataType {
+  bio?: string;
+  username?: string;
+  ens_name?: string;
+  eth_address?: string;
+  role_developer?: boolean;
+  role_designer?: boolean;
+  role_trader?: boolean;
+  role_creator?: boolean;
+  role_researcher?: boolean;
+  role_investor?: boolean;
+  role_community_manager?: boolean;
+  open_to_opportunities?: boolean;
+  email?: string;
+  website?: string;
+}
+
 interface OnboardingContextType {
-  currentStep: number;
-  setCurrentStep: Dispatch<SetStateAction<number>>;
+  formData: OnboardingFormDataType;
+  setFormData: Dispatch<SetStateAction<OnboardingFormDataType>>;
+  fetched: boolean;
+  setFetched: Dispatch<SetStateAction<boolean>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
-  currentStep: 0,
-  setCurrentStep: () => {},
+  formData: {},
+  setFormData: () => {},
+  fetched: false,
+  setFetched: () => {},
 });

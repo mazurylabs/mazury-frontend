@@ -2,7 +2,7 @@
 
 exports[`Tags renders correctly, onRemove works correctly 1`] = `
 <div
-  class="flex flex-wrap gap-1"
+  class="flex flex-wrap items-center gap-1 undefined"
   role="tags"
 >
   <div

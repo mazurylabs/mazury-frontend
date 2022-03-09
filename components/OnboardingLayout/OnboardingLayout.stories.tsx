@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import * as React from 'react';
+import { Provider } from 'wagmi';
 
 import { OnboardingLayout } from './OnboardingLayout';
 
@@ -15,7 +16,9 @@ export default {
 } as ComponentMeta<typeof OnboardingLayout>;
 
 const Template: ComponentStory<typeof OnboardingLayout> = (args) => (
-  <OnboardingLayout {...args} />
+  <Provider>
+    <OnboardingLayout {...args} />
+  </Provider>
 );
 
 export const Default = Template.bind({});

@@ -13,6 +13,8 @@ export const Input: FC<InputProps> = ({
   The className that will be applied to the outer div containing the label and the input
   */
   outerClassName,
+  disabled = false,
+  error = false,
 }) => {
   return (
     <div className={`flex flex-col ${outerClassName}`}>
@@ -31,7 +33,10 @@ export const Input: FC<InputProps> = ({
           }
         }}
         placeholder={placeholder}
-        className={`block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-90 placeholder:text-indigoGray-50 ${className}`}
+        className={`block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-40 focus:border-indigoGray-50 ${
+          disabled && 'cursor-not-allowed border-indigoGray-30 bg-indigoGray-10'
+        } ${error && 'border-red-500'} ${className}`}
+        disabled={disabled}
       />
     </div>
   );
