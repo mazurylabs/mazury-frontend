@@ -61,7 +61,7 @@ export const ProfileView: FC = () => {
           </span>
         </div>
 
-        <div className="mr-6 flex w-1/4 items-center justify-end">
+        {/* <div className="mr-6 flex w-1/4 items-center justify-end">
           <Image
             src="/icons/refresh.svg"
             height="24px"
@@ -71,7 +71,7 @@ export const ProfileView: FC = () => {
             role="button"
             // TODO: implement this
           />
-        </div>
+        </div> */}
       </div>
 
       <form className="mt-4 flex flex-col">

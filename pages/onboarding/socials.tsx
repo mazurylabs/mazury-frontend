@@ -12,6 +12,7 @@ interface SocialButtonProps {
   label: string;
   backgroundColor: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const SocialButton: FC<SocialButtonProps> = ({
@@ -19,11 +20,13 @@ const SocialButton: FC<SocialButtonProps> = ({
   label,
   backgroundColor,
   className,
+  disabled,
 }) => {
   return (
     <button
       style={{ backgroundColor }}
-      className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      disabled={disabled}
     >
       {icon}
       {label}
@@ -145,9 +148,10 @@ const SocialsPage: NextPage = () => {
             className="border-[1.33px border-indigoGray-5"
           />
         }
-        label="Discord"
+        label="Discord - Coming soon"
         backgroundColor="#5A65EA"
         className="mt-4"
+        disabled
       />
     </OnboardingLayout>
   );
