@@ -494,6 +494,8 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             )}
 
+            {referrals.length <= 0 && <HR className="mt-0" />}
+
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
@@ -533,7 +535,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                       );
                     })
                 ) : (
-                  <p className="text-sm text-indigoGray-50">No badges found.</p>
+                  <p className="text-lg text-indigoGray-60">
+                    No recent badges to show
+                  </p>
                 )}
               </div>
 
@@ -591,8 +595,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                       );
                     })
                 ) : (
-                  <p className="text-sm text-indigoGray-50">
-                    No referrals found.
+                  <p className="text-lg text-indigoGray-60">
+                    No referrals to show
                   </p>
                 )}
               </div>
