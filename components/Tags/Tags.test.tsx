@@ -27,7 +27,12 @@ const TagsContainer = () => {
     setTags(newTags);
   };
 
-  return <Tags tags={tags} onRemove={onRemove} />;
+  const onAdd = (val: string) => {
+    const newTags = [...tags, { label: val, color: colors.gray, value: val }];
+    setTags(newTags);
+  };
+
+  return <Tags tags={tags} onRemove={onRemove} allowInput onAdd={onAdd} />;
 };
 
 describe('Tags', () => {
@@ -42,5 +47,14 @@ describe('Tags', () => {
     );
     fireEvent.click(removeFrontendButton);
     expect(frontendTag).not.toBeInTheDocument();
+  });
+
+  test('onAdd works correctly', () => {
+    render(<TagsContainer />);
+    const input = screen.getByRole('input');
+    fireEvent.change(input, { target: { value: 'New tag' } });
+    fireEvent.keyUp(input, { key: 'Enter' });
+    const newTag = screen.getByText('New tag');
+    expect(newTag).toBeInTheDocument();
   });
 });
