@@ -27,6 +27,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/developer.svg"
             onClick={() => handleRoleClick('role_developer')}
             selected={formData.role_developer}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_designer"
@@ -34,6 +35,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/designer.svg"
             onClick={() => handleRoleClick('role_designer')}
             selected={formData.role_designer}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_trader"
@@ -41,6 +43,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/trader.svg"
             onClick={() => handleRoleClick('role_trader')}
             selected={formData.role_trader}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_creator"
@@ -48,6 +51,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/creator.svg"
             onClick={() => handleRoleClick('role_creator')}
             selected={formData.role_creator}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_researcher"
@@ -55,6 +59,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/researcher.svg"
             onClick={() => handleRoleClick('role_researcher')}
             selected={formData.role_researcher}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_investor"
@@ -62,6 +67,7 @@ export const RoleView: FC = () => {
             coloredSrc="/icons/roles/colored/investor.svg"
             onClick={() => handleRoleClick('role_investor')}
             selected={formData.role_investor}
+            className="h-[118px]"
           />
           <RoleCard
             role="role_community_manager"

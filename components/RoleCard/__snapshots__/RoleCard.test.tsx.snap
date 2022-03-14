@@ -5,7 +5,7 @@ exports[`RoleCard displays information correctly and reacts correctly on click 1
   data-testid="container"
 >
   <div
-    class="transition-all duration-300 flex flex-col items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center lg:hover:text-lime-900 lg:hover:bg-lime-50 lg:hover:border-lime-50 false"
+    class="transition-all duration-300 flex flex-col justify-center items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center lg:hover:text-lime-900 lg:hover:bg-lime-50 lg:hover:border-lime-50 false undefined"
   >
     <span
       style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
