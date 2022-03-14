@@ -95,7 +95,7 @@ export const ProfileView: FC = () => {
           }
         />
 
-        <div className="mt-6 flex items-center justify-center gap-6 p-4">
+        <div className="mt-6 flex items-center justify-center gap-6 p-4 sm:justify-start">
           <Image
             src={fileUrl || '/default-avi.png'}
             height="100px"
