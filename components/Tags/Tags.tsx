@@ -47,13 +47,13 @@ export const Tags: FC<TagsProps> = ({
           role="button"
           className="flex w-fit items-center rounded-[4px] border border-indigoGray-20 py-1 px-2 hover:cursor-pointer hover:bg-indigoGray-5"
           onKeyUp={(e) => {
-            if (!newTag) {
-              return alert('Please enter something');
-            }
             if (!onAdd) {
               return console.error('Please pass in onAdd prop');
             }
             if (e.key === 'Enter') {
+              if (!newTag) {
+                return alert('Please enter something');
+              }
               onAdd(newTag);
               setNewTag('');
             }
@@ -62,8 +62,8 @@ export const Tags: FC<TagsProps> = ({
           <Image
             role="button"
             src="/icons/plus.svg"
-            height="10.67px"
-            width="10.67px"
+            height="12px"
+            width="12px"
             alt="Plus icon"
             onClick={() => {
               if (!newTag) {
@@ -77,9 +77,10 @@ export const Tags: FC<TagsProps> = ({
             }}
           />
           <input
+            role="input"
             type="text"
             placeholder="Add your tag"
-            className="ml-1 w-20 bg-transparent text-xs font-bold text-indigoGray-90 outline-none focus:font-medium"
+            className="ml-1 w-20 bg-transparent text-xs font-bold text-indigoGray-90 outline-none placeholder:text-indigoGray-90 focus:font-medium"
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
           />

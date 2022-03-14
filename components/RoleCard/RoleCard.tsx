@@ -7,7 +7,7 @@ import { RoleCardProps } from './RoleCard.types';
 
 const getClassName = (role: Role, selected: boolean = false) => {
   const baseClassName =
-    'transition-all duration-300 flex flex-col items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center';
+    'transition-all duration-300 flex flex-col justify-center items-center gap-[10px] rounded-lg border-[1.5px] border-indigoGray-10 px-8 py-6 hover:cursor-pointer text-indigoGray-50 text-center';
 
   switch (role) {
     case 'role_developer':
@@ -43,8 +43,8 @@ const getClassName = (role: Role, selected: boolean = false) => {
     case 'role_community_manager':
       return `${baseClassName} ${
         !selected &&
-        'lg:hover:text-violet-900 lg:hover:bg-violet-50 lg:hover:border-violet-50'
-      } ${selected && 'bg-violet-100 border-violet-400 text-violet-900'}`;
+        'lg:hover:text-rose-900 lg:hover:bg-rose-50 lg:hover:border-rose-50'
+      } ${selected && 'bg-rose-100 border-rose-400 text-rose-900'}`;
   }
 };
 
@@ -54,6 +54,7 @@ export const RoleCard: FC<RoleCardProps> = ({
   coloredSrc,
   selected = false,
   onClick,
+  className,
 }) => {
   const [hovered, setHovered] = useState(false);
   const isMobile = useMobile();
@@ -62,7 +63,7 @@ export const RoleCard: FC<RoleCardProps> = ({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={getClassName(role, selected)}
+      className={getClassName(role, selected) + ' ' + className}
       onClick={onClick}
     >
       <Image

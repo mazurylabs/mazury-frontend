@@ -6,4 +6,5 @@ export interface RoleCardProps {
   coloredSrc: string;
   selected?: boolean;
   onClick?: () => void;
+  className?: string;
 }

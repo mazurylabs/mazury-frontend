@@ -35,12 +35,16 @@ export const ProfileView: FC = () => {
     console.log({ formData, setFormData });
   }, [formData, setFormData]);
 
+  const displayName = formData.ens_name || accountData?.ens;
+
+  const hasEns = !!accountData?.ens;
+
+  const greeting = displayName ? `Hi, ${displayName}!` : 'Hi there!';
+
   return (
     <OnboardingLayout
       firstHeading="Profile information"
-      secondHeading={`Hi, ${
-        formData.ens_name || formData.username || accountData?.ens || '...'
-      }`}
+      secondHeading={greeting}
     >
       <p className="mt-3 text-sm font-medium text-indigoGray-60">
         We&apos;re glad you&apos;re joining us. Let&apos;s take a moment to
@@ -52,13 +56,21 @@ export const ProfileView: FC = () => {
           <span className="text-sm font-medium uppercase text-black-300">
             ENS Name
           </span>
-          <span className="text-black mt-1 text-lg font-medium">
-            {formData.ens_name || '...'}
-          </span>
-          {/* TODO: Fix overflowing text */}
-          <span className="mt-1 text-xs font-medium text-black-700">
-            {formData.eth_address || '...'}
-          </span>
+          {hasEns ? (
+            <>
+              <span className="text-black mt-1 text-lg font-medium">
+                {formData.ens_name}
+              </span>
+              {/* TODO: Fix overflowing text */}
+              <span className="mt-1 text-xs font-medium text-black-700">
+                {formData.eth_address}
+              </span>
+            </>
+          ) : (
+            <span className="text-black mt-1 text-lg font-medium">
+              {formData.eth_address || '...'}
+            </span>
+          )}
         </div>
 
         {/* <div className="mr-6 flex w-1/4 items-center justify-end">
@@ -95,7 +107,7 @@ export const ProfileView: FC = () => {
           }
         />
 
-        <div className="mt-6 flex items-center justify-center gap-6 p-4">
+        <div className="mt-6 flex items-center justify-center gap-6 p-4 sm:justify-start">
           <Image
             src={fileUrl || '/default-avi.png'}
             height="100px"
