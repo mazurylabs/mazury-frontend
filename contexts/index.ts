@@ -40,6 +40,8 @@ interface OnboardingContextType {
   setReferralReceiver?: Dispatch<
     SetStateAction<PersonBasicDetails | undefined>
   >;
+  twitterConnected: boolean;
+  setTwitterConnected: Dispatch<SetStateAction<boolean>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -51,4 +53,6 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setAvatarFile: () => {},
   referralReceiver: undefined,
   setReferralReceiver: () => {},
+  twitterConnected: false,
+  setTwitterConnected: () => {},
 });

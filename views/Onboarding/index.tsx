@@ -1,2 +1,3 @@
-export { ProfileView } from 'views/Onboarding/Profile';
-export { RoleView } from 'views/Onboarding/Role';
+export { ProfileView } from './Profile';
+export { RoleView } from './Role';
+export { TwitterConnectionModal } from './TwitterConnectionModal';

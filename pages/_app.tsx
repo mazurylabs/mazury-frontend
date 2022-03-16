@@ -89,6 +89,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [referralReceiver, setReferralReceiver] =
     useState<PersonBasicDetails>();
+  const [twitterConnected, setTwitterConnected] = useState(false);
 
   useEffect(() => {
     console.log(`                                                   
@@ -118,6 +119,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             setAvatarFile,
             referralReceiver,
             setReferralReceiver,
+            twitterConnected,
+            setTwitterConnected,
           }}
         >
           <NextHead>

@@ -26,8 +26,9 @@ export const Modal: FC<ModalProps> = ({
       onRequestClose={onClose}
       shouldCloseOnEsc
       shouldCloseOnOverlayClick
-      className={`top-20 h-[70vh] border-2 p-4 ${containerClassName}`}
+      className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white bg-opacity-100 py-4 px-6 shadow-xl ${containerClassName}`}
       data-testid="modal-container"
+      overlayClassName="bg-black-900 bg-opacity-50 h-screen w-screen absolute top-0 left-0"
     >
       {children}
     </ReactModal>

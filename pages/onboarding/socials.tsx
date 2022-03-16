@@ -1,44 +1,21 @@
-import { Input, Modal, OnboardingLayout } from 'components';
+import { Input, OnboardingLayout, SocialButton } from 'components';
 import { OnboardingContext } from 'contexts';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { FC, ReactNode, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
 import { getMessageToBeSigned, updateProfile } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
-
-interface SocialButtonProps {
-  icon: ReactNode;
-  label: string;
-  backgroundColor: string;
-  className?: string;
-  disabled?: boolean;
-  onClick?: () => void;
-}
-
-const SocialButton: FC<SocialButtonProps> = ({
-  icon,
-  label,
-  backgroundColor,
-  className,
-  disabled,
-  onClick,
-}) => {
-  return (
-    <button
-      style={{ backgroundColor }}
-      className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {icon}
-      {label}
-    </button>
-  );
-};
+import { TwitterConnectionModal } from 'views';
+import { useSignMessage } from 'wagmi';
 
 const SocialsPage: NextPage = () => {
-  const { formData, setFormData, avatarFile } = useContext(OnboardingContext);
+  const {
+    formData,
+    setFormData,
+    avatarFile,
+    twitterConnected,
+    setTwitterConnected,
+  } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
   const [twitterModalOpen, setTwitterModalOpen] = useState(false);
 
@@ -81,12 +58,15 @@ const SocialsPage: NextPage = () => {
       secondHeading="Let's get in touch"
       bottomButtonOnClick={onSubmit}
     >
-      <Modal
+      <TwitterConnectionModal
         isOpen={twitterModalOpen}
         onClose={() => setTwitterModalOpen(false)}
-      >
-        Twitter
-      </Modal>
+        onFinish={() => {
+          setTwitterModalOpen(false);
+          setTwitterConnected(true);
+        }}
+      />
+
       <p className="mt-4 text-sm font-medium text-indigoGray-60">
         You can let others contact you and let us notify you about updates on
         your profile. All this data is optional.
@@ -135,10 +115,11 @@ const SocialsPage: NextPage = () => {
             className="border-[1.33px border-indigoGray-5"
           />
         }
-        label="Twitter"
+        label={twitterConnected ? 'Connected' : 'Twitter'}
         backgroundColor="#4A99E9"
         className="mt-12"
         onClick={() => setTwitterModalOpen(true)}
+        variant={twitterConnected ? 'secondary' : 'primary'}
       />
       <SocialButton
         icon={
