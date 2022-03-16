@@ -1,8 +1,8 @@
-import { Input, OnboardingLayout } from 'components';
+import { Input, Modal, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { FC, ReactNode, useContext } from 'react';
+import { FC, ReactNode, useContext, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
 import { getMessageToBeSigned, updateProfile } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
@@ -13,6 +13,7 @@ interface SocialButtonProps {
   backgroundColor: string;
   className?: string;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 const SocialButton: FC<SocialButtonProps> = ({
@@ -21,12 +22,14 @@ const SocialButton: FC<SocialButtonProps> = ({
   backgroundColor,
   className,
   disabled,
+  onClick,
 }) => {
   return (
     <button
       style={{ backgroundColor }}
       className={`flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold uppercase text-indigoGray-5 shadow-base disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
       disabled={disabled}
+      onClick={onClick}
     >
       {icon}
       {label}
@@ -37,6 +40,7 @@ const SocialButton: FC<SocialButtonProps> = ({
 const SocialsPage: NextPage = () => {
   const { formData, setFormData, avatarFile } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
+  const [twitterModalOpen, setTwitterModalOpen] = useState(false);
 
   const onSubmit = async () => {
     if (!formData.eth_address) {
@@ -77,6 +81,12 @@ const SocialsPage: NextPage = () => {
       secondHeading="Let's get in touch"
       bottomButtonOnClick={onSubmit}
     >
+      <Modal
+        isOpen={twitterModalOpen}
+        onClose={() => setTwitterModalOpen(false)}
+      >
+        Twitter
+      </Modal>
       <p className="mt-4 text-sm font-medium text-indigoGray-60">
         You can let others contact you and let us notify you about updates on
         your profile. All this data is optional.
@@ -128,6 +138,7 @@ const SocialsPage: NextPage = () => {
         label="Twitter"
         backgroundColor="#4A99E9"
         className="mt-12"
+        onClick={() => setTwitterModalOpen(true)}
       />
       <SocialButton
         icon={

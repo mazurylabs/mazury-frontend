@@ -14,26 +14,11 @@ export const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   containerClassName,
-  appRootId = '__next',
+  appRootId = '_next',
 }) => {
   useEffect(() => {
     ReactModal.setAppElement(document.getElementById(appRootId)!);
   }, [appRootId]);
-
-  useEffect(() => {
-    if (isOpen) {
-      // Prevent scrolling of background content when the modal is open
-      document.body.style.overflow = 'hidden';
-    }
-    if (!isOpen) {
-      // Reset the overflow style to the default once the modal has been closed
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      // Reset the overflow style to the default once the modal has been unmounted
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
 
   return (
     <ReactModal
@@ -41,9 +26,8 @@ export const Modal: FC<ModalProps> = ({
       onRequestClose={onClose}
       shouldCloseOnEsc
       shouldCloseOnOverlayClick
-      className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white bg-opacity-100 py-4 px-6 shadow-xl outline-none ${containerClassName}`}
+      className={`top-20 h-[70vh] border-2 p-4 ${containerClassName}`}
       data-testid="modal-container"
-      overlayClassName="bg-black-900 bg-opacity-50 h-screen w-screen absolute top-0 left-0 z-20"
     >
       {children}
     </ReactModal>
