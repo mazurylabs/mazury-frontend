@@ -1,59 +1,31 @@
 import { Button, Input, Modal, Spinner } from 'components';
-import { Bytes } from 'ethers';
+import { TwitterModalContext } from 'contexts';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { getMessageToBeSigned, verifyTweet } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
 
 interface ContentComponentProps {
   onButtonClick?: () => void;
-  signMessage?: (
-    config?:
-      | {
-          message?: string | Bytes | undefined;
-        }
-      | undefined
-  ) => Promise<
-    | {
-        data: string;
-        error: undefined;
-      }
-    | {
-        data: undefined;
-        error: Error;
-      }
-  >;
-  address?: string;
 }
 
-const PasteTweetStep: FC<ContentComponentProps> = ({
-  onButtonClick,
-  signMessage,
-  address,
-}) => {
-  const [tweetURL, setTweetURL] = useState('');
+const PasteTweetStep: FC<ContentComponentProps> = () => {
+  const [{ data: accountData }] = useAccount();
+  const { goToNextStep, setMessageToBeSigned, tweetURL, setTweetURL } =
+    useContext(TwitterModalContext);
 
-  const verifyConnection = async () => {
+  const address = accountData?.address;
+
+  const proceedToSigning = async () => {
     const { data: messageToBeSigned, error: messageToBeSignedError } =
       await getMessageToBeSigned(address!);
-
     if (messageToBeSignedError || !messageToBeSigned) {
       return alert(
         'Couldnt get the message to be signed. Please try again later.'
       );
     }
-
-    const { data: signature, error: signatureError } = await signMessage!({
-      message: messageToBeSigned as string,
-    });
-
-    if (!signature || signatureError) {
-      return alert('Error signing message');
-    }
-
-    const { data, error } = await verifyTweet(tweetURL, signature);
-
-    console.log({ data, error });
+    setMessageToBeSigned(messageToBeSigned);
+    goToNextStep();
   };
 
   return (
@@ -61,7 +33,7 @@ const PasteTweetStep: FC<ContentComponentProps> = ({
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Verify Twitter link
       </h3>
-      <span className="mt-2 text-indigoGray-60">
+      <span className="mt-2 text-sm text-indigoGray-60">
         Paste your tweet&apos;s link here to verify
       </span>
 
@@ -75,7 +47,7 @@ const PasteTweetStep: FC<ContentComponentProps> = ({
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={verifyConnection} variant="primary">
+        <Button onClick={proceedToSigning} variant="primary">
           RETRY
         </Button>
       </div>
@@ -83,13 +55,64 @@ const PasteTweetStep: FC<ContentComponentProps> = ({
   );
 };
 
-const WalletSigningStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
+const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
+  const {
+    goToNextStep,
+    messageToBeSigned,
+    signature,
+    setSignature,
+    tweetURL,
+    setCurrentStep,
+  } = useContext(TwitterModalContext);
+  const [_, signMessage] = useSignMessage();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const submitForVerification = useCallback(async () => {
+    if (!signature) {
+      return alert('Error signing message');
+    }
+    const { data, error } = await verifyTweet(
+      tweetURL as string,
+      signature as string
+    );
+    console.log({ data, error });
+    if (error) {
+      // In case of an error go to the next step i.e. the error screen
+      goToNextStep();
+    } else {
+      // In case of success skip the next screen
+      setCurrentStep((currentStep) => currentStep + 2);
+    }
+  }, [signature, goToNextStep, tweetURL, setCurrentStep]);
+
+  const requestSignature = useCallback(async () => {
+    if (!messageToBeSigned) {
+      return alert(
+        'Couldnt get the message to be signed. Please try again later.'
+      );
+    }
+    const { data: signature, error: signatureError } = await signMessage!({
+      message: messageToBeSigned as string,
+    });
+    if (!signature || signatureError) {
+      return alert('Error signing message');
+    }
+    setSignature(signature);
+    submitForVerification();
+  }, [messageToBeSigned, signMessage, setSignature, submitForVerification]);
+
+  useEffect(() => {
+    requestSignature();
+    // we only want to run this once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="flex flex-col">
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Sign with wallet
       </h3>
-      <span className="mt-2 text-indigoGray-60">
+      <span className="mt-2 text-sm text-indigoGray-60">
         Before we finish we need you to sign this with your wallet
       </span>
 
@@ -99,7 +122,7 @@ const WalletSigningStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={onButtonClick} variant="primary">
+        <Button onClick={requestSignature} variant="primary">
           RETRY
         </Button>
       </div>
@@ -107,17 +130,20 @@ const WalletSigningStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
   );
 };
 
-const FailedStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
+const FailedStep: FC<ContentComponentProps> = ({}) => {
+  const { goToNextStep } = useContext(TwitterModalContext);
   return (
     <div className="flex flex-col">
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Connection failed
       </h3>
-      <span className="mt-2 text-indigoGray-60">Something went wrong.</span>
+      <span className="mt-2 text-sm text-indigoGray-60">
+        Something went wrong.
+      </span>
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={onButtonClick} variant="primary">
+        <Button onClick={goToNextStep} variant="primary">
           RETRY
         </Button>
       </div>
@@ -163,35 +189,47 @@ export const TwitterConnectionModal: FC<TwitterModalProps> = ({
   onFinish,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [_, signMessage] = useSignMessage();
-  const [{ data: accountData }] = useAccount();
+  const [tweetURL, setTweetURL] = useState<string | undefined>('');
+  const [messageToBeSigned, setMessageToBeSigned] = useState<
+    string | undefined
+  >();
+  const [signature, setSignature] = useState<string | undefined>();
 
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setCurrentStep(0);
-  };
+  }, [setCurrentStep]);
 
-  const goToNextStep = () => {
+  const goToNextStep = useCallback(() => {
     setCurrentStep((currentStep) => currentStep + 1);
-  };
+  }, [setCurrentStep]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        resetState();
-        onClose();
+    <TwitterModalContext.Provider
+      value={{
+        setCurrentStep,
+        currentStep,
+        resetState,
+        goToNextStep,
+        tweetURL,
+        setTweetURL,
+        messageToBeSigned,
+        setMessageToBeSigned,
+        signature,
+        setSignature,
       }}
     >
-      {currentStep === 0 && (
-        <PasteTweetStep
-          onButtonClick={goToNextStep}
-          signMessage={signMessage}
-          address={accountData?.address}
-        />
-      )}
-      {currentStep === 1 && <WalletSigningStep onButtonClick={goToNextStep} />}
-      {currentStep === 2 && <FailedStep onButtonClick={goToNextStep} />}
-      {currentStep === 3 && <SuccessStep onButtonClick={onFinish} />}
-    </Modal>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          resetState();
+          onClose();
+        }}
+      >
+        {currentStep === 0 && <PasteTweetStep />}
+        {currentStep === 1 && <WalletSigningStep />}
+        {currentStep === 2 && <FailedStep />}
+        {currentStep === 3 && <SuccessStep />}
+      </Modal>
+    </TwitterModalContext.Provider>
   );
 };

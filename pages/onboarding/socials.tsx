@@ -25,7 +25,7 @@ const SocialsPage: NextPage = () => {
   const onTwitterClick = async () => {
     const twitterPopupLink = `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0a${ethAddress}`;
     if (!twitterConnected) {
-      window.open(twitterPopupLink, 'popup');
+      window.open(twitterPopupLink, '_blank');
       setTwitterModalOpen(true);
     } else {
       // TODO: Implement disconnection
