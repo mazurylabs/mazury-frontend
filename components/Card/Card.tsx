@@ -15,10 +15,10 @@ export const Card: FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`rounded-2xl border border-indigoGray-20 p-6 transition-all duration-100 ${className} ${
+      className={`rounded-2xl border border-indigoGray-20 p-6 transition-all duration-300 ${className} ${
         clickable
           ? 'cursor-pointer bg-white shadow-base hover:shadow-lg active:bg-indigoGray-5 active:shadow-none'
-          : 'bg-indigoGray-20'
+          : 'border-indigoGray-20 bg-transparent'
       }`}
       onClick={() => {
         if (!clickable) {
