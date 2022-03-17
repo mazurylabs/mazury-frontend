@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
 import { getMessageToBeSigned, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
-import { useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 
 const SocialsPage: NextPage = () => {
   const {
@@ -17,7 +17,21 @@ const SocialsPage: NextPage = () => {
     setTwitterConnected,
   } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
+  const [{ data: accountData }] = useAccount();
   const [twitterModalOpen, setTwitterModalOpen] = useState(false);
+
+  const ethAddress = accountData?.address;
+
+  const onTwitterClick = async () => {
+    const twitterPopupLink = `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0a${ethAddress}`;
+    if (!twitterConnected) {
+      window.open(twitterPopupLink, 'popup');
+      setTwitterModalOpen(true);
+    } else {
+      // TODO: Implement disconnection
+      alert('Your twitter is already connected!');
+    }
+  };
 
   const onSubmit = async () => {
     if (!formData.eth_address) {
@@ -118,7 +132,7 @@ const SocialsPage: NextPage = () => {
         label={twitterConnected ? 'Connected' : 'Twitter'}
         backgroundColor="#4A99E9"
         className="mt-12"
-        onClick={() => setTwitterModalOpen(true)}
+        onClick={onTwitterClick}
         variant={twitterConnected ? 'secondary' : 'primary'}
       />
       <SocialButton

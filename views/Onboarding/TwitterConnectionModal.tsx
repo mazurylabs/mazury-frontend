@@ -1,12 +1,61 @@
 import { Button, Input, Modal, Spinner } from 'components';
+import { Bytes } from 'ethers';
 import Image from 'next/image';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
+import { getMessageToBeSigned, verifyTweet } from 'utils/api';
+import { useAccount, useSignMessage } from 'wagmi';
 
 interface ContentComponentProps {
   onButtonClick?: () => void;
+  signMessage?: (
+    config?:
+      | {
+          message?: string | Bytes | undefined;
+        }
+      | undefined
+  ) => Promise<
+    | {
+        data: string;
+        error: undefined;
+      }
+    | {
+        data: undefined;
+        error: Error;
+      }
+  >;
+  address?: string;
 }
 
-const PasteTweetStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
+const PasteTweetStep: FC<ContentComponentProps> = ({
+  onButtonClick,
+  signMessage,
+  address,
+}) => {
+  const [tweetURL, setTweetURL] = useState('');
+
+  const verifyConnection = async () => {
+    const { data: messageToBeSigned, error: messageToBeSignedError } =
+      await getMessageToBeSigned(address!);
+
+    if (messageToBeSignedError || !messageToBeSigned) {
+      return alert(
+        'Couldnt get the message to be signed. Please try again later.'
+      );
+    }
+
+    const { data: signature, error: signatureError } = await signMessage!({
+      message: messageToBeSigned as string,
+    });
+
+    if (!signature || signatureError) {
+      return alert('Error signing message');
+    }
+
+    const { data, error } = await verifyTweet(tweetURL, signature);
+
+    console.log({ data, error });
+  };
+
   return (
     <>
       <h3 className="font-demi text-3xl text-indigoGray-90">
@@ -20,11 +69,13 @@ const PasteTweetStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
         label="Twitter link"
         outerClassName="mt-4"
         placeholder="e.g. https://twitter.com/mazuryxyz"
+        value={tweetURL}
+        onChange={(val) => setTweetURL(val)}
       />
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={onButtonClick} variant="primary">
+        <Button onClick={verifyConnection} variant="primary">
           RETRY
         </Button>
       </div>
@@ -112,6 +163,8 @@ export const TwitterConnectionModal: FC<TwitterModalProps> = ({
   onFinish,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [_, signMessage] = useSignMessage();
+  const [{ data: accountData }] = useAccount();
 
   const resetState = () => {
     setCurrentStep(0);
@@ -129,7 +182,13 @@ export const TwitterConnectionModal: FC<TwitterModalProps> = ({
         onClose();
       }}
     >
-      {currentStep === 0 && <PasteTweetStep onButtonClick={goToNextStep} />}
+      {currentStep === 0 && (
+        <PasteTweetStep
+          onButtonClick={goToNextStep}
+          signMessage={signMessage}
+          address={accountData?.address}
+        />
+      )}
       {currentStep === 1 && <WalletSigningStep onButtonClick={goToNextStep} />}
       {currentStep === 2 && <FailedStep onButtonClick={goToNextStep} />}
       {currentStep === 3 && <SuccessStep onButtonClick={onFinish} />}

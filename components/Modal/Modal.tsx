@@ -14,7 +14,7 @@ export const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   containerClassName,
-  appRootId = '_next',
+  appRootId = '__next',
 }) => {
   useEffect(() => {
     ReactModal.setAppElement(document.getElementById(appRootId)!);
