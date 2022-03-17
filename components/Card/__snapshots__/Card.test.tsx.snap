@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card 1`] = `
+<div
+  class="rounded-2xl border border-indigoGray-20 p-6 shadow-base"
+>
+  Card content
+</div>
+`;
