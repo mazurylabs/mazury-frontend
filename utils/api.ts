@@ -1,5 +1,5 @@
 import { OnboardingFormDataType } from 'contexts';
-import { APIResponse } from 'types';
+import { Activity, APIResponse, ListResponse } from 'types';
 import { api } from '.';
 
 export const getProfile = async (address: string) => {
@@ -58,6 +58,23 @@ export const updateProfile: (
     return {
       data: null,
       error: err,
+    };
+  }
+};
+
+export const getActvity: (
+  address?: string
+) => Promise<APIResponse<ListResponse<Activity>>> = async (address) => {
+  try {
+    const res = await api.get(`/activity?user=${address}`);
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
     };
   }
 };

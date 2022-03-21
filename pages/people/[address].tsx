@@ -33,6 +33,7 @@ import {
   useProfile,
   useActiveProfileSection,
   useMobile,
+  useActivity,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -77,6 +78,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
+  // TODO: Integrate this into the markup once the design and the API have agreed on the types.
+  // const { activity, error: activityError } = useActivity(address);
   const { referrals, error: referralError } = useReferrals(address);
   const { badges, error: badgesError } = useBadges(address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
@@ -141,14 +144,6 @@ const Profile: React.FC<Props> = ({ address }) => {
       setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
     }
   }, [currActiveSection]);
-
-  useEffect(() => {
-    console.log({
-      isMobile,
-      username: profile.username.length,
-      val: isMobile && profile.username.length > 8,
-    });
-  }, [isMobile, profile.username]);
 
   return (
     <>

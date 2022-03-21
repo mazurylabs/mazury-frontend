@@ -161,6 +161,22 @@ export interface ThemeColor {
 }
 
 export type APIResponse<T = any> = {
-  data: T;
+  data: T | null;
   error: Error | unknown;
 };
+
+type ActivityType =
+  | 'new-badge'
+  | 'new-referral-given'
+  | 'new-referral-received'
+  | 'new-post';
+
+export interface Activity {
+  id: string;
+  user: PersonBasicDetails;
+  created_at: string;
+  updated_at: string;
+  type: ActivityType;
+  description: string;
+  image: string;
+}
