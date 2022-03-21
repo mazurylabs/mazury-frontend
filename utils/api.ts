@@ -37,13 +37,20 @@ export const getMessageToBeSigned: (
 export const updateProfile: (
   address: string,
   signature: string,
-  data: OnboardingFormDataType
-) => Promise<APIResponse> = async (address, signature, data) => {
+  data: OnboardingFormDataType,
+  avatarFile?: File | null
+) => Promise<APIResponse> = async (address, signature, data, avatarFile) => {
   try {
     const formData = new FormData();
     for (let key in data) {
+      if (key === 'avatar') {
+        continue;
+      }
       // @ts-ignore
       formData.append(key, data[key]);
+    }
+    if (avatarFile) {
+      formData.append('avatar', avatarFile, avatarFile.name);
     }
     const res = await api.patch(`/profiles/${address}/`, formData, {
       headers: {
