@@ -5,12 +5,16 @@ import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 export const ProfileView: FC = () => {
-  const { formData, setFormData } = useContext(OnboardingContext);
+  const {
+    formData,
+    setFormData,
+    avatarFile: file,
+    setAvatarFile: setFile,
+  } = useContext(OnboardingContext);
   const [{ data: accountData }] = useAccount({
     fetchEns: true,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File>();
   const [fileUrl, setFileUrl] = useState<string>();
 
   const onAddPicClick = () => {
@@ -21,7 +25,7 @@ export const ProfileView: FC = () => {
 
   const onRemovePicClick = () => {
     setFileUrl('');
-    setFile(undefined);
+    setFile(null);
   };
 
   useEffect(() => {
@@ -108,8 +112,9 @@ export const ProfileView: FC = () => {
         />
 
         <div className="mt-6 flex items-center justify-center gap-6 p-4 sm:justify-start">
-          <Image
-            src={fileUrl || '/default-avi.png'}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={fileUrl || formData?.avatar || '/default-avi.png'}
             height="100px"
             width="100px"
             alt="Your profile picture"

@@ -68,6 +68,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         website,
         ens_name,
         eth_address,
+        avatar,
       } = profileData;
       setFormData({
         bio,
@@ -84,6 +85,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         website,
         ens_name,
         eth_address,
+        avatar,
       });
       setFetched(true);
     }

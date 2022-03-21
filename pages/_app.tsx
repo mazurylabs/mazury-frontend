@@ -85,6 +85,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       open_to_opportunities: false,
     });
   const [fetchedProfile, setFetchedProfile] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
     console.log({ onboardingFormData });
@@ -104,6 +105,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             setFormData: setOnboardingFormData,
             fetched: fetchedProfile,
             setFetched: setFetchedProfile,
+            avatarFile,
+            setAvatarFile,
           }}
         >
           <NextHead>

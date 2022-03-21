@@ -25,6 +25,7 @@ export interface OnboardingFormDataType {
   open_to_opportunities?: boolean;
   email?: string;
   website?: string;
+  avatar?: string;
 }
 
 interface OnboardingContextType {
@@ -32,6 +33,8 @@ interface OnboardingContextType {
   setFormData: Dispatch<SetStateAction<OnboardingFormDataType>>;
   fetched: boolean;
   setFetched: Dispatch<SetStateAction<boolean>>;
+  avatarFile: File | null;
+  setAvatarFile: Dispatch<SetStateAction<File | null>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -39,4 +42,6 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setFormData: () => {},
   fetched: false,
   setFetched: () => {},
+  avatarFile: null,
+  setAvatarFile: () => {},
 });

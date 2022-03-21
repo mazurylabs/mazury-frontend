@@ -35,7 +35,7 @@ const SocialButton: FC<SocialButtonProps> = ({
 };
 
 const SocialsPage: NextPage = () => {
-  const { formData, setFormData } = useContext(OnboardingContext);
+  const { formData, setFormData, avatarFile } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
 
   const onSubmit = async () => {
@@ -62,7 +62,8 @@ const SocialsPage: NextPage = () => {
     const { error: updateProfileError } = await updateProfile(
       formData.eth_address,
       signature,
-      formData
+      formData,
+      avatarFile
     );
 
     if (updateProfileError) {
