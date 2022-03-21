@@ -8,7 +8,7 @@ export const ErrorFallback = () => {
         Something went wrong :(
       </h1>
       <p className="text-indigoGray-40">
-        Please try refershing the page or contact us at{' '}
+Please try refreshing the page or contact us at{' '}
         <a
           href="https://twitter.com/mazuryxyz"
           target="_blank"
