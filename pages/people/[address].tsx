@@ -394,19 +394,25 @@ const Profile: React.FC<Props> = ({ address }) => {
             />
 
             <div className="no-scrollbar flex gap-4 overflow-x-scroll px-4 py-4 font-serif text-lg font-bold md:hidden">
-              {profileSections.map((item) => (
-                <button
-                  key={`${item}-mobile-nav`}
-                  className={`${
-                    activeSection === item
-                      ? 'text-indigoGray-90'
-                      : 'text-indigoGray-30'
-                  }`}
-                  onClick={() => handleSectionClick(item)}
-                >
-                  {item}
-                </button>
-              ))}
+              {profileSections.map((item) => {
+                // We have temporarily removed the DAOs section
+                if (item === 'DAOs') {
+                  return null;
+                }
+                return (
+                  <button
+                    key={`${item}-mobile-nav`}
+                    className={`${
+                      activeSection === item
+                        ? 'text-indigoGray-90'
+                        : 'text-indigoGray-30'
+                    }`}
+                    onClick={() => handleSectionClick(item)}
+                  >
+                    {item}
+                  </button>
+                );
+              })}
             </div>
 
             <hr ref={headerRef} />
@@ -418,19 +424,25 @@ const Profile: React.FC<Props> = ({ address }) => {
               hasAnySocial ? 'top-[16.5rem]' : 'top-[14.5rem]'
             } flex h-fit flex-col justify-start gap-4`}
           >
-            {profileSections.map((sectionName) => (
-              <Pill
-                className="mx-auto w-[150px] justify-start"
-                key={sectionName}
-                isNav
-                label={sectionName}
-                active={sectionName === activeSection}
-                color={sectionToColor[sectionName]}
-                onClick={() => {
-                  handleSectionClick(sectionName);
-                }}
-              />
-            ))}
+            {profileSections.map((sectionName) => {
+              // We have temporarily removed the DAOs section
+              if (sectionName === 'DAOs') {
+                return null;
+              }
+              return (
+                <Pill
+                  className="mx-auto w-[150px] justify-start"
+                  key={sectionName}
+                  isNav
+                  label={sectionName}
+                  active={sectionName === activeSection}
+                  color={sectionToColor[sectionName]}
+                  onClick={() => {
+                    handleSectionClick(sectionName);
+                  }}
+                />
+              );
+            })}
           </div>
         }
         innerRightContent={
