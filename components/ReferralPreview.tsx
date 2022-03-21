@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Avatar, ITagItem, Tags } from '.';
 import { Skill } from 'types';
 import { colors, getMonthAndYear, toCapitalizedWord } from 'utils';
@@ -20,6 +20,20 @@ export const ReferralPreview: React.FC<Props> = ({
   date,
 }) => {
   const [tags, setTags] = useState<ITagItem[]>([]);
+  const slicedTags = useMemo(() => tags.slice(0, 3), [tags]);
+  const remainingTagsCount = useMemo(() => tags.length - 3, [tags]);
+
+  const appendedContent = useMemo(() => {
+    if (remainingTagsCount > 0) {
+      return (
+        <div className="max-w-fit rounded border border-indigoGray-20 py-1 px-2 text-xs font-bold text-indigoGray-90">
+          {remainingTagsCount} more categories
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }, [remainingTagsCount]);
 
   useEffect(() => {
     setTags(
@@ -56,7 +70,11 @@ export const ReferralPreview: React.FC<Props> = ({
 
       <p className="text-base text-indigoGray-80">{text}</p>
 
-      <Tags tags={tags} />
+      <Tags
+        className="mt-auto"
+        tags={slicedTags}
+        appendedContent={appendedContent}
+      />
     </div>
   );
 };
