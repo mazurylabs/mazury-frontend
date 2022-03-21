@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
@@ -81,6 +81,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
   // const { activity, error: activityError } = useActivity(address);
   const { referrals, error: referralError } = useReferrals(address);
+  const { referrals: authoredReferrals, error: authoredReferralsError } =
+    useReferrals(address, true);
   const { badges, error: badgesError } = useBadges(address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   const scrollPos = useScrollPosition();
@@ -88,8 +90,14 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
-  const [badgesExpanded, setBadgesExpanded] = React.useState(false);
-  const [referralsExpanded, setReferralsExpanded] = React.useState(false);
+  const [badgesExpanded, setBadgesExpanded] = useState(false);
+  const [referralsExpanded, setReferralsExpanded] = useState(false);
+  const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
+    'received'
+  );
+
+  const referralsToShow =
+    referralsToggle === 'received' ? referrals : authoredReferrals;
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
@@ -575,18 +583,35 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <div className="flex gap-[24px]">
                   <Pill
                     label="Received"
-                    active
+                    active={referralsToggle === 'received'}
                     color="emerald"
                     className="h-fit w-fit md:ml-8"
+                    onClick={() => {
+                      if (referralsToggle === 'received') {
+                        return;
+                      }
+                      setReferralsToggle('received');
+                    }}
                   />
-                  <Pill label="Given" color="emerald" className="h-fit w-fit" />
+                  <Pill
+                    label="Given"
+                    color="emerald"
+                    className="h-fit w-fit"
+                    active={referralsToggle === 'given'}
+                    onClick={() => {
+                      if (referralsToggle === 'given') {
+                        return;
+                      }
+                      setReferralsToggle('given');
+                    }}
+                  />
                 </div>
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                {referrals && referrals.length > 0 ? (
-                  referrals
-                    ?.slice(0, referralsExpanded ? referrals.length : 4)
+                {referralsToShow && referralsToShow.length > 0 ? (
+                  referralsToShow
+                    ?.slice(0, referralsExpanded ? referralsToShow.length : 4)
                     .map((referral) => {
                       return (
                         <ReferralPreview
@@ -608,7 +633,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 )}
               </div>
 
-              {referrals && referrals.length > 4 && (
+              {referralsToShow && referralsToShow.length > 4 && (
                 <div className="xl:w-10/12">
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}
