@@ -153,6 +153,27 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [currActiveSection]);
 
+  if (error) {
+    return (
+      <>
+        <Head>
+          <title>Mazury</title>
+        </Head>
+        <Layout
+          sidebarContent={<Sidebar />}
+          headerContent={
+            <p className="p-10 text-3xl">
+              Something went wrong. Please try refreshing in a while or contact
+              us @mazuryxyz on Twitter if the problem persists.
+            </p>
+          }
+          innerLeftContent={null}
+          innerRightContent={null}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -230,6 +251,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
+                          {/* TODO: The backend does not have a field for full name yet */}
                           Michael Scott
                         </h3>
                       </div>
