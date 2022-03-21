@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ThemeColor } from 'types';
+import { Skill, ThemeColor } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
@@ -55,3 +55,22 @@ export const getMonthAndYear = (date: Date) => {
   const year = date.getFullYear();
   return `${getMonthName(month as MonthDigit).slice(0, 3)} ${year}`;
 };
+
+export const skillsList: Skill[] = [
+  'frontendDev',
+  'backendDev',
+  'smartContractDev',
+  'protocolDev',
+  'design',
+  'growthMarketing',
+  'writing',
+  'productManagement',
+  'projectManagement',
+  'dataScience',
+  'art',
+  'defiDegen',
+  'nftDegen',
+  'teaching',
+  'memes',
+  'community',
+];

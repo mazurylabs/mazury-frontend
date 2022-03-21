@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SWRConfig } from 'swr';
 import {
   Button,
@@ -33,6 +33,7 @@ import {
   useProfile,
   useActiveProfileSection,
   useMobile,
+  useActivity,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -77,7 +78,11 @@ const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
+  // TODO: Integrate this into the markup once the design and the API have agreed on the types.
+  // const { activity, error: activityError } = useActivity(address);
   const { referrals, error: referralError } = useReferrals(address);
+  const { referrals: authoredReferrals, error: authoredReferralsError } =
+    useReferrals(address, true);
   const { badges, error: badgesError } = useBadges(address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   const scrollPos = useScrollPosition();
@@ -85,8 +90,14 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
-  const [badgesExpanded, setBadgesExpanded] = React.useState(false);
-  const [referralsExpanded, setReferralsExpanded] = React.useState(false);
+  const [badgesExpanded, setBadgesExpanded] = useState(false);
+  const [referralsExpanded, setReferralsExpanded] = useState(false);
+  const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
+    'received'
+  );
+
+  const referralsToShow =
+    referralsToggle === 'received' ? referrals : authoredReferrals;
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
@@ -142,13 +153,26 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [currActiveSection]);
 
-  useEffect(() => {
-    console.log({
-      isMobile,
-      username: profile.username.length,
-      val: isMobile && profile.username.length > 8,
-    });
-  }, [isMobile, profile.username]);
+  if (error) {
+    return (
+      <>
+        <Head>
+          <title>Mazury</title>
+        </Head>
+        <Layout
+          sidebarContent={<Sidebar />}
+          headerContent={
+            <p className="p-10 text-3xl">
+              Something went wrong. Please try refreshing in a while or contact
+              us @mazuryxyz on Twitter if the problem persists.
+            </p>
+          }
+          innerLeftContent={null}
+          innerRightContent={null}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -227,6 +251,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
+                          {/* TODO: The backend does not have a field for full name yet */}
                           Michael Scott
                         </h3>
                       </div>
@@ -394,19 +419,25 @@ const Profile: React.FC<Props> = ({ address }) => {
             />
 
             <div className="no-scrollbar flex gap-4 overflow-x-scroll px-4 py-4 font-serif text-lg font-bold md:hidden">
-              {profileSections.map((item) => (
-                <button
-                  key={`${item}-mobile-nav`}
-                  className={`${
-                    activeSection === item
-                      ? 'text-indigoGray-90'
-                      : 'text-indigoGray-30'
-                  }`}
-                  onClick={() => handleSectionClick(item)}
-                >
-                  {item}
-                </button>
-              ))}
+              {profileSections.map((item) => {
+                // We have temporarily removed the DAOs section
+                if (item === 'DAOs') {
+                  return null;
+                }
+                return (
+                  <button
+                    key={`${item}-mobile-nav`}
+                    className={`${
+                      activeSection === item
+                        ? 'text-indigoGray-90'
+                        : 'text-indigoGray-30'
+                    }`}
+                    onClick={() => handleSectionClick(item)}
+                  >
+                    {item}
+                  </button>
+                );
+              })}
             </div>
 
             <hr ref={headerRef} />
@@ -418,19 +449,25 @@ const Profile: React.FC<Props> = ({ address }) => {
               hasAnySocial ? 'top-[16.5rem]' : 'top-[14.5rem]'
             } flex h-fit flex-col justify-start gap-4`}
           >
-            {profileSections.map((sectionName) => (
-              <Pill
-                className="mx-auto w-[150px] justify-start"
-                key={sectionName}
-                isNav
-                label={sectionName}
-                active={sectionName === activeSection}
-                color={sectionToColor[sectionName]}
-                onClick={() => {
-                  handleSectionClick(sectionName);
-                }}
-              />
-            ))}
+            {profileSections.map((sectionName) => {
+              // We have temporarily removed the DAOs section
+              if (sectionName === 'DAOs') {
+                return null;
+              }
+              return (
+                <Pill
+                  className="mx-auto w-[150px] justify-start"
+                  key={sectionName}
+                  isNav
+                  label={sectionName}
+                  active={sectionName === activeSection}
+                  color={sectionToColor[sectionName]}
+                  onClick={() => {
+                    handleSectionClick(sectionName);
+                  }}
+                />
+              );
+            })}
           </div>
         }
         innerRightContent={
@@ -568,18 +605,35 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <div className="flex gap-[24px]">
                   <Pill
                     label="Received"
-                    active
+                    active={referralsToggle === 'received'}
                     color="emerald"
                     className="h-fit w-fit md:ml-8"
+                    onClick={() => {
+                      if (referralsToggle === 'received') {
+                        return;
+                      }
+                      setReferralsToggle('received');
+                    }}
                   />
-                  <Pill label="Given" color="emerald" className="h-fit w-fit" />
+                  <Pill
+                    label="Given"
+                    color="emerald"
+                    className="h-fit w-fit"
+                    active={referralsToggle === 'given'}
+                    onClick={() => {
+                      if (referralsToggle === 'given') {
+                        return;
+                      }
+                      setReferralsToggle('given');
+                    }}
+                  />
                 </div>
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                {referrals && referrals.length > 0 ? (
-                  referrals
-                    ?.slice(0, referralsExpanded ? referrals.length : 4)
+                {referralsToShow && referralsToShow.length > 0 ? (
+                  referralsToShow
+                    ?.slice(0, referralsExpanded ? referralsToShow.length : 4)
                     .map((referral) => {
                       return (
                         <ReferralPreview
@@ -601,7 +655,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 )}
               </div>
 
-              {referrals && referrals.length > 4 && (
+              {referralsToShow && referralsToShow.length > 4 && (
                 <div className="xl:w-10/12">
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}

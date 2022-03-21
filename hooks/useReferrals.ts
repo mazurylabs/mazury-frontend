@@ -1,29 +1,11 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import { skillsList } from 'utils';
 import { ListResponse, Referral, Skill } from '../types';
 
-const skillsList: Skill[] = [
-  'frontendDev',
-  'backendDev',
-  'smartContractDev',
-  'protocolDev',
-  'design',
-  'growthMarketing',
-  'writing',
-  'productManagement',
-  'projectManagement',
-  'dataScience',
-  'art',
-  'defiDegen',
-  'nftDegen',
-  'teaching',
-  'memes',
-  'community',
-];
-
-export const useReferrals = (address: string) => {
+export const useReferrals = (address: string, authored: boolean = false) => {
   const { data, error } = useSWR<ListResponse<Referral>>(
-    `/referrals/?receiver=${address}`
+    `/referrals/?${authored ? 'author' : 'receiver'}=${address}`
   );
   const [referrals, setReferrals] = useState<Referral[]>([]);
 

@@ -13,6 +13,7 @@ interface TagsProps {
   onRemove?: (value: string) => void;
   allowInput?: boolean;
   onAdd?: (value: string) => void;
+  appendedContent?: React.ReactNode;
 }
 
 export const Tags: FC<TagsProps> = ({
@@ -21,6 +22,7 @@ export const Tags: FC<TagsProps> = ({
   onRemove,
   allowInput = false,
   onAdd,
+  appendedContent,
 }) => {
   const [newTag, setNewTag] = useState('');
 
@@ -86,6 +88,7 @@ export const Tags: FC<TagsProps> = ({
           />
         </div>
       )}
+      {appendedContent && appendedContent}
     </div>
   );
 };
