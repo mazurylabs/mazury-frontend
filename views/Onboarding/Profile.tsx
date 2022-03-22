@@ -35,10 +35,6 @@ export const ProfileView: FC = () => {
     }
   }, [file]);
 
-  useEffect(() => {
-    console.log({ formData, setFormData });
-  }, [formData, setFormData]);
-
   const displayName = formData.ens_name || accountData?.ens;
 
   const hasEns = !!accountData?.ens;
@@ -96,7 +92,6 @@ export const ProfileView: FC = () => {
           label="Username"
           value={formData.username}
           onChange={(val) => {
-            console.log(val);
             const newFd = { ...formData, username: val };
             setFormData(newFd);
           }}
