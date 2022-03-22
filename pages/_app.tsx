@@ -88,8 +88,14 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
-    console.log({ onboardingFormData });
-  }, [onboardingFormData]);
+    console.log(`                                                   
+ ____   _____  _____  _   _   ____  _   _ 
+ |    \ (____ |(___  )| | | | / ___)| | | |
+ | | | |/ ___ | / __/ | |_| || |    | |_| |
+ |_|_|_|\_____|(_____)|____/ |_|     \__  |
+                                    (____/ 
+  `);
+  }, []);
 
   return (
     <SWRConfig value={{ fetcher }}>
