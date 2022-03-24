@@ -7,6 +7,7 @@ interface Props {
   alt?: string;
   borderRadius?: number | string;
   className?: string;
+  onClick?: () => void;
 }
 
 export const Avatar: React.FC<Props> = ({
@@ -16,6 +17,7 @@ export const Avatar: React.FC<Props> = ({
   alt = 'Avatar',
   borderRadius = '100%',
   className,
+  onClick,
 }) => {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -24,6 +26,7 @@ export const Avatar: React.FC<Props> = ({
       alt={alt}
       style={{ borderRadius, width, height }}
       className={className}
+      onClick={onClick}
     />
   );
 };

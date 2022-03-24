@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import type { FC } from 'react';
 
 export type ColorName =
   | 'indigo'
@@ -218,3 +218,4 @@ export interface MirrorPost {
   timestamp: number;
   title: string;
 }
+export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
