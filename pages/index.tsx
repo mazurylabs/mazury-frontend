@@ -493,4 +493,25 @@ const Home: NextPage = () => {
   );
 };
 
+const SuggestionInnerText: FCWithClassName = ({ children, className }) => {
+  return (
+    <span
+      className={`text-xs font-medium uppercase text-indigoGray-50 ${className}`}
+    >
+      {children}
+    </span>
+  );
+};
+
+const KeywordSuggestion: FCWithClassName = ({ className }) => {
+  return (
+    <div className={`flex flex-col ${className}`}>
+      <HistorySectionItem>React developer</HistorySectionItem>
+      <div className="flex">
+        <SuggestionInnerText>13 048 results</SuggestionInnerText>
+      </div>
+    </div>
+  );
+};
+
 export default Home;
