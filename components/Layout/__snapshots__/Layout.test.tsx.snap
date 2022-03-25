@@ -6,20 +6,23 @@ exports[`Layout all parts are being rendered correctly 1`] = `
   data-testid="layout-container"
 >
   <aside
-    class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 false shadow-inner lg:flex"
+    class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col bg-white py-10 false shadow-inner lg:flex"
     role="menu"
   >
     <img
       alt="Mazury logo"
       class="mx-auto"
-      src="/waves.png"
+      src="/new-logo.svg"
       style="border-radius: 100%; width: 40px; height: 40px;"
     />
+    <hr
+      class="w-full border border-indigoGray-10 mt-8"
+    />
     <menu
-      class="mt-12 flex flex-col gap-12 text-xl font-bold items-center h-[100%] false"
+      class="mt-12 flex flex-col text-xl font-bold items-center h-[100%] false"
     >
       <div
-        class="flex items-center justify-center gap-2 rounded-xl bg-indigoGray-20 p-4 text-[14px] font-normal"
+        class="flex items-center justify-center gap-2 rounded-xl bg-indigoGray-90 p-4 text-[14px] font-normal text-indigo-50 shadow-md"
       >
         <img
           alt="Search icon"
@@ -28,7 +31,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         />
       </div>
       <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80 undefined"
+        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80 mt-4"
         href="/"
       >
         <img
@@ -37,26 +40,33 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         />
          
       </a>
-      <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
-        href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+      <div
+        class="mt-auto flex flex-col"
       >
-        <img
-          alt="Profile icon"
-          src="/profile-active.svg"
+        <hr
+          class="w-full border border-indigoGray-10 undefined"
         />
-         
-      </a>
-      <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-auto mb-12"
-        href="/settings"
-      >
-        <img
-          alt="Settings icon"
-          src="/icons/sliders.svg"
-        />
-         
-      </a>
+        <a
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
+          href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+        >
+          <img
+            alt="Profile icon"
+            src="/profile-active.svg"
+          />
+           
+        </a>
+        <a
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mb-4 mt-4"
+          href="/settings"
+        >
+          <img
+            alt="Settings icon"
+            src="/icons/sliders.svg"
+          />
+           
+        </a>
+      </div>
     </menu>
   </aside>
   <main
@@ -85,40 +95,112 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     </div>
   </main>
   <div
-    class="fixed bottom-0 left-0 flex w-screen items-center justify-center gap-8 border bg-white p-2 lg:hidden"
+    class="fixed bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden"
   >
     <a
       href="/"
     >
-      <img
-        alt="Home icon"
-        src="/icons/home.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Home icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
     </a>
     <a
-      href="/"
+      href="/search"
     >
-      <img
-        alt="Home icon"
-        src="/icons/search.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Search icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
     </a>
     <a
       href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
     >
-      <img
-        alt="Profile icon"
-        src="/profile-active.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Profile icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
        
     </a>
     <a
-      href="/"
+      href="/settings"
     >
-      <img
-        alt="Settings icon"
-        src="/icons/sliders.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Settings icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
        
     </a>
   </div>
