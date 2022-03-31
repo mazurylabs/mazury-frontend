@@ -16,13 +16,14 @@ exports[`Layout all parts are being rendered correctly 1`] = `
       style="border-radius: 100%; width: 40px; height: 40px;"
     />
     <hr
-      class="w-full border border-indigoGray-10 mt-8"
+      class="border border-indigoGray-20 mx-3 mt-8"
     />
     <menu
-      class="mt-12 flex flex-col text-xl font-bold items-center h-[100%] false"
+      class="mt-12 flex flex-col text-xl font-bold items-center h-[100%] px-3"
     >
       <div
-        class="flex items-center justify-center gap-2 rounded-xl bg-indigoGray-90 p-4 text-[14px] font-normal text-indigo-50 shadow-md"
+        class="justify-center flex w-full items-center gap-2 rounded-xl bg-indigoGray-90 p-3 text-[14px] font-normal text-indigo-50 shadow-md hover:cursor-pointer"
+        role="button"
       >
         <img
           alt="Search icon"
@@ -44,7 +45,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         class="mt-auto flex flex-col"
       >
         <hr
-          class="w-full border border-indigoGray-10 undefined"
+          class="border border-indigoGray-20 undefined"
         />
         <a
           class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
