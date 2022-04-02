@@ -26,7 +26,7 @@ export const Layout: FC<LayoutProps> = ({
             isOpen && 'px-5'
           } shadow-inner lg:flex`}
           whileHover={{
-            width: '266px',
+            width: '200px',
           }}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}

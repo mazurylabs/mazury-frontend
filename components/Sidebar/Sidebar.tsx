@@ -1,9 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, useContext, useState } from 'react';
-import { Avatar } from '..';
+import { FC, ReactNode, useContext, useState } from 'react';
+import { Avatar, HomeIcon, SearchIcon } from 'components';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
+import { colors } from 'utils';
+import { SlidersIcon } from 'components/Icons';
+
+const iconColors = {
+  active: colors.indigo[50],
+  inactive: colors.indigoGray[90],
+};
 
 export const Sidebar: FC = () => {
   const { isOpen } = useContext(SidebarContext);
@@ -18,8 +25,8 @@ export const Sidebar: FC = () => {
     <>
       <Avatar
         src="/new-logo.svg"
-        height="40px"
-        width="40px"
+        height="32px"
+        width="32px"
         alt="Mazury logo"
         className={`${isOpen ? 'ml-4' : 'mx-auto'}`}
       />
@@ -31,11 +38,29 @@ export const Sidebar: FC = () => {
           isOpen ? 'items-start' : 'items-center'
         } h-[100%] px-3`}
       >
-        <SearchInput expanded={isOpen} onClick={goToSearch} />
+        <SidebarItem
+          href="/"
+          label="Search"
+          icon={
+            <SearchIcon
+              color={
+                pathname.startsWith('/search')
+                  ? iconColors.active
+                  : iconColors.inactive
+              }
+            />
+          }
+          isOpen={isOpen}
+          active={pathname.startsWith('/search')}
+        />
         <SidebarItem
           href="/"
           label="Home"
-          iconSrc="/icons/home.svg"
+          icon={
+            <HomeIcon
+              color={pathname === '/' ? iconColors.active : iconColors.inactive}
+            />
+          }
           isOpen={isOpen}
           active={pathname === '/'}
           className="mt-4"
@@ -44,7 +69,7 @@ export const Sidebar: FC = () => {
         <div className="mt-auto flex flex-col">
           {/* Email not verified alert */}
           {isOpen && (
-            <div className="mx-auto mb-11 flex items-center justify-center">
+            <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
               <img
                 src="/icons/info.svg"
                 width="16px"
@@ -66,7 +91,7 @@ export const Sidebar: FC = () => {
           <SidebarItem
             href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
             label="Profile"
-            iconSrc="/profile-active.svg"
+            icon={<img src="/profile-active.svg" alt="Profile icon" />}
             isOpen={isOpen}
             active={pathname.startsWith('/people')}
             className="mt-8"
@@ -74,7 +99,15 @@ export const Sidebar: FC = () => {
           <SidebarItem
             href="/settings"
             label="Settings"
-            iconSrc="/icons/sliders.svg"
+            icon={
+              <SlidersIcon
+                color={
+                  pathname.startsWith('/settings')
+                    ? iconColors.active
+                    : iconColors.inactive
+                }
+              />
+            }
             isOpen={isOpen}
             className="mb-4 mt-4"
             active={pathname.startsWith('/settings')}
@@ -92,7 +125,8 @@ export const Sidebar: FC = () => {
  */
 interface SidebarItemProps {
   label: string;
-  iconSrc: string;
+  // Expecting icon to be a ReactNode since we want it to be an SVG wrapped w/ JSX that should accept color as a prop
+  icon: ReactNode;
   href: string;
   isOpen: boolean;
   className?: string;
@@ -101,7 +135,7 @@ interface SidebarItemProps {
 
 const SidebarItem: FC<SidebarItemProps> = ({
   label,
-  iconSrc,
+  icon,
   href,
   isOpen,
   className,
@@ -114,49 +148,14 @@ const SidebarItem: FC<SidebarItemProps> = ({
           isOpen && 'w-full'
         } items-center gap-4 rounded-md border ${
           !active && 'border-hidden'
-        } p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 ${
+        } p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 ${
           active &&
-          'border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80'
+          'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
       >
-        <img src={iconSrc} alt={`${label} icon`} /> {isOpen && label}
+        {icon} {isOpen && label}
       </a>
     </Link>
-  );
-};
-
-// ===============================================
-
-/*
- * SearchInput component
- */
-
-interface SearchInputProps {
-  onClick: () => void;
-  expanded: boolean;
-}
-
-const SearchInput: FC<SearchInputProps> = ({ onClick, expanded }) => {
-  return (
-    <div
-      role="button"
-      className={`${
-        expanded ? 'justify-left' : 'justify-center'
-      } flex w-full items-center gap-2 rounded-xl bg-indigoGray-90 p-3 text-[14px] font-normal text-indigo-50 shadow-md hover:cursor-pointer`}
-      onClick={onClick}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/icons/search.svg"
-        alt="Search icon"
-        className={`h-[16px] w-[16px] ${!expanded && 'hover:cursor-pointer'}`}
-      />
-      {expanded && (
-        <span className="flex h-[16px] w-3/4 items-center bg-transparent text-sm font-semibold outline-none">
-          Search
-        </span>
-      )}
-    </div>
   );
 };
 

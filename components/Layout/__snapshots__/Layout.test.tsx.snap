@@ -13,7 +13,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
       alt="Mazury logo"
       class="mx-auto"
       src="/new-logo.svg"
-      style="border-radius: 100%; width: 40px; height: 40px;"
+      style="border-radius: 100%; width: 32px; height: 32px;"
     />
     <hr
       class="border border-indigoGray-20 mx-3 mt-8"
@@ -21,24 +21,57 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     <menu
       class="mt-12 flex flex-col text-xl font-bold items-center h-[100%] px-3"
     >
-      <div
-        class="justify-center flex w-full items-center gap-2 rounded-xl bg-indigoGray-90 p-3 text-[14px] font-normal text-indigo-50 shadow-md hover:cursor-pointer"
-        role="button"
-      >
-        <img
-          alt="Search icon"
-          class="h-[16px] w-[16px] hover:cursor-pointer"
-          src="/icons/search.svg"
-        />
-      </div>
       <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80 mt-4"
+        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
         href="/"
       >
-        <img
-          alt="Home icon"
-          src="/icons/home.svg"
-        />
+        <svg
+          aria-label="Search icon"
+          fill="none"
+          height="16px"
+          role="img"
+          viewBox="0 0 16 16"
+          width="16px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+            stroke="#110F2A"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+          <path
+            d="M14 14.0001L11.1 11.1001"
+            stroke="#110F2A"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+        </svg>
+         
+      </a>
+      <a
+        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50 mt-4"
+        href="/"
+      >
+        <svg
+          aria-label="Home icon"
+          fill="none"
+          height="16px"
+          role="img"
+          viewBox="0 0 16 16"
+          width="16px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2 6L8 1.33333L14 6V13.3333C14 13.687 13.8595 14.0261 13.6095 14.2761C13.3594 14.5262 13.0203 14.6667 12.6667 14.6667H3.33333C2.97971 14.6667 2.64057 14.5262 2.39052 14.2761C2.14048 14.0261 2 13.687 2 13.3333V6Z"
+            stroke="#eef2ff"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+        </svg>
          
       </a>
       <div
@@ -48,7 +81,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
           class="border border-indigoGray-20 undefined"
         />
         <a
-          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
           href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
         >
           <img
@@ -58,13 +91,82 @@ exports[`Layout all parts are being rendered correctly 1`] = `
            
         </a>
         <a
-          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mb-4 mt-4"
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mb-4 mt-4"
           href="/settings"
         >
-          <img
-            alt="Settings icon"
-            src="/icons/sliders.svg"
-          />
+          <svg
+            aria-label="Settings icon"
+            fill="none"
+            height="16px"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.66667 14V9.33334"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M2.66667 6.66667V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M8 14V8"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M8 5.33333V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M13.3333 14V10.6667"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M13.3333 8V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M0.666668 9.33334H4.66667"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M6 5.33334H10"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M11.3333 10.6667H15.3333"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+          </svg>
            
         </a>
       </div>
