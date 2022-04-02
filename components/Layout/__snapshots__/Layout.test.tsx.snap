@@ -6,57 +6,170 @@ exports[`Layout all parts are being rendered correctly 1`] = `
   data-testid="layout-container"
 >
   <aside
-    class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col py-10 false shadow-inner lg:flex"
+    class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col bg-white py-10 false shadow-inner lg:flex"
     role="menu"
   >
     <img
       alt="Mazury logo"
       class="mx-auto"
-      src="/waves.png"
-      style="border-radius: 100%; width: 40px; height: 40px;"
+      src="/new-logo.svg"
+      style="border-radius: 100%; width: 32px; height: 32px;"
+    />
+    <hr
+      class="border border-indigoGray-20 mx-3 mt-8"
     />
     <menu
-      class="mt-12 flex flex-col gap-12 text-xl font-bold items-center h-[100%] false"
+      class="mt-12 flex flex-col text-xl font-bold items-center h-[100%] px-3"
     >
-      <div
-        class="flex items-center justify-center gap-2 rounded-xl bg-indigoGray-20 p-4 text-[14px] font-normal"
-      >
-        <img
-          alt="Search icon"
-          class="h-[16px] w-[16px] hover:cursor-pointer"
-          src="/icons/search.svg"
-        />
-      </div>
       <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-10 text-indigoGray-80 undefined"
+        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
         href="/"
       >
-        <img
-          alt="Home icon"
-          src="/icons/home.svg"
-        />
+        <svg
+          aria-label="Search icon"
+          fill="none"
+          height="16px"
+          role="img"
+          viewBox="0 0 16 16"
+          width="16px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+            stroke="#110F2A"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+          <path
+            d="M14 14.0001L11.1 11.1001"
+            stroke="#110F2A"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+        </svg>
          
       </a>
       <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
-        href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+        class="flex h-[40px] false items-center gap-4 rounded-md border false p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50 mt-4"
+        href="/"
       >
-        <img
-          alt="Profile icon"
-          src="/profile-active.svg"
-        />
+        <svg
+          aria-label="Home icon"
+          fill="none"
+          height="16px"
+          role="img"
+          viewBox="0 0 16 16"
+          width="16px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2 6L8 1.33333L14 6V13.3333C14 13.687 13.8595 14.0261 13.6095 14.2761C13.3594 14.5262 13.0203 14.6667 12.6667 14.6667H3.33333C2.97971 14.6667 2.64057 14.5262 2.39052 14.2761C2.14048 14.0261 2 13.687 2 13.3333V6Z"
+            stroke="#eef2ff"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.33"
+          />
+        </svg>
          
       </a>
-      <a
-        class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-50 hover:bg-indigoGray-20 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-auto mb-12"
-        href="/settings"
+      <div
+        class="mt-auto flex flex-col"
       >
-        <img
-          alt="Settings icon"
-          src="/icons/sliders.svg"
+        <hr
+          class="border border-indigoGray-20 undefined"
         />
-         
-      </a>
+        <a
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
+          href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+        >
+          <img
+            alt="Profile icon"
+            src="/profile-active.svg"
+          />
+           
+        </a>
+        <a
+          class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mb-4 mt-4"
+          href="/settings"
+        >
+          <svg
+            aria-label="Settings icon"
+            fill="none"
+            height="16px"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.66667 14V9.33334"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M2.66667 6.66667V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M8 14V8"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M8 5.33333V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M13.3333 14V10.6667"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M13.3333 8V2"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M0.666668 9.33334H4.66667"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M6 5.33334H10"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+            <path
+              d="M11.3333 10.6667H15.3333"
+              stroke="#110F2A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.33333"
+            />
+          </svg>
+           
+        </a>
+      </div>
     </menu>
   </aside>
   <main
@@ -85,40 +198,112 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     </div>
   </main>
   <div
-    class="fixed bottom-0 left-0 flex w-screen items-center justify-center gap-8 border bg-white p-2 lg:hidden"
+    class="fixed bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden"
   >
     <a
       href="/"
     >
-      <img
-        alt="Home icon"
-        src="/icons/home.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Home icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
     </a>
     <a
-      href="/"
+      href="/search"
     >
-      <img
-        alt="Home icon"
-        src="/icons/search.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Search icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
     </a>
     <a
       href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
     >
-      <img
-        alt="Profile icon"
-        src="/profile-active.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Profile icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
        
     </a>
     <a
-      href="/"
+      href="/settings"
     >
-      <img
-        alt="Settings icon"
-        src="/icons/sliders.svg"
-      />
+      <span
+        style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+      >
+        <span
+          style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+        >
+          <img
+            alt=""
+            aria-hidden="true"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+            style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+          />
+        </span>
+        <img
+          alt="Settings icon"
+          data-nimg="intrinsic"
+          decoding="async"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+        />
+        <noscript />
+      </span>
        
     </a>
   </div>

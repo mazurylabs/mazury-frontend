@@ -1,24 +1,37 @@
+/* eslint-disable @next/next/no-img-element */
+import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
+  // TODO: Implement active state
 }
 
 export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
   return (
-    <div className="fixed bottom-0 left-0 flex w-screen items-center justify-center gap-8 border bg-white p-2 lg:hidden">
+    <div className="fixed bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden">
       {children || (
         <>
           <Link href="/" passHref>
             <a>
-              <img src="/icons/home.svg" alt="Home icon" />
+              <Image
+                src="/icons/home.svg"
+                alt="Home icon"
+                width="24px"
+                height="24px"
+              />
             </a>
           </Link>
 
-          <Link href="/" passHref>
+          <Link href="/search" passHref>
             <a>
-              <img src="/icons/search.svg" alt="Home icon" />
+              <Image
+                src="/icons/search.svg"
+                alt="Search icon"
+                width="24px"
+                height="24px"
+              />
             </a>
           </Link>
 
@@ -27,13 +40,23 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
             passHref
           >
             <a>
-              <img src="/profile-active.svg" alt="Profile icon" />{' '}
+              <Image
+                src="/profile-active.svg"
+                alt="Profile icon"
+                width="24px"
+                height="24px"
+              />{' '}
             </a>
           </Link>
 
-          <Link href="/" passHref>
+          <Link href="/settings" passHref>
             <a>
-              <img src="/icons/sliders.svg" alt="Settings icon" />{' '}
+              <Image
+                src="/icons/sliders.svg"
+                alt="Settings icon"
+                width="24px"
+                height="24px"
+              />{' '}
             </a>
           </Link>
         </>
