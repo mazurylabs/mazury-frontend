@@ -61,7 +61,6 @@ const WritePage: NextPage = () => {
     const skills = tags.map((tag) => tag.value);
     console.log({ skills });
     const { data, error } = await createReferral(
-      authorAddress,
       receiverAddress,
       content,
       skills,

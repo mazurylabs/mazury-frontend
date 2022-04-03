@@ -87,13 +87,11 @@ export const getActvity: (
 };
 
 export const createReferral: (
-  authorAddress: string,
   receiverAddress: string,
   content: string,
   skills: string[],
   authorSignature: string
 ) => Promise<APIResponse<Referral>> = async (
-  authorAddress,
   receiverAddress,
   content,
   skills,
@@ -103,12 +101,7 @@ export const createReferral: (
     const res = await api.post(
       '/referrals/',
       {
-        receiver: {
-          eth_address: receiverAddress,
-        },
-        author: {
-          eth_address: authorAddress,
-        },
+        receiver: receiverAddress,
         content,
         skills,
       },
