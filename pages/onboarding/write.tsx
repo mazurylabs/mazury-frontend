@@ -2,7 +2,9 @@ import { Avatar, OnboardingLayout } from 'components';
 import { Tags, ITagItem } from 'components';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { colors } from 'utils';
+import { colors, toCamelCase } from 'utils';
+import { createReferral, getMessageToBeSigned } from 'utils/api';
+import { useAccount, useSignMessage } from 'wagmi';
 
 const WritePage: NextPage = () => {
   const [tags, setTags] = useState<ITagItem[]>([
@@ -22,10 +24,54 @@ const WritePage: NextPage = () => {
       value: 'community',
     },
   ]);
+  const [content, setContent] = useState('');
 
+  const [{ data: accountData }] = useAccount();
+  const authorAddress = accountData?.address;
+  // TODO: Make this dynamic
+  const receiverAddress = '0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3';
+
+  const [_, signMessage] = useSignMessage();
+
+  // Fired when a tag is removed
   const onRemove = (val: string) => {
     const newTags = tags.filter((tag) => tag.value !== val);
     setTags(newTags);
+  };
+
+  // Fired when the user clicks on the publish button
+  const onSubmit = async () => {
+    if (!authorAddress) {
+      return alert('Please connect your wallet first.');
+    }
+    const { data: messageToBeSigned } = await getMessageToBeSigned(
+      authorAddress
+    );
+    if (!messageToBeSigned) {
+      return alert(
+        "Please try again later. (Couldn't get the message to be signed.)"
+      );
+    }
+    const { data: signature } = await signMessage({
+      message: messageToBeSigned,
+    });
+    if (!signature) {
+      return alert("Please try again later. (Couldn't get the signed message)");
+    }
+    const skills = tags.map((tag) => tag.value);
+    console.log({ skills });
+    const { data, error } = await createReferral(
+      authorAddress,
+      receiverAddress,
+      content,
+      skills,
+      signature
+    );
+    if (error) {
+      return alert(error);
+    }
+    console.log({ data, error });
+    alert('Referral created successfully!');
   };
 
   return (
@@ -33,6 +79,7 @@ const WritePage: NextPage = () => {
       firstHeading="Referrals"
       secondHeading={null}
       bottomButtonText="PUBLISH AND CONTINUE"
+      bottomButtonOnClick={onSubmit}
     >
       <div className="mt-[14px] flex flex-col">
         <div className="flex items-center">
@@ -61,6 +108,8 @@ const WritePage: NextPage = () => {
           className="mt-6 resize-none p-4 text-base font-medium text-indigoGray-50 placeholder:text-indigoGray-50"
           rows={8}
           maxLength={400}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
 
         <span className="mt-6 text-base font-medium text-indigoGray-60">
@@ -79,7 +128,7 @@ const WritePage: NextPage = () => {
               {
                 label: val,
                 color: colors.gray,
-                value: val,
+                value: toCamelCase(val),
               },
             ])
           }
