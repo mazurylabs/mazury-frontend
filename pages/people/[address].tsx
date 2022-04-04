@@ -20,12 +20,14 @@ import {
   MappedRoles,
   Profile as IProfile,
   ProfileSection,
+  Referral,
   Role,
 } from 'types';
 import {
   colors,
   getTruncatedAddress,
   goToLink,
+  hasAlreadyReferredReceiver,
   toCapitalizedWord,
 } from 'utils';
 import { getProfile } from 'utils/api';
@@ -44,6 +46,8 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
+import { useAccount } from 'wagmi';
 
 interface Props {
   address: string;
@@ -82,6 +86,7 @@ const roleFieldToLabel: MappedRoles<string> = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
+  const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
@@ -100,6 +105,14 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [referralsExpanded, setReferralsExpanded] = useState(false);
   const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
     'received'
+  );
+
+  // To track whether the 'write referral' modal is open or not
+  const [referralModalOpen, setReferralModalOpen] = useState(false);
+
+  // If the author has already referred the receiver, this holds that referral. Else it's null.
+  const [existingReferral, setExistingReferral] = useState<Referral | null>(
+    null
   );
 
   const referralsToShow =
@@ -155,7 +168,11 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   // Opens the 'write referral' modal
   const handleWriteReferralClick = () => {
-    alert('Not implemented yet');
+    setReferralModalOpen(true);
+  };
+
+  const onReferralModalClose = () => {
+    setReferralModalOpen(false);
   };
 
   useEffect(() => {
@@ -163,6 +180,20 @@ const Profile: React.FC<Props> = ({ address }) => {
       setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
     }
   }, [currActiveSection]);
+
+  // If the user has already referred the receiver, we need to fetch the referral.
+  useEffect(() => {
+    if (referrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        referrals,
+        address,
+        accountData?.address as string
+      );
+      if (foundExistingReferral) {
+        setExistingReferral(foundExistingReferral);
+      }
+    }
+  }, [referrals, accountData, address]);
 
   if (error) {
     return (
@@ -185,11 +216,21 @@ const Profile: React.FC<Props> = ({ address }) => {
     );
   }
 
+  const writeReferralButtonText = existingReferral
+    ? 'Edit referral'
+    : 'Write referral';
+
   return (
     <>
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
+      <WriteReferralModal
+        isOpen={referralModalOpen}
+        onClose={onReferralModalClose}
+        receiverAddress={address}
+        existingReferral={existingReferral}
+      />
       <Layout
         sidebarContent={<Sidebar />}
         headerContent={
@@ -213,7 +254,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               >
                 <PenIcon color={colors.indigoGray[90]} />
                 <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                  Write Referral
+                  {writeReferralButtonText}
                 </span>
               </div>
             </div>
@@ -246,7 +287,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     >
                       <PenIcon color={colors.indigoGray[90]} />
                       <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                        Write Referral
+                        {writeReferralButtonText}
                       </span>
                     </div>
                   </div>
@@ -644,7 +685,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     size="small"
                   >
                     <PenIcon color={colors.indigoGray[5]} />
-                    Write referral
+                    {writeReferralButtonText}
                   </Button>
                 </div>
 
@@ -680,7 +721,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     size="small"
                   >
                     <PenIcon color={colors.indigoGray[5]} />
-                    Write referral
+                    {writeReferralButtonText}
                   </Button>
                 </div>
               </div>

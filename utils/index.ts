@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Skill, ThemeColor } from 'types';
+import { Referral, Skill, ThemeColor } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
@@ -81,4 +81,18 @@ export const toCamelCase = (text: string) => {
       index === 0 ? leftTrim.toLowerCase() : leftTrim.toUpperCase()
     )
     .replace(/\s+/g, '');
+};
+
+// Scans an array of referrals and finds out if the user has already referred someone
+export const hasAlreadyReferredReceiver = (
+  referrals: Referral[],
+  receiver: string,
+  author: string
+) => {
+  return referrals.find((referral) => {
+    return (
+      referral.receiver.eth_address === receiver &&
+      referral.author.eth_address === author
+    );
+  });
 };
