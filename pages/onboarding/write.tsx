@@ -1,12 +1,15 @@
 import { Avatar, OnboardingLayout } from 'components';
 import { Tags, ITagItem } from 'components';
+import { OnboardingContext } from 'contexts';
 import { NextPage } from 'next';
-import { useState } from 'react';
-import { colors, toCamelCase } from 'utils';
+import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
+import { colors, getTruncatedAddress, toCamelCase } from 'utils';
 import { createReferral, getMessageToBeSigned } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
 
 const WritePage: NextPage = () => {
+  const router = useRouter();
   const [tags, setTags] = useState<ITagItem[]>([
     {
       label: 'Frontend development',
@@ -25,11 +28,11 @@ const WritePage: NextPage = () => {
     },
   ]);
   const [content, setContent] = useState('');
+  const { referralReceiver: receiver } = useContext(OnboardingContext);
+  const receiverAddress = receiver?.eth_address;
 
   const [{ data: accountData }] = useAccount();
   const authorAddress = accountData?.address;
-  // TODO: Make this dynamic
-  const receiverAddress = '0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3';
 
   const [_, signMessage] = useSignMessage();
 
@@ -41,6 +44,10 @@ const WritePage: NextPage = () => {
 
   // Fired when the user clicks on the publish button
   const onSubmit = async () => {
+    if (!receiverAddress) {
+      router.push('/onboarding/refer');
+      return;
+    }
     if (!authorAddress) {
       return alert('Please connect your wallet first.');
     }
@@ -82,10 +89,15 @@ const WritePage: NextPage = () => {
     >
       <div className="mt-[14px] flex flex-col">
         <div className="flex items-center">
-          <Avatar src="/avatar-2.png" width="28px" height="28px" />
+          <Avatar
+            src={receiver?.avatar || '/avatar-2.png'}
+            width="28px"
+            height="28px"
+          />
 
           <span className="ml-[14px] font-demi text-base font-bold text-indigoGray-90">
-            0xluc.eth
+            {receiver?.ens_name ||
+              getTruncatedAddress(receiver?.eth_address as string)}
           </span>
 
           <span className="ml-auto text-xs font-medium text-indigoGray-50">
@@ -99,7 +111,6 @@ const WritePage: NextPage = () => {
             honor to meet. unreserved support for whatever he brings into
             existence with his big brain. LFG 🌊
           </p>
-          {/* TODO: Tags component */}
         </div>
 
         <textarea

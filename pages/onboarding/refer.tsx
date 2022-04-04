@@ -1,16 +1,27 @@
 import { Avatar, Button, InfoBox, Input, OnboardingLayout } from 'components';
+import { OnboardingContext } from 'contexts';
+import { useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, useContext, useRef } from 'react';
+import { getMonthAndYear } from 'utils';
+import { useAccount } from 'wagmi';
 
 interface PersonProps {
   date: string;
   avatarSrc: string;
   username: string;
   role: string;
+  onReferClick: () => void;
 }
 
-const Person: FC<PersonProps> = ({ date, avatarSrc, username, role }) => {
+const Person: FC<PersonProps> = ({
+  date,
+  avatarSrc,
+  username,
+  role,
+  onReferClick,
+}) => {
   const router = useRouter();
 
   return (
@@ -28,7 +39,7 @@ const Person: FC<PersonProps> = ({ date, avatarSrc, username, role }) => {
       </div>
 
       <Button
-        onClick={() => router.push('/onboarding/write')}
+        onClick={onReferClick}
         variant="secondary"
         className="ml-auto h-fit"
       >
@@ -39,6 +50,11 @@ const Person: FC<PersonProps> = ({ date, avatarSrc, username, role }) => {
 };
 
 const ReferPage: NextPage = () => {
+  const router = useRouter();
+  const [{ data: accountData }] = useAccount();
+  const { referrals } = useReferrals(accountData?.address as string);
+  const { setReferralReceiver } = useContext(OnboardingContext);
+
   return (
     <OnboardingLayout
       firstHeading="Role"
@@ -51,39 +67,34 @@ const ReferPage: NextPage = () => {
           make sure you get credit for your reputation on web3.
         </InfoBox>
 
-        {/* TODO: Add search icon */}
-        <Input className="mt-6" placeholder="Search for a user" />
+        {referrals.length > 0 && (
+          <>
+            {/* TODO: Add search icon & implement search */}
+            <Input className="mt-6" placeholder="Search for a user" />
 
-        <span className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
-          People that referred you
-        </span>
+            <span className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
+              People that referred you
+            </span>
 
-        <div className="mt-2 flex flex-col gap-4">
-          <Person
-            avatarSrc="/avatar-2.png"
-            date="Feb 2022"
-            username="dhaiwat.eth"
-            role="Developer"
-          />
-          <Person
-            avatarSrc="/avatar-2.png"
-            date="Feb 2022"
-            username="dhaiwat.eth"
-            role="Developer"
-          />
-          <Person
-            avatarSrc="/avatar-2.png"
-            date="Feb 2022"
-            username="dhaiwat.eth"
-            role="Developer"
-          />
-          <Person
-            avatarSrc="/avatar-2.png"
-            date="Feb 2022"
-            username="dhaiwat.eth"
-            role="Developer"
-          />
-        </div>
+            <div className="mt-2 flex flex-col gap-4">
+              {referrals.map((referral) => {
+                return (
+                  <Person
+                    avatarSrc={referral.author.avatar}
+                    date={getMonthAndYear(new Date(referral.created_at))}
+                    username={referral.author.username}
+                    role={referral.skills ? referral.skills[0] : 'No role'}
+                    key={referral.id}
+                    onReferClick={() => {
+                      setReferralReceiver?.(referral.author);
+                      router.push('/onboarding/write');
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
     </OnboardingLayout>
   );
