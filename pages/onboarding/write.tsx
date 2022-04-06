@@ -96,8 +96,7 @@ const WritePage: NextPage = () => {
           />
 
           <span className="ml-[14px] font-demi text-base font-bold text-indigoGray-90">
-            {receiver?.ens_name ||
-              getTruncatedAddress(receiver?.eth_address as string)}
+            {receiver?.ens_name || getTruncatedAddress(receiver?.eth_address)}
           </span>
 
           <span className="ml-auto text-xs font-medium text-indigoGray-50">

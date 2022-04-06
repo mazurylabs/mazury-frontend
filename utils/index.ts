@@ -1,11 +1,15 @@
 import axios from 'axios';
-import { Referral, Skill, ThemeColor } from 'types';
+import { Referral, Skill } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
-  address: string,
+  address: string | undefined | null,
   length: number = 10
 ): string => {
+  if (!address) {
+    return '';
+  }
+
   return `${address.slice(0, length)}...${address.slice(
     address.length - length
   )}`;
