@@ -9,3 +9,4 @@ export { useMobile } from './useMobile';
 export { useIntersection, useActiveProfileSection } from './useIntersection';
 export { useDebounce } from './useDebounce';
 export { useActivity } from './useActivity';
+export { useReferralCount } from './useReferralCount';

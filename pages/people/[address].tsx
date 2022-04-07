@@ -114,6 +114,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [existingReferral, setExistingReferral] = useState<Referral | null>(
     null
   );
+  // If the receiver has already referred the author, this holds that referral. Else it's null.
+  const [receivedReferral, setReceivedReferral] = useState<Referral | null>(
+    null
+  );
 
   const referralsToShow =
     referralsToggle === 'received' ? referrals : authoredReferrals;
@@ -186,14 +190,24 @@ const Profile: React.FC<Props> = ({ address }) => {
     if (referrals) {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         referrals,
-        address,
-        accountData?.address as string
+        address, // receiver
+        accountData?.address as string // the user
       );
       if (foundExistingReferral) {
         setExistingReferral(foundExistingReferral);
       }
     }
-  }, [referrals, accountData, address]);
+    if (authoredReferrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        authoredReferrals,
+        accountData?.address as string, // receiver
+        address as string // the user
+      );
+      if (foundExistingReferral) {
+        setReceivedReferral(foundExistingReferral);
+      }
+    }
+  }, [referrals, authoredReferrals, accountData, address]);
 
   if (error) {
     return (
@@ -228,8 +242,14 @@ const Profile: React.FC<Props> = ({ address }) => {
       <WriteReferralModal
         isOpen={referralModalOpen}
         onClose={onReferralModalClose}
-        receiverAddress={address}
+        receiver={{
+          avatar: profile.avatar,
+          ens_name: profile.ens_name,
+          eth_address: profile.eth_address,
+          username: profile.username,
+        }}
         existingReferral={existingReferral}
+        receivedReferral={receivedReferral}
       />
       <Layout
         sidebarContent={<Sidebar />}
@@ -595,6 +615,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         referredBy={{
                           username: referral.author.username,
                           avatarSrc: referral.author.avatar,
+                          eth_address: referral.author.eth_address,
                         }}
                         text={referral.content}
                         skills={referral.skills || []}
@@ -737,6 +758,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           referredBy={{
                             username: referral.author.username,
                             avatarSrc: referral.author.avatar,
+                            eth_address: referral.author.eth_address,
                           }}
                           text={referral.content}
                           skills={referral.skills || []}

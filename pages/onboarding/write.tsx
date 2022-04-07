@@ -37,9 +37,12 @@ const defaultTags = [
 const WritePage: NextPage = () => {
   const router = useRouter();
   const [tags, setTags] = useState<ITagItem[]>(defaultTags);
+
+  // existingReferral is the referral that the referral that the user has authored for the receiver, if it exists
   const [existingReferral, setExistingReferral] = useState<Referral | null>(
     null
   );
+
   const [content, setContent] = useState(existingReferral?.content || '');
   const { referralReceiver: receiver } = useContext(OnboardingContext);
   const receiverAddress = receiver?.eth_address;

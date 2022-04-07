@@ -1,7 +1,8 @@
 import { Avatar, Button, ITagItem, Modal, Tags, XIcon } from 'components';
+import { useReferralCount } from 'hooks';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
-import { Referral } from 'types';
+import { PersonBasicDetails, Referral } from 'types';
 import { colors, toCamelCase, toCapitalizedWord } from 'utils';
 import { createReferral, getMessageToBeSigned } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
@@ -9,8 +10,11 @@ import { useAccount, useSignMessage } from 'wagmi';
 interface WriteReferralModalProps {
   isOpen: boolean;
   onClose: () => void;
-  receiverAddress: string;
+  receiver: PersonBasicDetails;
+  // The referral that the user has already written for the receiver, if it exists
   existingReferral: Referral | null;
+  // The referral that the user has received from the receiver, if it exists
+  receivedReferral: Referral | null;
 }
 
 type IStatus = 'writing' | 'signing' | 'success' | 'error';
@@ -36,15 +40,21 @@ const defaultTags = [
 export const WriteReferralModal: FC<WriteReferralModalProps> = ({
   isOpen,
   onClose,
-  receiverAddress,
+  receiver,
   existingReferral,
+  receivedReferral,
 }) => {
   const [tags, setTags] = useState<ITagItem[]>(defaultTags);
   const [content, setContent] = useState(existingReferral?.content || '');
   const [status, setStatus] = useState<IStatus>('writing');
 
   const [{ data: accountData }] = useAccount();
+  const { referralCount: receiverReferralCount } = useReferralCount(
+    receiver.eth_address
+  );
+
   const authorAddress = accountData?.address;
+  const receiverAddress = receiver.eth_address;
 
   const [_, signMessage] = useSignMessage();
 
@@ -147,25 +157,31 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
               </div>
             </div>
             <div className="mt-6 flex items-center">
-              <Avatar src="/avatar-2.png" width="28px" height="28px" />
+              <Avatar
+                src={receiver.avatar || '/avatar-2.png'}
+                width="28px"
+                height="28px"
+              />
 
               <span className="ml-[14px] font-demi text-base font-bold text-indigoGray-90">
-                0xluc.eth
+                {receiver.username}
               </span>
 
-              <span className="ml-auto text-xs font-medium text-indigoGray-50">
-                13 referrals
-              </span>
+              {receiverReferralCount !== undefined ? (
+                <span className="ml-auto text-xs font-medium text-indigoGray-50">
+                  {receiverReferralCount} referrals
+                </span>
+              ) : null}
             </div>
 
             {/* TODO: Only show this part if the current user has received a referral from the person on the receiving end */}
-            <div className="mt-2 rounded-tl-[2px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px] border-[2px] border-indigoGray-30 bg-indigoGray-10 p-4 shadow-lg">
-              <p className="text-sm font-medium text-indigoGray-80">
-                wojtek is one of the smartest and kindest friends i&apos;ve had
-                the honor to meet. unreserved support for whatever he brings
-                into existence with his big brain. LFG 🌊
-              </p>
-            </div>
+            {receivedReferral && (
+              <div className="mt-2 rounded-tl-[2px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px] border-[2px] border-indigoGray-30 bg-indigoGray-10 p-4 shadow-lg">
+                <p className="text-sm font-medium text-indigoGray-80">
+                  {receivedReferral.content}
+                </p>
+              </div>
+            )}
 
             <textarea
               placeholder="Write your referral here..."
