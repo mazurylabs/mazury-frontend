@@ -2,7 +2,7 @@
 
 exports[`Layout all parts are being rendered correctly 1`] = `
 <div
-  class="flex min-h-screen w-full"
+  class="min-h-screen w-full flex-col"
   data-testid="layout-container"
 >
   <aside
@@ -173,13 +173,13 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     </menu>
   </aside>
   <main
-    class="mx-auto flex min-h-screen w-full flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12"
+    class="mx-auto flex min-h-[90vh] w-full flex-col gap-8 px-0 pt-0 pb-2 lg:ml-[75px] lg:w-11/12"
   >
     <span>
       Header content
     </span>
     <div
-      class="flex flex-col gap-8 md:flex-row"
+      class="flex grow flex-col gap-8 md:flex-row"
     >
       <div
         class="hidden w-full flex-col gap-4 md:flex md:w-3/12"
@@ -189,7 +189,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         </span>
       </div>
       <div
-        class="flex w-full flex-col gap-8 px-4 pb-16 md:w-9/12 md:px-0 md:pb-8"
+        class="flex w-full grow flex-col gap-8 px-4 md:w-9/12 md:px-0"
       >
         <span>
           Inner right content
@@ -198,7 +198,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     </div>
   </main>
   <div
-    class="fixed bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden"
+    class="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden"
   >
     <a
       href="/"
