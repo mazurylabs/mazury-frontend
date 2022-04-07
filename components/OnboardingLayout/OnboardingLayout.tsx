@@ -1,6 +1,6 @@
 import { Button } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useCurrentBreakpoint, useIsOnboarded, useProfile } from 'hooks';
+import { useProfile } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, useContext, useEffect } from 'react';
@@ -11,11 +11,11 @@ const onboardingRoutes = [
   '/',
   'role',
   'refer',
-  'write',
+  // 'write', ** we have removed this page from the onboarding flow because it is now accessible via the individual 'refer' buttons
   'whitelist',
   'socials',
   'finish',
-  'redirect',
+  // 'redirect', we dont need a hard redirect anymore. we'll just do router.push('people/[address]')
 ];
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
@@ -25,10 +25,11 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   bottomButtonText = 'CONTINUE',
   bottomButtonOnClick,
   bottomButtonDisabled = false,
+  overrideOnClick = false,
 }) => {
   const router = useRouter();
   const [{ data: connectData, loading: connectLoading }] = useConnect();
-  const [{ data: accountData, loading: accountLoading }] = useAccount();
+  const [{ data: accountData }] = useAccount();
   const { profile: profileData } = useProfile(accountData?.address as string);
   const { setFormData, fetched, setFetched } = useContext(OnboardingContext);
 
@@ -139,7 +140,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       <div className="mx-auto mb-8 mt-8 w-full">
         <Button
           size="large"
-          onClick={goForward}
+          onClick={overrideOnClick ? bottomButtonOnClick : goForward}
           className="w-full justify-center uppercase"
           disabled={bottomButtonDisabled}
         >

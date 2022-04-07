@@ -22,8 +22,6 @@ const Person: FC<PersonProps> = ({
   role,
   onReferClick,
 }) => {
-  const router = useRouter();
-
   return (
     <div className="flex items-center">
       <Avatar src={avatarSrc} width="56px" height="56px" />
