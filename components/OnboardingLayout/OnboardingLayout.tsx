@@ -24,6 +24,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   secondHeading,
   bottomButtonText = 'CONTINUE',
   bottomButtonOnClick,
+  bottomButtonDisabled = false,
 }) => {
   const router = useRouter();
   const [{ data: connectData, loading: connectLoading }] = useConnect();
@@ -140,6 +141,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
           size="large"
           onClick={goForward}
           className="w-full justify-center uppercase"
+          disabled={bottomButtonDisabled}
         >
           {bottomButtonText}
         </Button>
