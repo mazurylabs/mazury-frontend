@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
+import { PersonBasicDetails } from 'types';
 
 interface SidebarContextType {
   isOpen: boolean;
@@ -35,6 +36,10 @@ interface OnboardingContextType {
   setFetched: Dispatch<SetStateAction<boolean>>;
   avatarFile: File | null;
   setAvatarFile: Dispatch<SetStateAction<File | null>>;
+  referralReceiver?: PersonBasicDetails;
+  setReferralReceiver?: Dispatch<
+    SetStateAction<PersonBasicDetails | undefined>
+  >;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -44,4 +49,6 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setFetched: () => {},
   avatarFile: null,
   setAvatarFile: () => {},
+  referralReceiver: undefined,
+  setReferralReceiver: () => {},
 });

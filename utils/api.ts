@@ -1,5 +1,5 @@
 import { OnboardingFormDataType } from 'contexts';
-import { Activity, APIResponse, ListResponse } from 'types';
+import { Activity, APIResponse, ListResponse, Referral } from 'types';
 import { api } from '.';
 
 export const getProfile = async (address: string) => {
@@ -74,6 +74,43 @@ export const getActvity: (
 ) => Promise<APIResponse<ListResponse<Activity>>> = async (address) => {
   try {
     const res = await api.get(`/activity?user=${address}`);
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export const createReferral: (
+  receiverAddress: string,
+  content: string,
+  skills: string[],
+  authorSignature: string
+) => Promise<APIResponse<Referral>> = async (
+  receiverAddress,
+  content,
+  skills,
+  authorSignature
+) => {
+  try {
+    const res = await api.post(
+      '/referrals/',
+      {
+        receiver: receiverAddress,
+        content,
+        skills,
+      },
+      {
+        headers: {
+          'ETH-AUTH': authorSignature,
+        },
+      }
+    );
     return {
       data: res.data,
       error: null,

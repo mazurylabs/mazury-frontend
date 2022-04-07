@@ -184,3 +184,27 @@ export const SlidersIcon: FC<IconProps> = ({
     </svg>
   );
 };
+
+export const PenIcon: FC<IconProps> = ({
+  width = '16px',
+  height = '16px',
+  color,
+  label = 'Pen icon',
+}) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={label}
+    >
+      <path
+        d="M14 1.3335C4 1.3335 2.66667 10.6668 2 14.6668H3.332C3.776 12.4448 4.88733 11.2228 6.66667 11.0002C9.33333 10.6668 11.3333 8.3335 12 6.3335L11 5.66683L11.6667 5.00016C12.3333 4.3335 13.0027 3.3335 14 1.3335Z"
+        fill={color}
+      />
+    </svg>
+  );
+};

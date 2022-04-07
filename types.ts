@@ -39,7 +39,7 @@ export type Skill =
   | 'memes'
   | 'community';
 
-interface PersonBasicDetails {
+export interface PersonBasicDetails {
   eth_address: string;
   ens_name: string;
   username: string;
