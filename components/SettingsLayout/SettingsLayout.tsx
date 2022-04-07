@@ -33,10 +33,10 @@ const SettingsCard: FC<SettingsCardProps> = ({ title, links }) => {
               <span>{link.split('-').join(' ')}</span>
 
               <Image
-                aria-hidden="true"
                 src="/icons/arrow-right.svg"
                 width="7.78px"
                 height="12.73px"
+                alt="back"
               />
             </a>
           </Link>
@@ -69,10 +69,10 @@ const SettingsLink = ({
           }`}
         >
           <Image
-            aria-hidden="true"
             src={`/icons/${icon}.svg`}
             width="16px"
             height="16px"
+            alt={`${title}`}
           />
           <span className="ml-3.5">{title.toUpperCase()}</span>
         </a>
@@ -94,10 +94,10 @@ const SettingsLink = ({
               >
                 <a className="flex pl-6">
                   <Image
-                    aria-hidden="true"
                     src={'/icons/list-disc.svg'}
                     width="4px"
                     height="4px"
+                    alt="list disc"
                   />
 
                   <span className="ml-5">{link}</span>
