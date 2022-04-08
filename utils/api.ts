@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { OnboardingFormDataType } from 'contexts';
 import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
+import type { ScopedMutator } from 'swr/dist/types';
 import { api } from '.';
 
 export const getProfile: (
@@ -95,12 +96,16 @@ export const createReferral: (
   receiverAddress: string,
   content: string,
   skills: string[],
-  authorSignature: string
+  authorSignature: string,
+  mutate?: ScopedMutator,
+  authorAddress?: string
 ) => Promise<APIResponse<Referral>> = async (
   receiverAddress,
   content,
   skills,
-  authorSignature
+  authorSignature,
+  mutate,
+  authorAddress
 ) => {
   try {
     const res = await api.post(
@@ -116,6 +121,11 @@ export const createReferral: (
         },
       }
     );
+    // Revalidate queries
+    mutate?.(`/referrals?receiver=${receiverAddress}`);
+    mutate?.(`/activity?user=${receiverAddress}`);
+    mutate?.(`/referrals?author=${authorAddress}`);
+    mutate?.(`/activity?user=${authorAddress}`);
     return {
       data: res.data,
       error: null,

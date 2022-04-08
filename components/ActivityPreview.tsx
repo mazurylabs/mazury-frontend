@@ -1,77 +1,70 @@
+import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
 import React from 'react';
-import { Avatar } from '.';
+import type { Activity } from 'types';
+import { Avatar } from './Avatar';
 
-type Activity = 'event' | 'referral' | 'vote' | 'badge';
-
-type MappedActivities<T> = { [Key in Activity]: T };
-
-interface Props {
-  thumbnailSrc: string;
-  activityType: Activity;
-  time: Date | string;
-  label: string;
-  avatarSize?: 'sm' | 'm' | 'lg';
+interface ActivityPreviewProps {
+  activity: Activity;
 }
 
-const baseClass = 'uppercase text-xs font-bold';
-
-const activityDetails: MappedActivities<{
-  iconSrc: string;
-  className: string;
-}> = {
-  event: {
-    iconSrc: '/icons/fire.svg',
-    className: `${baseClass} text-indigo-400`,
-  },
-  referral: {
-    iconSrc: '/icons/message-circle coloured.svg',
-    className: `${baseClass} text-teal-500`,
-  },
-  vote: {
-    iconSrc: '/icons/thumbs-up.svg',
-    className: `${baseClass} text-pink-500`,
-  },
-  badge: {
-    iconSrc: '/icons/badge.svg',
-    className: `${baseClass} text-pink-500`,
-  },
-};
-
-const avatarSizes = { sm: 32, m: 40, lg: 64 };
-
-export const ActivityPreview: React.FC<Props> = ({
-  thumbnailSrc,
-  activityType,
-  time,
-  label,
-  avatarSize = 'lg',
+export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
+  activity,
 }) => {
-  const { iconSrc, className } = activityDetails[activityType];
+  const {
+    type: activityType,
+    image,
+    description,
+    created_at,
+    user,
+    currentUser,
+  } = activity;
 
-  return (
-    <div className="flex gap-4">
-      <Avatar
-        src={thumbnailSrc}
-        height={avatarSizes[avatarSize]}
-        width={avatarSizes[avatarSize]}
-      />
-      <div className="flex flex-col">
-        <div className="flex gap-4">
-          <div className="flex gap-2">
-            <Image
-              src={iconSrc}
-              alt={`${activityType} icon`}
-              width="16px"
-              height="16px"
-            />
-            <span className={className}>{activityType}</span>
+  if (activityType === 'new-badge') {
+    return (
+      <div className="flex w-full items-center">
+        <Avatar
+          src={image}
+          width="64px"
+          height="64px"
+          className="border border-indigoGray-30"
+        />
+
+        <div className="ml-6 flex flex-col">
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <Image
+                src="/icons/thumbs-up.svg"
+                width="16px"
+                height="16px"
+                alt="Event icon"
+              />
+              <span className="ml-1 text-xs font-bold uppercase text-pink-500">
+                Vote
+              </span>
+            </div>
+
+            <span className="ml-4 text-xs font-medium text-indigoGray-50">
+              {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+            </span>
           </div>
 
-          <span className="text-xs">{time}</span>
+          <p>{description}</p>
         </div>
-        <p>{label}</p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (activityType === 'new-referral-received') {
+    return <div>New referral received</div>;
+  }
+  if (activityType === 'new-referral-given') {
+    return <div>referral given</div>;
+  }
+
+  if (activityType === 'new-post') {
+    return <div>post</div>;
+  }
+
+  return null;
 };

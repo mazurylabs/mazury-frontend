@@ -93,13 +93,12 @@ const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address;
-  // TODO: Integrate this into the markup once the design and the API have agreed on the types.
-  // const { activity, error: activityError } = useActivity(address);
   const {
     referrals,
     error: referralError,
     count: referralsCount,
   } = useReferrals(eth_address);
+  const { activity, error: activityError } = useActivity(address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
   const {
@@ -619,24 +618,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                 ref={altActivityRef}
                 className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
               >
-                <ActivityPreview
-                  activityType="event"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1"
-                  time="3 days ago"
-                />
-                <ActivityPreview
-                  activityType="referral"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Mikela wrote a referral for luc"
-                  time="3 days ago"
-                />
-                <ActivityPreview
-                  activityType="vote"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Voted Yes - Create $CODE on P-5: Governance Token Proposal"
-                  time="3 days ago"
-                />
+                {activity?.map((item) => {
+                  return <ActivityPreview activity={item} key={item.id} />;
+                })}
               </div>
             </div>
 
