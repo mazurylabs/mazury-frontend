@@ -90,6 +90,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [referralReceiver, setReferralReceiver] =
     useState<PersonBasicDetails>();
   const [twitterConnected, setTwitterConnected] = useState(false);
+  const [githubConnected, setGithubConnected] = useState(false);
 
   useEffect(() => {
     console.log(`                                                   
@@ -121,6 +122,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             setReferralReceiver,
             twitterConnected,
             setTwitterConnected,
+            githubConnected,
+            setGithubConnected,
           }}
         >
           <NextHead>

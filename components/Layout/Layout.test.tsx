@@ -2,9 +2,20 @@ import { render, screen } from '@testing-library/react';
 import { Sidebar } from 'components';
 import { Layout } from './Layout';
 import * as nextRouter from 'next/router';
+import * as wagmi from 'wagmi';
 
 describe('Layout', () => {
   test('all parts are being rendered correctly', () => {
+    const spyUseAccount = jest.spyOn(wagmi, 'useAccount');
+    spyUseAccount.mockReturnValue([
+      {
+        // @ts-ignore we are not returning all the fields returned by the actual data field. We don't need to
+        data: {
+          address: '0x123',
+        },
+        loading: false,
+      },
+    ]);
     const mockRouter = jest.spyOn(nextRouter, 'useRouter');
     // @ts-ignore we are not mocking the entire router, just pathname
     mockRouter.mockReturnValue({

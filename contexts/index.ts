@@ -27,6 +27,8 @@ export interface OnboardingFormDataType {
   email?: string;
   website?: string;
   avatar?: string;
+  twitter?: string;
+  github?: string;
 }
 
 interface OnboardingContextType {
@@ -42,6 +44,8 @@ interface OnboardingContextType {
   >;
   twitterConnected: boolean;
   setTwitterConnected: Dispatch<SetStateAction<boolean>>;
+  githubConnected: boolean;
+  setGithubConnected: Dispatch<SetStateAction<boolean>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -55,6 +59,8 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setReferralReceiver: () => {},
   twitterConnected: false,
   setTwitterConnected: () => {},
+  githubConnected: false,
+  setGithubConnected: () => {},
 });
 
 export * from './twitter';

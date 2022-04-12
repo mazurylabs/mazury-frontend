@@ -65,7 +65,6 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
     setCurrentStep,
   } = useContext(TwitterModalContext);
   const [_, signMessage] = useSignMessage();
-  const [showPopup, setShowPopup] = useState(false);
 
   const submitForVerification = useCallback(async () => {
     if (!signature) {
@@ -228,7 +227,7 @@ export const TwitterConnectionModal: FC<TwitterModalProps> = ({
         {currentStep === 0 && <PasteTweetStep />}
         {currentStep === 1 && <WalletSigningStep />}
         {currentStep === 2 && <FailedStep />}
-        {currentStep === 3 && <SuccessStep />}
+        {currentStep === 3 && <SuccessStep onButtonClick={onFinish} />}
       </Modal>
     </TwitterModalContext.Provider>
   );

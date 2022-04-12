@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import { useContext, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
+import { getTwitterConnectionPopupLink } from 'utils';
 import { getMessageToBeSigned, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
 import { useAccount, useSignMessage } from 'wagmi';
@@ -15,6 +16,8 @@ const SocialsPage: NextPage = () => {
     avatarFile,
     twitterConnected,
     setTwitterConnected,
+    githubConnected,
+    setGithubConnected,
   } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
@@ -23,7 +26,10 @@ const SocialsPage: NextPage = () => {
   const ethAddress = accountData?.address;
 
   const onTwitterClick = async () => {
-    const twitterPopupLink = `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0a${ethAddress}`;
+    if (!ethAddress) {
+      return alert('Please connect your wallet first');
+    }
+    const twitterPopupLink = getTwitterConnectionPopupLink(ethAddress);
     if (!twitterConnected) {
       window.open(twitterPopupLink, '_blank');
       setTwitterModalOpen(true);
@@ -31,6 +37,14 @@ const SocialsPage: NextPage = () => {
       // TODO: Implement disconnection
       alert('Your twitter is already connected!');
     }
+  };
+
+  const onGithubClick = async () => {
+    if (githubConnected) {
+      return alert('Your Github is already connected!');
+    }
+    const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
+    window.open(githubPopupLink, '_blank');
   };
 
   const onSubmit = async () => {
@@ -122,39 +136,32 @@ const SocialsPage: NextPage = () => {
       </form>
 
       <SocialButton
-        icon={
-          <FaTwitter
-            width="20px"
-            height="20px"
-            className="border-[1.33px border-indigoGray-5"
-          />
+        icon={<FaTwitter width="20px" height="20px" />}
+        label={
+          twitterConnected
+            ? `Connected as ${formData.twitter}` || 'Connected'
+            : 'Twitter'
         }
-        label={twitterConnected ? 'Connected' : 'Twitter'}
         backgroundColor="#4A99E9"
         className="mt-12"
         onClick={onTwitterClick}
         variant={twitterConnected ? 'secondary' : 'primary'}
       />
+
       <SocialButton
-        icon={
-          <FaGithub
-            width="20px"
-            height="20px"
-            className="border-[1.33px border-indigoGray-5"
-          />
+        icon={<FaGithub width="20px" height="20px" />}
+        label={
+          githubConnected
+            ? `Connected as ${formData.github}` || 'Connected'
+            : 'Github'
         }
-        label="Github"
         backgroundColor="#262626"
         className="mt-4"
+        onClick={onGithubClick}
+        variant={githubConnected ? 'secondary' : 'primary'}
       />
       <SocialButton
-        icon={
-          <FaDiscord
-            width="20px"
-            height="20px"
-            className="border-[1.33px border-indigoGray-5"
-          />
-        }
+        icon={<FaDiscord width="20px" height="20px" />}
         label="Discord - Coming soon"
         backgroundColor="#5A65EA"
         className="mt-4"
