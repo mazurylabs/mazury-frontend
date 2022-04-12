@@ -122,3 +122,67 @@ export const createReferral: (
     };
   }
 };
+
+export const verifyTweet: (
+  tweetURL: string,
+  signature: string
+) => Promise<APIResponse> = async (tweetURL, signature) => {
+  try {
+    if (!tweetURL || !signature) {
+      return {
+        data: null,
+        error: new Error('Missing tweetURL or signature'),
+      };
+    }
+    const res = await api.post(
+      `/auth/twitter?tweet_url=${tweetURL}`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err,
+    };
+  }
+};
+
+export const connectGithub: (
+  githubCode: string,
+  signature: string
+) => Promise<APIResponse> = async (githubCode, signature) => {
+  try {
+    if (!githubCode || !signature) {
+      return {
+        data: null,
+        error: new Error('Missing githubCode or signature'),
+      };
+    }
+    const res = await api.post(
+      `/auth/github?github_code=${githubCode}`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err,
+    };
+  }
+};

@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
+import { useAccount } from 'wagmi';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
@@ -9,6 +10,8 @@ interface MobileSidebarProps {
 }
 
 export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
+  const [{ data: accountData }] = useAccount();
+
   return (
     <div className="fixed bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden">
       {children || (
@@ -36,7 +39,7 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
           </Link>
 
           <Link
-            href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+            href={accountData ? `/people/${accountData?.address}` : '/'}
             passHref
           >
             <a>

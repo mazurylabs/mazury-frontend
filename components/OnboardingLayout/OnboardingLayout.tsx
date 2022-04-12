@@ -31,7 +31,13 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   const [{ data: connectData, loading: connectLoading }] = useConnect();
   const [{ data: accountData }] = useAccount();
   const { profile: profileData } = useProfile(accountData?.address as string);
-  const { setFormData, fetched, setFetched } = useContext(OnboardingContext);
+  const {
+    setFormData,
+    fetched,
+    setFetched,
+    setTwitterConnected,
+    setGithubConnected,
+  } = useContext(OnboardingContext);
 
   const goForward = async () => {
     const currentRoute = [...router.pathname.split('/'), '/'][2];
@@ -54,6 +60,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   };
 
   useEffect(() => {
+    // console.log({ twitter: profileData?.twitter });
     if (profileData && !fetched) {
       const {
         bio,
@@ -71,6 +78,8 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         ens_name,
         eth_address,
         avatar,
+        twitter,
+        github,
       } = profileData;
       setFormData({
         bio,
@@ -88,10 +97,25 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         ens_name,
         eth_address,
         avatar,
+        twitter,
+        github,
       });
+      if (profileData.twitter) {
+        setTwitterConnected(true);
+      }
+      if (profileData.github) {
+        setGithubConnected(true);
+      }
       setFetched(true);
     }
-  }, [profileData, setFormData, fetched, setFetched]);
+  }, [
+    profileData,
+    setFormData,
+    fetched,
+    setFetched,
+    setTwitterConnected,
+    setGithubConnected,
+  ]);
 
   if (connectLoading) {
     return <div>Loading...</div>;

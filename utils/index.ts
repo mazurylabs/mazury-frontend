@@ -100,3 +100,7 @@ export const hasAlreadyReferredReceiver = (
     );
   });
 };
+
+export const getTwitterConnectionPopupLink = (ethAddress: string) => {
+  return `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0a${ethAddress}`;
+};
