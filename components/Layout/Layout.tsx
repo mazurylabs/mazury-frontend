@@ -2,16 +2,17 @@ import { motion } from 'framer-motion';
 import { FC, useState } from 'react';
 import { SidebarContext } from 'contexts';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
+import { Sidebar } from 'components';
 
 interface LayoutProps {
-  sidebarContent: React.ReactNode;
+  sidebarContent?: React.ReactNode;
   innerLeftContent: React.ReactNode;
   innerRightContent: React.ReactNode;
   headerContent?: React.ReactNode;
 }
 
 export const Layout: FC<LayoutProps> = ({
-  sidebarContent,
+  sidebarContent = Sidebar,
   innerLeftContent,
   innerRightContent,
   headerContent,
