@@ -2,7 +2,7 @@
 
 exports[`Layout all parts are being rendered correctly 1`] = `
 <div
-  class="min-h-screen w-full flex-col"
+  class="flex min-h-screen w-full"
   data-testid="layout-container"
 >
   <aside
