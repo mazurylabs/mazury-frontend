@@ -39,7 +39,7 @@ export const Layout: FC<LayoutProps> = ({
         </motion.aside>
       </SidebarContext.Provider>
 
-      <main className="mx-auto flex min-h-[90vh]  w-full flex-col gap-8 px-0 pt-0 pb-2 lg:ml-[75px] lg:w-11/12">
+      <main className="mx-auto flex min-h-[90vh]  w-full flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
         {headerContent}
 
         <div className="flex grow flex-col gap-8 md:flex-row">
