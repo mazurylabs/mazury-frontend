@@ -1,13 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 import { FC, ReactNode } from 'react';
 
 interface SocialButtonProps {
-  icon: ReactNode;
+  icon?: ReactNode;
   label: string;
   backgroundColor: string;
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
   variant?: 'primary' | 'secondary';
+  iconSrc?: string;
 }
 
 export const SocialButton: FC<SocialButtonProps> = ({
@@ -18,6 +20,7 @@ export const SocialButton: FC<SocialButtonProps> = ({
   disabled,
   onClick,
   variant = 'primary',
+  iconSrc,
 }) => {
   return (
     <button
@@ -32,7 +35,11 @@ export const SocialButton: FC<SocialButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      {icon}
+      {iconSrc ? (
+        <img src={iconSrc} alt={`${label} icon`} width="16px" height="16px" />
+      ) : (
+        icon
+      )}
       {label}
     </button>
   );

@@ -1,8 +1,10 @@
 import { OnboardingFormDataType } from 'contexts';
-import { Activity, APIResponse, ListResponse, Referral } from 'types';
+import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
 import { api } from '.';
 
-export const getProfile = async (address: string) => {
+export const getProfile: (
+  address: string
+) => Promise<APIResponse<Profile>> = async (address: string) => {
   try {
     const res = await api.get(`/profiles/${address}`);
     return {
@@ -52,6 +54,8 @@ export const updateProfile: (
     if (avatarFile) {
       formData.append('avatar', avatarFile, avatarFile.name);
     }
+    // @ts-expect-error passing in a boolean to formdata
+    formData.append('onboarded', true);
     const res = await api.patch(`/profiles/${address}/`, formData, {
       headers: {
         'ETH-AUTH': signature,
@@ -183,6 +187,23 @@ export const connectGithub: (
     return {
       data: null,
       error: err,
+    };
+  }
+};
+
+export const isOnboarded: (
+  address: string
+) => Promise<APIResponse<boolean>> = async (address) => {
+  try {
+    const { data: profile } = await getProfile(address);
+    return {
+      data: !!profile?.onboarded,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
     };
   }
 };
