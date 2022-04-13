@@ -5,10 +5,7 @@ export interface SettingsCardProps {
   links: string[];
 }
 
-export interface SettingsLinkProps extends SettingsCardProps {
-  routePath: string;
-  icons?: Record<string, IconStates>;
-}
+export interface SettingsLinkProps extends SettingsCardProps {}
 
 export interface SettingsLayoutProps {
   content?: React.ReactNode;

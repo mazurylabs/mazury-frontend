@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-import { Button, Layout, Sidebar } from 'components';
+import { Button, Layout, Sidebar, Pill } from 'components';
 import {
   SettingsCardProps,
   SettingsLayoutProps,
@@ -46,37 +46,33 @@ const SettingsCard: FC<SettingsCardProps> = ({ title, links }) => {
   );
 };
 
-const SettingsLink = ({
-  title,
-  links,
-  routePath,
-  icons = {
-    Account: { active: 'user-coloured', inactive: 'user-black' },
-    Services: { active: 'cloud-coloured', inactive: 'cloud-black' },
-  },
-}: SettingsLinkProps) => {
-  const isActive = links.find((link) => routePath.includes(link.toLowerCase()));
-  const icon = icons[title][`${isActive ? 'active' : 'inactive'}`];
+const SettingsLink = ({ title, links }: SettingsLinkProps) => {
+  const { query, asPath, push } = useRouter();
+  const routeArray = asPath.split('/');
+
+  const isActive = links.find((link) => routeArray[3] === link.toLowerCase());
+  const activeRoute = !query.route ? 'Account' : query.route;
+
+  const handlePill = () => {
+    push({ pathname: '/settings', query: { route: title } }, '/settings', {
+      scroll: false,
+    });
+    title === 'Services' && window.scrollTo({ top: 200, behavior: 'smooth' });
+  };
 
   return (
     <div className="mb-3">
-      <Link href={'/settings'}>
-        <a
-          className={`flex rounded-md py-2.5 pl-4 pr-8 ${
-            isActive
-              ? 'border border-indigo-200 bg-indigo-50 font-bold text-indigo-700'
-              : ''
-          }`}
-        >
-          <Image
-            src={`/icons/${icon}.svg`}
-            width="16px"
-            height="16px"
-            alt={`${title}`}
-          />
-          <span className="ml-3.5">{title.toUpperCase()}</span>
-        </a>
-      </Link>
+      <Pill
+        label={title}
+        color="indigo"
+        onClick={handlePill}
+        active={
+          routeArray.length === 2
+            ? activeRoute === title
+            : routeArray[2] === title.toLowerCase()
+        }
+        isNav={true}
+      />
 
       <div className={` ${isActive ? 'h-fit' : 'h-0'} overflow-hidden`}>
         <ul className="list-disc">
@@ -91,6 +87,7 @@ const SettingsLink = ({
             >
               <Link
                 href={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
+                as={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
               >
                 <a className="flex pl-6">
                   <Image
@@ -112,8 +109,6 @@ const SettingsLink = ({
 };
 
 export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
-  const router = useRouter();
-
   return (
     <Layout
       headerContent={
@@ -132,13 +127,11 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
             <SettingsLink
               title="Account"
               links={['Username', 'Email', 'Eth-address']}
-              routePath={router.asPath}
             />
 
             <SettingsLink
               title="Services"
               links={['Twitter', 'Github', 'Discord']}
-              routePath={router.asPath}
             />
           </div>
         </div>
