@@ -24,7 +24,7 @@ const EthAddressPage: NextPage = () => {
           </div>
 
           <div className="mt-6 flex grow flex-col">
-            <div className="flex grow flex-col justify-between">
+            <div className="flex grow flex-col justify-between md:mb-8 md:grow-0">
               <div className="grow">
                 {data.map((data, index) => (
                   <div

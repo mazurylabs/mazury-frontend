@@ -19,7 +19,7 @@ const UsernamePage: NextPage = () => {
                   id="username"
                   label="Username"
                   value={''}
-                  placeholder="Blob"
+                  placeholder="Insert username"
                   onChange={() => {}}
                 />
                 <div className="mt-2 flex">
@@ -37,7 +37,7 @@ const UsernamePage: NextPage = () => {
               <Input
                 id="full-name"
                 outerClassName="mt-8 mb-8"
-                placeholder="Mikela Blob"
+                placeholder="Insert full name"
                 label={
                   <>
                     Full name{' '}

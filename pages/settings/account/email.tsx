@@ -15,14 +15,18 @@ const EmailPage: NextPage = () => {
           {emailConfirmed && (
             <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
               <div>
-                <h3>Confirmation</h3>
+                <h3 className="font-bold">Confirmation</h3>
 
                 <p className="my-3">
                   You haven’t confirmed your current address. If you wish to do
                   so, we can resend the link.
                 </p>
 
-                <Button className=" uppercase" size="large" variant="secondary">
+                <Button
+                  className="bg-transparent text-lg uppercase"
+                  size="large"
+                  variant="secondary"
+                >
                   RESEND E-MAIL
                 </Button>
               </div>
@@ -31,8 +35,8 @@ const EmailPage: NextPage = () => {
 
           <div className="mt-8 flex grow flex-col">
             <form className="flex w-full grow flex-col justify-between">
-              <div className="grow">
-                <Input id="email" placeholder="blob@yahoo.com" label="Email" />
+              <div className="grow md:mb-8 md:grow-0">
+                <Input id="email" placeholder="Insert e-mail" label="Email" />
               </div>
 
               <Button className="w-full uppercase" size="large">
