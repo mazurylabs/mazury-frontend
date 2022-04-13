@@ -22,6 +22,7 @@ const Template: ComponentStory<typeof Pill> = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Pill',
+  label: 'Activity',
   color: 'emerald',
+  isNav: true,
 };
