@@ -13,15 +13,23 @@ import {
   Sidebar,
   ReferralPreview,
   BlueSocialButton,
+  PenIcon,
 } from 'components';
 import {
   ColorName,
   MappedRoles,
   Profile as IProfile,
   ProfileSection,
+  Referral,
   Role,
 } from 'types';
-import { getTruncatedAddress, goToLink, toCapitalizedWord } from 'utils';
+import {
+  colors,
+  getTruncatedAddress,
+  goToLink,
+  hasAlreadyReferredReceiver,
+  toCapitalizedWord,
+} from 'utils';
 import { getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
@@ -38,6 +46,8 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
+import { useAccount } from 'wagmi';
 
 interface Props {
   address: string;
@@ -76,6 +86,7 @@ const roleFieldToLabel: MappedRoles<string> = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
+  const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
@@ -94,6 +105,18 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [referralsExpanded, setReferralsExpanded] = useState(false);
   const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
     'received'
+  );
+
+  // To track whether the 'write referral' modal is open or not
+  const [referralModalOpen, setReferralModalOpen] = useState(false);
+
+  // If the author has already referred the receiver, this holds that referral. Else it's null.
+  const [existingReferral, setExistingReferral] = useState<Referral | null>(
+    null
+  );
+  // If the receiver has already referred the author, this holds that referral. Else it's null.
+  const [receivedReferral, setReceivedReferral] = useState<Referral | null>(
+    null
   );
 
   const referralsToShow =
@@ -147,11 +170,44 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   };
 
+  // Opens the 'write referral' modal
+  const handleWriteReferralClick = () => {
+    setReferralModalOpen(true);
+  };
+
+  const onReferralModalClose = () => {
+    setReferralModalOpen(false);
+  };
+
   useEffect(() => {
     if (currActiveSection) {
       setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
     }
   }, [currActiveSection]);
+
+  // If the user has already referred the receiver, we need to fetch the referral.
+  useEffect(() => {
+    if (referrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        referrals,
+        address, // receiver
+        accountData?.address as string // the user
+      );
+      if (foundExistingReferral) {
+        setExistingReferral(foundExistingReferral);
+      }
+    }
+    if (authoredReferrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        authoredReferrals,
+        accountData?.address as string, // receiver
+        address as string // the user
+      );
+      if (foundExistingReferral) {
+        setReceivedReferral(foundExistingReferral);
+      }
+    }
+  }, [referrals, authoredReferrals, accountData, address]);
 
   if (error) {
     return (
@@ -174,11 +230,27 @@ const Profile: React.FC<Props> = ({ address }) => {
     );
   }
 
+  const writeReferralButtonText = existingReferral
+    ? 'Edit referral'
+    : 'Write referral';
+
   return (
     <>
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
+      <WriteReferralModal
+        isOpen={referralModalOpen}
+        onClose={onReferralModalClose}
+        receiver={{
+          avatar: profile.avatar,
+          ens_name: profile.ens_name,
+          eth_address: profile.eth_address,
+          username: profile.username,
+        }}
+        existingReferral={existingReferral}
+        receivedReferral={receivedReferral}
+      />
       <Layout
         sidebarContent={<Sidebar />}
         headerContent={
@@ -193,6 +265,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                 height={16}
               />
               <p className="font-demi">{profile.username}</p>
+
+              {/* Write referral button, large screens */}
+              <div
+                className="ml-auto flex items-center"
+                role="button"
+                onClick={handleWriteReferralClick}
+              >
+                <PenIcon color={colors.indigoGray[90]} />
+                <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
+                  {writeReferralButtonText}
+                </span>
+              </div>
             </div>
 
             <div
@@ -204,7 +288,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             >
               <div className="flex flex-col gap-4 lg:gap-8">
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-4 md:hidden">
+                  <div className="flex items-center gap-4 md:hidden">
                     <Image
                       onClick={() => router.back()}
                       className="hover:cursor-pointer"
@@ -214,6 +298,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                       height={16}
                     />
                     <p className="font-demi">{profile.username}</p>
+
+                    {/* Write referral button, small screens */}
+                    <div
+                      className="ml-auto flex items-center"
+                      role="button"
+                      onClick={handleWriteReferralClick}
+                    >
+                      <PenIcon color={colors.indigoGray[90]} />
+                      <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
+                        {writeReferralButtonText}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-6">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -519,6 +615,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         referredBy={{
                           username: referral.author.username,
                           avatarSrc: referral.author.avatar,
+                          eth_address: referral.author.eth_address,
                         }}
                         text={referral.content}
                         skills={referral.skills || []}
@@ -594,20 +691,31 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div>
-              <div className="flex flex-col gap-4 md:flex-row md:items-center">
-                <h3
-                  id="referrals"
-                  ref={referralsRef}
-                  className="font-serif text-3xl font-bold text-indigoGray-90"
-                >
-                  Referrals
-                </h3>
-                <div className="flex gap-[24px]">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                <div className="flex">
+                  <h3
+                    id="referrals"
+                    ref={referralsRef}
+                    className="font-serif text-3xl font-bold text-indigoGray-90"
+                  >
+                    Referrals
+                  </h3>
+                  <Button
+                    onClick={handleWriteReferralClick}
+                    className="ml-auto w-fit uppercase md:hidden"
+                    size="small"
+                  >
+                    <PenIcon color={colors.indigoGray[5]} />
+                    {writeReferralButtonText}
+                  </Button>
+                </div>
+
+                <div className="flex gap-[24px] lg:ml-12 lg:w-7/12">
                   <Pill
                     label="Received"
                     active={referralsToggle === 'received'}
                     color="emerald"
-                    className="h-fit w-fit md:ml-8"
+                    className="h-fit w-fit"
                     onClick={() => {
                       if (referralsToggle === 'received') {
                         return;
@@ -627,6 +735,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                       setReferralsToggle('given');
                     }}
                   />
+
+                  <Button
+                    onClick={handleWriteReferralClick}
+                    className="ml-auto hidden w-fit uppercase md:flex"
+                    size="small"
+                  >
+                    <PenIcon color={colors.indigoGray[5]} />
+                    {writeReferralButtonText}
+                  </Button>
                 </div>
               </div>
 
@@ -641,6 +758,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           referredBy={{
                             username: referral.author.username,
                             avatarSrc: referral.author.avatar,
+                            eth_address: referral.author.eth_address,
                           }}
                           text={referral.content}
                           skills={referral.skills || []}

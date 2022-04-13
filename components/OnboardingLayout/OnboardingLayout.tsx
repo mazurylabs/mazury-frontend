@@ -1,6 +1,6 @@
 import { Button } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useCurrentBreakpoint, useIsOnboarded, useProfile } from 'hooks';
+import { useProfile } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, useContext, useEffect } from 'react';
@@ -11,11 +11,11 @@ const onboardingRoutes = [
   '/',
   'role',
   'refer',
-  'write',
+  // 'write', ** we have removed this page from the onboarding flow because it is now accessible via the individual 'refer' buttons
   'whitelist',
   'socials',
   'finish',
-  'redirect',
+  // 'redirect', we dont need a hard redirect anymore. we'll just do router.push('people/[address]')
 ];
 
 export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
@@ -24,12 +24,20 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   secondHeading,
   bottomButtonText = 'CONTINUE',
   bottomButtonOnClick,
+  bottomButtonDisabled = false,
+  overrideOnClick = false,
 }) => {
   const router = useRouter();
   const [{ data: connectData, loading: connectLoading }] = useConnect();
-  const [{ data: accountData, loading: accountLoading }] = useAccount();
+  const [{ data: accountData }] = useAccount();
   const { profile: profileData } = useProfile(accountData?.address as string);
-  const { setFormData, fetched, setFetched } = useContext(OnboardingContext);
+  const {
+    setFormData,
+    fetched,
+    setFetched,
+    setTwitterConnected,
+    setGithubConnected,
+  } = useContext(OnboardingContext);
 
   const goForward = async () => {
     const currentRoute = [...router.pathname.split('/'), '/'][2];
@@ -52,6 +60,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   };
 
   useEffect(() => {
+    // console.log({ twitter: profileData?.twitter });
     if (profileData && !fetched) {
       const {
         bio,
@@ -69,6 +78,8 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         ens_name,
         eth_address,
         avatar,
+        twitter,
+        github,
       } = profileData;
       setFormData({
         bio,
@@ -86,10 +97,25 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         ens_name,
         eth_address,
         avatar,
+        twitter,
+        github,
       });
+      if (profileData.twitter) {
+        setTwitterConnected(true);
+      }
+      if (profileData.github) {
+        setGithubConnected(true);
+      }
       setFetched(true);
     }
-  }, [profileData, setFormData, fetched, setFetched]);
+  }, [
+    profileData,
+    setFormData,
+    fetched,
+    setFetched,
+    setTwitterConnected,
+    setGithubConnected,
+  ]);
 
   if (connectLoading) {
     return <div>Loading...</div>;
@@ -138,8 +164,9 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
       <div className="mx-auto mb-8 mt-8 w-full">
         <Button
           size="large"
-          onClick={goForward}
+          onClick={overrideOnClick ? bottomButtonOnClick : goForward}
           className="w-full justify-center uppercase"
+          disabled={bottomButtonDisabled}
         >
           {bottomButtonText}
         </Button>

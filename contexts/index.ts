@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
+import { PersonBasicDetails } from 'types';
 
 interface SidebarContextType {
   isOpen: boolean;
@@ -26,6 +27,8 @@ export interface OnboardingFormDataType {
   email?: string;
   website?: string;
   avatar?: string;
+  twitter?: string;
+  github?: string;
 }
 
 interface OnboardingContextType {
@@ -35,6 +38,14 @@ interface OnboardingContextType {
   setFetched: Dispatch<SetStateAction<boolean>>;
   avatarFile: File | null;
   setAvatarFile: Dispatch<SetStateAction<File | null>>;
+  referralReceiver?: PersonBasicDetails;
+  setReferralReceiver?: Dispatch<
+    SetStateAction<PersonBasicDetails | undefined>
+  >;
+  twitterConnected: boolean;
+  setTwitterConnected: Dispatch<SetStateAction<boolean>>;
+  githubConnected: boolean;
+  setGithubConnected: Dispatch<SetStateAction<boolean>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -44,4 +55,12 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setFetched: () => {},
   avatarFile: null,
   setAvatarFile: () => {},
+  referralReceiver: undefined,
+  setReferralReceiver: () => {},
+  twitterConnected: false,
+  setTwitterConnected: () => {},
+  githubConnected: false,
+  setGithubConnected: () => {},
 });
+
+export * from './twitter';

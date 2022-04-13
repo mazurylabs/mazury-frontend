@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, ReactNode, useContext, useState } from 'react';
-import { Avatar, HomeIcon, SearchIcon } from 'components';
+import { FC, ReactNode, useContext } from 'react';
+import { HomeIcon, SearchIcon } from 'components';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
 import { colors } from 'utils';
 import { SlidersIcon } from 'components/Icons';
+import { useAccount } from 'wagmi';
+import Image from 'next/image';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -16,19 +18,19 @@ export const Sidebar: FC = () => {
   const { isOpen } = useContext(SidebarContext);
   const router = useRouter();
   const { pathname } = router;
-
-  const goToSearch = () => {
-    router.push('/');
-  };
+  const [{ data: accountData }] = useAccount();
 
   return (
     <>
-      <Avatar
+      <Image
         src="/new-logo.svg"
         height="32px"
         width="32px"
         alt="Mazury logo"
-        className={`${isOpen ? 'ml-4' : 'mx-auto'}`}
+        className={`${
+          isOpen ? 'ml-4' : 'mx-auto'
+        } rounded-full hover:cursor-pointer`}
+        onClick={() => router.push('/')}
       />
 
       <Divider className="mx-3 mt-8" />
@@ -89,7 +91,7 @@ export const Sidebar: FC = () => {
           <Divider />
 
           <SidebarItem
-            href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+            href={accountData ? `/people/${accountData?.address}` : '/'}
             label="Profile"
             icon={<img src="/profile-active.svg" alt="Profile icon" />}
             isOpen={isOpen}

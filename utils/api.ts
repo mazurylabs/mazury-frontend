@@ -1,5 +1,5 @@
 import { OnboardingFormDataType } from 'contexts';
-import { Activity, APIResponse, ListResponse } from 'types';
+import { Activity, APIResponse, ListResponse, Referral } from 'types';
 import { api } from '.';
 
 export const getProfile = async (address: string) => {
@@ -82,6 +82,107 @@ export const getActvity: (
     return {
       data: null,
       error,
+    };
+  }
+};
+
+export const createReferral: (
+  receiverAddress: string,
+  content: string,
+  skills: string[],
+  authorSignature: string
+) => Promise<APIResponse<Referral>> = async (
+  receiverAddress,
+  content,
+  skills,
+  authorSignature
+) => {
+  try {
+    const res = await api.post(
+      '/referrals/',
+      {
+        receiver: receiverAddress,
+        content,
+        skills,
+      },
+      {
+        headers: {
+          'ETH-AUTH': authorSignature,
+        },
+      }
+    );
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export const verifyTweet: (
+  tweetURL: string,
+  signature: string
+) => Promise<APIResponse> = async (tweetURL, signature) => {
+  try {
+    if (!tweetURL || !signature) {
+      return {
+        data: null,
+        error: new Error('Missing tweetURL or signature'),
+      };
+    }
+    const res = await api.post(
+      `/auth/twitter?tweet_url=${tweetURL}`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err,
+    };
+  }
+};
+
+export const connectGithub: (
+  githubCode: string,
+  signature: string
+) => Promise<APIResponse> = async (githubCode, signature) => {
+  try {
+    if (!githubCode || !signature) {
+      return {
+        data: null,
+        error: new Error('Missing githubCode or signature'),
+      };
+    }
+    const res = await api.post(
+      `/auth/github?github_code=${githubCode}`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err,
     };
   }
 };

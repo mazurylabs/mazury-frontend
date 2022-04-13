@@ -9,12 +9,29 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     class="fixed top-0 z-20 hidden h-screen w-[75px] flex-col bg-white py-10 false shadow-inner lg:flex"
     role="menu"
   >
-    <img
-      alt="Mazury logo"
-      class="mx-auto"
-      src="/new-logo.svg"
-      style="border-radius: 100%; width: 32px; height: 32px;"
-    />
+    <span
+      style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
+    >
+      <span
+        style="box-sizing: border-box; display: block; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"
+      >
+        <img
+          alt=""
+          aria-hidden="true"
+          src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+          style="display: block; max-width: 100%; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+        />
+      </span>
+      <img
+        alt="Mazury logo"
+        class="mx-auto rounded-full hover:cursor-pointer"
+        data-nimg="intrinsic"
+        decoding="async"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+      />
+      <noscript />
+    </span>
     <hr
       class="border border-indigoGray-20 mx-3 mt-8"
     />
@@ -82,7 +99,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         />
         <a
           class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mt-8"
-          href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+          href="/people/0x123"
         >
           <img
             alt="Profile icon"
@@ -253,7 +270,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
       </span>
     </a>
     <a
-      href="/people/0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3"
+      href="/people/0x123"
     >
       <span
         style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"

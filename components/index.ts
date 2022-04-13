@@ -16,3 +16,6 @@ export * from './Icons';
 export { Sidebar } from './Sidebar';
 export { SettingsLayout } from './SettingsLayout';
 export * from './Checkbox';
+export * from './Modal';
+export * from './Spinner';
+export * from './SocialButton';

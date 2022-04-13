@@ -2,11 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Avatar, ITagItem, Tags } from '.';
 import { Skill } from 'types';
 import { colors, getMonthAndYear, toCapitalizedWord } from 'utils';
+import { useReferralCount } from 'hooks';
 
 interface Props {
   referredBy: {
     avatarSrc: string;
     username: string;
+    eth_address: string;
   };
   text: string;
   skills: Skill[];
@@ -22,6 +24,7 @@ export const ReferralPreview: React.FC<Props> = ({
   const [tags, setTags] = useState<ITagItem[]>([]);
   const slicedTags = useMemo(() => tags.slice(0, 3), [tags]);
   const remainingTagsCount = useMemo(() => tags.length - 3, [tags]);
+  const { referralCount } = useReferralCount(referredBy.eth_address);
 
   const appendedContent = useMemo(() => {
     if (remainingTagsCount > 0) {
@@ -65,7 +68,11 @@ export const ReferralPreview: React.FC<Props> = ({
           </h5>
         </div>
 
-        <span className="ml-auto text-sm text-indigoGray-50">13 referrals</span>
+        {referralCount !== undefined && (
+          <span className="ml-auto text-sm text-indigoGray-50">
+            {referralCount} referrals
+          </span>
+        )}
       </div>
 
       <p className="text-base text-indigoGray-80">{text}</p>

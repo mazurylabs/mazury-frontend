@@ -6,4 +6,6 @@ export interface OnboardingLayoutProps {
   children: ReactNode;
   bottomButtonText?: ReactNode;
   bottomButtonOnClick?: () => Promise<void>;
+  bottomButtonDisabled?: boolean;
+  overrideOnClick?: boolean;
 }
