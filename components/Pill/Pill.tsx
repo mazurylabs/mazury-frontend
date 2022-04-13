@@ -49,6 +49,8 @@ const labelToIconName = {
   Referrals: 'message-circle',
   Writing: 'edit',
   DAOs: 'zap',
+  Account: 'user',
+  Services: 'cloud',
 };
 
 export const Pill: React.FC<PillProps> = ({
