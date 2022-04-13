@@ -4,11 +4,15 @@ import { PersonBasicDetails } from 'types';
 interface SidebarContextType {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  signInOpen: boolean;
+  setSignInOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const SidebarContext = createContext<SidebarContextType>({
   isOpen: false,
   setIsOpen: () => {},
+  signInOpen: false,
+  setSignInOpen: () => {},
 });
 
 export interface OnboardingFormDataType {

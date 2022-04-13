@@ -1,29 +1,13 @@
-import { HR, SocialButton } from 'components';
+import { SocialButton } from 'components';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { colors } from 'utils';
-import {
-  chain,
-  defaultChains,
-  InjectedConnector,
-  useAccount,
-  useConnect,
-} from 'wagmi';
-
-// // Get environment variables
-// const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
-
-// // Pick chains
-// const chains = defaultChains;
-// const defaultChain = chain.mainnet;
-
-// const rpcUrl =
-//   chains.find((x) => x.id === chainId)?.rpcUrls?.[0] ?? defaultChain.rpcUrls[0];
-
-// const metamaskConnector = new InjectedConnector();
+import { isOnboarded } from 'utils/api';
+import { Connector, useAccount, useConnect } from 'wagmi';
 
 export const SignIn = () => {
-  const [{ data }] = useConnect();
-  const [_, disconnect] = useAccount();
+  const [{ data }, connect] = useConnect();
+  const router = useRouter();
 
   const metamaskConnector = data.connectors.find(
     (connector) => connector.id === 'injected'
@@ -32,18 +16,33 @@ export const SignIn = () => {
     (connector) => connector.id === 'walletConnect'
   );
 
-  useEffect(() => {
-    console.log({ connected: data.connected });
-  }, [data.connected]);
-
-  if (data.connected) {
-    return (
-      <div>
-        <p>Connected</p>
-        <button onClick={disconnect}>Disconnect</button>
-      </div>
+  const showErrorPopup = () =>
+    alert(
+      'There was an error while trying to connect your wallet. Please try again later.'
     );
-  }
+
+  const handleConnect = async (connector: Connector | undefined) => {
+    if (!connector) {
+      return showErrorPopup();
+    }
+    const res = await connect(connector);
+    if (!res || res.error) {
+      return showErrorPopup();
+    }
+
+    const address = res.data.account;
+    if (!address) {
+      return showErrorPopup();
+    }
+
+    // check if user is onboarded
+    const { data: onboarded } = await isOnboarded(address);
+    if (!onboarded) {
+      router.push('/onboarding');
+    } else {
+      router.push(`/profile/${address}`);
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -56,14 +55,20 @@ export const SignIn = () => {
         label="QR Code"
         iconSrc="/icons/qrcode-scan.svg"
         className="mt-3"
-        onClick={() => walletConnectConnector?.connect()}
+        disabled={!walletConnectConnector}
+        onClick={() => {
+          handleConnect(walletConnectConnector);
+        }}
       />
       <SocialButton
         backgroundColor={colors.amber[600]}
         label="Browser wallet"
         iconSrc="/icons/wallet.svg"
         className="mt-4"
-        onClick={() => metamaskConnector?.connect()}
+        disabled={!metamaskConnector}
+        onClick={() => {
+          handleConnect(metamaskConnector);
+        }}
       />
 
       <span className="mx-auto mt-2 text-xs text-indigoGray-50">
@@ -86,7 +91,7 @@ export const SignIn = () => {
         For a mobile app we recommend{' '}
         <a
           href="https://rainbow.me/"
-          className="font-semibold"
+          className="font-semibold text-indigo-700"
           target="_blank"
           rel="noreferrer"
         >
@@ -95,7 +100,7 @@ export const SignIn = () => {
         . If you prefer a browser extension, you can try{' '}
         <a
           href="https://metamask.io/"
-          className="font-semibold"
+          className="font-semibold text-indigo-700"
           target="_blank"
           rel="noreferrer"
         >

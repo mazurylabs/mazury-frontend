@@ -18,19 +18,19 @@ export const Layout: FC<LayoutProps> = ({
   headerContent,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [signInOpen, setSignInOpen] = useState(false);
 
   return (
-    <div
-      className="min-h-screen w-full flex-col"
-      data-testid="layout-container"
-    >
-      <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
+    <div className="flex min-h-screen w-full" data-testid="layout-container">
+      <SidebarContext.Provider
+        value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
+      >
         <motion.aside
           className={`fixed top-0 z-20 hidden h-screen w-[75px] flex-col bg-white py-10 ${
             isOpen && 'px-5'
           } shadow-inner lg:flex`}
           whileHover={{
-            width: '200px',
+            width: signInOpen ? '300px' : '200px',
           }}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
