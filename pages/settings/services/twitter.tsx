@@ -11,8 +11,8 @@ const TwitterPage: NextPage = () => {
           </div>
 
           <div className="mt-3 flex grow flex-col">
-            <div className="flex grow flex-col justify-between">
-              <div className="grow">
+            <div className="flex grow flex-col">
+              <div className="grow md:mb-8 md:grow-0">
                 <div>
                   <p className="font-inter text-sm font-medium leading-[18px] text-indigoGray-60">
                     You can connect your Twitter account and have it show up as

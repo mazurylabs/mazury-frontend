@@ -11,18 +11,18 @@ const DiscordPage: NextPage = () => {
           </div>
 
           <div className="mt-3 flex grow flex-col">
-            <div className="flex grow flex-col justify-between">
-              <div className="grow">
+            <div className="flex grow flex-col">
+              <div className="grow md:mb-8 md:grow-0">
                 <div>
                   <p className="font-inter text-sm font-medium leading-[18px] text-indigoGray-60">
-                    You can connect your Twitter account and have it show up as
+                    You can connect your Discord account and have it show up as
                     one of your contacts. This way someone can reach you faster.
                   </p>
                 </div>
               </div>
 
               <Button className="w-full uppercase" size="large">
-                CONNECT TWITTER
+                CONNECT DISCORD
               </Button>
             </div>
           </div>
