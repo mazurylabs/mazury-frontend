@@ -136,7 +136,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
           alt="Mazury logo"
           width="40px"
           height="40px"
-          onClick={() => router.push('/')}
+          onClick={() => router.back()}
         />
       </div>
 
