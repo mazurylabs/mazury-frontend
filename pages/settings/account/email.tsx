@@ -192,7 +192,7 @@ const EmailPage: NextPage = () => {
                   className="w-full uppercase"
                   size="large"
                   onClick={onSubmit}
-                  disabled={!Boolean(email)}
+                  disabled={profile?.email === email || isNewChange || !email}
                 >
                   Save Changes
                 </Button>
