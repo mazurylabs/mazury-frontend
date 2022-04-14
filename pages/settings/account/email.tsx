@@ -64,10 +64,12 @@ const EmailPage: NextPage = () => {
       formData
     );
 
-    mutate(`/profile/${accountData?.address}`);
+    console.log(data.email);
+
     setEmail(data.email); //optimistic update for the input fields
     setIsNewChange(true);
     setCurrentStep('idle');
+    mutate(`/profile/${accountData?.address}`);
 
     if (updateProfileError) {
       return alert('Error updating profile.');
@@ -192,7 +194,7 @@ const EmailPage: NextPage = () => {
                   className="w-full uppercase"
                   size="large"
                   onClick={onSubmit}
-                  disabled={profile?.email === email || isNewChange || !email}
+                  disabled={profile?.email === email || !email}
                 >
                   Save Changes
                 </Button>
