@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useProfile } from 'hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect } from 'react';
@@ -11,6 +12,8 @@ interface MobileSidebarProps {
 
 export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
   const [{ data: accountData }] = useAccount();
+  const { profile } = useProfile(accountData?.address);
+
   const isSignedIn = !!accountData;
 
   return (
@@ -42,11 +45,12 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
           {isSignedIn ? (
             <Link href={`/people/${accountData?.address}`} passHref>
               <a>
-                <Image
-                  src="/profile-active.svg"
+                <img
+                  src={profile?.avatar || '/profile-active.svg'}
                   alt="Profile icon"
                   width="24px"
                   height="24px"
+                  className="rounded-full"
                 />{' '}
               </a>
             </Link>
