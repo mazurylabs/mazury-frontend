@@ -1,19 +1,30 @@
 import { NextPage } from 'next';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useAccount } from 'wagmi';
+
 import { Button, SettingsLayout } from 'components';
+import { getProfile } from 'utils/api';
+
+type AddressArray = Record<'username' | 'address', string>[];
 
 const EthAddressPage: NextPage = () => {
-  //Dummy data
-  const data = [
-    {
-      username: 'wojtek.eth',
-      address: '0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3',
-    },
-    {
-      username: 'Blob.eth',
-      address: '0xF417ACe7b13c0ef4fcb5548390a450A4B75D3eB3',
-    },
-  ];
+  const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
+  const [addresses, setAddresses] = useState<AddressArray>([]);
+  console.log(accountData);
+  // Prefill form with exisiting email
+  useEffect(() => {
+    if (accountData?.address) {
+      getProfile(accountData?.address).then(({ data }) => {
+        let dat = {
+          username: data?.username as string,
+          address: data?.eth_address as string,
+        };
+
+        setAddresses([dat]);
+      });
+    }
+  }, [accountData?.address]);
 
   return (
     <SettingsLayout
@@ -26,7 +37,7 @@ const EthAddressPage: NextPage = () => {
           <div className="mt-6 flex grow flex-col">
             <div className="flex grow flex-col justify-between md:mb-8 md:grow-0">
               <div className="grow">
-                {data.map((data, index) => (
+                {addresses.map((data, index) => (
                   <div
                     key={data.username + index}
                     className="mb-8 flex items-center md:justify-between"
@@ -38,7 +49,7 @@ const EthAddressPage: NextPage = () => {
                       </p>
                     </div>
 
-                    <div className="shrink-0">
+                    {/* <div className="shrink-0">
                       <button type="button" aria-label="delete">
                         <Image
                           src="/icons/trash.svg"
@@ -47,13 +58,13 @@ const EthAddressPage: NextPage = () => {
                           height="16px"
                         />
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
 
-              <Button className="w-full uppercase" size="large">
-                CONNECT WALLET
+              <Button className="w-full uppercase" size="large" disabled={true}>
+                CONNECT WALLET (COMING SOON)
               </Button>
             </div>
           </div>
