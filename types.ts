@@ -129,6 +129,7 @@ export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {
   onboarded: boolean;
   email: string;
   website: string;
+  full_name?: string;
 }
 
 export interface ListResponse<T> {
