@@ -1,38 +1,46 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
-import { useSWRConfig } from 'swr';
+// import { useSWRConfig } from 'swr';
 import { useAccount, useSignMessage } from 'wagmi';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import { useProfile } from 'hooks';
-import { getMessageToBeSigned, updateProfile } from 'utils/api';
+// import { useProfile } from 'hooks';
+import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
-  const { mutate } = useSWRConfig();
-  const [email, setEmail] = useState('');
+  // const { mutate } = useSWRConfig();
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
-  const { profile } = useProfile(accountData?.address as string);
+  // const { profile } = useProfile(accountData?.address as string);
+  const [email, setEmail] = useState('');
+  const [disabled, setDisabled] = useState(true);
 
-  //Prefill form with exisiting email
+  // Prefill form with exisiting email
   useEffect(() => {
-    setEmail(profile?.email || '');
-  }, [profile]);
+    if (accountData?.address) {
+      getProfile(accountData?.address).then((res) => {
+        setEmail(res.data?.email as string);
+      });
+    }
+  }, [accountData?.address]);
 
   const emailConfirmed = true; //dummy data
 
-  const onEmailChange = (value: string) => setEmail(value);
-
-  const onSubmit = async () => {
-    setCurrentStep('active');
-    await handleRequestSignature();
+  const onEmailChange = (value: string) => {
+    setEmail(value);
+    disabled && setDisabled(false);
   };
 
-  const handleRequestSignature = async () => {
+  const onSubmit = async (email: string) => {
+    setCurrentStep('active');
+    await handleRequestSignature(email);
+  };
+
+  const handleRequestSignature = async (email: string) => {
     if (!accountData?.address) {
       return alert('Please connect your wallet first');
     }
@@ -64,12 +72,11 @@ const EmailPage: NextPage = () => {
       formData
     );
 
-    console.log(data.email);
-
-    setEmail(data.email); //optimistic update for the input fields
+    // mutate(`/profile/${accountData?.address}`);
     setIsNewChange(true);
     setCurrentStep('idle');
-    mutate(`/profile/${accountData?.address}`);
+    setEmail(data.email); //optimistic update for the input fields
+    setDisabled(true);
 
     if (updateProfileError) {
       return alert('Error updating profile.');
@@ -77,9 +84,7 @@ const EmailPage: NextPage = () => {
   };
 
   const onDelete = async () => {
-    setEmail('');
-
-    onSubmit();
+    await onSubmit('');
   };
 
   const signWalletStep = (
@@ -96,8 +101,10 @@ const EmailPage: NextPage = () => {
       </div>
 
       <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary">SKIP</Button>
-        <Button onClick={handleRequestSignature} variant="primary">
+        <Button variant="secondary" onClick={() => setCurrentStep('idle')}>
+          SKIP
+        </Button>
+        <Button onClick={() => handleRequestSignature(email)} variant="primary">
           RETRY
         </Button>
       </div>
@@ -115,7 +122,7 @@ const EmailPage: NextPage = () => {
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={handleRequestSignature} variant="primary">
+        <Button onClick={() => handleRequestSignature(email)} variant="primary">
           RETRY
         </Button>
       </div>
@@ -136,7 +143,7 @@ const EmailPage: NextPage = () => {
             <h2>Email</h2>
           </div>
 
-          {emailConfirmed && (
+          {!emailConfirmed && (
             <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
               <div>
                 <h3 className="font-bold">Confirmation</h3>
@@ -159,7 +166,7 @@ const EmailPage: NextPage = () => {
 
           <div className="mt-8 flex grow flex-col">
             <form className="flex w-full grow flex-col">
-              <div className="flex grow items-center md:mb-8 md:grow-0 md:justify-between">
+              <div className="flex items-center pr-6  md:mb-8 md:justify-between">
                 <div className="mr-10 max-w-[83%] shrink grow md:max-w-full">
                   <Input
                     id="email"
@@ -170,7 +177,7 @@ const EmailPage: NextPage = () => {
                   />
                 </div>
 
-                <div className="flex h-[70%] shrink-0 items-center self-end">
+                <div className="flex shrink-0 items-center self-end py-3">
                   <button type="button" aria-label="delete" onClick={onDelete}>
                     <Image
                       src="/icons/trash.svg"
@@ -182,7 +189,7 @@ const EmailPage: NextPage = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="flex grow flex-col justify-end md:grow-0">
                 {isNewChange && (
                   <div className="mb-3 flex justify-center">
                     <p className="text-sm font-bold text-green-600">
@@ -193,8 +200,8 @@ const EmailPage: NextPage = () => {
                 <Button
                   className="w-full uppercase"
                   size="large"
-                  onClick={onSubmit}
-                  disabled={profile?.email === email || !email}
+                  onClick={() => onSubmit(email)}
+                  disabled={!email || disabled}
                 >
                   Save Changes
                 </Button>
