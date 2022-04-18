@@ -183,6 +183,11 @@ const Profile: React.FC<Props> = ({ address }) => {
     setReferralModalOpen(false);
   };
 
+  const copyAddressToClipboard = async () => {
+    await navigator.clipboard.writeText(address);
+    alert('Copied to clipboard!');
+  };
+
   useEffect(() => {
     if (currActiveSection) {
       setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
@@ -346,34 +351,46 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ? profile.username.slice(0, 10) + '...'
                             : profile.username}
                         </motion.h1>
-                        <h3
+                        {/* TODO: The backend does not have a field for full name yet */}
+                        {/* <h3
                           className={`hidden text-indigoGray-40 md:inline-block ${
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
-                          {/* TODO: The backend does not have a field for full name yet */}
                           Michael Scott
-                        </h3>
+                        </h3> */}
                       </div>
 
-                      <h3
+                      {/* <h3
                         className={`text-indigoGray-40 md:hidden ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
                         Michael Scott
-                      </h3>
+                      </h3> */}
 
-                      <p
-                        className={`text-indigoGray-70 md:block ${
-                          shouldCollapseHeader ? 'hidden text-sm' : 'text-base'
-                        }`}
-                      >
-                        {profile.ens_name && `${profile.ens_name} `}
-                        <span className="text-indigoGray-40">
-                          ({getTruncatedAddress(profile.eth_address, 3)})
-                        </span>
-                      </p>
+                      <div className="flex items-center">
+                        <p
+                          className={`mr-2 text-indigoGray-70 md:block ${
+                            shouldCollapseHeader
+                              ? 'hidden text-sm'
+                              : 'text-base'
+                          }`}
+                        >
+                          {profile.ens_name && `${profile.ens_name} `}
+                          <span className="text-indigoGray-40">
+                            ({getTruncatedAddress(profile.eth_address, 3)})
+                          </span>
+                        </p>
+                        <Image
+                          src="/icons/clipboard.svg"
+                          height="16px"
+                          width="16px"
+                          alt="Clipboard icon"
+                          className="hover:cursor-pointer"
+                          onClick={copyAddressToClipboard}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
