@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useAccount, useConnect } from 'wagmi';
 import { Button } from 'components';
 import { useRouter } from 'next/router';
+import { useIsOnboarded } from 'hooks';
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
@@ -11,6 +12,7 @@ const Home: NextPage = () => {
   });
   const { connected } = data;
   const router = useRouter();
+  const { onboarded } = useIsOnboarded(accountData?.address || '');
 
   if (connected) {
     return (
@@ -29,13 +31,23 @@ const Home: NextPage = () => {
           Disconnect
         </Button>
 
-        <Button
-          variant="secondary"
-          className="mx-auto mt-6"
-          onClick={() => router.push('/onboarding')}
-        >
-          Start onboarding
-        </Button>
+        {onboarded ? (
+          <Button
+            variant="secondary"
+            className="mx-auto mt-6"
+            onClick={() => router.push(`/people/${accountData?.address}`)}
+          >
+            Go to your profile
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            className="mx-auto mt-6"
+            onClick={() => router.push('/onboarding')}
+          >
+            Start onboarding
+          </Button>
+        )}
       </div>
     );
   }
