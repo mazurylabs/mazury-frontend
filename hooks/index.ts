@@ -2,6 +2,7 @@ export { useBadges } from './useBadges';
 export { useBadgeTypes, useTotalBadgeCounts } from './useBadgeTypes';
 export { useProfile, useIsOnboarded } from './useProfile';
 export { useReferrals } from './useReferrals';
+export { useMirror } from './useMirror';
 export { useScrollPosition } from './useScrollPosition';
 export { useScreenWidth } from './useScreenWidth';
 export { useCurrentBreakpoint } from './useCurrentBreakpoint';

@@ -36,6 +36,7 @@ import Head from 'next/head';
 import {
   useBadges,
   useReferrals,
+  useMirror,
   useScrollPosition,
   useTotalBadgeCounts,
   useProfile,
@@ -94,6 +95,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const { referrals, error: referralError } = useReferrals(address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(address, true);
+  const { mirrorPosts, errorMirror } = useMirror(address); // TODO i know this is fishy but idk how we properly handle errors here
   const { badges, error: badgesError } = useBadges(address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   const scrollPos = useScrollPosition();
@@ -804,70 +806,23 @@ const Profile: React.FC<Props> = ({ address }) => {
                     className="md:ml-8"
                     active
                   />
-                  <Pill color="amber" label="GM" />
                   <Pill color="amber" label="Mirror" />
                 </div>
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link="https://github.com/dhaiwat10"
-                  bgImageSrc="/post-bg.jpeg"
-                  title="Why is the internet so lonely?"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link="https://github.com/dhaiwat10"
-                  bgImageSrc="/post-bg.jpeg"
-                  title="Why is the internet so lonely?"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
+                {mirrorPosts &&
+                  mirrorPosts.map((post) => {
+                    <MirrorPost
+                      author={{
+                        username: 'mikela.eth',
+                        avatarSrc: '/avatar-2.png',
+                      }}
+                      link={`https://mirror.xyz/${post.author.address}/${post.digest}`}
+                      bgImageSrc={post.featuredImage?.url}
+                      title={post.title}
+                    />;
+                  })}
               </div>
 
               <div className="xl:w-10/12">

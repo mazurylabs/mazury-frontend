@@ -180,3 +180,5 @@ export interface Activity {
   description: string;
   image: string;
 }
+
+export interface MirrorPost {}
