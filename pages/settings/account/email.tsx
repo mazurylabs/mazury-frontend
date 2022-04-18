@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
-// import { useSWRConfig } from 'swr';
 import { useAccount, useSignMessage } from 'wagmi';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-// import { useProfile } from 'hooks';
 import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
-  // const { mutate } = useSWRConfig();
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
-  // const { profile } = useProfile(accountData?.address as string);
   const [email, setEmail] = useState('');
   const [disabled, setDisabled] = useState(true);
 
@@ -72,7 +68,6 @@ const EmailPage: NextPage = () => {
       formData
     );
 
-    // mutate(`/profile/${accountData?.address}`);
     setIsNewChange(true);
     setCurrentStep('idle');
     setEmail(data.email); //optimistic update for the input fields

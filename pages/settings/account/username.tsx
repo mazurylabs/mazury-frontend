@@ -12,8 +12,6 @@ interface User {
 }
 
 const UsernamePage: NextPage = () => {
-  // const suggestions = ['blob.eth', 'second.eth', 'third.eth']; //dummy suggestions
-
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();
@@ -75,7 +73,6 @@ const UsernamePage: NextPage = () => {
       user
     );
 
-    // mutate(`/profile/${accountData?.address}`);
     setIsNewChange(true);
     setCurrentStep('idle');
 

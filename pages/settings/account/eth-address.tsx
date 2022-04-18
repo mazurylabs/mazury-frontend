@@ -11,7 +11,7 @@ type AddressArray = Record<'username' | 'address', string>[];
 const EthAddressPage: NextPage = () => {
   const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
   const [addresses, setAddresses] = useState<AddressArray>([]);
-  console.log(accountData);
+
   // Prefill form with exisiting email
   useEffect(() => {
     if (accountData?.address) {
