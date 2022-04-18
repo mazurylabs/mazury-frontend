@@ -125,9 +125,7 @@ export const Sidebar: FC = () => {
                     <img
                       src={profile?.avatar || '/profile-active.svg'}
                       alt="Profile icon"
-                      width="20px"
-                      height="20px"
-                      className="rounded-full"
+                      className="h-5 w-5 rounded-full"
                     />
                   }
                   isOpen={isOpen}
@@ -211,7 +209,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
           'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
       >
-        {icon} {isOpen && label}
+        <span>{icon}</span> {isOpen && label}
       </a>
     </Link>
   );
