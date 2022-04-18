@@ -9,6 +9,7 @@ import { SlidersIcon } from 'components/Icons';
 import { useAccount } from 'wagmi';
 import Image from 'next/image';
 import { SignIn } from 'views/SignIn';
+import { useProfile } from 'hooks';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -20,6 +21,8 @@ export const Sidebar: FC = () => {
   const router = useRouter();
   const { pathname } = router;
   const [{ data: accountData }] = useAccount();
+  const { profile } = useProfile(accountData?.address);
+
   const isSignedIn = !!accountData;
 
   const openSignIn = () => setSignInOpen(true);
@@ -118,7 +121,13 @@ export const Sidebar: FC = () => {
                 <SidebarItem
                   href={accountData ? `/people/${accountData?.address}` : '/'}
                   label="Profile"
-                  icon={<img src="/profile-active.svg" alt="Profile icon" />}
+                  icon={
+                    <img
+                      src={profile?.avatar || '/profile-active.svg'}
+                      alt="Profile icon"
+                      className="h-5 w-5 rounded-full"
+                    />
+                  }
                   isOpen={isOpen}
                   active={pathname.startsWith('/people')}
                   className="mt-8"
@@ -200,7 +209,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
           'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
       >
-        {icon} {isOpen && label}
+        <span>{icon}</span> {isOpen && label}
       </a>
     </Link>
   );
