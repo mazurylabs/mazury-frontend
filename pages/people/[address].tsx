@@ -48,6 +48,7 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
 import { useAccount } from 'wagmi';
+import { useMirrorPosts } from 'hooks/useMirrorPosts';
 
 interface Props {
   address: string;
@@ -96,6 +97,8 @@ const Profile: React.FC<Props> = ({ address }) => {
     useReferrals(address, true);
   const { badges, error: badgesError } = useBadges(address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
+  const { posts, error: postsError } = useMirrorPosts(address);
+
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
   const [activeSection, setActiveSection] =
@@ -106,6 +109,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
     'received'
   );
+  const [postsExpanded, setPostsExpanded] = useState(false);
 
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -427,7 +431,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      23
+                      {posts?.length || '-'}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Posts
@@ -464,7 +468,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    23
+                    {posts?.length || '-'}
                   </motion.span>
                   <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
@@ -810,71 +814,40 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link="https://github.com/dhaiwat10"
-                  bgImageSrc="/post-bg.jpeg"
-                  title="Why is the internet so lonely?"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
-                <MirrorPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  link="https://github.com/dhaiwat10"
-                  bgImageSrc="/post-bg.jpeg"
-                  title="Why is the internet so lonely?"
-                />
-                <GMPost
-                  author={{
-                    username: 'mikela.eth',
-                    avatarSrc: '/avatar-2.png',
-                  }}
-                  content="wojtek is one of the smartest and kindest friends i've had the honor to meet. unreserved support for whatever he brings into existence with his big brain. LFG 🌊"
-                  upvoteCount={3}
-                  commentCount={3}
-                  link="https://github.com/dhaiwat10"
-                />
+                {posts && posts.length > 0 ? (
+                  posts
+                    ?.slice(0, postsExpanded ? posts.length : 4)
+                    .map((post) => {
+                      return (
+                        <MirrorPost
+                          author={{
+                            username: profile?.username,
+                            avatarSrc: profile?.avatar,
+                          }}
+                          bgImageSrc={post.featuredImage?.url || ''}
+                          title={post.title}
+                          link={`https://mirror.xyz/${address}/${post.digest}`}
+                          key={post.digest}
+                        />
+                      );
+                    })
+                ) : (
+                  <p className="text-lg text-indigoGray-60">
+                    No recent posts to show
+                  </p>
+                )}
               </div>
-
-              <div className="xl:w-10/12">
-                <Button variant="secondary" className="mx-auto mt-6">
-                  LOAD MORE
-                </Button>
-              </div>
+              {posts && posts.length > 4 && (
+                <div className="xl:w-10/12">
+                  <Button
+                    onClick={() => setPostsExpanded((v) => !v)}
+                    variant="secondary"
+                    className="mx-auto mt-6"
+                  >
+                    {postsExpanded ? 'COLLAPSE' : 'LOAD MORE'}
+                  </Button>
+                </div>
+              )}
             </div>
           </>
         }
