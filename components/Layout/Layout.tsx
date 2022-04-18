@@ -21,7 +21,10 @@ export const Layout: FC<LayoutProps> = ({
   const [signInOpen, setSignInOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen w-full" data-testid="layout-container">
+    <div
+      className="flex min-h-screen w-full flex-col"
+      data-testid="layout-container"
+    >
       <SidebarContext.Provider
         value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
       >
