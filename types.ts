@@ -181,3 +181,19 @@ export interface Activity {
   description: string;
   image: string;
 }
+
+export interface MirrorPost {
+  author: {
+    address: string;
+  };
+  body: string;
+  digest: string;
+  featuredImage: {
+    url: string;
+  } | null;
+  originalDigest: string;
+  publishStatus: string;
+  publishedAtTimestamp: number | null;
+  timestamp: number;
+  title: string;
+}
