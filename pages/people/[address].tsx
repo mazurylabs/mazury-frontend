@@ -90,14 +90,15 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
+  const eth_address = profile?.eth_address;
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
   // const { activity, error: activityError } = useActivity(address);
-  const { referrals, error: referralError } = useReferrals(address);
+  const { referrals, error: referralError } = useReferrals(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
-    useReferrals(address, true);
-  const { badges, error: badgesError } = useBadges(address);
+    useReferrals(eth_address, true);
+  const { badges, error: badgesError } = useBadges(eth_address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  const { posts, error: postsError } = useMirrorPosts(address);
+  const { posts, error: postsError } = useMirrorPosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
@@ -184,7 +185,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   };
 
   const copyAddressToClipboard = async () => {
-    await navigator.clipboard.writeText(address);
+    await navigator.clipboard.writeText(eth_address);
     alert('Copied to clipboard!');
   };
 
@@ -199,7 +200,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     if (referrals) {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         referrals,
-        address, // receiver
+        eth_address, // receiver
         accountData?.address as string // the user
       );
       if (foundExistingReferral) {
@@ -210,13 +211,13 @@ const Profile: React.FC<Props> = ({ address }) => {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         authoredReferrals,
         accountData?.address as string, // receiver
-        address as string // the user
+        eth_address as string // the user
       );
       if (foundExistingReferral) {
         setReceivedReferral(foundExistingReferral);
       }
     }
-  }, [referrals, authoredReferrals, accountData, address]);
+  }, [referrals, authoredReferrals, accountData, eth_address]);
 
   if (error) {
     return (
