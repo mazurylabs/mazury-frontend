@@ -50,6 +50,7 @@ import { motion } from 'framer-motion';
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
 import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
   address: string;
@@ -199,7 +200,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const copyAddressToClipboard = async () => {
     await navigator.clipboard.writeText(eth_address);
-    alert('Copied to clipboard!');
+    toast.success('Copied to clipboard!');
   };
 
   useEffect(() => {
@@ -259,6 +260,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   return (
     <>
+      <Toaster />
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
