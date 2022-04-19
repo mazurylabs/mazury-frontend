@@ -25,6 +25,7 @@ import {
 } from 'types';
 import {
   colors,
+  getMetricDisplayValue,
   getTruncatedAddress,
   goToLink,
   hasAlreadyReferredReceiver,
@@ -49,6 +50,7 @@ import { motion } from 'framer-motion';
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
 import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
   address: string;
@@ -90,14 +92,27 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
+  const eth_address = profile?.eth_address;
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
   // const { activity, error: activityError } = useActivity(address);
-  const { referrals, error: referralError } = useReferrals(address);
+  const {
+    referrals,
+    error: referralError,
+    count: referralsCount,
+  } = useReferrals(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
-    useReferrals(address, true);
-  const { badges, error: badgesError } = useBadges(address);
+    useReferrals(eth_address, true);
+  const {
+    badges,
+    error: badgesError,
+    count: badgesCount,
+  } = useBadges(eth_address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  const { posts, error: postsError } = useMirrorPosts(address);
+  const {
+    posts,
+    error: postsError,
+    count: postsCount,
+  } = useMirrorPosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
@@ -184,8 +199,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   };
 
   const copyAddressToClipboard = async () => {
-    await navigator.clipboard.writeText(address);
-    alert('Copied to clipboard!');
+    await navigator.clipboard.writeText(eth_address);
+    toast.success('Copied to clipboard!');
   };
 
   useEffect(() => {
@@ -199,7 +214,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     if (referrals) {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         referrals,
-        address, // receiver
+        eth_address, // receiver
         accountData?.address as string // the user
       );
       if (foundExistingReferral) {
@@ -210,13 +225,13 @@ const Profile: React.FC<Props> = ({ address }) => {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         authoredReferrals,
         accountData?.address as string, // receiver
-        address as string // the user
+        eth_address as string // the user
       );
       if (foundExistingReferral) {
         setReceivedReferral(foundExistingReferral);
       }
     }
-  }, [referrals, authoredReferrals, accountData, address]);
+  }, [referrals, authoredReferrals, accountData, eth_address]);
 
   if (error) {
     return (
@@ -245,6 +260,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   return (
     <>
+      <Toaster />
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
@@ -382,12 +398,13 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ({getTruncatedAddress(profile.eth_address, 3)})
                           </span>
                         </p>
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src="/icons/clipboard.svg"
                           height="16px"
                           width="16px"
                           alt="Clipboard icon"
-                          className="hover:cursor-pointer"
+                          className="hidden hover:cursor-pointer md:block"
                           onClick={copyAddressToClipboard}
                         />
                       </div>
@@ -430,7 +447,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {referrals?.length || '-'}
+                      {getMetricDisplayValue(referralsCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Referrals
@@ -439,7 +456,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {badges?.length || '-'}
+                      {getMetricDisplayValue(badgesCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Badges
@@ -448,7 +465,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {posts?.length || '-'}
+                      {getMetricDisplayValue(postsCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Posts
@@ -463,7 +480,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {referrals?.length || '-'}
+                    {getMetricDisplayValue(referralsCount)}
                   </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Referrals
@@ -474,7 +491,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {badges?.length || '-'}
+                    {getMetricDisplayValue(badgesCount)}
                   </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Badges
@@ -485,7 +502,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {posts?.length || '-'}
+                    {getMetricDisplayValue(postsCount)}
                   </motion.span>
                   <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
@@ -588,7 +605,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
         innerRightContent={
-          <>
+          <div className="pb-4">
             <div>
               <h3
                 id="activity"
@@ -866,7 +883,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               )}
             </div>
-          </>
+          </div>
         }
       />
     </>

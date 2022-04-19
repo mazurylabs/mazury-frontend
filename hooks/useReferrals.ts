@@ -28,5 +28,6 @@ export const useReferrals = (address: string, authored: boolean = false) => {
   return {
     referrals,
     error,
+    count: data?.count,
   };
 };
