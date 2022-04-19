@@ -1,7 +1,89 @@
 import { NextPage } from 'next';
-import { Button, SettingsLayout } from 'components';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { useAccount, useSignMessage } from 'wagmi';
+
+import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
+import {
+  getMessageToBeSigned,
+  getProfile,
+  updateProfile,
+  verifyTweet,
+} from 'utils/api';
+import { getTwitterConnectionPopupLink } from 'utils';
+
+type User = Record<'github' | 'address', string>;
+type Steps = 'idle' | 'success';
 
 const GithubPage: NextPage = () => {
+  const [currentStep, setCurrentStep] = useState<Steps>('idle');
+  const [{ data: accountData }] = useAccount();
+  const [_, signMessage] = useSignMessage();
+
+  const [user, setUser] = useState<User>({
+    github: '',
+    address: '',
+  });
+
+  // Prefill form with exisiting email
+  useEffect(() => {
+    if (accountData?.address && !user.address) {
+      getProfile(accountData?.address).then(({ data }) => {
+        setUser({
+          address: data?.eth_address as string,
+          github: data?.github as string,
+        });
+      });
+
+      localStorage.removeItem('gh-route');
+    }
+  }, [accountData?.address, user.address]);
+
+  const handleVerifyGithub = async () => {
+    const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
+    localStorage.setItem('gh-route', 'settings');
+    window.open(githubPopupLink, '_blank');
+  };
+
+  const disconnectGithub = async (signature: string) => {
+    const { error } = await updateProfile(user.address, signature, {
+      github: '',
+    });
+
+    if (error) {
+      return alert('Error disconnecting profile.');
+    }
+
+    setUser((user) => {
+      return { ...user, github: '' };
+    });
+  };
+
+  const getSignature = async (funct: any) => {
+    const { data, error } = await getMessageToBeSigned(user.address!);
+
+    if (!data || error) {
+      alert('Couldnt get the message to be signed. Please try again later.');
+      return;
+    }
+
+    const { data: signature, error: signatureError } = await funct({
+      message: data,
+    });
+
+    if (!signature || signatureError) {
+      alert('Error signing message');
+      return;
+    }
+
+    return signature;
+  };
+
+  const handleDisconnectGithub = async (messageSigner: any = signMessage) => {
+    const signature = await getSignature(messageSigner);
+    disconnectGithub(signature);
+  };
+
   return (
     <SettingsLayout
       content={
@@ -22,9 +104,21 @@ const GithubPage: NextPage = () => {
                 </div>
               </div>
 
-              <Button className="w-full uppercase" size="large">
-                CONNECT GITHUB
+              <Button
+                className="w-full uppercase"
+                size="large"
+                onClick={
+                  user.github ? handleDisconnectGithub : handleVerifyGithub
+                }
+              >
+                {user.github ? 'DISCONNECT' : 'CONNECT'} GITHUB
               </Button>
+
+              {user.github && (
+                <div className="font-inter mt-5 flex justify-center text-sm font-bold text-gray-900">
+                  <Link href={`/people/${user.address}`}>GO TO PROFILE</Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
