@@ -104,3 +104,13 @@ export const hasAlreadyReferredReceiver = (
 export const getTwitterConnectionPopupLink = (ethAddress: string) => {
   return `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0a${ethAddress}`;
 };
+
+/**
+ * Returns '-' if the value is null or undefined, otherwise returns the value. Useful because 0 || '-' returns '-'
+ */
+export const getMetricDisplayValue = (
+  value: number | null | undefined,
+  placeholder: string = '-'
+) => {
+  return value === null || value === undefined ? placeholder : value;
+};

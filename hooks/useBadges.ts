@@ -10,5 +10,6 @@ export const useBadges = (address: string) => {
   return {
     badges: data?.results,
     error,
+    count: data?.count,
   };
 };

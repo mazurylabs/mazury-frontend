@@ -25,6 +25,7 @@ import {
 } from 'types';
 import {
   colors,
+  getMetricDisplayValue,
   getTruncatedAddress,
   goToLink,
   hasAlreadyReferredReceiver,
@@ -93,12 +94,24 @@ const Profile: React.FC<Props> = ({ address }) => {
   const eth_address = profile?.eth_address;
   // TODO: Integrate this into the markup once the design and the API have agreed on the types.
   // const { activity, error: activityError } = useActivity(address);
-  const { referrals, error: referralError } = useReferrals(eth_address);
+  const {
+    referrals,
+    error: referralError,
+    count: referralsCount,
+  } = useReferrals(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
-  const { badges, error: badgesError } = useBadges(eth_address);
+  const {
+    badges,
+    error: badgesError,
+    count: badgesCount,
+  } = useBadges(eth_address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  const { posts, error: postsError } = useMirrorPosts(eth_address);
+  const {
+    posts,
+    error: postsError,
+    count: postsCount,
+  } = useMirrorPosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
@@ -431,7 +444,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {referrals?.length || '-'}
+                      {getMetricDisplayValue(referralsCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Referrals
@@ -440,7 +453,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {badges?.length || '-'}
+                      {getMetricDisplayValue(badgesCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Badges
@@ -449,7 +462,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {posts?.length || '-'}
+                      {getMetricDisplayValue(postsCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Posts
@@ -464,7 +477,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {referrals?.length || '-'}
+                    {getMetricDisplayValue(referralsCount)}
                   </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Referrals
@@ -475,7 +488,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {badges?.length || '-'}
+                    {getMetricDisplayValue(badgesCount)}
                   </motion.span>
                   <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                     Badges
@@ -486,7 +499,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
                     className="font-serif font-bold"
                   >
-                    {posts?.length || '-'}
+                    {getMetricDisplayValue(postsCount)}
                   </motion.span>
                   <div className="text-xs uppercase text-indigoGray-60 opacity-60">
                     Posts
