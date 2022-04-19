@@ -605,7 +605,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
         innerRightContent={
-          <>
+          <div className="pb-4">
             <div>
               <h3
                 id="activity"
@@ -883,7 +883,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               )}
             </div>
-          </>
+          </div>
         }
       />
     </>
