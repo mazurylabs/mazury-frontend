@@ -23,14 +23,16 @@ export const BadgePreview: React.FC<Props> = ({
           {heading}
         </h5>
         <p className="text-sm font-medium text-indigoGray-80">{description}</p>
-        <span className="text-sm font-medium text-indigoGray-50">
-          <NumberFormat
-            value={totalCount}
-            displayType="text"
-            thousandSeparator
-          />{' '}
-          people have this badge
-        </span>
+        {totalCount && (
+          <span className="text-sm font-medium text-indigoGray-50">
+            <NumberFormat
+              value={totalCount}
+              displayType="text"
+              thousandSeparator
+            />{' '}
+            people have this badge
+          </span>
+        )}
       </div>
     </div>
   );
