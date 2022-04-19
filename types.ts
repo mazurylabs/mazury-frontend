@@ -52,11 +52,13 @@ export interface BadgeType {
   created_at: string;
   updated_at: string;
   image: string;
-  score_bonus: number;
-  related_skill: string;
+  score_bonus?: number;
+  related_skill?: string;
   title: string;
   slug: string;
   description: string;
+  issuer?: string;
+  poap_badge_extra_data?: any;
 }
 
 export interface Badge {
@@ -108,7 +110,9 @@ export type MappedTrimmedRoles<T> = {
   [Key in TrimmedRole]: T;
 };
 
-export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {
+export interface Profile
+  extends Partial<MappedSkills<number>>,
+    Partial<MappedRoles<boolean>> {
   id: string;
   top_badges: Badge[];
   referred_by: PersonBasicDetails[];
@@ -124,7 +128,7 @@ export interface Profile extends MappedSkills<number>, MappedRoles<boolean> {
   verified: boolean;
   github: string;
   twitter: string;
-  github_last_checked: string;
+  github_last_checked?: string | null;
   open_to_opportunities: boolean;
   onboarded: boolean;
   email: string;

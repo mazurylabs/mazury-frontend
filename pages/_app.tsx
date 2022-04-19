@@ -134,6 +134,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         >
           <NextHead>
             <title>Mazury</title>
+            <link rel="icon" href="/new-logo.svg" />
           </NextHead>
 
           <Component {...pageProps} />
