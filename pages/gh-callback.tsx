@@ -35,7 +35,13 @@ const Page: NextPage = () => {
         if (error) {
           return alert('Error connecting to Github');
         }
-        router.push('/onboarding/socials');
+
+        let originRoute = localStorage.getItem('gh-route');
+        if (originRoute) {
+          router.push('/settings/services/github');
+        } else {
+          router.push('/onboarding/socials');
+        }
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
