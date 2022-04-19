@@ -398,12 +398,13 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ({getTruncatedAddress(profile.eth_address, 3)})
                           </span>
                         </p>
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src="/icons/clipboard.svg"
                           height="16px"
                           width="16px"
                           alt="Clipboard icon"
-                          className="hover:cursor-pointer"
+                          className="hidden hover:cursor-pointer md:block"
                           onClick={copyAddressToClipboard}
                         />
                       </div>
