@@ -21,8 +21,8 @@ const DiscordPage: NextPage = () => {
                 </div>
               </div>
 
-              <Button className="w-full uppercase" size="large">
-                CONNECT DISCORD
+              <Button className="w-full uppercase" size="large" disabled={true}>
+                CONNECT DISCORD (COMING SOON)
               </Button>
             </div>
           </div>
