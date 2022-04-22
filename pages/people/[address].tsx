@@ -98,7 +98,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     error: referralError,
     count: referralsCount,
   } = useReferrals(eth_address);
-  const { activity, error: activityError } = useActivity(address);
+  const { activity, error: activityError } = useActivity(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
   const {

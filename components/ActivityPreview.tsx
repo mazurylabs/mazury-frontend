@@ -18,6 +18,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
     created_at,
     user,
     currentUser,
+    metadata,
   } = activity;
 
   if (activityType === 'new-badge') {
@@ -62,8 +63,8 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
     return <div>referral given</div>;
   }
 
-  if (activityType === 'new-post') {
-    return <div>post</div>;
+  if (activityType === 'new-event-attended') {
+    return <div>New event attended</div>;
   }
 
   return null;
