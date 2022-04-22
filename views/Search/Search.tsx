@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Checkbox,
   Dropdown,
   Pill,
@@ -17,10 +18,24 @@ import {
   useProfileSearch,
 } from 'hooks';
 import Image from 'next/image';
-import { FC, KeyboardEvent, useContext, useEffect, useState, VFC } from 'react';
+import { useRouter } from 'next/router';
+import {
+  FC,
+  KeyboardEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  VFC,
+} from 'react';
 import { BadgeIssuer, FCWithClassName, Profile, Role } from 'types';
-import { colors, returnTruncatedIfEthAddress } from 'utils';
-import { mockProfile } from 'utils/mock';
+import {
+  colors,
+  getOffsetArray,
+  getSkillsFromProfile,
+  returnTruncatedIfEthAddress,
+  toCapitalizedWord,
+} from 'utils';
 
 interface SearchProps {}
 
@@ -32,17 +47,10 @@ export const Search: FC<SearchProps> = ({}) => {
     isContactableToggled: false,
     selectedBadgeSlugs: [],
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const {
-    searchQuery,
-    touched,
-    hasSearched,
-    isContactableToggled,
-    selectedBadgeSlugs,
-  } = searchState;
-
-  const { profiles, error: profilesError } =
-    useProfileSearch(selectedBadgeSlugs);
+  const { searchQuery, touched, hasSearched, isContactableToggled } =
+    searchState;
 
   const setTouched = (touched: boolean) => {
     setSearchState((prevState) => ({ ...prevState, touched }));
@@ -215,10 +223,16 @@ export const Search: FC<SearchProps> = ({}) => {
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col gap-4">
-            {profiles?.map((profile) => {
-              return <SearchResult profile={profile} key={profile.id} />;
-            })}
+          <div className="mt-4 flex flex-col gap-4 pb-4">
+            {getOffsetArray(currentPage).map((offset) => (
+              <SearchResultPage offset={offset} key={`search-page-${offset}`} />
+            ))}
+            <Button
+              onClick={() => setCurrentPage((v) => v + 1)}
+              className="mx-auto w-fit uppercase"
+            >
+              Load more
+            </Button>
           </div>
         </div>
       )}
@@ -591,13 +605,18 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
   profile,
   className,
 }) => {
+  const router = useRouter();
+  const skills = useMemo(() => getSkillsFromProfile(profile), [profile]);
+
   return (
     <div
-      className="flex items-center rounded-2xl border border-indigoGray-20 p-4"
+      className="flex items-center rounded-2xl border border-indigoGray-20 p-4 hover:cursor-pointer"
       style={{
         boxShadow:
           '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
       }}
+      role="link"
+      onClick={() => router.push(`/people/${profile.username}`)}
     >
       <Avatar width="40px" height="40px" src={profile.avatar as string} />
 
@@ -613,24 +632,63 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <TagItem color={colors.gray} label="Developer" showRemove={false} />
-        <TagItem
-          color={colors.gray}
-          label="Content creator"
-          showRemove={false}
-        />
+        {skills?.slice(0, 2).map((skill) => {
+          return (
+            <TagItem
+              color={colors.gray}
+              label={toCapitalizedWord(skill)}
+              showRemove={false}
+              key={`profile-${profile.id}-skill-${skill}`}
+            />
+          );
+        })}
       </div>
 
-      <span className="ml-4 text-xs font-bold text-indigoGray-90">2 more</span>
+      {skills?.length > 2 && (
+        <span className="ml-4 text-xs font-bold text-indigoGray-90">
+          {skills?.length - 2} more
+        </span>
+      )}
 
       {/* TODO: Add vertical divider */}
 
       <div className="ml-5 flex items-center gap-4">
-        <SearchResultBadge label="Graph voter" iconSrc="/icons/command.svg" />
-        <SearchResultBadge label="Graph voter" iconSrc="/icons/command.svg" />
+        {profile?.top_badges?.slice(0, 2).map((badge) => {
+          return (
+            <SearchResultBadge
+              key={badge.id}
+              label={badge.badge_type?.title}
+              iconSrc={badge.badge_type?.image}
+            />
+          );
+        })}
       </div>
 
-      <span className="ml-4 text-xs font-bold text-indigoGray-90">2 more</span>
+      {profile?.top_badges?.length && profile?.top_badges?.length > 2 && (
+        <span className="ml-4 text-xs font-bold text-indigoGray-90">
+          {profile?.top_badges?.length - 2} more
+        </span>
+      )}
     </div>
+  );
+};
+
+const SearchResultPage: FCWithClassName<{ offset: number }> = ({
+  className,
+  offset,
+}) => {
+  const { searchState } = useContext(SearchContext);
+  const { selectedBadgeSlugs } = searchState;
+  const { profiles, error: profilesError } = useProfileSearch(
+    offset,
+    selectedBadgeSlugs
+  );
+
+  return (
+    <>
+      {profiles?.map((profile) => {
+        return <SearchResult profile={profile} key={profile.id} />;
+      })}
+    </>
   );
 };
