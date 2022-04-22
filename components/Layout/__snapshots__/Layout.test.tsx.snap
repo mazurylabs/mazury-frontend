@@ -40,7 +40,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     >
       <a
         class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false undefined"
-        href="/"
+        href="/search"
       >
         <span>
           <svg
