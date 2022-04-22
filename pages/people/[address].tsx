@@ -819,7 +819,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   Writing
                 </h3>
 
-                <div className="flex gap-[24px]">
+                {/* <div className="flex gap-[24px]">
                   <Pill
                     color="amber"
                     label="All posts"
@@ -828,7 +828,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   />
                   <Pill color="amber" label="GM" />
                   <Pill color="amber" label="Mirror" />
-                </div>
+                </div> */}
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
