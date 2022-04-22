@@ -113,6 +113,15 @@ export const getMetricDisplayValue = (
   placeholder: string = '-'
 ) => {
   return value === null || value === undefined ? placeholder : value;
+const detectIfEthAddress = (str: string) => {
+  return /^(0x)?[0-9a-f]{40}$/i.test(str);
+};
+
+export const returnTruncatedIfEthAddress = (str: string) => {
+  if (detectIfEthAddress(str)) {
+    return getTruncatedAddress(str);
+  }
+  return str;
 };
 
 export const commify = (value: number) => {

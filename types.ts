@@ -223,3 +223,5 @@ export interface MirrorPost {
   title: string;
 }
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
+
+export type BadgeIssuer = 'mazury' | 'poap';

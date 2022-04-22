@@ -21,20 +21,20 @@ export const Dropdown: FCWithClassName<DropdownProps> = ({
   };
 
   // TODO: handle click outside of options container
-  // useEffect(() => {
-  //   const handleClickOutside = (event: any) => {
-  //     if (
-  //       optionsContainerRef.current &&
-  //       !optionsContainerRef.current.contains(event.target)
-  //     ) {
-  //       setShowOptions(false);
-  //     }
-  //   };
-  //   document.addEventListener('click', handleClickOutside, true);
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutside, true);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        optionsContainerRef.current &&
+        !optionsContainerRef.current.contains(event.target)
+      ) {
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   return (
     <div className="relative">

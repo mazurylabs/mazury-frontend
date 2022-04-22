@@ -9,29 +9,63 @@ import {
 } from 'components';
 import { SearchInput } from 'components/SearchInput';
 import { Toggle } from 'components/Toggle';
-import { useCurrentBreakpoint } from 'hooks';
+import { SearchContext, SearchStateType } from 'contexts/search';
+import {
+  useBadgesSearch,
+  useCurrentBreakpoint,
+  useDebounce,
+  useProfileSearch,
+} from 'hooks';
 import Image from 'next/image';
-import { FC, KeyboardEvent, useEffect, useState, VFC } from 'react';
-import { FCWithClassName, Profile, Role } from 'types';
-import { colors } from 'utils';
+import { FC, KeyboardEvent, useContext, useEffect, useState, VFC } from 'react';
+import { BadgeIssuer, FCWithClassName, Profile, Role } from 'types';
+import { colors, returnTruncatedIfEthAddress } from 'utils';
 import { mockProfile } from 'utils/mock';
 
 interface SearchProps {}
 
 export const Search: FC<SearchProps> = ({}) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchState, setSearchState] = useState<SearchStateType>({
+    searchQuery: '',
+    touched: false,
+    hasSearched: false,
+    isContactableToggled: false,
+    selectedBadgeSlugs: [],
+  });
 
-  // To track whether the user has pressed enter and 'searched' or not
-  const [hasSearched, setHasSearched] = useState(false);
+  const {
+    searchQuery,
+    touched,
+    hasSearched,
+    isContactableToggled,
+    selectedBadgeSlugs,
+  } = searchState;
 
-  // Here 'touched` means that the user has interacted with the input and that we should be showing results/suggestions
-  const [touched, setTouched] = useState(false);
+  const { profiles, error: profilesError } =
+    useProfileSearch(selectedBadgeSlugs);
+
+  const setTouched = (touched: boolean) => {
+    setSearchState((prevState) => ({ ...prevState, touched }));
+  };
+
+  const setSearchQuery = (searchQuery: string) => {
+    setSearchState((prevState) => ({ ...prevState, searchQuery }));
+  };
+
+  const setHasSearched = (hasSearched: boolean) => {
+    setSearchState((prevState) => ({ ...prevState, hasSearched }));
+  };
+
+  const setIsContactableToggled = (isContactableToggled: boolean) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      isContactableToggled,
+    }));
+  };
+
   const breakpoint = useCurrentBreakpoint();
 
   const queryEntered = searchQuery?.length > 0;
-
-  // whether the contactable toggle is toggled
-  const [isContactableToggled, setIsContactableToggled] = useState(false);
 
   // On smaller screens, we want to move the input to the top of the screen and hide everything else
   const shouldGoToTop = touched && (breakpoint === 'sm' || breakpoint === 'xs');
@@ -65,7 +99,7 @@ export const Search: FC<SearchProps> = ({}) => {
   }, [searchQuery]);
 
   return (
-    <>
+    <SearchContext.Provider value={{ searchState, setSearchState }}>
       {/* Search input START */}
       <div
         role="input"
@@ -182,23 +216,13 @@ export const Search: FC<SearchProps> = ({}) => {
           </div>
 
           <div className="mt-4 flex flex-col gap-4">
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
-            <SearchResult profile={mockProfile} />
+            {profiles?.map((profile) => {
+              return <SearchResult profile={profile} key={profile.id} />;
+            })}
           </div>
         </div>
       )}
-    </>
+    </SearchContext.Provider>
   );
 };
 
@@ -314,10 +338,35 @@ const KeywordSuggestion: FCWithClassName = ({ className }) => {
 };
 
 const BadgesFilterView: FCWithClassName = ({ className }) => {
+  const [issuer, setIssuer] = useState<BadgeIssuer>('mazury');
   const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query);
+
+  const { searchState, setSearchState } = useContext(SearchContext);
+  const { selectedBadgeSlugs } = searchState;
+
+  const setSelectedBadgeSlugs = (slugs: string[]) => {
+    setSearchState({
+      ...searchState,
+      selectedBadgeSlugs: slugs,
+    });
+  };
+
+  const { badges, error: badgesError } = useBadgesSearch(
+    debouncedQuery,
+    issuer
+  );
+
+  const handleCheckClick = (checked: boolean, slug: string) => {
+    if (checked) {
+      setSelectedBadgeSlugs([...selectedBadgeSlugs, slug]);
+    } else {
+      setSelectedBadgeSlugs(selectedBadgeSlugs.filter((s) => s !== slug));
+    }
+  };
 
   return (
-    <div className="flex w-[500px] flex-col">
+    <div className="flex max-h-[400px] w-[500px] flex-col overflow-y-scroll">
       <SearchInput
         value={query}
         onChange={setQuery}
@@ -325,9 +374,33 @@ const BadgesFilterView: FCWithClassName = ({ className }) => {
       />
 
       <div className="mt-6 flex">
-        <Pill label="Mazury Badges" color="fuchsia" active />
-        <Pill label="POAPs" className="ml-6" />
-        <Pill label="Another category" className="ml-6" />
+        <Pill
+          label="Mazury Badges"
+          color="fuchsia"
+          onClick={() => setIssuer('mazury')}
+          active={issuer === 'mazury'}
+        />
+        <Pill
+          color="fuchsia"
+          label="POAPs"
+          className="ml-6"
+          onClick={() => setIssuer('poap')}
+          active={issuer === 'poap'}
+        />
+      </div>
+
+      <div className="mt-6 flex flex-col gap-6">
+        {badges?.map((badge) => {
+          return (
+            <Checkbox
+              key={badge.id}
+              label={badge.title}
+              checked={selectedBadgeSlugs.includes(badge.slug)}
+              setChecked={(v) => handleCheckClick(v, badge.slug)}
+              id={badge.id}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -530,7 +603,8 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
 
       <div className="ml-3 flex flex-col">
         <span className="font-serif text-xl font-bold text-indigoGray-90">
-          {profile.username}
+          {profile.ens_name ||
+            returnTruncatedIfEthAddress(profile.username as string)}
         </span>
 
         <span className="mt-1 text-xs font-medium text-indigoGray-50">
