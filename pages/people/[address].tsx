@@ -151,7 +151,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const currActiveSection = useActiveProfileSection();
   const isMobile = useMobile();
 
-  const hasAnySocial = profile.github || profile.website || profile.twitter;
+  const hasAnySocial = profile?.github || profile?.website || profile?.twitter;
 
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
@@ -257,6 +257,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writeReferralButtonText = existingReferral
     ? 'Edit referral'
     : 'Write referral';
+
+  if (!profile) {
+    return <div>Something went wrong.</div>;
+  }
 
   return (
     <>
