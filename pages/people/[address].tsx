@@ -844,7 +844,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }}
                           bgImageSrc={post.featuredImage?.url || ''}
                           title={post.title}
-                          link={`https://mirror.xyz/${address}/${post.digest}`}
+                          link={`https://mirror.xyz/${eth_address}/${post.digest}`}
                           key={post.digest}
                         />
                       );
