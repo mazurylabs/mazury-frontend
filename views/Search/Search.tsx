@@ -46,6 +46,7 @@ export const Search: FC<SearchProps> = ({}) => {
     hasSearched: false,
     isContactableToggled: false,
     selectedBadgeSlugs: [],
+    selectedRoles: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -421,21 +422,21 @@ const BadgesFilterView: FCWithClassName = ({ className }) => {
 };
 
 const RolesFilterView: FCWithClassName = ({ className }) => {
-  const [formData, setFormData] = useState({
-    role_developer: false,
-    role_designer: false,
-    role_trader: false,
-    role_creator: false,
-    role_researcher: false,
-    role_investor: false,
-    role_community_manager: false,
-  });
+  const { searchState, setSearchState } = useContext(SearchContext);
+  const { selectedRoles } = searchState;
 
   const handleRoleClick = (role: Role) => {
-    setFormData({
-      ...formData,
-      [role]: !formData[role],
-    });
+    if (!selectedRoles.includes(role)) {
+      setSearchState({
+        ...searchState,
+        selectedRoles: [...selectedRoles, role],
+      });
+    } else {
+      setSearchState({
+        ...searchState,
+        selectedRoles: selectedRoles.filter((r) => r !== role),
+      });
+    }
   };
 
   return (
@@ -445,7 +446,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/developer.svg"
         coloredSrc="/icons/roles/colored/developer.svg"
         onClick={() => handleRoleClick('role_developer')}
-        selected={formData.role_developer}
+        selected={selectedRoles.includes('role_developer')}
         className="h-[118px]"
       />
       <RoleCard
@@ -453,7 +454,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/designer.svg"
         coloredSrc="/icons/roles/colored/designer.svg"
         onClick={() => handleRoleClick('role_designer')}
-        selected={formData.role_designer}
+        selected={selectedRoles.includes('role_designer')}
         className="h-[118px]"
       />
       <RoleCard
@@ -461,7 +462,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/trader.svg"
         coloredSrc="/icons/roles/colored/trader.svg"
         onClick={() => handleRoleClick('role_trader')}
-        selected={formData.role_trader}
+        selected={selectedRoles.includes('role_trader')}
         className="h-[118px]"
       />
       <RoleCard
@@ -469,7 +470,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/creator.svg"
         coloredSrc="/icons/roles/colored/creator.svg"
         onClick={() => handleRoleClick('role_creator')}
-        selected={formData.role_creator}
+        selected={selectedRoles.includes('role_creator')}
         className="h-[118px]"
       />
       <RoleCard
@@ -477,7 +478,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/researcher.svg"
         coloredSrc="/icons/roles/colored/researcher.svg"
         onClick={() => handleRoleClick('role_researcher')}
-        selected={formData.role_researcher}
+        selected={selectedRoles.includes('role_researcher')}
         className="h-[118px]"
       />
       <RoleCard
@@ -485,7 +486,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/investor.svg"
         coloredSrc="/icons/roles/colored/investor.svg"
         onClick={() => handleRoleClick('role_investor')}
-        selected={formData.role_investor}
+        selected={selectedRoles.includes('role_investor')}
         className="h-[118px]"
       />
       <RoleCard
@@ -493,7 +494,7 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
         iconSrc="/icons/roles/community.svg"
         coloredSrc="/icons/roles/colored/community.svg"
         onClick={() => handleRoleClick('role_community_manager')}
-        selected={formData.role_community_manager}
+        selected={selectedRoles.includes('role_community_manager')}
       />
     </div>
   );
@@ -678,10 +679,11 @@ const SearchResultPage: FCWithClassName<{ offset: number }> = ({
   offset,
 }) => {
   const { searchState } = useContext(SearchContext);
-  const { selectedBadgeSlugs } = searchState;
+  const { selectedBadgeSlugs, selectedRoles } = searchState;
   const { profiles, error: profilesError } = useProfileSearch(
     offset,
-    selectedBadgeSlugs
+    selectedBadgeSlugs,
+    selectedRoles
   );
 
   return (

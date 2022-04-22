@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { createContext } from 'react';
+import { Role } from 'types';
 
 /**
  * Context for the search view
@@ -19,6 +20,8 @@ export interface SearchStateType {
   isContactableToggled: boolean;
 
   selectedBadgeSlugs: string[];
+
+  selectedRoles: Role[];
 }
 
 interface SearchContextType {
@@ -33,6 +36,7 @@ export const SearchContext = createContext<SearchContextType>({
     hasSearched: false,
     isContactableToggled: false,
     selectedBadgeSlugs: [],
+    selectedRoles: [],
   },
   setSearchState: () => {},
 });

@@ -1,11 +1,17 @@
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
-import { BadgeIssuer, BadgeType, ListResponse, Profile } from 'types';
+import { BadgeIssuer, BadgeType, ListResponse, Profile, Role } from 'types';
 
-export const useProfileSearch = (offset: number, badgeSlugs: string[]) => {
+export const useProfileSearch = (
+  offset: number,
+  badgeSlugs: string[],
+  roles: Role[]
+) => {
   // TODO: Pagination
   const { data, error } = useSWR<ListResponse<Profile>>(
-    `/search/profiles/?badges=${badgeSlugs.join(';')}&offset=${offset}&limit=20`
+    `/search/profiles/?badges=${badgeSlugs.join(';')}&role=${
+      roles[0]?.split('role_')?.[1]
+    }&offset=${offset}&limit=20`
   );
 
   return {
