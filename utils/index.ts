@@ -159,7 +159,7 @@ const getOffset = (page: number) => {
 
 export const getOffsetArray = (page: number) => {
   const offsets = [];
-  for (let i = 0; i < page; i++) {
+  for (let i = 1; i <= page; i++) {
     offsets.push(getOffset(i));
   }
   return offsets;

@@ -16,6 +16,7 @@ import {
   useCurrentBreakpoint,
   useDebounce,
   useProfileSearch,
+  useSkillsSearch,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -47,6 +48,7 @@ export const Search: FC<SearchProps> = ({}) => {
     isContactableToggled: false,
     selectedBadgeSlugs: [],
     selectedRoles: [],
+    selectedSkillSlugs: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -502,40 +504,42 @@ const RolesFilterView: FCWithClassName = ({ className }) => {
 
 const ReferredSkillsFilterView: FCWithClassName = ({ className }) => {
   const [query, setQuery] = useState('');
-  const [skills, setSkills] = useState({
-    react: false,
-    python: false,
-    web3: false,
-    javascript: false,
-    nodejs: false,
-    solidity: false,
-  });
+  const { skills } = useSkillsSearch(query);
+  const { searchState, setSearchState } = useContext(SearchContext);
+  const { selectedSkillSlugs } = searchState;
 
-  const handleCheck = (key: string) => {
-    setSkills({
-      ...skills,
-      // @ts-ignore for now
-      [key]: !skills[key],
-    });
+  const handleCheck = (slug: string) => {
+    if (!selectedSkillSlugs.includes(slug)) {
+      setSearchState({
+        ...searchState,
+        selectedSkillSlugs: [...selectedSkillSlugs, slug],
+      });
+    } else {
+      setSearchState({
+        ...searchState,
+        selectedSkillSlugs: selectedSkillSlugs.filter((s) => s !== slug),
+      });
+    }
   };
 
   return (
-    <div className={`flex w-[500px] flex-col ${className}`}>
+    <div
+      className={`flex max-h-[500px] w-[500px] flex-col overflow-y-scroll ${className}`}
+    >
       <SearchInput
         value={query}
         onChange={setQuery}
         placeholder="Search skills"
       />
       <div className="mt-6 flex flex-col gap-6 capitalize">
-        {Object.keys(skills).map((key) => {
+        {skills?.map((skill) => {
           return (
             <Checkbox
-              key={key}
-              label={key}
-              // @ts-ignore for now
-              checked={skills[key]}
-              setChecked={() => handleCheck(key)}
-              id={key}
+              key={`skill-${skill.slug}`}
+              label={skill.name}
+              checked={selectedSkillSlugs.includes(skill.slug)}
+              setChecked={() => handleCheck(skill.slug)}
+              id={`skill-${skill.slug}`}
             />
           );
         })}
@@ -679,11 +683,12 @@ const SearchResultPage: FCWithClassName<{ offset: number }> = ({
   offset,
 }) => {
   const { searchState } = useContext(SearchContext);
-  const { selectedBadgeSlugs, selectedRoles } = searchState;
+  const { selectedBadgeSlugs, selectedRoles, selectedSkillSlugs } = searchState;
   const { profiles, error: profilesError } = useProfileSearch(
     offset,
     selectedBadgeSlugs,
-    selectedRoles
+    selectedRoles,
+    selectedSkillSlugs
   );
 
   return (

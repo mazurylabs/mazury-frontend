@@ -22,6 +22,8 @@ export interface SearchStateType {
   selectedBadgeSlugs: string[];
 
   selectedRoles: Role[];
+
+  selectedSkillSlugs: string[];
 }
 
 interface SearchContextType {
@@ -37,6 +39,7 @@ export const SearchContext = createContext<SearchContextType>({
     isContactableToggled: false,
     selectedBadgeSlugs: [],
     selectedRoles: [],
+    selectedSkillSlugs: [],
   },
   setSearchState: () => {},
 });
