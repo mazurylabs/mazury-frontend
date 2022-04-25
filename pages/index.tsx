@@ -336,7 +336,7 @@ const Home: NextPage = () => {
               className={`${
                 focused && isMobile
                   ? 'fixed h-screen bg-white pt-8'
-                  : 'relative sticky top-0 rounded-lg bg-indigoGray-5'
+                  : 'relative sticky top-4 rounded-lg bg-indigoGray-5'
               }  z-10 flex w-full flex-col`}
             >
               <form className="flex w-full items-center py-2 pl-[14px] pr-2">
