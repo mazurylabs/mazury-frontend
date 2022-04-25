@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import { Avatar } from '.';
 
-type Activity = 'event' | 'referral' | 'vote';
+type Activity = 'event' | 'referral' | 'vote' | 'badge';
 
 type MappedActivities<T> = { [Key in Activity]: T };
 
@@ -11,6 +11,7 @@ interface Props {
   activityType: Activity;
   time: Date | string;
   label: string;
+  avatarSize?: 'sm' | 'm' | 'lg';
 }
 
 const baseClass = 'uppercase text-xs font-bold';
@@ -31,19 +32,30 @@ const activityDetails: MappedActivities<{
     iconSrc: '/icons/thumbs-up.svg',
     className: `${baseClass} text-pink-500`,
   },
+  badge: {
+    iconSrc: '/icons/badge.svg',
+    className: `${baseClass} text-pink-500`,
+  },
 };
+
+const avatarSizes = { sm: 32, m: 40, lg: 64 };
 
 export const ActivityPreview: React.FC<Props> = ({
   thumbnailSrc,
   activityType,
   time,
   label,
+  avatarSize = 'lg',
 }) => {
   const { iconSrc, className } = activityDetails[activityType];
 
   return (
     <div className="flex gap-4">
-      <Avatar src={thumbnailSrc} height="64px" width="64px" />
+      <Avatar
+        src={thumbnailSrc}
+        height={avatarSizes[avatarSize]}
+        width={avatarSizes[avatarSize]}
+      />
       <div className="flex flex-col">
         <div className="flex gap-4">
           <div className="flex gap-2">
