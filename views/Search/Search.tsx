@@ -16,6 +16,7 @@ import {
   useCurrentBreakpoint,
   useDebounce,
   useProfileSearch,
+  useReferralCount,
   useSkillsSearch,
 } from 'hooks';
 import Image from 'next/image';
@@ -612,6 +613,7 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
 }) => {
   const router = useRouter();
   const skills = useMemo(() => getSkillsFromProfile(profile), [profile]);
+  const { referralCount } = useReferralCount(profile?.eth_address as string);
 
   return (
     <div
@@ -632,7 +634,7 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
         </span>
 
         <span className="mt-1 text-xs font-medium text-indigoGray-50">
-          43 referrals
+          {referralCount} referrals
         </span>
       </div>
 

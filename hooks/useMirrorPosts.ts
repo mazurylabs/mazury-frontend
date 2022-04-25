@@ -32,6 +32,6 @@ export const useMirrorPosts = (address: string) => {
   return {
     posts: data?.entries,
     error,
-    count: data?.entries.length,
+    count: data?.entries?.length,
   };
 };
