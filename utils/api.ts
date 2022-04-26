@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { OnboardingFormDataType } from 'contexts';
 import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
 import { api } from '.';
@@ -204,6 +205,32 @@ export const isOnboarded: (
     return {
       data: null,
       error,
+    };
+  }
+};
+
+export const isValid: (
+  field: 'username' | 'email',
+  value: string
+) => Promise<
+  APIResponse<{
+    valid: boolean;
+    type: string;
+    value: string;
+  } | null>
+> = async (field, value) => {
+  try {
+    const res = await api.post(`/profiles/validate?type=${field}`, {
+      value,
+    });
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error: any) {
+    return {
+      data: null,
+      error: error.response?.data,
     };
   }
 };

@@ -1,7 +1,16 @@
 import { Button, Input, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
+import { useDebounce } from 'hooks';
 import Image from 'next/image';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { isValid } from 'utils/api';
 import { useAccount } from 'wagmi';
 
 export const ProfileView: FC = () => {
@@ -10,12 +19,16 @@ export const ProfileView: FC = () => {
     setFormData,
     avatarFile: file,
     setAvatarFile: setFile,
+    valid,
+    setValid,
   } = useContext(OnboardingContext);
   const [{ data: accountData }] = useAccount({
     fetchEns: true,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileUrl, setFileUrl] = useState<string>();
+  const debouncedUsername = useDebounce(formData.username);
+  const canContinue = valid.username;
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
@@ -27,6 +40,26 @@ export const ProfileView: FC = () => {
     setFileUrl('');
     setFile(null);
   };
+
+  const checkIfValid = useCallback(
+    async (field: 'email' | 'username') => {
+      if (!formData[field]) {
+        return;
+      }
+      const { data, error } = await isValid(field, formData[field]!);
+      if (error) {
+        setValid((valid) => ({ ...valid, [field]: false }));
+      } else {
+        setValid((valid) => ({ ...valid, [field]: true }));
+      }
+    },
+    [formData, setValid]
+  );
+
+  useEffect(() => {
+    checkIfValid('username');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedUsername]);
 
   useEffect(() => {
     if (file) {
@@ -45,6 +78,7 @@ export const ProfileView: FC = () => {
     <OnboardingLayout
       firstHeading="Profile information"
       secondHeading={greeting}
+      bottomButtonDisabled={!canContinue}
     >
       <p className="mt-3 text-sm font-medium text-indigoGray-60">
         We&apos;re glad you&apos;re joining us. Let&apos;s take a moment to
@@ -95,7 +129,14 @@ export const ProfileView: FC = () => {
             const newFd = { ...formData, username: val };
             setFormData(newFd);
           }}
+          error={!valid.username}
         />
+        {!valid.username && (
+          <span className="mt-1 text-sm text-red-500">
+            Please choose a different username.
+          </span>
+        )}
+
         <Input
           id="full-name"
           outerClassName="mt-4"
@@ -110,10 +151,8 @@ export const ProfileView: FC = () => {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={fileUrl || formData?.avatar || '/default-avi.png'}
-            height="100px"
-            width="100px"
             alt="Your profile picture"
-            className="rounded-full border-[1.5px] border-indigoGray-30 object-cover"
+            className="h-[100px] w-[100px] rounded-full border-[1.5px] border-indigoGray-30 object-cover"
           />
 
           <div className="flex flex-col items-center gap-2">

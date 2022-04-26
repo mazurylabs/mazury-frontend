@@ -91,6 +91,10 @@ const App = ({ Component, pageProps }: AppProps) => {
     useState<PersonBasicDetails>();
   const [twitterConnected, setTwitterConnected] = useState(false);
   const [githubConnected, setGithubConnected] = useState(false);
+  const [valid, setValid] = useState({
+    username: true,
+    email: true,
+  });
 
   useEffect(() => {
     console.log(`                                                   
@@ -124,6 +128,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             setTwitterConnected,
             githubConnected,
             setGithubConnected,
+            valid,
+            setValid,
           }}
         >
           <NextHead>
