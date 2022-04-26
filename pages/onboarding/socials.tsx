@@ -1,11 +1,12 @@
 import { Input, OnboardingLayout, SocialButton } from 'components';
 import { OnboardingContext } from 'contexts';
+import { useDebounce } from 'hooks';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
 import { getTwitterConnectionPopupLink } from 'utils';
-import { getMessageToBeSigned, updateProfile } from 'utils/api';
+import { getMessageToBeSigned, isValid, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
 import { useAccount, useSignMessage } from 'wagmi';
 
@@ -18,12 +19,16 @@ const SocialsPage: NextPage = () => {
     setTwitterConnected,
     githubConnected,
     setGithubConnected,
+    valid,
+    setValid,
   } = useContext(OnboardingContext);
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
   const [twitterModalOpen, setTwitterModalOpen] = useState(false);
+  const debouncedEmail = useDebounce(formData.email);
 
   const ethAddress = accountData?.address;
+  const canContinue = valid.email;
 
   const onTwitterClick = async () => {
     if (!ethAddress) {
@@ -38,6 +43,26 @@ const SocialsPage: NextPage = () => {
       alert('Your twitter is already connected!');
     }
   };
+
+  const checkIfValid = useCallback(
+    async (field: 'email' | 'username') => {
+      if (!formData[field]) {
+        return;
+      }
+      const { data, error } = await isValid(field, formData[field]!);
+      if (error) {
+        setValid((valid) => ({ ...valid, [field]: false }));
+      } else {
+        setValid((valid) => ({ ...valid, [field]: true }));
+      }
+    },
+    [formData, setValid]
+  );
+
+  useEffect(() => {
+    checkIfValid('email');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedEmail]);
 
   const onGithubClick = async () => {
     if (githubConnected) {
@@ -85,6 +110,7 @@ const SocialsPage: NextPage = () => {
       firstHeading="Socials"
       secondHeading="Let's get in touch"
       bottomButtonOnClick={onSubmit}
+      bottomButtonDisabled={!canContinue}
     >
       <TwitterConnectionModal
         isOpen={twitterModalOpen}
@@ -112,7 +138,13 @@ const SocialsPage: NextPage = () => {
             })
           }
           value={formData.email}
+          error={!valid.email}
         />
+        {!valid.email && (
+          <span className="mt-1 text-sm text-red-500">
+            Please choose a different email.
+          </span>
+        )}
 
         <div className="flex">
           <Image

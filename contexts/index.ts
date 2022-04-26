@@ -50,6 +50,11 @@ interface OnboardingContextType {
   setTwitterConnected: Dispatch<SetStateAction<boolean>>;
   githubConnected: boolean;
   setGithubConnected: Dispatch<SetStateAction<boolean>>;
+  valid: {
+    username: boolean;
+    email: boolean;
+  };
+  setValid: Dispatch<SetStateAction<{ username: boolean; email: boolean }>>;
 }
 
 export const OnboardingContext = createContext<OnboardingContextType>({
@@ -65,6 +70,11 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   setTwitterConnected: () => {},
   githubConnected: false,
   setGithubConnected: () => {},
+  valid: {
+    username: false,
+    email: false,
+  },
+  setValid: () => {},
 });
 
 export * from './twitter';
