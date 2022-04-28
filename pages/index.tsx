@@ -3,53 +3,20 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useAccount } from 'wagmi';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { ActivityPreview, Avatar, Button, MobileSidebar } from 'components';
 import { Layout } from 'components';
-import { useClickOutside, useMobile } from 'hooks';
-import { commify } from 'utils';
+import {
+  useClickOutside,
+  useMobile,
+  useActivity,
+  useProfileSuggestions,
+} from 'hooks';
+import { commify, returnTruncatedIfEthAddress } from 'utils';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
-
-type Activity = 'event' | 'referral' | 'vote' | 'badge';
-
-interface DummyActivities {
-  thumbnailSrc: string;
-  activityType: Activity;
-  time: Date | string;
-  label: string;
-  avatarSize?: 'sm' | 'm' | 'lg';
-}
-
-const dummyActivities: DummyActivities[] = [
-  {
-    thumbnailSrc: '/icons/dummy-event.svg',
-    activityType: 'event',
-    label: 'matteo.eth attended Let’s play football during ETHAmsterdam!',
-    time: '3 days ago',
-  },
-  {
-    thumbnailSrc: '/icons/dummy-referral.svg',
-    activityType: 'referral',
-    label:
-      'shaad.eth referred arthur for “being a beast of an early stage founder”',
-    time: '3 days ago',
-  },
-  {
-    thumbnailSrc: '/icons/dummy-publication.svg',
-    activityType: 'event',
-    label:
-      'luc.eth just published “How to extract alpha with Dune Analytics — make $100k in 2 weeks”',
-    time: '3 days ago',
-  },
-  {
-    thumbnailSrc: '/icons/dummy-badge.svg',
-    activityType: 'badge',
-    label: 'wojtek earned a badge Sushi voter',
-    time: '3 days ago',
-  },
-];
 
 const keywordSuggestions = [
   { title: 'React developer', results: 13048, mostSearched: 5 },
@@ -75,16 +42,12 @@ const badgeSuggestions = [
   },
 ];
 
-const peopleSuggestions = [
-  { avatar: '/icons/dummy-user.svg', title: '8515teawine.eth' },
-  { avatar: '/icons/dummy-user.svg', title: '0xd7F...a6B' },
-  { avatar: '/icons/dummy-user.svg', title: 'alec.eth' },
-  {
-    avatar: '/icons/dummy-user.svg',
-    title: 'jonaherlich.eth',
-    detail: 'Attendend an event with you ',
-  },
-];
+const skeletonArray = new Array(4).fill(true);
+
+const apiParams = {
+  isNetwork: true,
+  limit: 4,
+};
 
 const Home: NextPage = () => {
   const searchRef = useRef<HTMLDivElement>(null!);
@@ -92,6 +55,9 @@ const Home: NextPage = () => {
   const isMobile = useMobile();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [{ data: accountData }] = useAccount();
+  const { activity } = useActivity(accountData?.address as string, apiParams);
+  const { profiles } = useProfileSuggestions(accountData?.address, apiParams);
   const [currentSearchState, setCurrentSearchState] =
     useState<SearchState>('idle');
 
@@ -140,11 +106,11 @@ const Home: NextPage = () => {
 
   const idle = (
     <div className="w-full lg:flex">
-      <div className="border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0 xl:basis-[35%]">
+      <div className="grow-[3] border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0">
         <div className="mb-5 hidden lg:flex">
           <button
             type="button"
-            className="font-inter flex items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-inter flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/network.svg'}
@@ -158,7 +124,7 @@ const Home: NextPage = () => {
 
           <button
             type="button"
-            className="font-inter ml-3 flex items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-inter ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/recommendation.svg'}
@@ -171,7 +137,7 @@ const Home: NextPage = () => {
           </button>
         </div>
 
-        <div className="text-indigoGray-50m mb-3 flex text-xs font-medium">
+        <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
           <div className="mr-2 hidden lg:flex">
             <Image
               src={'/icons/previous.svg'}
@@ -211,11 +177,11 @@ const Home: NextPage = () => {
         </ul>
       </div>
 
-      <div className="mb-[44.5px] mt-7 hidden grow justify-center lg:flex">
+      <div className="mb-[44.5px] mt-7 mr-14 hidden justify-center lg:flex">
         <div className=" w-[1px] shrink-0 bg-indigoGray-20 " />
       </div>
 
-      <div className="basis-[40%] pt-8 lg:pt-0">
+      <div className="pt-8 lg:mr-12 lg:pt-0">
         <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
           <h2>BADGE SEARCH SUGGESTIONS</h2>
         </div>
@@ -313,8 +279,8 @@ const Home: NextPage = () => {
 
       <Layout variant="plain">
         <div className="flex grow flex-col items-center justify-center">
-          <div className="flex max-w-[1000px] flex-col items-center pl-4 pr-6  md:px-0">
-            <div className="pt-12 lg:pt-0">
+          <div className="flex max-w-[1000px] flex-col items-center pl-4 pr-6 md:px-0  xl:w-[1000px]">
+            <div className={`overflow-hidden pt-12 lg:pt-0`}>
               <div className="mx-auto w-fit lg:hidden">
                 <Image
                   height={32}
@@ -336,7 +302,7 @@ const Home: NextPage = () => {
               className={`${
                 focused && isMobile
                   ? 'fixed h-screen bg-white pt-8'
-                  : 'relative sticky top-4 rounded-lg bg-indigoGray-5'
+                  : 'relative sticky top-8 grow rounded-lg bg-indigoGray-5'
               }  z-10 flex w-full flex-col`}
             >
               <form className="flex w-full items-center py-2 pl-[14px] pr-2">
@@ -428,21 +394,33 @@ const Home: NextPage = () => {
                   <h2>RECENT ACTIVITY IN YOUR NETWORK</h2>
                 </div>
 
-                {/* Temporarily commented out since the types for activity were updated */}
-                {/* <div className="mt-3 ">
+                <div className="mt-3 ">
                   <ul className="space-y-6">
-                    {dummyActivities.map((activity, index) => (
-                      <ActivityPreview
-                        key={index}
-                        activityType={activity.activityType}
-                        thumbnailSrc={activity.thumbnailSrc}
-                        label={activity.label}
-                        time={activity.time}
-                        avatarSize="m"
-                      />
-                    ))}
+                    {Boolean(activity)
+                      ? activity?.map((item) => {
+                          return (
+                            <ActivityPreview
+                              activity={item}
+                              key={item.id}
+                              avatarSize="md"
+                            />
+                          );
+                        })
+                      : skeletonArray.map((_, index) => (
+                          <div
+                            className="flex w-full animate-pulse items-end"
+                            key={index}
+                          >
+                            <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
+
+                            <div className="ml-3 flex w-full flex-col justify-center space-y-[2px] lg:mr-[60px] lg:w-fit">
+                              <div className="h-4 w-20 rounded bg-indigoGray-20" />
+                              <div className="h-4 w-full rounded bg-indigoGray-20 lg:w-[400px]" />
+                            </div>
+                          </div>
+                        ))}
                   </ul>
-                </div> */}
+                </div>
               </div>
 
               <div className="font-inter mt-10  w-full shrink-0 pb-8 lg:mt-0 lg:w-fit lg:pb-0">
@@ -452,36 +430,58 @@ const Home: NextPage = () => {
 
                 <div className="mt-3 grow lg:grow-0">
                   <ul className="space-y-6">
-                    {peopleSuggestions.map((suggestion, index) => (
-                      <li key={index} className="flex">
-                        <Avatar
-                          src={suggestion.avatar}
-                          width={40}
-                          height={40}
-                          alt="user"
-                        />
-
-                        <div className="ml-3 mr-4 min-w-[208px] grow lg:grow-0">
-                          <p className="font-serif text-base font-bold text-indigoGray-90">
-                            {suggestion.title}
-                          </p>
-                          {suggestion.detail && (
-                            <p className="text-xs font-medium text-indigoGray-60">
-                              {suggestion.detail}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="flex">
-                          <Image
-                            src="/icons/arrow-right.svg"
-                            width={8}
-                            height={12}
-                            alt="arrow-right"
+                    {Boolean(profiles) ? (
+                      profiles?.map((suggestion, index) => (
+                        <li key={index} className="flex">
+                          <Avatar
+                            src={suggestion.avatar}
+                            width={40}
+                            height={40}
+                            alt="user"
                           />
-                        </div>
-                      </li>
-                    ))}
+
+                          <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
+                            <p className="font-serif text-base font-bold text-indigoGray-90">
+                              {returnTruncatedIfEthAddress(suggestion.username)}
+                            </p>
+                          </div>
+
+                          <div className="flex">
+                            <Image
+                              src="/icons/arrow-right.svg"
+                              width={8}
+                              height={12}
+                              alt="arrow-right"
+                            />
+                          </div>
+                        </li>
+                      ))
+                    ) : (
+                      <div className="flex-1 space-y-6">
+                        {skeletonArray.map((_, index) => (
+                          <div
+                            className="flex animate-pulse items-end"
+                            key={index}
+                          >
+                            <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
+
+                            <div className="ml-3 mr-[60px] flex flex-col justify-center space-y-[2px]">
+                              <div className="h-4 w-20 rounded bg-indigoGray-20" />
+                              <div className="h-4 w-[160px] rounded bg-indigoGray-20" />
+                            </div>
+
+                            <div className="flex pb-3 opacity-50">
+                              <Image
+                                src="/icons/arrow-right.svg"
+                                width={8}
+                                height={12}
+                                alt="arrow-right"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </ul>
                 </div>
               </div>
