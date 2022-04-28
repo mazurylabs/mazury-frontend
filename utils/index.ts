@@ -136,3 +136,17 @@ export const commify = (value: number) => {
 
   return numberString;
 };
+
+const detectIfEthAddress = (str: string) => {
+  return /^(0x)?[0-9a-f]{40}$/i.test(str);
+};
+
+export const returnTruncatedIfEthAddress = (
+  str: string,
+  length: number = 10
+) => {
+  if (detectIfEthAddress(str)) {
+    return getTruncatedAddress(str, length);
+  }
+  return str;
+};

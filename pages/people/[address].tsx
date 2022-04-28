@@ -124,6 +124,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     'received'
   );
   const [postsExpanded, setPostsExpanded] = useState(false);
+  const [activityExpanded, setActivityExpanded] = useState(false);
 
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -618,10 +619,30 @@ const Profile: React.FC<Props> = ({ address }) => {
                 ref={altActivityRef}
                 className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
               >
-                {activity?.map((item) => {
-                  return <ActivityPreview activity={item} key={item.id} />;
-                })}
+                {activity && activity.length > 0 ? (
+                  activity
+                    ?.slice(0, activityExpanded ? activity.length : 4)
+                    .map((item) => {
+                      return <ActivityPreview activity={item} key={item.id} />;
+                    })
+                ) : (
+                  <p className="text-lg text-indigoGray-60">
+                    No recent activity to show
+                  </p>
+                )}
               </div>
+
+              {activity && activity.length > 4 && (
+                <div className="xl:w-10/12">
+                  <Button
+                    onClick={() => setActivityExpanded((v) => !v)}
+                    variant="secondary"
+                    className="mx-auto mt-6"
+                  >
+                    {activityExpanded ? 'COLLAPSE' : 'LOAD MORE'}
+                  </Button>
+                </div>
+              )}
             </div>
 
             {referrals.length > 0 && (

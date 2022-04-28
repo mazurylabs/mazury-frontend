@@ -2,6 +2,7 @@ import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
 import React from 'react';
 import type { Activity } from 'types';
+import { returnTruncatedIfEthAddress } from 'utils';
 import { Avatar } from './Avatar';
 
 interface ActivityPreviewProps {
@@ -51,12 +52,20 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-referral-received') {
     return (
       <div className="flex w-full items-center">
-        <Avatar
-          src={metadata?.referral_author?.avatar as string}
-          width="64px"
-          height="64px"
-          className="border border-indigoGray-30"
-        />
+        <div className="relative">
+          <Avatar
+            src={metadata?.referral_author?.avatar as string}
+            width="64px"
+            height="64px"
+            className="border border-indigoGray-30"
+          />
+          <Avatar
+            src={metadata?.referral_receiver?.avatar as string}
+            width="32px"
+            height="32px"
+            className="absolute top-8 left-8 border border-indigoGray-30"
+          />
+        </div>
 
         <div className="ml-6 flex flex-col">
           <div className="flex items-center">
@@ -77,7 +86,21 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             </span>
           </div>
 
-          <p>{metadata?.referral?.content}</p>
+          <p>
+            <span className="font-bold">
+              {returnTruncatedIfEthAddress(
+                metadata?.referral_author?.username as string,
+                5
+              )}
+            </span>{' '}
+            wrote a referral for{' '}
+            <span className="font-bold">
+              {returnTruncatedIfEthAddress(
+                metadata?.referral_receiver?.username as string,
+                5
+              )}
+            </span>
+          </p>
         </div>
       </div>
     );
@@ -112,7 +135,21 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             </span>
           </div>
 
-          <p>{metadata?.referral?.content}</p>
+          <p>
+            <span className="font-bold">
+              {returnTruncatedIfEthAddress(
+                metadata?.referral_author?.username as string,
+                5
+              )}
+            </span>{' '}
+            wrote a referral for{' '}
+            <span className="font-bold">
+              {returnTruncatedIfEthAddress(
+                metadata?.referral_receiver?.username as string,
+                5
+              )}
+            </span>
+          </p>
         </div>
       </div>
     );
