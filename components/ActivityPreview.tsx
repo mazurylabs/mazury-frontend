@@ -5,12 +5,17 @@ import type { Activity } from 'types';
 import { returnTruncatedIfEthAddress } from 'utils';
 import { Avatar } from './Avatar';
 
+type AvatarSize = 'sm' | 'md' | 'lg';
 interface ActivityPreviewProps {
   activity: Activity;
+  avatarSize?: AvatarSize;
 }
+
+const avatarSizes = { sm: 16, md: 40, lg: 64 };
 
 export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
+  avatarSize = 'lg',
 }) => {
   const { type: activityType, created_at, user, metadata } = activity;
 
@@ -19,8 +24,8 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
       <div className="flex w-full items-center">
         <Avatar
           src={metadata?.badge?.image_url as string}
-          width="64px"
-          height="64px"
+          width={avatarSizes[avatarSize]}
+          height={avatarSizes[avatarSize]}
           className="border border-indigoGray-30"
         />
 
@@ -55,14 +60,14 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
         <div className="relative">
           <Avatar
             src={metadata?.referral_author?.avatar as string}
-            width="64px"
-            height="64px"
+            width={avatarSizes[avatarSize]}
+            height={avatarSizes[avatarSize]}
             className="border border-indigoGray-30"
           />
           <Avatar
             src={metadata?.referral_receiver?.avatar as string}
-            width="32px"
-            height="32px"
+            width={avatarSize ? 20 : 32}
+            height={avatarSize ? 20 : 32}
             className="absolute top-8 left-8 border border-indigoGray-30"
           />
         </div>
@@ -111,8 +116,8 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
       <div className="flex w-full items-center">
         <Avatar
           src={metadata?.referral_receiver?.avatar as string}
-          width="64px"
-          height="64px"
+          width={avatarSizes[avatarSize]}
+          height={avatarSizes[avatarSize]}
           className="border border-indigoGray-30"
         />
 
@@ -160,8 +165,8 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
       <div className="flex w-full items-center">
         <Avatar
           src={metadata.event?.image_url as string}
-          width="64px"
-          height="64px"
+          width={avatarSizes[avatarSize]}
+          height={avatarSizes[avatarSize]}
           className="border border-indigoGray-30"
         />
 
@@ -185,8 +190,10 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           </div>
 
           <p>
-            <span className="font-bold">{user?.username}</span> attended{' '}
-            <span className="italic">{metadata.event?.name}</span>
+            <span className="font-bold">
+              {returnTruncatedIfEthAddress(user?.username)}
+            </span>{' '}
+            attended <span className="italic">{metadata.event?.name}</span>
           </p>
         </div>
       </div>
