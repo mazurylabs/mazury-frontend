@@ -79,7 +79,7 @@ export interface Referral extends MappedSkills<boolean> {
   updated_at: string;
   datetime: string;
   content: string;
-  skills?: Skill[];
+  skills?: { name: string; slug: string }[];
 }
 
 export type Role =

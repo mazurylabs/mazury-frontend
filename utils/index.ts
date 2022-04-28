@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Profile, Referral, Skill } from 'types';
+import type { Referral, Skill } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
@@ -149,4 +149,9 @@ export const returnTruncatedIfEthAddress = (
     return getTruncatedAddress(str, length);
   }
   return str;
+};
+
+export const getSkillSlugsFromReferral = (referral: Referral) => {
+  const { skills } = referral;
+  return skills?.map((skill) => skill.slug);
 };

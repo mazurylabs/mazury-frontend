@@ -1,26 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Avatar, ITagItem, Tags } from '.';
-import { Skill } from 'types';
+import { Referral, Skill } from 'types';
 import { colors, getMonthAndYear, toCapitalizedWord } from 'utils';
 import { useReferralCount } from 'hooks';
 
 interface Props {
-  referredBy: {
-    avatarSrc: string;
-    username: string;
-    eth_address: string;
-  };
-  text: string;
-  skills: Skill[];
-  date: Date | string;
+  referral: Referral;
 }
 
-export const ReferralPreview: React.FC<Props> = ({
-  referredBy,
-  text,
-  skills,
-  date,
-}) => {
+export const ReferralPreview: React.FC<Props> = ({ referral }) => {
+  const referredBy = referral.author;
+  const skills = referral.skills;
+  const date = referral.created_at;
+  const text = referral.content;
+
   const [tags, setTags] = useState<ITagItem[]>([]);
   const slicedTags = useMemo(() => tags.slice(0, 3), [tags]);
   const remainingTagsCount = useMemo(() => tags.length - 3, [tags]);
@@ -40,12 +33,12 @@ export const ReferralPreview: React.FC<Props> = ({
 
   useEffect(() => {
     setTags(
-      skills.map((skill) => ({
+      skills?.map((skill) => ({
         color: colors.gray,
-        label: toCapitalizedWord(skill),
-        value: skill,
+        label: toCapitalizedWord(skill.name),
+        value: skill.slug,
         showRemove: false,
-      }))
+      })) || []
     );
   }, [skills]);
 
@@ -54,7 +47,7 @@ export const ReferralPreview: React.FC<Props> = ({
       <div className="flex h-[40px] items-center gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Avatar
-          src={referredBy.avatarSrc || '/avatar-2.png'}
+          src={referredBy.avatar || '/avatar-2.png'}
           alt={`${referredBy.username} avatar`}
           width="40px"
           height="40px"

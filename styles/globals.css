@@ -5,12 +5,12 @@
 @layer base {
   @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf') format('true');
+    src: url('/fonts/Inter.ttf');
   }
 
   @font-face {
     font-family: 'Masqualero';
-    src: url('/fonts/Masqualero Regular.ttf') format('true');
+    src: url('/fonts/Masqualero Regular.otf') format('opentype');
     font-weight: normal;
   }
 
