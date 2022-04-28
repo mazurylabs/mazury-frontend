@@ -93,13 +93,12 @@ const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address;
-  // TODO: Integrate this into the markup once the design and the API have agreed on the types.
-  // const { activity, error: activityError } = useActivity(address);
   const {
     referrals,
     error: referralError,
     count: referralsCount,
   } = useReferrals(eth_address);
+  const { activity, error: activityError } = useActivity(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
   const {
@@ -125,6 +124,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     'received'
   );
   const [postsExpanded, setPostsExpanded] = useState(false);
+  const [activityExpanded, setActivityExpanded] = useState(false);
 
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -619,25 +619,30 @@ const Profile: React.FC<Props> = ({ address }) => {
                 ref={altActivityRef}
                 className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
               >
-                <ActivityPreview
-                  activityType="event"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Getting seen in web3 with Alec.eth (head of talent @ ConsenSys mesh, building peepledao) — mazury community call #1"
-                  time="3 days ago"
-                />
-                <ActivityPreview
-                  activityType="referral"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Mikela wrote a referral for luc"
-                  time="3 days ago"
-                />
-                <ActivityPreview
-                  activityType="vote"
-                  thumbnailSrc="/blue-ph.png"
-                  label="Voted Yes - Create $CODE on P-5: Governance Token Proposal"
-                  time="3 days ago"
-                />
+                {activity && activity.length > 0 ? (
+                  activity
+                    ?.slice(0, activityExpanded ? activity.length : 4)
+                    .map((item) => {
+                      return <ActivityPreview activity={item} key={item.id} />;
+                    })
+                ) : (
+                  <p className="text-lg text-indigoGray-60">
+                    No recent activity to show
+                  </p>
+                )}
               </div>
+
+              {activity && activity.length > 4 && (
+                <div className="xl:w-10/12">
+                  <Button
+                    onClick={() => setActivityExpanded((v) => !v)}
+                    variant="secondary"
+                    className="mx-auto mt-6"
+                  >
+                    {activityExpanded ? 'COLLAPSE' : 'LOAD MORE'}
+                  </Button>
+                </div>
+              )}
             </div>
 
             {referrals.length > 0 && (
@@ -835,7 +840,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   Writing
                 </h3>
 
-                <div className="flex gap-[24px]">
+                {/* <div className="flex gap-[24px]">
                   <Pill
                     color="amber"
                     label="All posts"
@@ -844,7 +849,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   />
                   <Pill color="amber" label="GM" />
                   <Pill color="amber" label="Mirror" />
-                </div>
+                </div> */}
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
@@ -860,7 +865,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }}
                           bgImageSrc={post.featuredImage?.url || ''}
                           title={post.title}
-                          link={`https://mirror.xyz/${address}/${post.digest}`}
+                          link={`https://mirror.xyz/${eth_address}/${post.digest}`}
                           key={post.digest}
                         />
                       );

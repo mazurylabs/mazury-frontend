@@ -5,6 +5,7 @@ import { useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Referral } from 'types';
 import {
   colors,
@@ -36,6 +37,7 @@ const defaultTags = [
 
 const WritePage: NextPage = () => {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
   const [tags, setTags] = useState<ITagItem[]>(defaultTags);
 
   // existingReferral is the referral that the referral that the user has authored for the receiver, if it exists
@@ -127,7 +129,9 @@ const WritePage: NextPage = () => {
       receiverAddress,
       content,
       skills,
-      signature
+      signature,
+      mutate,
+      authorAddress
     );
     if (error) {
       return alert(error);

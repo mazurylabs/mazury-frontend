@@ -20,7 +20,7 @@ export const Avatar: React.FC<Props> = ({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={src || '/default-avi.png'}
       alt={alt}
       style={{ borderRadius, width, height }}
       className={className}

@@ -428,7 +428,8 @@ const Home: NextPage = () => {
                   <h2>RECENT ACTIVITY IN YOUR NETWORK</h2>
                 </div>
 
-                <div className="mt-3 ">
+                {/* Temporarily commented out since the types for activity were updated */}
+                {/* <div className="mt-3 ">
                   <ul className="space-y-6">
                     {dummyActivities.map((activity, index) => (
                       <ActivityPreview
@@ -441,7 +442,7 @@ const Home: NextPage = () => {
                       />
                     ))}
                   </ul>
-                </div>
+                </div> */}
               </div>
 
               <div className="font-inter mt-10  w-full shrink-0 pb-8 lg:mt-0 lg:w-fit lg:pb-0">

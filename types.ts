@@ -166,11 +166,12 @@ export type APIResponse<T = any> = {
   error: Error | unknown;
 };
 
-type ActivityType =
+export type ActivityType =
   | 'new-badge'
   | 'new-referral-given'
   | 'new-referral-received'
-  | 'new-post';
+  // | 'new-post'
+  | 'new-event-attended';
 
 export interface Activity {
   id: string;
@@ -180,6 +181,26 @@ export interface Activity {
   type: ActivityType;
   description: string;
   image: string;
+  // Details of the current user in case we need them for activities related to referrals
+  currentUser?: PersonBasicDetails;
+  metadata: {
+    badge?: {
+      image_url: string;
+      name: string;
+      slug: string;
+    };
+
+    referral_author?: Partial<PersonBasicDetails>;
+    referral_receiver?: Partial<PersonBasicDetails>;
+    referral?: {
+      content: string;
+    };
+
+    event?: {
+      name: string;
+      image_url: string;
+    };
+  };
 }
 
 export interface MirrorPost {
