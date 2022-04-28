@@ -197,7 +197,7 @@ export interface Activity {
     };
 
     event?: {
-      title: string;
+      name: string;
       image_url: string;
     };
   };

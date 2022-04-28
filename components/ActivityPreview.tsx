@@ -11,21 +11,13 @@ interface ActivityPreviewProps {
 export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
 }) => {
-  const {
-    type: activityType,
-    image,
-    description,
-    created_at,
-    user,
-    currentUser,
-    metadata,
-  } = activity;
+  const { type: activityType, created_at, user, metadata } = activity;
 
   if (activityType === 'new-badge') {
     return (
       <div className="flex w-full items-center">
         <Avatar
-          src={image}
+          src={metadata?.badge?.image_url as string}
           width="64px"
           height="64px"
           className="border border-indigoGray-30"
@@ -38,10 +30,10 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
                 src="/icons/thumbs-up.svg"
                 width="16px"
                 height="16px"
-                alt="Event icon"
+                alt="Badge icon"
               />
               <span className="ml-1 text-xs font-bold uppercase text-pink-500">
-                Vote
+                New badge
               </span>
             </div>
 
@@ -50,21 +42,118 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             </span>
           </div>
 
-          <p>{description}</p>
+          <p>{metadata?.badge?.name}</p>
         </div>
       </div>
     );
   }
 
   if (activityType === 'new-referral-received') {
-    return <div>New referral received</div>;
+    return (
+      <div className="flex w-full items-center">
+        <Avatar
+          src={metadata?.referral_author?.avatar as string}
+          width="64px"
+          height="64px"
+          className="border border-indigoGray-30"
+        />
+
+        <div className="ml-6 flex flex-col">
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <Image
+                src="/icons/message-circle coloured.svg"
+                width="16px"
+                height="16px"
+                alt="Referral icon"
+              />
+              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+                Referral
+              </span>
+            </div>
+
+            <span className="ml-4 text-xs font-medium text-indigoGray-50">
+              {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+            </span>
+          </div>
+
+          <p>{metadata?.referral?.content}</p>
+        </div>
+      </div>
+    );
   }
+
   if (activityType === 'new-referral-given') {
-    return <div>referral given</div>;
+    return (
+      <div className="flex w-full items-center">
+        <Avatar
+          src={metadata?.referral_receiver?.avatar as string}
+          width="64px"
+          height="64px"
+          className="border border-indigoGray-30"
+        />
+
+        <div className="ml-6 flex flex-col">
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <Image
+                src="/icons/message-circle coloured.svg"
+                width="16px"
+                height="16px"
+                alt="Referral icon"
+              />
+              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+                Referral
+              </span>
+            </div>
+
+            <span className="ml-4 text-xs font-medium text-indigoGray-50">
+              {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+            </span>
+          </div>
+
+          <p>{metadata?.referral?.content}</p>
+        </div>
+      </div>
+    );
   }
 
   if (activityType === 'new-event-attended') {
-    return <div>New event attended</div>;
+    return (
+      <div className="flex w-full items-center">
+        <Avatar
+          src={metadata.event?.image_url as string}
+          width="64px"
+          height="64px"
+          className="border border-indigoGray-30"
+        />
+
+        <div className="ml-6 flex flex-col">
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <Image
+                src="/icons/fire.svg"
+                width="16px"
+                height="16px"
+                alt="Event icon"
+              />
+              <span className="ml-1 text-xs font-bold uppercase text-indigo-400">
+                Event
+              </span>
+            </div>
+
+            <span className="ml-4 text-xs font-medium text-indigoGray-50">
+              {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+            </span>
+          </div>
+
+          <p>
+            <span className="font-bold">{user?.username}</span> attended{' '}
+            <span className="italic">{metadata.event?.name}</span>
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return null;
