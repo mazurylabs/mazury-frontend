@@ -5,7 +5,7 @@ exports[`Modal renders correctly and close functionality works properly 1`] = `
   class="ReactModalPortal"
 >
   <div
-    class="ReactModal__Overlay bg-black-900 bg-opacity-50 h-screen w-screen absolute top-0 left-0 z-20"
+    class="ReactModal__Overlay bg-black-900 bg-opacity-50 h-screen w-screen fixed top-0 left-0 z-20"
   >
     <div
       aria-modal="true"
