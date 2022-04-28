@@ -40,7 +40,7 @@ export const SignIn = () => {
     if (!onboarded) {
       router.push('/onboarding');
     } else {
-      router.push(`/profile/${address}`);
+      router.push(`/people/${address}`);
     }
   };
 
