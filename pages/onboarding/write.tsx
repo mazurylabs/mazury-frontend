@@ -83,9 +83,9 @@ const WritePage: NextPage = () => {
       const existingTags: ITagItem[] | undefined = existingReferral.skills?.map(
         (skill) => {
           return {
-            value: skill,
+            value: skill.slug,
             color: colors.indigo,
-            label: toCapitalizedWord(skill),
+            label: toCapitalizedWord(skill.name),
           };
         }
       );
@@ -173,7 +173,7 @@ const WritePage: NextPage = () => {
         <div className="mt-2 rounded-tl-[2px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px] border-[2px] border-indigoGray-30 bg-indigoGray-10 p-4 shadow-lg">
           <p className="text-sm font-medium text-indigoGray-80">
             {
-              referrals.find(
+              referrals?.find(
                 (referral) => referral.author.eth_address === receiverAddress
               )?.content
             }

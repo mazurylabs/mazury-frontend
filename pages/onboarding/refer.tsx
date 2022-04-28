@@ -4,7 +4,7 @@ import { useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FC, useContext, useRef } from 'react';
-import { getMonthAndYear } from 'utils';
+import { getMonthAndYear, getSkillSlugsFromReferral } from 'utils';
 import { useAccount } from 'wagmi';
 
 interface PersonProps {
@@ -65,7 +65,7 @@ const ReferPage: NextPage = () => {
           make sure you get credit for your reputation on web3.
         </InfoBox>
 
-        {referrals.length > 0 && (
+        {referrals && referrals.length > 0 && (
           <>
             {/* TODO: Add search icon & implement search */}
             <Input className="mt-6" placeholder="Search for a user" />
@@ -76,12 +76,14 @@ const ReferPage: NextPage = () => {
 
             <div className="mt-2 flex flex-col gap-4">
               {referrals.map((referral) => {
+                const skillSlugs = getSkillSlugsFromReferral(referral);
+
                 return (
                   <Person
                     avatarSrc={referral.author.avatar}
                     date={getMonthAndYear(new Date(referral.created_at))}
                     username={referral.author.username}
-                    role={referral.skills ? referral.skills[0] : 'No role'}
+                    role={skillSlugs ? skillSlugs[0] : 'No role'}
                     key={referral.id}
                     onReferClick={() => {
                       setReferralReceiver?.(referral.author);

@@ -74,9 +74,9 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
       const existingTags: ITagItem[] | undefined = existingReferral.skills?.map(
         (skill) => {
           return {
-            value: skill,
+            value: skill.slug,
             color: colors.indigo,
-            label: toCapitalizedWord(skill),
+            label: toCapitalizedWord(skill.name),
           };
         }
       );
