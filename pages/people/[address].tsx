@@ -645,7 +645,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               )}
             </div>
 
-            {referrals.length > 0 && (
+            {referrals && referrals?.length > 0 && (
               <div>
                 <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
                   Recent referrals
@@ -653,17 +653,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
                   {referrals?.slice(0, 2).map((referral) => {
                     return (
-                      <ReferralPreview
-                        key={referral.id}
-                        referredBy={{
-                          username: referral.author.username,
-                          avatarSrc: referral.author.avatar,
-                          eth_address: referral.author.eth_address,
-                        }}
-                        text={referral.content}
-                        skills={referral.skills || []}
-                        date={referral.created_at}
-                      />
+                      <ReferralPreview key={referral.id} referral={referral} />
                     );
                   })}
                 </div>
@@ -671,7 +661,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             )}
 
-            {referrals.length <= 0 && <HR className="mt-0" />}
+            {referrals && referrals?.length <= 0 && <HR className="mt-0" />}
 
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
@@ -798,14 +788,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       return (
                         <ReferralPreview
                           key={referral.id}
-                          referredBy={{
-                            username: referral.author.username,
-                            avatarSrc: referral.author.avatar,
-                            eth_address: referral.author.eth_address,
-                          }}
-                          text={referral.content}
-                          skills={referral.skills || []}
-                          date={referral.created_at}
+                          referral={referral}
                         />
                       );
                     })
