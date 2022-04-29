@@ -10,7 +10,7 @@ export const getTruncatedAddress = (
     return '';
   }
 
-  return `${address.slice(0, length)}...${address.slice(
+  return `${address.slice(0, length + 2)}...${address.slice(
     address.length - length
   )}`;
 };
@@ -143,7 +143,7 @@ const detectIfEthAddress = (str: string) => {
 
 export const returnTruncatedIfEthAddress = (
   str: string,
-  length: number = 10
+  length: number = 4
 ) => {
   if (detectIfEthAddress(str)) {
     return getTruncatedAddress(str, length);
