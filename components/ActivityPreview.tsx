@@ -94,15 +94,13 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <p>
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string,
-                5
+                metadata?.referral_author?.username as string
               )}
             </span>{' '}
             wrote a referral for{' '}
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string,
-                5
+                metadata?.referral_receiver?.username as string
               )}
             </span>
           </p>
@@ -143,15 +141,13 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <p>
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string,
-                5
+                metadata?.referral_author?.username as string
               )}
             </span>{' '}
             wrote a referral for{' '}
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string,
-                5
+                metadata?.referral_receiver?.username as string
               )}
             </span>
           </p>
