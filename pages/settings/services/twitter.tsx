@@ -12,11 +12,14 @@ import {
   verifyTweet,
 } from 'utils/api';
 import { getTwitterConnectionPopupLink } from 'utils';
+import { useProtectedRoute } from 'hooks';
 
 type User = Record<'twitter' | 'address', string>;
 type Steps = 'idle' | 'active' | 'loading' | 'error' | 'success';
 
 const TwitterPage: NextPage = () => {
+  useProtectedRoute();
+
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [{ data: accountData }] = useAccount();
   const [_, signMessage] = useSignMessage();

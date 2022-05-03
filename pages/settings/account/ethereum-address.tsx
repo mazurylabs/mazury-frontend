@@ -5,10 +5,13 @@ import { useAccount } from 'wagmi';
 
 import { Button, SettingsLayout } from 'components';
 import { getProfile } from 'utils/api';
+import { useProtectedRoute } from 'hooks';
 
 type AddressArray = Record<'username' | 'address', string>[];
 
 const EthAddressPage: NextPage = () => {
+  useProtectedRoute();
+
   const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
   const [addresses, setAddresses] = useState<AddressArray>([]);
 

@@ -1,7 +1,10 @@
 import { NextPage } from 'next';
 import { Button, SettingsLayout } from 'components';
+import { useProtectedRoute } from 'hooks';
 
 const DiscordPage: NextPage = () => {
+  useProtectedRoute();
+
   return (
     <SettingsLayout
       content={

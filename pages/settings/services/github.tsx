@@ -11,11 +11,14 @@ import {
   verifyTweet,
 } from 'utils/api';
 import { getTwitterConnectionPopupLink } from 'utils';
+import { useProtectedRoute } from 'hooks';
 
 type User = Record<'github' | 'address', string>;
 type Steps = 'idle' | 'success';
 
 const GithubPage: NextPage = () => {
+  useProtectedRoute();
+
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [{ data: accountData }] = useAccount();
   const [_, signMessage] = useSignMessage();
