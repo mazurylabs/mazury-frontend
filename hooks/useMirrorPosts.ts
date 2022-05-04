@@ -4,7 +4,7 @@ import { MirrorPost } from 'types';
 
 export const useMirrorPosts = (address: string) => {
   const fetcher = (query: string) =>
-    request('https://mirror-api.com/graphql', query);
+    request('http://mirror-api-static.com/graphql', query);
 
   const { data, error } = useSWR<{
     entries: MirrorPost[];
