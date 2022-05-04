@@ -97,7 +97,7 @@ const SettingsLink = ({ title, links }: SettingsLinkProps) => {
                     alt="list disc"
                   />
 
-                  <span className="ml-5">{link}</span>
+                  <span className="ml-5">{link.split('-').join(' ')}</span>
                 </a>
               </Link>
             </li>
@@ -126,7 +126,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
           <div>
             <SettingsLink
               title="Account"
-              links={['Username', 'Email', 'Eth-address']}
+              links={['Username', 'Email', 'Ethereum-address']}
             />
 
             <SettingsLink
@@ -160,7 +160,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
             <div>
               <SettingsCard
                 title="Account"
-                links={['Username', 'Email', 'Eth-address']}
+                links={['Username', 'Email', 'Ethereum-address']}
               />
 
               <SettingsCard

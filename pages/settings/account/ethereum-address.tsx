@@ -31,7 +31,7 @@ const EthAddressPage: NextPage = () => {
       content={
         <div className="flex grow flex-col">
           <div className="font-serif text-4xl font-semibold leading-9">
-            <h2>Eth addresses</h2>
+            <h2>Ethereum addresses </h2>
           </div>
 
           <div className="mt-6 flex grow flex-col">
@@ -64,7 +64,7 @@ const EthAddressPage: NextPage = () => {
               </div>
 
               <Button className="w-full uppercase" size="large" disabled={true}>
-                CONNECT WALLET (COMING SOON)
+                CONNECT NEW ADDRESS (COMING SOON)
               </Button>
             </div>
           </div>
