@@ -113,12 +113,6 @@ const GithubPage: NextPage = () => {
               >
                 {user.github ? 'DISCONNECT' : 'CONNECT'} GITHUB
               </Button>
-
-              {user.github && (
-                <div className="font-inter mt-5 flex justify-center text-sm font-bold text-gray-900">
-                  <Link href={`/people/${user.address}`}>GO TO PROFILE</Link>
-                </div>
-              )}
             </div>
           </div>
         </div>
