@@ -1,8 +1,15 @@
-import { AxiosError } from 'axios';
 import { OnboardingFormDataType } from 'contexts';
-import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
+import {
+  Activity,
+  APIResponse,
+  ListResponse,
+  MirrorPost,
+  Profile,
+  Referral,
+} from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
 import { api } from '.';
+import { request as gqlRequest } from 'graphql-request';
 
 export const getProfile: (
   address: string
@@ -236,6 +243,44 @@ export const isValid: (
     return {
       data: res.data,
       error: null,
+    };
+  } catch (error: any) {
+    return {
+      data: null,
+      error: error.response?.data,
+    };
+  }
+};
+
+export const getMirrorPosts: (
+  address: string
+) => Promise<APIResponse<ListResponse<MirrorPost>>> = async (address) => {
+  try {
+    const res = await gqlRequest(
+      'http://mirror-api-static.com/graphql',
+      `{
+      entries(projectAddress: \"${address}\") {
+          title
+          featuredImage {
+              url
+          }
+          body
+          author {
+              address
+          }
+          digest
+          originalDigest
+          timestamp
+          publishStatus
+          publishedAtTimestamp
+      }
+  }`
+    );
+    console.log(res);
+    return {
+      data: res?.entries,
+      error: null,
+      count: res?.entries?.length || 0,
     };
   } catch (error: any) {
     return {

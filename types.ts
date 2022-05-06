@@ -164,6 +164,7 @@ export interface ThemeColor {
 export type APIResponse<T = any> = {
   data: T | null;
   error: Error | unknown;
+  count?: number;
 };
 
 export type ActivityType =

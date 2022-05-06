@@ -18,6 +18,7 @@ import {
 import {
   ColorName,
   MappedRoles,
+  MirrorPost as IMirrorPost,
   Profile as IProfile,
   ProfileSection,
   Referral,
@@ -31,7 +32,7 @@ import {
   hasAlreadyReferredReceiver,
   toCapitalizedWord,
 } from 'utils';
-import { getProfile } from 'utils/api';
+import { getMirrorPosts, getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
 import {
@@ -55,10 +56,14 @@ import toast, { Toaster } from 'react-hot-toast';
 interface Props {
   address: string;
   ens?: string;
+  posts: IMirrorPost[];
+  postsCount: number;
 }
 
 interface PageProps extends Props {
   fallback: IProfile;
+  posts: IMirrorPost[];
+  postsCount: number;
 }
 
 const profileSections: ProfileSection[] = [
@@ -87,7 +92,7 @@ const roleFieldToLabel: MappedRoles<string> = {
   role_community_manager: 'Community manager',
 };
 
-const Profile: React.FC<Props> = ({ address }) => {
+const Profile: React.FC<Props> = ({ address, posts, postsCount }) => {
   const router = useRouter();
   const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
@@ -107,11 +112,6 @@ const Profile: React.FC<Props> = ({ address }) => {
     count: badgesCount,
   } = useBadges(eth_address);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  const {
-    posts,
-    error: postsError,
-    count: postsCount,
-  } = useMirrorPosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = scrollPos && scrollPos > 0;
@@ -878,10 +878,15 @@ const Profile: React.FC<Props> = ({ address }) => {
   );
 };
 
-const Page: NextPage<PageProps> = ({ fallback, address }) => {
+const Page: NextPage<PageProps> = ({
+  fallback,
+  address,
+  posts,
+  postsCount,
+}) => {
   return (
     <SWRConfig value={{ fallback }}>
-      <Profile address={address} />
+      <Profile address={address} posts={posts} postsCount={postsCount} />
     </SWRConfig>
   );
 };
@@ -891,9 +896,14 @@ export default Page;
 export const getServerSideProps = async (context: NextPageContext) => {
   const { address } = context.query;
   const { data: profile } = await getProfile(address as string);
+  const { data: posts, count: postsCount } = await getMirrorPosts(
+    profile?.eth_address as string
+  );
   return {
     props: {
       address: context.query.address,
+      posts,
+      postsCount,
       // we pass a fallback to SWR so that it always has something to render and not show a loading indicator
       fallback: {
         [`/profiles/${address}`]: profile,
