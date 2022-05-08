@@ -6,7 +6,13 @@ import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { ActivityPreview, Avatar, Button, MobileSidebar } from 'components';
+import {
+  ActivityPreview,
+  Avatar,
+  BadgeModal,
+  Button,
+  MobileSidebar,
+} from 'components';
 import { Layout } from 'components';
 import {
   useClickOutside,
@@ -213,17 +219,22 @@ const Home: NextPage = () => {
 
           <div className="flex">
             <div className="mr-4 w-6" aria-hidden={true} />
-            <Link href={''}>
-              <a className="flex items-center text-xs text-indigo-600">
-                <span className="mr-2">See more badges</span>
-                <Image
-                  src="/icons/arrow-right-indigo.svg"
-                  width={16}
-                  height={16}
-                  alt="arrow-right"
-                />
-              </a>
-            </Link>
+            <BadgeModal
+              triggerButton={
+                <button
+                  type="button"
+                  className="flex items-center text-xs text-indigo-600"
+                >
+                  <span className="mr-2">See more badges</span>
+                  <Image
+                    src="/icons/arrow-right-indigo.svg"
+                    width={16}
+                    height={16}
+                    alt="arrow-right"
+                  />
+                </button>
+              }
+            />
           </div>
         </div>
       </div>
