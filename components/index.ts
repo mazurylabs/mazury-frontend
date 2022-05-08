@@ -11,6 +11,8 @@ export { Input } from './Input';
 export { OnboardingLayout } from './OnboardingLayout';
 export { RoleCard } from './RoleCard';
 export { InfoBox } from './InfoBox';
+export { BadgeModal } from './BadgeModal';
+export { BadgeDetail } from './BadgeDetail';
 export * from './Tags';
 export * from './Icons';
 export { Sidebar } from './Sidebar';
