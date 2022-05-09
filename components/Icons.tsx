@@ -5,9 +5,12 @@ interface IconProps {
   height?: string;
   color?: string;
   label?: string;
+  className?: string;
 }
 
-export const XIcon: FC<IconProps> = ({
+interface Icon extends FC<IconProps> {}
+
+export const XIcon: Icon = ({
   width,
   height,
   color,

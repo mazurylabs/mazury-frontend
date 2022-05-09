@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Referral, Skill } from 'types';
+import type { Profile, Referral, Skill } from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
@@ -115,6 +115,17 @@ export const getMetricDisplayValue = (
   return value === null || value === undefined ? placeholder : value;
 };
 
+const detectIfEthAddress = (str: string) => {
+  return /^(0x)?[0-9a-f]{40}$/i.test(str);
+};
+
+export const returnTruncatedIfEthAddress = (str: string) => {
+  if (detectIfEthAddress(str)) {
+    return getTruncatedAddress(str);
+  }
+  return str;
+};
+
 export const commify = (value: number) => {
   let numberString: string | string[] = String(value);
 
@@ -137,21 +148,29 @@ export const commify = (value: number) => {
   return numberString;
 };
 
-const detectIfEthAddress = (str: string) => {
-  return /^(0x)?[0-9a-f]{40}$/i.test(str);
-};
-
-export const returnTruncatedIfEthAddress = (
-  str: string,
-  length: number = 4
-) => {
-  if (detectIfEthAddress(str)) {
-    return getTruncatedAddress(str, length);
-  }
-  return str;
-};
-
 export const getSkillSlugsFromReferral = (referral: Referral) => {
   const { skills } = referral;
   return skills?.map((skill) => skill.slug);
+};
+
+const getOffset = (page: number) => {
+  return (page - 1) * 20;
+};
+
+export const getOffsetArray = (page: number) => {
+  const offsets = [];
+  for (let i = 1; i <= page; i++) {
+    offsets.push(getOffset(i));
+  }
+  return offsets;
+};
+
+export const getSkillsFromProfile = (profile: Partial<Profile>) => {
+  const skills = [];
+  for (let skill of skillsList) {
+    if (profile[skill]) {
+      skills.push(skill);
+    }
+  }
+  return skills;
 };

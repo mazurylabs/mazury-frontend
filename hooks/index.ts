@@ -12,3 +12,4 @@ export { useActivity } from './useActivity';
 export { useReferralCount } from './useReferralCount';
 export { useClickOutside } from './useClickOutside';
 export { useProfileSuggestions } from './useProfileSuggestions';
+export * from './useSearch';

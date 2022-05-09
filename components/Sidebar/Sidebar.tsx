@@ -63,7 +63,7 @@ export const Sidebar: FC = () => {
         ) : (
           <>
             <SidebarItem
-              href="/"
+              href="/search"
               label="Search"
               icon={
                 <SearchIcon

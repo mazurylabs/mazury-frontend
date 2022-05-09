@@ -5,9 +5,15 @@ interface ToggleProps {
   isToggled: boolean;
   onToggle: (active: boolean) => void;
   className?: string;
+  id?: string;
 }
 
-export const Toggle: FC<ToggleProps> = ({ isToggled, onToggle, className }) => {
+export const Toggle: FC<ToggleProps> = ({
+  isToggled,
+  onToggle,
+  className,
+  id,
+}) => {
   const hiddenCheckboxRef = useRef<HTMLInputElement>(null);
 
   const onClick = () => {
@@ -32,6 +38,7 @@ export const Toggle: FC<ToggleProps> = ({ isToggled, onToggle, className }) => {
         hidden
         checked={isToggled}
         onChange={(e) => onToggle(e.target.checked)}
+        id={id}
       />
     </div>
   );

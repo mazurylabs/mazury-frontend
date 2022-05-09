@@ -20,3 +20,4 @@ export * from './Modal';
 export * from './Spinner';
 export * from './SocialButton';
 export * from './MobileSidebar';
+export * from './Dropdown';
