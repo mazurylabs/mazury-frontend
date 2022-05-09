@@ -103,7 +103,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   loop={true}
                   width={isMobile ? 180 : 123}
                   height={isMobile ? 260 : 186}
-                  className="leading-0 flex !border-transparent"
+                  className="leading-0 flex max-h-[200px] !border-transparent"
                 >
                   <source src="/videos/badge.mp4" type="video/mp4" />
                   {/* <img src="video.gif" width="175" height="260" /> */}
