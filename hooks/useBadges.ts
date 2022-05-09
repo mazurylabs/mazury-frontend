@@ -1,10 +1,10 @@
 import useSWR from 'swr';
-import { ListResponse, Badge } from '../types';
+import type { ListResponse, Badge, BadgeIssuer } from '../types';
 
-export const useBadges = (address: string) => {
+export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
   // TODO: Pagination
   const { data, error } = useSWR<ListResponse<Badge>>(
-    `/badges/?owner=${address}`
+    `/badges/?owner=${address}&issuer=${issuer}`
   );
 
   return {

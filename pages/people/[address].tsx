@@ -16,6 +16,7 @@ import {
   PenIcon,
 } from 'components';
 import {
+  BadgeIssuer,
   ColorName,
   MappedRoles,
   Profile as IProfile,
@@ -93,6 +94,9 @@ const Profile: React.FC<Props> = ({ address }) => {
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address;
+
+  const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
+
   const {
     referrals,
     error: referralError,
@@ -105,7 +109,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     badges,
     error: badgesError,
     count: badgesCount,
-  } = useBadges(eth_address);
+  } = useBadges(eth_address, badgeIssuer);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   const {
     posts,
@@ -679,11 +683,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <div className="flex gap-[24px]">
                   <Pill
                     label="Mazury badges"
-                    active
                     color="fuchsia"
                     className="h-fit w-fit md:ml-8"
+                    active={badgeIssuer === 'mazury'}
+                    onClick={() => setBadgeIssuer('mazury')}
                   />
-                  <Pill label="POAPs" color="fuchsia" className="h-fit w-fit" />
+                  <Pill
+                    label="POAPs"
+                    color="fuchsia"
+                    className="h-fit w-fit"
+                    active={badgeIssuer === 'poap'}
+                    onClick={() => setBadgeIssuer('poap')}
+                  />
                 </div>
               </div>
 
@@ -707,7 +718,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                     })
                 ) : (
                   <p className="text-lg text-indigoGray-60">
-                    No recent badges to show
+                    {badges?.length === 0
+                      ? 'No recent badges to show'
+                      : 'Loading...'}
                   </p>
                 )}
               </div>
