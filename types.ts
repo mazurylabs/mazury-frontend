@@ -57,7 +57,9 @@ export interface BadgeType {
   title: string;
   slug: string;
   description: string;
-  issuer?: string;
+  issuer: {
+    name: BadgeIssuer;
+  };
   poap_badge_extra_data?: any;
 }
 
