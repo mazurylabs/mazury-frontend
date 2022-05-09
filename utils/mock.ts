@@ -21,7 +21,7 @@ export const mockProfile: Profile = {
         title: 'Uniswap proposal author',
         slug: 'uniswap_author',
         description: 'You published a proposal for uniswap',
-        issuer: '3044e81d-4bcd-4ca1-8fb7-39f7b2fbee91',
+        issuer: { name: 'mazury' },
         poap_badge_extra_data: null,
       },
       created_at: '2021-11-28T21:16:23.817772Z',
