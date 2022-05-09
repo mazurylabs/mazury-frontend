@@ -37,7 +37,7 @@ export const Dropdown: FCWithClassName<DropdownProps> = ({
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative z-40">
       <div
         onClick={toggleShowOptions}
         className={`flex w-fit hover:cursor-pointer ${className}`}
