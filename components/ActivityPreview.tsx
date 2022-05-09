@@ -17,7 +17,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
   avatarSize = 'lg',
 }) => {
-  const { type: activityType, created_at, user, metadata } = activity;
+  const {
+    type: activityType,
+    activity_datetime: created_at,
+    user,
+    metadata,
+  } = activity;
 
   if (activityType === 'new-badge') {
     return (

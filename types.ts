@@ -180,6 +180,7 @@ export type ActivityType =
   | 'new-event-attended';
 
 export interface Activity {
+  activity_datetime: string;
   id: string;
   user: PersonBasicDetails;
   created_at: string;
