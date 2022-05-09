@@ -101,9 +101,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 <video
                   autoPlay={true}
                   loop={true}
-                  width={isMobile ? 180 : 123}
-                  height={isMobile ? 260 : 186}
-                  className="leading-0 flex max-h-[200px] !border-transparent"
+                  className="leading-0 flex w-[220px] !border-transparent md:w-[245px] lg:w-[123px]"
                 >
                   <source src="/videos/badge.mp4" type="video/mp4" />
                   {/* <img src="video.gif" width="175" height="260" /> */}
