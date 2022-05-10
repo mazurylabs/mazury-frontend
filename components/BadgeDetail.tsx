@@ -4,7 +4,6 @@ import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 
 import { Button } from './Button';
-import { useMobile } from 'hooks';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -76,7 +75,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   return (
     <div
-      className="z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:left-0 lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
+      className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
       onClick={handleCloseModal}
     >
       <motion.div
