@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 import { ActivityPreview, Avatar, Button, MobileSidebar } from 'components';
 import { Layout } from 'components';
@@ -50,6 +51,7 @@ const apiParams = {
 };
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null!);
   const inputRef = useRef<HTMLInputElement>(null!);
   const isMobile = useMobile();
@@ -67,13 +69,8 @@ const Home: NextPage = () => {
     setFocused(() => (event.type === 'focus' ? true : false));
   };
 
-  const handleSearch = async () => {
-    try {
-      setCurrentSearchState('loading');
-      console.log(searchTerm);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSearch = () => {
+    router.push('/search');
   };
 
   const handleKeydown = (event: React.KeyboardEvent) => {
@@ -91,6 +88,12 @@ const Home: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+
+    if (event.target.value) {
+      setCurrentSearchState('loading');
+    } else {
+      setCurrentSearchState('idle');
+    }
   };
 
   const animationAttributes = !isMobile
@@ -107,7 +110,7 @@ const Home: NextPage = () => {
   const idle = (
     <div className="w-full lg:flex">
       <div className="grow-[3] border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0">
-        <div className="mb-5 hidden lg:flex">
+        {/* <div className="mb-5 hidden lg:flex">
           <button
             type="button"
             className="font-inter flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
@@ -135,10 +138,10 @@ const Home: NextPage = () => {
             />
             <span className="ml-2">See recommendations</span>
           </button>
-        </div>
+        </div> */}
 
-        <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
-          <div className="mr-2 hidden lg:flex">
+        <div className="mb-3 flex text-xs font-medium text-indigoGray-40">
+          {/* <div className="mr-2 hidden lg:flex">
             <Image
               src={'/icons/previous.svg'}
               layout="fixed"
@@ -146,8 +149,9 @@ const Home: NextPage = () => {
               height={16}
               alt="previous search"
             />
-          </div>
-          <h2>{isMobile ? 'KEYWORD SUGGESTIONS' : 'PREVIOUS SEARCH'}</h2>
+          </div> */}
+          {/* <h2>{isMobile ? 'KEYWORD SUGGESTIONS' : 'PREVIOUS SEARCH'}</h2> */}
+          <h2>KEYWORD SUGGESTIONS</h2>
         </div>
 
         <ul className="font-inter font-medium">
@@ -155,7 +159,7 @@ const Home: NextPage = () => {
             <li key={index} className="mb-6">
               <p className="text-sm text-indigoGray-90">{suggestion.title}</p>
 
-              <div className="flex text-xs  text-indigoGray-50 md:hidden">
+              <div className="flex text-xs  text-indigoGray-50">
                 <p>{commify(suggestion.results)} results</p>
 
                 {suggestion.mostSearched && (
