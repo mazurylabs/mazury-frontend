@@ -76,7 +76,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   return (
     <div
       className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
-      onClick={handleCloseModal}
+      onClick={() => isMobile && handleCloseModal()}
     >
       <motion.div
         {...animatedValue}
