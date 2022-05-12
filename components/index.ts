@@ -21,3 +21,4 @@ export * from './Spinner';
 export * from './SocialButton';
 export * from './MobileSidebar';
 export * from './Dropdown';
+export * from './Skeleton';

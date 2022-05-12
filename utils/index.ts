@@ -1,5 +1,11 @@
 import axios from 'axios';
-import type { Profile, Referral, Skill } from 'types';
+import type {
+  ColorName,
+  Profile,
+  ProfileSection,
+  Referral,
+  Skill,
+} from 'types';
 import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
@@ -173,4 +179,12 @@ export const getSkillsFromProfile = (profile: Partial<Profile>) => {
     }
   }
   return skills;
+};
+
+export const sectionToColor: { [key in ProfileSection]: ColorName } = {
+  Activity: 'indigo',
+  Badges: 'fuchsia',
+  Referrals: 'emerald',
+  Writing: 'amber',
+  DAOs: 'purple',
 };
