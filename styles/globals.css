@@ -3,9 +3,79 @@
 @tailwind utilities;
 
 @layer base {
+  /* Inter thin */
   @font-face {
     font-family: 'Inter';
     src: url('/fonts/Inter.ttf');
+    font-weight: 100;
+  }
+
+  /* Inter extralight */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 200;
+  }
+
+  /* Inter light */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 300;
+  }
+
+  /* Inter regular */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 400;
+  }
+
+  /* Inter medium */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 500;
+  }
+
+  /* Inter semibold */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 600;
+  }
+
+  /* Inter bold */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 700;
+  }
+
+  /* Inter extrabold */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 800;
+  }
+
+  /* Inter black   */
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 900;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 600;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter.ttf');
+    font-weight: 400;
   }
 
   @font-face {
