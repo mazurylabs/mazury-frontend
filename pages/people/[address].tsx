@@ -1,13 +1,11 @@
 import { NextPage, NextPageContext } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
-import { SWRConfig } from 'swr';
 import {
   Button,
   Pill,
   ActivityPreview,
   BadgePreview,
   HR,
-  GMPost,
   MirrorPost,
   Layout,
   Sidebar,
@@ -17,9 +15,7 @@ import {
 } from 'components';
 import {
   BadgeIssuer,
-  ColorName,
   MappedRoles,
-  Profile as IProfile,
   ProfileSection,
   Referral,
   Role,
@@ -31,8 +27,8 @@ import {
   goToLink,
   hasAlreadyReferredReceiver,
   toCapitalizedWord,
+  sectionToColor,
 } from 'utils';
-import { getProfile } from 'utils/api';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Head from 'next/head';
 import {
@@ -52,15 +48,14 @@ import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
 import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
 import toast, { Toaster } from 'react-hot-toast';
+import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 
 interface Props {
   address: string;
   ens?: string;
 }
 
-interface PageProps extends Props {
-  fallback: IProfile;
-}
+interface PageProps extends Props {}
 
 const profileSections: ProfileSection[] = [
   'Activity',
@@ -69,14 +64,6 @@ const profileSections: ProfileSection[] = [
   'Writing',
   'DAOs',
 ];
-
-const sectionToColor: { [key in ProfileSection]: ColorName } = {
-  Activity: 'indigo',
-  Badges: 'fuchsia',
-  Referrals: 'emerald',
-  Writing: 'amber',
-  DAOs: 'purple',
-};
 
 const roleFieldToLabel: MappedRoles<string> = {
   role_developer: 'Developer',
@@ -93,7 +80,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [{ data: accountData }] = useAccount();
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
-  const eth_address = profile?.eth_address;
+  const eth_address = profile?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
 
@@ -118,7 +105,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   } = useMirrorPosts(eth_address);
 
   const scrollPos = useScrollPosition();
-  const shouldCollapseHeader = scrollPos && scrollPos > 0;
+  const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Activity');
 
@@ -237,6 +224,10 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
 
+  const writeReferralButtonText = existingReferral
+    ? 'Edit referral'
+    : 'Write referral';
+
   if (error) {
     return (
       <>
@@ -258,12 +249,21 @@ const Profile: React.FC<Props> = ({ address }) => {
     );
   }
 
-  const writeReferralButtonText = existingReferral
-    ? 'Edit referral'
-    : 'Write referral';
-
   if (!profile) {
-    return <div>Something went wrong.</div>;
+    return (
+      <ProfilePageLoadingState
+        headerRef={headerRef}
+        shouldCollapseHeader={shouldCollapseHeader}
+        profileSections={profileSections}
+        activeSection={activeSection}
+        handleSectionClick={handleSectionClick}
+        activityRef={activityRef}
+        altActivityRef={altActivityRef}
+        badgesRef={badgesRef}
+        referralsRef={referralsRef}
+        writingRef={writingRef}
+      />
+    );
   }
 
   return (
@@ -895,26 +895,17 @@ const Profile: React.FC<Props> = ({ address }) => {
   );
 };
 
-const Page: NextPage<PageProps> = ({ fallback, address }) => {
-  return (
-    <SWRConfig value={{ fallback }}>
-      <Profile address={address} />
-    </SWRConfig>
-  );
+const Page: NextPage<PageProps> = ({ address }) => {
+  return <Profile address={address} />;
 };
 
 export default Page;
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { address } = context.query;
-  const { data: profile } = await getProfile(address as string);
   return {
     props: {
       address: context.query.address,
-      // we pass a fallback to SWR so that it always has something to render and not show a loading indicator
-      fallback: {
-        [`/profiles/${address}`]: profile,
-      },
     },
   };
 };
