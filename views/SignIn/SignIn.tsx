@@ -45,7 +45,7 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <h1 className="font-serif text-xl font-bold text-indigoGray-90">
         Choose your method
       </h1>

@@ -11,10 +11,12 @@ interface MobileSidebarProps {
 }
 
 export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
-  const [{ data: accountData }] = useAccount();
+  const [{ data: accountData }, disconnect] = useAccount();
   const { profile } = useProfile(accountData?.address);
 
   const isSignedIn = !!accountData;
+
+  const logout = () => disconnect();
 
   return (
     <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden">
@@ -43,17 +45,29 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
           </Link>
 
           {isSignedIn ? (
-            <Link href={`/people/${accountData?.address}`} passHref>
-              <a>
-                <img
-                  src={profile?.avatar || '/profile-active.svg'}
-                  alt="Profile icon"
+            <>
+              <Link href={`/people/${accountData?.address}`} passHref>
+                <a>
+                  <img
+                    src={profile?.avatar || '/profile-active.svg'}
+                    alt="Profile icon"
+                    width="24px"
+                    height="24px"
+                    className="rounded-full"
+                  />{' '}
+                </a>
+              </Link>
+
+              <a onClick={logout}>
+                <Image
+                  src="/icons/login.svg"
+                  alt="Sign out icon"
                   width="24px"
                   height="24px"
-                  className="rounded-full"
+                  className="scale-x-[-1]"
                 />{' '}
               </a>
-            </Link>
+            </>
           ) : (
             <Link href="/sign-in" passHref>
               <a>
