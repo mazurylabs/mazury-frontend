@@ -3,10 +3,11 @@ import useSWR from 'swr';
 import { BadgeType, ListResponse } from '../types';
 
 export const useBadgeTypes = () => {
-  const { data, error } = useSWR<ListResponse<BadgeType>>('/badge_types/');
+  const { data, error } = useSWR<ListResponse<BadgeType>>('badge_types');
 
   return {
     badgeTypes: data?.results,
+    nextBadgeType: data?.next || '',
     error,
   };
 };
