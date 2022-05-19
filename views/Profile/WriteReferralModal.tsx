@@ -19,23 +19,7 @@ interface WriteReferralModalProps {
 
 type IStatus = 'writing' | 'signing' | 'success' | 'error';
 
-const defaultTags = [
-  {
-    label: 'Frontend development',
-    color: colors.indigo,
-    value: 'frontend',
-  },
-  {
-    label: 'Solidity',
-    color: colors.amber,
-    value: 'solidity',
-  },
-  {
-    label: 'Community',
-    color: colors.emerald,
-    value: 'community',
-  },
-];
+const defaultTags: ITagItem[] = [];
 
 export const WriteReferralModal: FC<WriteReferralModalProps> = ({
   isOpen,

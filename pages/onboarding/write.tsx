@@ -17,23 +17,7 @@ import {
 import { createReferral, getMessageToBeSigned } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
 
-const defaultTags = [
-  {
-    label: 'Frontend development',
-    color: colors.indigo,
-    value: 'frontend',
-  },
-  {
-    label: 'Solidity',
-    color: colors.amber,
-    value: 'solidity',
-  },
-  {
-    label: 'Community',
-    color: colors.emerald,
-    value: 'community',
-  },
-];
+const defaultTags: ITagItem[] = [];
 
 const WritePage: NextPage = () => {
   const router = useRouter();
