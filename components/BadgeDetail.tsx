@@ -8,6 +8,12 @@ import { Button } from './Button';
 interface BadgeDetailProps {
   handleCloseModal: () => void;
   isMobile: boolean;
+  title: string;
+  description: string;
+  videoUrl: string;
+  isBadgeHidden: boolean;
+  badgeCount?: number;
+  image: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -70,6 +76,12 @@ const BadgeDetailButton = ({
 export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   handleCloseModal,
   isMobile,
+  title,
+  description,
+  videoUrl,
+  isBadgeHidden,
+  badgeCount = 0,
+  image,
 }) => {
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
@@ -97,24 +109,28 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <ScrollLock>
             <div className="flex grow flex-col lg:flex-row lg:pt-6 lg:pr-4 lg:pb-4">
               <div className="flex grow items-center justify-center">
-                <video
+                {/* <video
                   autoPlay={true}
                   loop={true}
                   className="leading-0 flex w-[220px] !border-transparent md:w-[245px] lg:w-[123px]"
                 >
-                  <source src="/videos/badge.mp4" type="video/mp4" />
-                  {/* <img src="video.gif" width="175" height="260" /> */}
-                </video>
+                  <source src={videoUrl} type="video/mp4" />
+                </video> */}
+                <img
+                  src={image}
+                  className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[156px] lg:w-[110px] lg:px-[15px] lg:pt-[30px]"
+                  alt={title + ' badge'}
+                />
               </div>
 
               <div className="space-y-[25.5px]">
                 <div className="space-y-2 lg:mb-[48.5px]">
                   <h2 className="font-demi text-2xl leading-6 text-indigoGray-90">
-                    Early Mazury adopter
+                    {title}
                   </h2>
 
                   <p className="font-inter text-sm text-indigoGray-60">
-                    Voted in an aave governance snapshot
+                    {description}
                   </p>
 
                   <div className="flex max-h-7 items-center space-x-2">
@@ -139,7 +155,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
                     <div className="font-inter text-xs font-medium text-indigoGray-60">
-                      <p>{12345} people</p>
+                      <p>{badgeCount} people</p>
                     </div>
                   </div>
                 </div>

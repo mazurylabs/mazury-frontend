@@ -1,59 +1,23 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
+import { useAccount } from 'wagmi';
 
-import { useClickOutside, useMobile } from 'hooks';
+import {
+  useClickOutside,
+  useMobile,
+  useBadgeTypes,
+  useBadges,
+  useIntersection,
+} from 'hooks';
 import { Button } from './Button';
 import { Pill } from './Pill';
 import { Toggle } from './Toggle';
 import { Avatar } from './Avatar';
 import { BadgeDetail } from './BadgeDetail';
-
-const dummyBadges = [
-  {
-    title: 'Graph voter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: true,
-    count: 12497,
-    image: '/icons/aave.svg',
-  },
-  {
-    title: 'Early Mazury adopter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: false,
-    count: 12497,
-    image: '/icons/mazury.svg',
-  },
-  {
-    title: 'Graph voter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: false,
-    count: 12497,
-    image: '/icons/graph.svg',
-  },
-  {
-    title: 'Graph voter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: true,
-    count: 12497,
-    image: '/icons/aave.svg',
-  },
-  {
-    title: 'Early Mazury adopter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: false,
-    count: 12497,
-    image: '/icons/mazury.svg',
-  },
-  {
-    title: 'Graph voter',
-    snapshot: 'Voted in an aave governance snapshot',
-    isHidden: false,
-    count: 12497,
-    image: '/icons/graph.svg',
-  },
-];
+import { Badge, BadgeType } from '../types';
+import { api } from 'utils';
 
 const skeletonArray = new Array(5).fill(true);
 
@@ -86,6 +50,14 @@ interface BadgeModalProps {
 }
 
 export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
+  const intersectionRef = useRef(null!);
+  const loadMoreBadges = useIntersection(intersectionRef.current, '50px');
+  const [{ data: accountData }] = useAccount();
+  const { badges, count: badgesCount } = useBadges(
+    accountData?.address as string
+  );
+  const { badgeTypes, nextBadgeType } = useBadgeTypes();
+  const [refresh, setRefresh] = useState('');
   const inputRef = useRef<HTMLInputElement>(null!);
   const containerRef = useRef(null!);
   const isMobile = useMobile();
@@ -93,8 +65,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showUserBadges, setShowUserBadges] = useState(false);
-  const [showBadgeDetails, setShowBadgeDetails] = useState(false);
-  const [hoveredBadge, setHoveredbadge] = useState<number | null>(null);
+  const [showBadgeDetails, setShowBadgeDetails] = useState<BadgeType | null>(
+    null
+  );
+  const [badgesInView, setBadgesInView] = useState<BadgeType[] | undefined>([]);
+  const [hoveredBadge, setHoveredbadge] = useState<BadgeType | null>(null);
   const [currentModalStep, setCurrentModalStep] =
     useState<BadgeModalState>('idle');
 
@@ -108,14 +83,14 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
     setCurrentModalStep('idle');
   };
 
-  const handleOpenBadgeDetail = (id: string) => {
+  const handleOpenBadgeDetail = (badge: BadgeType) => {
     if (!isMobile) return;
-    setShowBadgeDetails(true);
+    setShowBadgeDetails(badge);
   };
 
-  const handleShowDetailsOnHover = (id: number) => {
+  const handleShowDetailsOnHover = (badge: BadgeType) => {
     if (isMobile) return;
-    setHoveredbadge(id);
+    setHoveredbadge(badge);
   };
 
   useClickOutside(containerRef, handleResetModal);
@@ -131,28 +106,65 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
     setSearchTerm(event.target.value);
   };
 
+  useEffect(() => {
+    if (showUserBadges) {
+      const userBadges = badges?.map((badge) => badge.badge_type);
+      setBadgesInView(userBadges);
+    } else {
+      setBadgesInView(badgeTypes);
+    }
+    setRefresh('');
+  }, [showUserBadges, badges, badgeTypes]);
+
+  useEffect(() => {
+    const fetchMore = async () => {
+      let next = refresh ? refresh : nextBadgeType?.split('.com/')[1];
+
+      const res = await api.get(next);
+
+      const nextRefreshLink = res.data.next?.split('.com/')[1];
+
+      if (refresh !== nextRefreshLink) {
+        //only load add unique data
+        let updatedResult = badgesInView?.concat(res?.data?.results);
+        setBadgesInView(updatedResult);
+        setRefresh(nextRefreshLink);
+      }
+    };
+
+    if (loadMoreBadges && !showUserBadges) {
+      fetchMore();
+    }
+  }, [loadMoreBadges, showUserBadges]);
+
   const idle = (
-    <ul className="h-[450px] space-y-8 overflow-auto px-6 lg:grid lg:h-fit lg:grid-cols-2 lg:grid-rows-3 lg:gap-7 lg:space-y-0 lg:overflow-visible lg:px-10">
-      {dummyBadges.map((badge, index) => (
+    <ul className="z-10 h-[450px] space-y-8 overflow-auto px-6 lg:grid lg:h-[287px] lg:grid-cols-2 lg:gap-7 lg:space-y-0 lg:px-10">
+      {badgesInView?.map((badge, index) => (
         <li
           key={index}
-          className="relative flex max-h-[98px] items-center justify-between lg:max-h-[77px] lg:min-w-[43.8%]"
-          onClick={() => handleOpenBadgeDetail('')}
-          onMouseEnter={() => handleShowDetailsOnHover(index)}
+          className="relative flex max-h-[98px] items-center justify-between lg:h-[77px] lg:min-w-[43.8%]"
+          onClick={() => handleOpenBadgeDetail(badge)}
+          onMouseEnter={() => handleShowDetailsOnHover(badge)}
           onMouseLeave={() => setHoveredbadge(null)}
         >
           <AnimatePresence>
-            {hoveredBadge === index && (
+            {hoveredBadge?.id === badge.id && (
               <BadgeDetail
-                handleCloseModal={() => setShowBadgeDetails(false)}
+                handleCloseModal={() => setShowBadgeDetails(null)}
                 isMobile={isMobile}
+                title={badge.title}
+                description={badge.description}
+                videoUrl={badge.video}
+                isBadgeHidden={false}
+                badgeCount={badgesCount}
+                image={badge.image}
               />
             )}
           </AnimatePresence>
 
           <div className="flex items-center space-x-3">
             <div className="flex">
-              <Avatar src={badge.image} height={40} width={40} alt="badge" />
+              <img src={badge.image} className="h-10 w-[27px]" alt="badge" />
             </div>
 
             <div className="space-y-2">
@@ -161,39 +173,40 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   {badge.title}
                 </p>
                 <p className="font-inter text-sm font-medium text-indigoGray-60">
-                  {badge.snapshot}
+                  {badge.description}
                 </p>
               </div>
 
               <div className="flex max-h-7 items-center space-x-2">
                 <div
                   className={`flex w-fit items-center space-x-2 rounded py-[5.33px] pl-[9.33px] pr-2 ${
-                    badge.isHidden ? 'bg-indigoGray-10' : 'bg-emerald-50'
+                    false ? 'bg-indigoGray-10' : 'bg-emerald-50'
                   }`}
                 >
                   <div className="flex" role="presentation">
                     <Image
                       height={16}
                       width={16}
-                      src={`/icons/${
-                        badge.isHidden ? 'eye-slash.svg' : 'trophy.svg'
-                      }`}
+                      src={`/icons/${false ? 'eye-slash.svg' : 'trophy.svg'}`}
                       alt="badge type"
                     />
                   </div>
                   <p
                     className={`font-inter text-xs font-bold ${
-                      badge.isHidden ? 'text-indigoGray-90' : 'text-emerald-900'
+                      false ? 'text-indigoGray-90' : 'text-emerald-900'
                     }`}
                   >
-                    {badge.isHidden ? 'Badge hidden' : 'Badge earned'}
+                    {false ? 'Badge hidden' : 'Badge earned'}
                   </p>
                 </div>
 
                 <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
                 <div className="font-inter text-xs font-medium text-indigoGray-60">
-                  <p>{badge.count} people</p>
+                  <p>
+                    {badgesCount}{' '}
+                    {(badgesCount as number) < 2 ? 'person' : 'people'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -209,6 +222,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
           </div>
         </li>
       ))}
+
+      <div className="h-[0.1px] w-full bg-transparent" ref={intersectionRef} />
     </ul>
   );
 
@@ -274,8 +289,14 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
             <AnimatePresence>
               {showBadgeDetails && isMobile && (
                 <BadgeDetail
-                  handleCloseModal={() => setShowBadgeDetails(false)}
+                  handleCloseModal={() => setShowBadgeDetails(null)}
                   isMobile={isMobile}
+                  title={showBadgeDetails.title}
+                  description={showBadgeDetails.description}
+                  videoUrl={showBadgeDetails.video}
+                  isBadgeHidden={false}
+                  badgeCount={badgesCount}
+                  image={showBadgeDetails.image}
                 />
               )}
 
