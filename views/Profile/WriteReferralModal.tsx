@@ -213,6 +213,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
                   },
                 ])
               }
+              addButtonText="Add new skill"
             />
             <Button
               onClick={onSubmit}
