@@ -49,12 +49,17 @@ export const ProfileView: FC = () => {
       }
       const { data, error } = await isValid(field, formData[field]!);
       if (error) {
-        setValid((valid) => ({ ...valid, [field]: false }));
+        // @ts-ignore error has the field value
+        if (error.value === accountData?.address) {
+          setValid((valid) => ({ ...valid, [field]: true }));
+        } else {
+          setValid((valid) => ({ ...valid, [field]: false }));
+        }
       } else {
         setValid((valid) => ({ ...valid, [field]: true }));
       }
     },
-    [formData, setValid]
+    [formData, setValid, accountData]
   );
 
   useEffect(() => {
