@@ -12,7 +12,7 @@ const onboardingRoutes = [
   'role',
   'refer',
   // 'write', ** we have removed this page from the onboarding flow because it is now accessible via the individual 'refer' buttons
-  'whitelist',
+  // 'whitelist', ** we don't want this whitelist page anymore
   'socials',
   'finish',
   // 'redirect', we dont need a hard redirect anymore. we'll just do router.push('people/[address]')
