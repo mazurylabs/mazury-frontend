@@ -1,6 +1,6 @@
 import { Input, OnboardingLayout, SocialButton } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useDebounce } from 'hooks';
+import { useDebounce, useIsOnboarded } from 'hooks';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -26,6 +26,7 @@ const SocialsPage: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const [twitterModalOpen, setTwitterModalOpen] = useState(false);
   const debouncedEmail = useDebounce(formData.email);
+  const { onboarded } = useIsOnboarded(accountData?.address as string);
 
   const ethAddress = accountData?.address;
   const canContinue = valid.email;
@@ -60,7 +61,10 @@ const SocialsPage: NextPage = () => {
   );
 
   useEffect(() => {
-    checkIfValid('email');
+    if (accountData?.address && !onboarded) {
+      // don't check for validity if the user has already been onboarded.
+      checkIfValid('email');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedEmail]);
 

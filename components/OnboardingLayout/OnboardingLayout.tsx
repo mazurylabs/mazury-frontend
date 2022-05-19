@@ -131,7 +131,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         {/* next/Image overrides display:hidden */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/waves.png"
+          src="/new-logo.svg"
           className="rounded-full hover:cursor-pointer"
           alt="Mazury logo"
           width="40px"
