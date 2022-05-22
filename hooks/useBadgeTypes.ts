@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { BadgeType, ListResponse } from '../types';
 
-export const useBadgeTypes = () => {
-  const { data, error } = useSWR<ListResponse<BadgeType>>('badge_types');
+export const useBadgeTypes = (issuer: string = 'mazury') => {
+  const { data, error } = useSWR<ListResponse<BadgeType>>(
+    `badge_types?issuer=${issuer}`
+  );
 
   return {
     badgeTypes: data?.results,
