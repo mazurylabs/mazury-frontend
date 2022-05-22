@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, ReactNode, useContext, useState } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 import { HomeIcon, SearchIcon } from 'components';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
 import { colors } from 'utils';
 import { SlidersIcon } from 'components/Icons';
-import { useAccount } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import Image from 'next/image';
 import { SignIn } from 'views/SignIn';
 import { useProfile } from 'hooks';
@@ -20,13 +20,15 @@ export const Sidebar: FC = () => {
   const { isOpen, signInOpen, setSignInOpen } = useContext(SidebarContext);
   const router = useRouter();
   const { pathname } = router;
-  const [{ data: accountData }] = useAccount();
+  const [{ data: accountData }, disconnect] = useAccount();
   const { profile } = useProfile(accountData?.address);
 
   const isSignedIn = !!accountData;
 
   const openSignIn = () => setSignInOpen(true);
   const closeSignIn = () => setSignInOpen(false);
+
+  const logout = () => disconnect();
 
   return (
     <>
@@ -63,7 +65,7 @@ export const Sidebar: FC = () => {
         ) : (
           <>
             <SidebarItem
-              href="/"
+              href="/search"
               label="Search"
               icon={
                 <SearchIcon
@@ -117,21 +119,39 @@ export const Sidebar: FC = () => {
               <Divider />
 
               {isSignedIn ? (
-                // Profile button
-                <SidebarItem
-                  href={accountData ? `/people/${accountData?.address}` : '/'}
-                  label="Profile"
-                  icon={
+                <>
+                  {/* // Profile button */}
+                  <SidebarItem
+                    href={accountData ? `/people/${accountData?.address}` : '/'}
+                    label="Profile"
+                    icon={
+                      <img
+                        src={profile?.avatar || '/profile-active.svg'}
+                        alt="Profile icon"
+                        className="h-5 w-5 rounded-full"
+                      />
+                    }
+                    isOpen={isOpen}
+                    active={pathname.startsWith('/people')}
+                    className="mt-8"
+                  />
+
+                  <a
+                    onClick={logout}
+                    className={`mt-8 flex h-[40px] hover:cursor-pointer ${
+                      isOpen && 'w-full'
+                    } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
+                  >
                     <img
-                      src={profile?.avatar || '/profile-active.svg'}
-                      alt="Profile icon"
-                      className="h-5 w-5 rounded-full"
-                    />
-                  }
-                  isOpen={isOpen}
-                  active={pathname.startsWith('/people')}
-                  className="mt-8"
-                />
+                      width="16px"
+                      height="16px"
+                      src="/icons/login.svg"
+                      alt="Sign in icon"
+                      className="scale-x-[-1]"
+                    />{' '}
+                    {isOpen && <span>Sign out</span>}
+                  </a>
+                </>
               ) : (
                 // Sign in button
                 <a

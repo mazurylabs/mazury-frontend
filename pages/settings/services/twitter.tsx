@@ -285,12 +285,6 @@ const TwitterPage: NextPage = () => {
               >
                 {user.twitter ? 'DISCONNECT' : 'CONNECT'} TWITTER
               </Button>
-
-              {user.twitter && (
-                <div className="font-inter mt-5 flex justify-center text-sm font-bold text-gray-900">
-                  <Link href={`/people/${user.address}`}>GO TO PROFILE</Link>
-                </div>
-              )}
             </div>
           </div>
 

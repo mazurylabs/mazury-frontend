@@ -17,7 +17,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
   avatarSize = 'lg',
 }) => {
-  const { type: activityType, created_at, user, metadata } = activity;
+  const {
+    type: activityType,
+    activity_datetime: created_at,
+    user,
+    metadata,
+  } = activity;
 
   if (activityType === 'new-badge') {
     return (
@@ -94,15 +99,13 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <p>
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string,
-                5
+                metadata?.referral_author?.username as string
               )}
             </span>{' '}
             wrote a referral for{' '}
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string,
-                5
+                metadata?.referral_receiver?.username as string
               )}
             </span>
           </p>
@@ -143,15 +146,13 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <p>
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string,
-                5
+                metadata?.referral_author?.username as string
               )}
             </span>{' '}
             wrote a referral for{' '}
             <span className="font-bold">
               {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string,
-                5
+                metadata?.referral_receiver?.username as string
               )}
             </span>
           </p>

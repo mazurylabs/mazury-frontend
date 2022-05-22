@@ -455,6 +455,9 @@ const Home: NextPage = () => {
                             <p className="font-serif text-base font-bold text-indigoGray-90">
                               {returnTruncatedIfEthAddress(suggestion.username)}
                             </p>
+                            <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
+                              Talent spotlight
+                            </p>
                           </div>
 
                           <div className="flex">

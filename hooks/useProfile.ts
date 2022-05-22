@@ -5,7 +5,7 @@ export const useProfile = (address: string | undefined) => {
   const { data, error } = useSWR<Profile>(`/profiles/${address}`);
 
   return {
-    profile: data!,
+    profile: data,
     error: error,
   };
 };
