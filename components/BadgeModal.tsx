@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 import { useAccount } from 'wagmi';
+import debounce from 'lodash.debounce';
 
 import {
   useClickOutside,
@@ -14,10 +15,10 @@ import {
 import { Button } from './Button';
 import { Pill } from './Pill';
 import { Toggle } from './Toggle';
-import { Avatar } from './Avatar';
 import { BadgeDetail } from './BadgeDetail';
-import { Badge, BadgeType } from '../types';
+import { BadgeType } from '../types';
 import { api } from 'utils';
+import { Portal } from './Portal';
 
 const skeletonArray = new Array(5).fill(true);
 
@@ -51,12 +52,10 @@ interface BadgeModalProps {
 
 export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const intersectionRef = useRef(null!);
-  const loadMoreBadges = useIntersection(intersectionRef.current, '50px');
+  const [badgeIssuer, setBadgeIssuer] = useState<'mazury' | 'poap'>('mazury');
+  const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
   const [{ data: accountData }] = useAccount();
-  const { badges, count: badgesCount } = useBadges(
-    accountData?.address as string
-  );
-  const { badgeTypes, nextBadgeType } = useBadgeTypes();
+  const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
   const [refresh, setRefresh] = useState('');
   const inputRef = useRef<HTMLInputElement>(null!);
   const containerRef = useRef(null!);
@@ -65,19 +64,32 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showUserBadges, setShowUserBadges] = useState(false);
+  const [badgesInView, setBadgesInView] = useState<BadgeType[] | undefined>([]);
+  const [hoveredBadge, setHoveredbadge] = useState<BadgeType | null>(null);
+  const [rect, setRect] = useState<{ top?: number; left?: number }>({
+    top: 0,
+    left: 0,
+  });
+
   const [showBadgeDetails, setShowBadgeDetails] = useState<BadgeType | null>(
     null
   );
-  const [badgesInView, setBadgesInView] = useState<BadgeType[] | undefined>([]);
-  const [hoveredBadge, setHoveredbadge] = useState<BadgeType | null>(null);
+  const { badges, count: badgesCount } = useBadges(
+    accountData?.address as string
+  );
   const [currentModalStep, setCurrentModalStep] =
     useState<BadgeModalState>('idle');
 
   const handleCloseModal = () => setIsOpen(false);
   const handleOpenModal = () => setIsOpen(true);
-  const handleOpenSearch = () => setIsSearchOpen(true);
-  const handleCloseSearch = () => setIsSearchOpen(false);
   const handleToggleShowBadges = () => setShowUserBadges((state) => !state);
+  const handleOpenSearch = () => setIsSearchOpen(true);
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+    setSearchTerm('');
+  };
+
   const handleResetModal = () => {
     handleCloseModal();
     setCurrentModalStep('idle');
@@ -88,9 +100,22 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
     setShowBadgeDetails(badge);
   };
 
-  const handleShowDetailsOnHover = (badge: BadgeType) => {
+  const handleShowDetailsOnHover = (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    badge: BadgeType
+  ) => {
     if (isMobile) return;
+    const target = event.currentTarget.querySelector(`.badge-${badge.id}`);
+    const rect = target?.getBoundingClientRect();
+
+    setRect({ top: rect?.bottom, left: rect?.left });
     setHoveredbadge(badge);
+  };
+
+  const handleBadgeIssuer = (issuer: 'mazury' | 'poap') => {
+    setRefresh('');
+    setBadgesInView([]);
+    setBadgeIssuer(issuer);
   };
 
   useClickOutside(containerRef, handleResetModal);
@@ -104,7 +129,28 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+
+    handleSearch(event.target.value);
   };
+
+  const handleSearch = useCallback(
+    debounce(async (nextValue) => {
+      const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
+      const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
+
+      const result = await api.get(
+        nextValue ? searchEndpoint : badgeTypesEndpoint
+      );
+
+      const nextRefreshLink = result.data.next?.split('.com/')[1];
+
+      if (refresh !== nextRefreshLink) {
+        setBadgesInView(result?.data?.results);
+        setRefresh(nextRefreshLink);
+      }
+    }, 500),
+    [badgeIssuer, refresh]
+  );
 
   useEffect(() => {
     if (showUserBadges) {
@@ -118,47 +164,66 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
   useEffect(() => {
     const fetchMore = async () => {
-      let next = refresh ? refresh : nextBadgeType?.split('.com/')[1];
+      try {
+        let next =
+          refresh || searchTerm ? refresh : nextBadgeType?.split('.com/')[1];
 
-      const res = await api.get(next);
+        const result = await api.get(next);
 
-      const nextRefreshLink = res.data.next?.split('.com/')[1];
+        const nextRefreshLink = result.data.next?.split('.com/')[1];
 
-      if (refresh !== nextRefreshLink) {
-        //only load add unique data
-        let updatedResult = badgesInView?.concat(res?.data?.results);
-        setBadgesInView(updatedResult);
-        setRefresh(nextRefreshLink);
+        if (refresh !== nextRefreshLink) {
+          //only load add unique data
+          let updatedResult = badgesInView?.concat(result?.data?.results);
+          setBadgesInView(updatedResult);
+          setRefresh(nextRefreshLink);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
 
-    if (loadMoreBadges && !showUserBadges) {
+    if (shouldFetchBadge && !showUserBadges) {
       fetchMore();
     }
-  }, [loadMoreBadges, showUserBadges]);
+  }, [shouldFetchBadge, showUserBadges, badgeIssuer]);
 
   const idle = (
-    <ul className="z-10 h-[450px] space-y-8 overflow-auto px-6 lg:grid lg:h-[287px] lg:grid-cols-2 lg:gap-7 lg:space-y-0 lg:px-10">
+    <ul className="z-10 h-[450px] space-y-8 overflow-y-auto overflow-x-hidden px-6 lg:grid lg:h-[287px] lg:grid-cols-2 lg:gap-y-7 lg:gap-x-[80px] lg:space-y-0 lg:px-10">
+      <div
+        className="detail-container fixed z-20 mt-8 ml-8"
+        style={{
+          top: rect?.top,
+          left: rect?.left,
+        }}
+      />
+
       {badgesInView?.map((badge, index) => (
         <li
           key={index}
-          className="relative flex max-h-[98px] items-center justify-between lg:h-[77px] lg:min-w-[43.8%]"
+          className="relative flex items-center justify-between lg:h-[77px] lg:max-h-[98px] lg:min-w-[43.8%]"
           onClick={() => handleOpenBadgeDetail(badge)}
-          onMouseEnter={() => handleShowDetailsOnHover(badge)}
+          onMouseEnter={(event) => handleShowDetailsOnHover(event, badge)}
           onMouseLeave={() => setHoveredbadge(null)}
         >
+          <div
+            className={`z-[-1] hidden lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:block lg:h-[215.5px] lg:w-[502.23px] badge-${badge.id}`}
+          />
+
           <AnimatePresence>
             {hoveredBadge?.id === badge.id && (
-              <BadgeDetail
-                handleCloseModal={() => setShowBadgeDetails(null)}
-                isMobile={isMobile}
-                title={badge.title}
-                description={badge.description}
-                videoUrl={badge.video}
-                isBadgeHidden={false}
-                badgeCount={badgesCount}
-                image={badge.image}
-              />
+              <Portal container=".detail-container">
+                <BadgeDetail
+                  handleCloseModal={() => setShowBadgeDetails(null)}
+                  isMobile={isMobile}
+                  title={hoveredBadge.title}
+                  description={hoveredBadge.description}
+                  videoUrl={hoveredBadge.video}
+                  isBadgeHidden={false}
+                  badgeCount={badgesCount}
+                  image={hoveredBadge.image}
+                />
+              </Portal>
             )}
           </AnimatePresence>
 
@@ -172,7 +237,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                 <p className="font-demi text-lg font-normal leading-5 text-indigoGray-90">
                   {badge.title}
                 </p>
-                <p className="font-inter text-sm font-medium text-indigoGray-60">
+                <p className="font-inter text-sm font-medium text-indigoGray-60 line-clamp-2">
                   {badge.description}
                 </p>
               </div>
@@ -315,7 +380,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     {...animatedValue}
                     className="z-10 h-[90%] w-full grow rounded-t-3xl bg-white pt-[30px] shadow-3xl md:h-[97%] lg:mx-[30px] lg:h-fit lg:max-w-[900px] lg:rounded-b-3xl lg:pb-6"
                   >
-                    <div className="px-6 lg:px-10">
+                    <div className="px-6 lg:border-b lg:border-indigoGray-20 lg:px-10">
                       <div className="mb-[30px]">
                         <Button
                           className="m-0 !p-0"
@@ -355,6 +420,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                       aria-label="Search"
                                       className="h-full w-full bg-transparent"
                                       value={searchTerm}
+                                      autoFocus={true}
                                       onChange={handleChange}
                                     />
                                   </div>
@@ -364,14 +430,17 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                               <div className="flex space-x-[24px]">
                                 <Pill
                                   label="Mazury badges"
-                                  active
+                                  active={badgeIssuer === 'mazury'}
                                   color="fuchsia"
                                   className="h-fit w-fit"
+                                  onClick={() => handleBadgeIssuer('mazury')}
                                 />
                                 <Pill
                                   label="POAPs"
+                                  active={badgeIssuer === 'poap'}
                                   color="fuchsia"
                                   className="h-fit w-fit"
+                                  onClick={() => handleBadgeIssuer('poap')}
                                 />
                               </div>
                             )}
@@ -398,7 +467,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                         </>
                       </div>
 
-                      <div className="my-6 flex space-x-[11px]">
+                      <div className="mt-6 mb-4 flex space-x-[11px]">
                         <Toggle
                           isToggled={showUserBadges}
                           onToggle={handleToggleShowBadges}
@@ -411,7 +480,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     </div>
 
                     <ScrollLock>
-                      <div>{badgeModalStates[currentModalStep]}</div>
+                      <div className="pt-2">
+                        {badgeModalStates[currentModalStep]}
+                      </div>
                     </ScrollLock>
                   </motion.div>
                 </>
