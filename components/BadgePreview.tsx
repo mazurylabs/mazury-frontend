@@ -40,6 +40,11 @@ export const BadgePreview: React.FC<Props> = ({
                   setShowBadgeDetails(false);
                 }}
                 isMobile={isMobile}
+                title=""
+                description=""
+                videoUrl=""
+                isBadgeHidden={false}
+                image=""
               />
             )}
           </AnimatePresence>
@@ -75,6 +80,11 @@ export const BadgePreview: React.FC<Props> = ({
                 setShowBadgeDetails(false);
               }}
               isMobile={true}
+              title=""
+              description=""
+              videoUrl=""
+              isBadgeHidden={false}
+              image=""
             />
           )}
         </AnimatePresence>
