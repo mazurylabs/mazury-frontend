@@ -129,7 +129,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     {title}
                   </h2>
 
-                  <p className="font-inter text-sm text-indigoGray-60">
+                  <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
                     {description}
                   </p>
 
