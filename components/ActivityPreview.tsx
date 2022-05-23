@@ -43,7 +43,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
                 height="16px"
                 alt="Badge icon"
               />
-              <span className="ml-1 text-xs font-bold uppercase text-pink-500">
+              <span className="ml-1 text-xs font-bold uppercase text-fuchsia-500">
                 New badge
               </span>
             </div>
