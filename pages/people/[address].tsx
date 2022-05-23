@@ -714,6 +714,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           heading={title}
                           imgSrc={image}
                           totalCount={totalBadgeCounts[badge_type.id]}
+                          badgeCount={badgesCount}
                         />
                       );
                     })
