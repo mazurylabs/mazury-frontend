@@ -26,6 +26,7 @@ import {
   getTruncatedAddress,
   goToLink,
   hasAlreadyReferredReceiver,
+  returnTruncatedIfEthAddress,
   toCapitalizedWord,
   sectionToColor,
 } from 'utils';
@@ -403,7 +404,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         >
                           {profile.ens_name && `${profile.ens_name} `}
                           <span className="text-indigoGray-40">
-                            ({getTruncatedAddress(profile.eth_address, 3)})
+                            ({returnTruncatedIfEthAddress(profile.eth_address)})
                           </span>
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -713,6 +714,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           heading={title}
                           imgSrc={image}
                           totalCount={totalBadgeCounts[badge_type.id]}
+                          badgeCount={badgesCount}
                         />
                       );
                     })

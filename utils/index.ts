@@ -10,7 +10,7 @@ import { theme } from '../tailwind.config';
 
 export const getTruncatedAddress = (
   address: string | undefined | null,
-  length: number = 10
+  length: number = 4
 ): string => {
   if (!address) {
     return '';

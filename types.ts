@@ -57,6 +57,7 @@ export interface BadgeType {
   title: string;
   slug: string;
   description: string;
+  video: string;
   issuer: {
     name: BadgeIssuer;
   };

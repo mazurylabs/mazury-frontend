@@ -23,6 +23,7 @@ export const mockProfile: Profile = {
         description: 'You published a proposal for uniswap',
         issuer: { name: 'mazury' },
         poap_badge_extra_data: null,
+        video: '',
       },
       created_at: '2021-11-28T21:16:23.817772Z',
       updated_at: '2021-11-28T21:16:23.817784Z',
