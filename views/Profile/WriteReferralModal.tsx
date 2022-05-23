@@ -128,7 +128,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
       }}
       containerClassName={modalClassName + 'max-w-full'}
     >
-      <div className="flex flex-col py-6 px-8">
+      <div className="flex flex-col">
         {status === 'writing' && (
           <>
             <div className="w-full">

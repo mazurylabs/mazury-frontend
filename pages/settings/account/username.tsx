@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
+import { useProtectedRoute } from 'hooks';
 
 type Steps = 'idle' | 'active' | 'error';
 
@@ -12,6 +13,8 @@ interface User {
 }
 
 const UsernamePage: NextPage = () => {
+  useProtectedRoute();
+
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();

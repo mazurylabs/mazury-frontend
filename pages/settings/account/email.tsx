@@ -4,10 +4,13 @@ import { NextPage } from 'next';
 import { useAccount, useSignMessage } from 'wagmi';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
+import { useProtectedRoute } from 'hooks';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
+  useProtectedRoute();
+
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();

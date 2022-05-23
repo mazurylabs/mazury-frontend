@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { SettingsLayout } from 'components';
+import { useProtectedRoute } from 'hooks';
 
 const SettingsPage: NextPage = () => {
-  const router = useRouter();
+  useProtectedRoute();
+
   return <SettingsLayout />;
 };
 
