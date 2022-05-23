@@ -1,6 +1,6 @@
 import { Button, Input, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useDebounce } from 'hooks';
+import { useDebounce, useIsOnboarded } from 'hooks';
 import Image from 'next/image';
 import {
   FC,
@@ -29,6 +29,7 @@ export const ProfileView: FC = () => {
   const [fileUrl, setFileUrl] = useState<string>();
   const debouncedUsername = useDebounce(formData.username);
   const canContinue = valid.username;
+  const { onboarded } = useIsOnboarded(accountData?.address as string);
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
@@ -48,16 +49,24 @@ export const ProfileView: FC = () => {
       }
       const { data, error } = await isValid(field, formData[field]!);
       if (error) {
-        setValid((valid) => ({ ...valid, [field]: false }));
+        // @ts-ignore error has the field value
+        if (error.value === accountData?.address) {
+          setValid((valid) => ({ ...valid, [field]: true }));
+        } else {
+          setValid((valid) => ({ ...valid, [field]: false }));
+        }
       } else {
         setValid((valid) => ({ ...valid, [field]: true }));
       }
     },
-    [formData, setValid]
+    [formData, setValid, accountData]
   );
 
   useEffect(() => {
-    checkIfValid('username');
+    if (accountData?.address && !onboarded) {
+      // don't check for validity if the user has already been onboarded.
+      checkIfValid('username');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUsername]);
 

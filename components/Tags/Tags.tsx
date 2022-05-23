@@ -14,6 +14,7 @@ interface TagsProps {
   allowInput?: boolean;
   onAdd?: (value: string) => void;
   appendedContent?: React.ReactNode;
+  addButtonText?: string;
 }
 
 export const Tags: FC<TagsProps> = ({
@@ -23,6 +24,7 @@ export const Tags: FC<TagsProps> = ({
   allowInput = false,
   onAdd,
   appendedContent,
+  addButtonText = 'Add your tag',
 }) => {
   const [newTag, setNewTag] = useState('');
 
@@ -81,7 +83,7 @@ export const Tags: FC<TagsProps> = ({
           <input
             role="input"
             type="text"
-            placeholder="Add your tag"
+            placeholder={addButtonText}
             className="ml-1 w-20 bg-transparent text-xs font-bold text-indigoGray-90 outline-none placeholder:text-indigoGray-90 focus:font-medium"
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}

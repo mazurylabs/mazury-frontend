@@ -11,7 +11,7 @@ exports[`OnboardingLaout all sections are being rendered 1`] = `
       alt="Mazury logo"
       class="rounded-full hover:cursor-pointer"
       height="40px"
-      src="/waves.png"
+      src="/new-logo.svg"
       width="40px"
     />
   </div>
