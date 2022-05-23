@@ -456,9 +456,17 @@ const Home: NextPage = () => {
                           />
 
                           <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
-                            <p className="font-serif text-base font-bold text-indigoGray-90">
-                              {returnTruncatedIfEthAddress(suggestion.username)}
-                            </p>
+                            <Link
+                              href={`/people/${
+                                suggestion?.username || suggestion?.eth_address
+                              }`}
+                            >
+                              <a className="font-serif text-base font-bold text-indigoGray-90">
+                                {returnTruncatedIfEthAddress(
+                                  suggestion.username
+                                )}
+                              </a>
+                            </Link>
                             <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
                               Talent spotlight
                             </p>

@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import type { Activity } from 'types';
 import { returnTruncatedIfEthAddress } from 'utils';
@@ -97,17 +98,31 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           </div>
 
           <p>
-            <span className="font-bold">
-              {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string
-              )}
-            </span>{' '}
+            <Link
+              href={`/people/${
+                metadata?.referral_author?.username ||
+                metadata?.referral_author?.eth_address
+              }`}
+            >
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(
+                  metadata?.referral_author?.username as string
+                )}
+              </a>
+            </Link>{' '}
             wrote a referral for{' '}
-            <span className="font-bold">
-              {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string
-              )}
-            </span>
+            <Link
+              href={`/people/${
+                metadata?.referral_receiver?.username ||
+                metadata?.referral_receiver?.eth_address
+              }`}
+            >
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(
+                  metadata?.referral_receiver?.username as string
+                )}
+              </a>
+            </Link>
           </p>
         </div>
       </div>
@@ -144,17 +159,31 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           </div>
 
           <p>
-            <span className="font-bold">
-              {returnTruncatedIfEthAddress(
-                metadata?.referral_author?.username as string
-              )}
-            </span>{' '}
+            <Link
+              href={`/people/${
+                metadata?.referral_author?.username ||
+                metadata?.referral_author?.eth_address
+              }`}
+            >
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(
+                  metadata?.referral_author?.username as string
+                )}
+              </a>
+            </Link>{' '}
             wrote a referral for{' '}
-            <span className="font-bold">
-              {returnTruncatedIfEthAddress(
-                metadata?.referral_receiver?.username as string
-              )}
-            </span>
+            <Link
+              href={`/people/${
+                metadata?.referral_receiver?.username ||
+                metadata?.referral_receiver?.eth_address
+              }`}
+            >
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(
+                  metadata?.referral_receiver?.username as string
+                )}
+              </a>
+            </Link>
           </p>
         </div>
       </div>
@@ -191,9 +220,11 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           </div>
 
           <p>
-            <span className="font-bold">
-              {returnTruncatedIfEthAddress(user?.username)}
-            </span>{' '}
+            <Link href={`/people/${user?.username || user.eth_address}`}>
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(user?.username)}
+              </a>
+            </Link>{' '}
             attended <span className="italic">{metadata.event?.name}</span>
           </p>
         </div>
