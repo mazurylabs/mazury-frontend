@@ -75,8 +75,11 @@ const Home: NextPage = () => {
     setFocused(() => (event.type === 'focus' ? true : false));
   };
 
-  const handleSearch = () => {
-    router.push('/search');
+  const handleSearch = (query?: string, badge?: string) => {
+    const badgeParam = query ? 'query=' + encodeURIComponent(query) : '';
+    const queryParam = badge ? 'badges=' + encodeURIComponent(badge) : '';
+
+    router.push(`/search?${queryParam}${badgeParam}`);
   };
 
   const handleKeydown = (event: React.KeyboardEvent) => {
@@ -96,7 +99,7 @@ const Home: NextPage = () => {
     setSearchTerm(event.target.value);
 
     if (event.target.value) {
-      setCurrentSearchState('loading');
+      // setCurrentSearchState('loading');
     } else {
       setCurrentSearchState('idle');
     }
@@ -162,7 +165,11 @@ const Home: NextPage = () => {
 
         <ul className="font-inter font-medium">
           {keywordSuggestions.map((suggestion, index) => (
-            <li key={index} className="mb-6">
+            <li
+              key={index}
+              className="mb-6 cursor-pointer"
+              onClick={() => handleSearch(suggestion.title)}
+            >
               <p className="text-sm text-indigoGray-90">{suggestion.title}</p>
 
               <div className="flex text-xs  text-indigoGray-50">
@@ -199,7 +206,11 @@ const Home: NextPage = () => {
         <div className="font-inter px-2 font-medium">
           <ul className="mb-4">
             {badgeSuggestions.map((badge, index) => (
-              <li key={index} className=" mb-4 flex items-center">
+              <li
+                key={index}
+                className=" mb-4 flex cursor-pointer items-center"
+                onClick={() => handleSearch('', badge.title)}
+              >
                 <div className="mr-4 flex">
                   <Image
                     src={badge.img}
@@ -369,7 +380,7 @@ const Home: NextPage = () => {
                     <Button
                       className="border-none !p-0"
                       disabled={searchTerm === ''}
-                      onClick={handleSearch}
+                      onClick={() => handleSearch(searchTerm)}
                     >
                       <Image
                         height={32}

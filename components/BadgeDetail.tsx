@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
+import { useRouter } from 'next/router';
 
 import { Button } from './Button';
 
@@ -14,6 +15,7 @@ interface BadgeDetailProps {
   isBadgeHidden: boolean;
   badgeCount?: number;
   image: string;
+  variant: 'badge' | 'poap';
 }
 
 interface BadgeDetailButtonProp {
@@ -82,13 +84,22 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   isBadgeHidden,
   badgeCount = 0,
   image,
+  variant,
 }) => {
+  const router = useRouter();
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
+
+  const handleSearch = (badge: string) => {
+    const queryParam =
+      (variant === 'badge' ? 'badges=' : 'poap=') + encodeURIComponent(badge);
+
+    router.push(`/search?${queryParam}`);
+  };
 
   return (
     <div
       className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
-      onClick={() => isMobile && handleCloseModal()}
+      // onClick={() => isMobile && handleCloseModal()}
     >
       <motion.div
         {...animatedValue}
@@ -172,9 +183,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
                   <div>
                     <BadgeDetailButton
-                      label="Search using badge"
+                      label={`Search using ${variant}`}
                       icon="search-black"
-                      handleClick={() => {}}
+                      handleClick={() => handleSearch(title)}
                     />
                   </div>
 
@@ -191,6 +202,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <button
                     type="button"
                     className="flex shrink-0 items-center space-x-2"
+                    onClick={() => handleSearch(title)}
                   >
                     <div className="flex">
                       <Image
@@ -201,16 +213,17 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     </div>
 
                     <span className="font-inter text-sm font-bold leading-6 text-violet-600">
-                      Search using badge
+                      {`Search using ${variant}`}
                     </span>
                   </button>
 
                   <button
                     type="button"
+                    disabled
                     className="flex max-h-[36px] shrink-0 items-center space-x-6 rounded-lg bg-violet-600 p-[10px] pl-6"
                   >
                     <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
-                      MINT NFT
+                      Mint NFT
                     </span>
 
                     <div className="flex border-l border-violet-500 pl-2">
