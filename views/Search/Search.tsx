@@ -118,7 +118,9 @@ export const Search: FC<SearchProps> = ({}) => {
       setSearchState((prevState) => ({
         ...prevState,
         searchQuery: queryParams.query as string,
-        selectedBadgeSlugs: [queryParams.badges as string],
+        selectedBadgeSlugs: [
+          ...decodeURIComponent(queryParams.badges as string).split(','),
+        ],
       }));
       setHasSearched(true);
     }
@@ -373,11 +375,20 @@ const BadgesFilterView: FCWithClassName = ({ className }) => {
   const [issuer, setIssuer] = useState<BadgeIssuer>('mazury');
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query);
+  const router = useRouter();
+  const queryParams = router.query;
 
   const { searchState, setSearchState } = useContext(SearchContext);
   const { selectedBadgeSlugs } = searchState;
 
   const setSelectedBadgeSlugs = (slugs: string[]) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...queryParams,
+        badges: slugs.join(','),
+      },
+    });
     setSearchState({
       ...searchState,
       selectedBadgeSlugs: slugs,
