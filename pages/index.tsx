@@ -366,7 +366,7 @@ const Home: NextPage = () => {
                   <input
                     ref={inputRef}
                     type="text"
-                    placeholder="wojtek.eth, Frontent dev…"
+                    placeholder="wojtek.eth, Frontend dev…"
                     aria-label="Search"
                     className="h-full w-full bg-transparent"
                     value={searchTerm}
