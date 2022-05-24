@@ -48,6 +48,7 @@ export const BadgePreview: React.FC<Props> = ({
                 isBadgeHidden={false}
                 image={imgSrc}
                 badgeCount={badgeCount}
+                variant="badge"
               />
             )}
           </AnimatePresence>
@@ -89,6 +90,7 @@ export const BadgePreview: React.FC<Props> = ({
               isBadgeHidden={false}
               image={imgSrc}
               badgeCount={badgeCount}
+              variant="badge"
             />
           )}
         </AnimatePresence>

@@ -222,13 +222,14 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   isBadgeHidden={false}
                   badgeCount={badgesCount}
                   image={hoveredBadge.image}
+                  variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
                 />
               </Portal>
             )}
           </AnimatePresence>
 
           <div className="flex items-center space-x-3">
-            <div className="flex">
+            <div className="flex shrink-0">
               <img src={badge.image} className="h-10 w-[27px]" alt="badge" />
             </div>
 
@@ -362,6 +363,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   isBadgeHidden={false}
                   badgeCount={badgesCount}
                   image={showBadgeDetails.image}
+                  variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
                 />
               )}
 
@@ -383,7 +385,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     <div className="px-6 lg:border-b lg:border-indigoGray-20 lg:px-10">
                       <div className="mb-[30px]">
                         <Button
-                          className="m-0 !p-0"
+                          className="m-0 !p-0 !outline-none"
                           variant="tertiary"
                           onClick={handleCloseModal}
                         >
@@ -416,7 +418,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                     <input
                                       ref={inputRef}
                                       type="text"
-                                      placeholder="Search badges"
+                                      placeholder={`Search ${
+                                        badgeIssuer === 'poap'
+                                          ? 'poaps'
+                                          : 'badges'
+                                      }`}
                                       aria-label="Search"
                                       className="h-full w-full bg-transparent"
                                       value={searchTerm}
