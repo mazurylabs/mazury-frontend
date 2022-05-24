@@ -248,6 +248,7 @@ export const Search: FC<SearchProps> = ({}) => {
                 offset={offset}
                 key={`search-page-${offset}`}
                 lastResult={!getOffsetArray(currentPage)[idx + 1]}
+                firstResult={idx === 0}
               />
             ))}
           </div>
@@ -693,11 +694,11 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
         })}
       </div>
 
-      {profile?.top_badges?.length && profile?.top_badges?.length > 2 && (
+      {profile?.top_badges?.length && profile?.top_badges?.length > 2 ? (
         <span className="ml-4 text-xs font-bold text-indigoGray-90">
           {profile?.top_badges?.length - 2} more
         </span>
-      )}
+      ) : null}
     </div>
   );
 };
@@ -705,7 +706,8 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
 const SearchResultPage: FCWithClassName<{
   offset: number;
   lastResult?: boolean;
-}> = ({ className, offset, lastResult = false }) => {
+  firstResult?: boolean;
+}> = ({ className, offset, lastResult = false, firstResult = false }) => {
   const { searchState, setSearchState } = useContext(SearchContext);
   const {
     selectedBadgeSlugs,
@@ -765,6 +767,16 @@ const SearchResultPage: FCWithClassName<{
       {profiles?.map((profile) => {
         return <SearchResult profile={profile} key={profile.id} />;
       })}
+      {firstResult && (!profiles || profiles.length === 0) && (
+        <div className="mx-auto mt-16 flex flex-col text-center">
+          <span className="text-lg font-bold text-indigoGray-60">
+            No users found.
+          </span>
+          <span className="font-regular mt-1 text-lg text-indigoGray-60">
+            Try looking using different words.
+          </span>
+        </div>
+      )}
       {lastResult && hasNextPage && (
         <Button
           onClick={() => setCurrentPage(currentPage + 1)}
