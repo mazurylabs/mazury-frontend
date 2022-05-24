@@ -654,7 +654,9 @@ const Profile: React.FC<Props> = ({ address }) => {
               )}
             </div>
 
-            {referrals && referrals?.length > 0 && (
+            <HR />
+
+            {/* {referrals && referrals?.length > 0 && (
               <div>
                 <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
                   Recent referrals
@@ -668,11 +670,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
                 <HR />
               </div>
-            )}
+            )} */}
 
             {referrals && referrals?.length <= 0 && <HR className="mt-0" />}
 
-            <div>
+            <div className="mt-16">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   id="badges"
