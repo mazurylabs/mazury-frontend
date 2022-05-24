@@ -127,9 +127,13 @@ export const Search: FC<SearchProps> = ({}) => {
       setSearchState((prevState) => ({
         ...prevState,
         searchQuery: queryParams.query as string,
-        selectedBadgeSlugs: [
-          ...decodeURIComponent(queryParams.badges as string).split(','),
-        ],
+
+        // please find a better way to do this
+        selectedBadgeSlugs:
+          [...decodeURIComponent(queryParams.badges as string).split(',')] ===
+          ['undefined']
+            ? []
+            : [...decodeURIComponent(queryParams.badges as string).split(',')],
       }));
       setHasSearched(true);
     }
@@ -196,26 +200,12 @@ export const Search: FC<SearchProps> = ({}) => {
       </div>
       {/* Search input END */}
 
-      {touched && !queryEntered && (
+      {touched && !queryEntered && !hasSearched && (
         <>
           <div className="mt-5">
             <HistorySection />
           </div>
         </>
-      )}
-
-      {touched && queryEntered && !hasSearched && (
-        <div className="mt-6 flex flex-col items-start">
-          <HistorySectionItem>Frontend developer</HistorySectionItem>
-
-          <SectionHeading className="mt-8">Keyword suggestions</SectionHeading>
-
-          <div className="mt-1 flex flex-col gap-3">
-            <KeywordSuggestion />
-            <KeywordSuggestion />
-            <KeywordSuggestion />
-          </div>
-        </div>
       )}
 
       {hasSearched && (
@@ -724,9 +714,11 @@ const SearchResultPage: FCWithClassName<{
     searchQuery,
     currentPage,
   } = searchState;
+
   const setCurrentPage = (page: number) => {
     setSearchState({ ...searchState, currentPage: page });
   };
+
   const debouncedQuery = useDebounce(searchQuery);
   const {
     profiles,

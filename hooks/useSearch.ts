@@ -10,7 +10,11 @@ const generateProfilesSearchQuery = (
   query: string
 ) => {
   const badgesPart =
-    badgeSlugs.length > 0 ? `&badges=${badgeSlugs.join(';')}` : '';
+    badgeSlugs.length > 0
+      ? badgeSlugs.join(';') === 'undefined'
+        ? ''
+        : `&badges=${badgeSlugs.join(';')}`
+      : '';
   const rolesPart =
     roles.length > 0 ? `&roles=${roles[0]?.split('role_')?.[1]}` : '';
   const skillsPart =
