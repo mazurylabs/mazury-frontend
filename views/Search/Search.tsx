@@ -52,6 +52,9 @@ export const Search: FC<SearchProps> = ({}) => {
     selectedSkillSlugs: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const queryParams = router.query;
+  const queryParamsExist = queryParams && Object.keys(queryParams).length > 0;
 
   const { searchQuery, touched, hasSearched, isContactableToggled } =
     searchState;
@@ -61,7 +64,7 @@ export const Search: FC<SearchProps> = ({}) => {
   };
 
   const setSearchQuery = (searchQuery: string) => {
-    setSearchState((prevState) => ({ ...prevState, searchQuery }));
+    router.push({ pathname: '/search', query: { query: searchQuery } });
   };
 
   const setHasSearched = (hasSearched: boolean) => {
@@ -97,11 +100,11 @@ export const Search: FC<SearchProps> = ({}) => {
     }
   };
 
-  useEffect(() => {
-    if (!touched) {
-      setSearchQuery('');
-    }
-  }, [touched]);
+  // useEffect(() => {
+  //   if (!touched) {
+  //     setSearchQuery('');
+  //   }
+  // }, [touched]);
 
   useEffect(() => {
     // We are just making sure that whenever there is some input, `touched` is true
@@ -109,6 +112,17 @@ export const Search: FC<SearchProps> = ({}) => {
       setTouched(true);
     }
   }, [searchQuery]);
+
+  useEffect(() => {
+    if (Object.keys(queryParams).length > 0) {
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchQuery: queryParams.query as string,
+        selectedBadgeSlugs: [queryParams.badges as string],
+      }));
+      setHasSearched(true);
+    }
+  }, [queryParams]);
 
   return (
     <SearchContext.Provider value={{ searchState, setSearchState }}>
@@ -195,7 +209,7 @@ export const Search: FC<SearchProps> = ({}) => {
 
       {hasSearched && (
         <div className="flex flex-col">
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-around">
             <Dropdown label="Badges">
               <BadgesFilterView />
             </Dropdown>
@@ -685,12 +699,15 @@ const SearchResultPage: FCWithClassName<{ offset: number }> = ({
   offset,
 }) => {
   const { searchState } = useContext(SearchContext);
-  const { selectedBadgeSlugs, selectedRoles, selectedSkillSlugs } = searchState;
+  const { selectedBadgeSlugs, selectedRoles, selectedSkillSlugs, searchQuery } =
+    searchState;
+  const debouncedQuery = useDebounce(searchQuery);
   const { profiles, error: profilesError } = useProfileSearch(
     offset,
     selectedBadgeSlugs,
     selectedRoles,
-    selectedSkillSlugs
+    selectedSkillSlugs,
+    debouncedQuery
   );
 
   if (!profilesError && !profiles) {

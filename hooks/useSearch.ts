@@ -6,7 +6,8 @@ const generateProfilesSearchQuery = (
   offset: number,
   badgeSlugs: string[],
   roles: Role[],
-  skillSlugs: string[]
+  skillSlugs: string[],
+  query: string
 ) => {
   const badgesPart =
     badgeSlugs.length > 0 ? `&badges=${badgeSlugs.join(';')}` : '';
@@ -14,17 +15,18 @@ const generateProfilesSearchQuery = (
     roles.length > 0 ? `&roles=${roles[0]?.split('role_')?.[1]}` : '';
   const skillsPart =
     skillSlugs.length > 0 ? `&skills=${skillSlugs.join(';')}` : '';
-  return `/search/profiles/?offset=${offset}&limit=20${badgesPart}${rolesPart}${skillsPart}`;
+  return `/search/profiles/?offset=${offset}&limit=20&query=${query}${badgesPart}${rolesPart}${skillsPart}`;
 };
 
 export const useProfileSearch = (
   offset: number,
   badgeSlugs: string[],
   roles: Role[],
-  skillSlugs: string[]
+  skillSlugs: string[],
+  query: string
 ) => {
   const { data, error } = useSWR<ListResponse<Profile>>(
-    generateProfilesSearchQuery(offset, badgeSlugs, roles, skillSlugs)
+    generateProfilesSearchQuery(offset, badgeSlugs, roles, skillSlugs, query)
   );
 
   return {
