@@ -24,6 +24,8 @@ export interface SearchStateType {
   selectedRoles: Role[];
 
   selectedSkillSlugs: string[];
+
+  currentPage: number;
 }
 
 interface SearchContextType {
@@ -40,6 +42,7 @@ export const SearchContext = createContext<SearchContextType>({
     selectedBadgeSlugs: [],
     selectedRoles: [],
     selectedSkillSlugs: [],
+    currentPage: 1,
   },
   setSearchState: () => {},
 });

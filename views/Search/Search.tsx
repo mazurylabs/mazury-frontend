@@ -50,14 +50,19 @@ export const Search: FC<SearchProps> = ({}) => {
     selectedBadgeSlugs: [],
     selectedRoles: [],
     selectedSkillSlugs: [],
+    currentPage: 1,
   });
-  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const queryParams = router.query;
   const queryParamsExist = queryParams && Object.keys(queryParams).length > 0;
 
-  const { searchQuery, touched, hasSearched, isContactableToggled } =
-    searchState;
+  const {
+    searchQuery,
+    touched,
+    hasSearched,
+    isContactableToggled,
+    currentPage,
+  } = searchState;
 
   const setTouched = (touched: boolean) => {
     setSearchState((prevState) => ({ ...prevState, touched }));
@@ -76,6 +81,10 @@ export const Search: FC<SearchProps> = ({}) => {
       ...prevState,
       isContactableToggled,
     }));
+  };
+
+  const setCurrentPage = (currentPage: number) => {
+    setSearchState((prevState) => ({ ...prevState, currentPage }));
   };
 
   const breakpoint = useCurrentBreakpoint();
@@ -244,15 +253,13 @@ export const Search: FC<SearchProps> = ({}) => {
           </div>
 
           <div className="mt-4 flex flex-col gap-4 pb-4">
-            {getOffsetArray(currentPage).map((offset) => (
-              <SearchResultPage offset={offset} key={`search-page-${offset}`} />
+            {getOffsetArray(currentPage).map((offset, idx) => (
+              <SearchResultPage
+                offset={offset}
+                key={`search-page-${offset}`}
+                lastResult={!getOffsetArray(currentPage)[idx + 1]}
+              />
             ))}
-            <Button
-              onClick={() => setCurrentPage((v) => v + 1)}
-              className="mx-auto w-fit uppercase"
-            >
-              Load more
-            </Button>
           </div>
         </div>
       )}
@@ -705,15 +712,27 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
   );
 };
 
-const SearchResultPage: FCWithClassName<{ offset: number }> = ({
-  className,
-  offset,
-}) => {
-  const { searchState } = useContext(SearchContext);
-  const { selectedBadgeSlugs, selectedRoles, selectedSkillSlugs, searchQuery } =
-    searchState;
+const SearchResultPage: FCWithClassName<{
+  offset: number;
+  lastResult?: boolean;
+}> = ({ className, offset, lastResult = false }) => {
+  const { searchState, setSearchState } = useContext(SearchContext);
+  const {
+    selectedBadgeSlugs,
+    selectedRoles,
+    selectedSkillSlugs,
+    searchQuery,
+    currentPage,
+  } = searchState;
+  const setCurrentPage = (page: number) => {
+    setSearchState({ ...searchState, currentPage: page });
+  };
   const debouncedQuery = useDebounce(searchQuery);
-  const { profiles, error: profilesError } = useProfileSearch(
+  const {
+    profiles,
+    error: profilesError,
+    hasNextPage,
+  } = useProfileSearch(
     offset,
     selectedBadgeSlugs,
     selectedRoles,
@@ -754,6 +773,14 @@ const SearchResultPage: FCWithClassName<{ offset: number }> = ({
       {profiles?.map((profile) => {
         return <SearchResult profile={profile} key={profile.id} />;
       })}
+      {lastResult && hasNextPage && (
+        <Button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className="mx-auto w-fit uppercase"
+        >
+          Load more
+        </Button>
+      )}
     </>
   );
 };

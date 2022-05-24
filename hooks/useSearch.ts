@@ -15,7 +15,8 @@ const generateProfilesSearchQuery = (
     roles.length > 0 ? `&roles=${roles[0]?.split('role_')?.[1]}` : '';
   const skillsPart =
     skillSlugs.length > 0 ? `&skills=${skillSlugs.join(';')}` : '';
-  return `/search/profiles/?offset=${offset}&limit=20&query=${query}${badgesPart}${rolesPart}${skillsPart}`;
+  const queryPart = query ? `&query=${query}` : '';
+  return `/search/profiles/?offset=${offset}&limit=20${queryPart}${badgesPart}${rolesPart}${skillsPart}`;
 };
 
 export const useProfileSearch = (
@@ -33,6 +34,7 @@ export const useProfileSearch = (
     profiles: data?.results,
     error,
     count: data?.count,
+    hasNextPage: !!data?.next,
   };
 };
 
