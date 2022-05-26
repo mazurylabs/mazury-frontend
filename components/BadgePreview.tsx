@@ -53,9 +53,8 @@ export const BadgePreview: React.FC<Props> = ({
             )}
           </AnimatePresence>
         )}
-
-        <img src={imgSrc} className="h-[100px]" alt="" />
-
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={imgSrc} className="h-[100px]" alt={`${heading} badge`} />
         <div className="ml-6 flex flex-col gap-2">
           <h5 className="font-serif text-2xl font-bold text-indigoGray-90">
             {heading}
