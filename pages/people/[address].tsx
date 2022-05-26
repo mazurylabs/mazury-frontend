@@ -810,6 +810,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         <ReferralPreview
                           key={referral.id}
                           referral={referral}
+                          alternate={referralsToggle === 'given'}
                         />
                       );
                     })

@@ -27,7 +27,7 @@ export const BadgePreview: React.FC<Props> = ({
   return (
     <>
       <div
-        className="relative flex gap-4"
+        className="relative flex"
         onClick={() => {
           isMobile && setShowBadgeDetails(true);
         }}
@@ -53,10 +53,9 @@ export const BadgePreview: React.FC<Props> = ({
             )}
           </AnimatePresence>
         )}
-
-        <Avatar src={imgSrc} height="100px" width="100px" />
-
-        <div className="flex flex-col gap-2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={imgSrc} className="h-[100px]" alt={`${heading} badge`} />
+        <div className="ml-6 flex flex-col gap-2">
           <h5 className="font-serif text-2xl font-bold text-indigoGray-90">
             {heading}
           </h5>
