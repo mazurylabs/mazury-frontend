@@ -33,11 +33,18 @@ import {
 import { BadgeIssuer, FCWithClassName, Profile, Role } from 'types';
 import {
   colors,
+  commify,
   getOffsetArray,
   getSkillsFromProfile,
   returnTruncatedIfEthAddress,
   toCapitalizedWord,
 } from 'utils';
+
+const keywordSuggestions = [
+  { title: 'React developer', results: 13048, mostSearched: 5 },
+  { title: 'Python developer', results: 10048, mostSearched: 10 },
+  { title: 'Full stack developer', results: 760 },
+];
 
 interface SearchProps {}
 
@@ -116,6 +123,20 @@ export const Search: FC<SearchProps> = ({}) => {
     }
   };
 
+  const handleSuggestionSearch = (searchQuery: string) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        query: searchQuery,
+      },
+    });
+  };
+
+  const handleGoBack = () => {
+    setTouched(false);
+    setHasSearched(false);
+  };
+
   // useEffect(() => {
   //   if (!touched) {
   //     setSearchQuery('');
@@ -170,7 +191,7 @@ export const Search: FC<SearchProps> = ({}) => {
             height={24}
             alt="Go back icon"
             className="hover:cursor-pointer"
-            onClick={() => setTouched(false)}
+            onClick={handleGoBack}
           />
         ) : (
           <SearchIcon
@@ -211,8 +232,43 @@ export const Search: FC<SearchProps> = ({}) => {
 
       {touched && !queryEntered && !hasSearched && (
         <>
-          <div className="mt-5">
-            <HistorySection />
+          <div className="mt-8 flex flex-col">
+            <h3 className="text-xs font-medium uppercase text-indigoGray-50">
+              Keyword suggestions
+            </h3>
+
+            <div className="mt-1 flex flex-col gap-3">
+              {keywordSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="cursor-pointer"
+                  onClick={() => handleSuggestionSearch(suggestion.title)}
+                  // onClick={() => handleSearch(suggestion.title)}
+                >
+                  <p className="text-sm text-indigoGray-90">
+                    {suggestion.title}
+                  </p>
+
+                  <div className="flex text-xs  text-indigoGray-50">
+                    <p>{commify(suggestion.results)} results</p>
+
+                    {suggestion.mostSearched && (
+                      <>
+                        <div className="mx-2 flex">
+                          <Image
+                            width={4}
+                            height={4}
+                            src="/icons/list-disc-grey.svg"
+                            alt="list-disc"
+                          />
+                        </div>
+                        <p>#{suggestion.mostSearched} most searched</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </>
       )}
@@ -365,17 +421,6 @@ const SuggestionInnerText: FCWithClassName = ({ children, className }) => {
     >
       {children}
     </span>
-  );
-};
-
-const KeywordSuggestion: FCWithClassName = ({ className }) => {
-  return (
-    <div className={`flex flex-col ${className}`}>
-      <HistorySectionItem>React developer</HistorySectionItem>
-      <div className="flex">
-        <SuggestionInnerText>13 048 results</SuggestionInnerText>
-      </div>
-    </div>
   );
 };
 
