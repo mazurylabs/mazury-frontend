@@ -672,7 +672,11 @@ const SearchResultBadge: FCWithClassName<{
   return (
     <div className={`flex items-center ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={iconSrc} className="h-4 w-4" alt={label} />
+      <img
+        src={iconSrc || '/default-avi.png'}
+        className="h-4 w-4 rounded-full"
+        alt={label}
+      />
       <span className="ml-2 text-xs font-bold text-indigoGray-90">{label}</span>
     </div>
   );
