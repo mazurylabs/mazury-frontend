@@ -223,9 +223,10 @@ export const Search: FC<SearchProps> = ({}) => {
               <ReferredSkillsFilterView />
             </Dropdown>
 
-            <Dropdown label="Number of referrals">
+            {/* We have temporarily disabled this for the launch */}
+            {/* <Dropdown label="Number of referrals">
               <NumberOfReferralsFilterView />
-            </Dropdown>
+            </Dropdown> */}
 
             <div className="flex">
               <Toggle
