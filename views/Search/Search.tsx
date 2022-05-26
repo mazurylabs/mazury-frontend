@@ -718,6 +718,8 @@ const SearchResultPage: FCWithClassName<{
   lastResult?: boolean;
   firstResult?: boolean;
 }> = ({ className, offset, lastResult = false, firstResult = false }) => {
+  const router = useRouter();
+
   const { searchState, setSearchState } = useContext(SearchContext);
   const {
     selectedBadgeSlugs,
@@ -746,6 +748,22 @@ const SearchResultPage: FCWithClassName<{
     debouncedQuery,
     isContactableToggled
   );
+
+  const cleanFilters = () => {
+    setSearchState({
+      ...searchState,
+      selectedBadgeSlugs: [],
+      selectedRoles: [],
+      selectedSkillSlugs: [],
+      isContactableToggled: false,
+    });
+    router.push({
+      pathname: '/search',
+      query: {
+        query: searchQuery,
+      },
+    });
+  };
 
   if (!profilesError && !profiles) {
     return (
@@ -786,7 +804,13 @@ const SearchResultPage: FCWithClassName<{
             No users found.
           </span>
           <span className="font-regular mt-1 text-lg text-indigoGray-60">
-            Try looking using different words.
+            Try looking using different words or
+          </span>
+          <span
+            onClick={cleanFilters}
+            className="mt-1 cursor-pointer text-lg font-medium text-blue-800 underline"
+          >
+            clean filters
           </span>
         </div>
       )}
