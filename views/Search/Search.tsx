@@ -77,6 +77,13 @@ export const Search: FC<SearchProps> = ({}) => {
   };
 
   const setIsContactableToggled = (isContactableToggled: boolean) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...queryParams,
+        contactable: isContactableToggled,
+      },
+    });
     setSearchState((prevState) => ({
       ...prevState,
       isContactableToggled,
@@ -134,6 +141,8 @@ export const Search: FC<SearchProps> = ({}) => {
           ['undefined']
             ? []
             : [...decodeURIComponent(queryParams.badges as string).split(',')],
+
+        isContactableToggled: queryParams.contactable === 'true',
       }));
       setHasSearched(true);
     }
@@ -716,6 +725,7 @@ const SearchResultPage: FCWithClassName<{
     selectedSkillSlugs,
     searchQuery,
     currentPage,
+    isContactableToggled,
   } = searchState;
 
   const setCurrentPage = (page: number) => {
@@ -723,6 +733,7 @@ const SearchResultPage: FCWithClassName<{
   };
 
   const debouncedQuery = useDebounce(searchQuery);
+
   const {
     profiles,
     error: profilesError,
@@ -732,7 +743,8 @@ const SearchResultPage: FCWithClassName<{
     selectedBadgeSlugs,
     selectedRoles,
     selectedSkillSlugs,
-    debouncedQuery
+    debouncedQuery,
+    isContactableToggled
   );
 
   if (!profilesError && !profiles) {
