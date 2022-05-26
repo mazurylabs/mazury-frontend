@@ -6,10 +6,16 @@ import { useReferralCount } from 'hooks';
 
 interface Props {
   referral: Referral;
+
+  // if true, show the receiver's details
+  alternate?: boolean;
 }
 
-export const ReferralPreview: React.FC<Props> = ({ referral }) => {
-  const referredBy = referral.author;
+export const ReferralPreview: React.FC<Props> = ({
+  referral,
+  alternate = false,
+}) => {
+  const referredBy = alternate ? referral.receiver : referral.author;
   const skills = referral.skills;
   const date = referral.created_at;
   const text = referral.content;
