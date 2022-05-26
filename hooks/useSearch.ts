@@ -6,31 +6,50 @@ const generateProfilesSearchQuery = (
   offset: number,
   badgeSlugs: string[],
   roles: Role[],
-  skillSlugs: string[]
+  skillSlugs: string[],
+  query: string,
+  contactable: boolean
 ) => {
   const badgesPart =
-    badgeSlugs.length > 0 ? `&badges=${badgeSlugs.join(';')}` : '';
+    badgeSlugs.length > 0
+      ? badgeSlugs.join(';') === 'undefined'
+        ? ''
+        : `&badges=${badgeSlugs.join(';')}`
+      : '';
   const rolesPart =
     roles.length > 0 ? `&roles=${roles[0]?.split('role_')?.[1]}` : '';
   const skillsPart =
     skillSlugs.length > 0 ? `&skills=${skillSlugs.join(';')}` : '';
-  return `/search/profiles/?offset=${offset}&limit=20${badgesPart}${rolesPart}${skillsPart}`;
+  const queryPart = query ? `&query=${query}` : '';
+  const contactablePart = contactable ? '&contactable=true' : '';
+
+  return `/search/profiles/?offset=${offset}&limit=20${queryPart}${badgesPart}${rolesPart}${skillsPart}${contactablePart}`;
 };
 
 export const useProfileSearch = (
   offset: number,
   badgeSlugs: string[],
   roles: Role[],
-  skillSlugs: string[]
+  skillSlugs: string[],
+  query: string,
+  contactable: boolean
 ) => {
   const { data, error } = useSWR<ListResponse<Profile>>(
-    generateProfilesSearchQuery(offset, badgeSlugs, roles, skillSlugs)
+    generateProfilesSearchQuery(
+      offset,
+      badgeSlugs,
+      roles,
+      skillSlugs,
+      query,
+      contactable
+    )
   );
 
   return {
     profiles: data?.results,
     error,
     count: data?.count,
+    hasNextPage: !!data?.next,
   };
 };
 

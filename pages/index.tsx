@@ -36,16 +36,19 @@ const badgeSuggestions = [
     title: 'Aave voters',
     img: '/icons/aave.svg',
     detail: 'Search for people who voted on Aave',
+    slug: 'aave_voter',
   },
   {
     title: 'Early Mazury adopter',
     img: '/icons/mazury.svg',
     detail: 'Search for people who voted on Aave',
+    slug: 'mazury_early_adopter',
   },
   {
     title: 'Graph voter',
     img: '/icons/graph.svg',
     detail: 'Search for people who voted on Aave',
+    slug: 'graph_voter',
   },
 ];
 
@@ -209,7 +212,7 @@ const Home: NextPage = () => {
               <li
                 key={index}
                 className=" mb-4 flex cursor-pointer items-center"
-                onClick={() => handleSearch('', badge.title)}
+                onClick={() => handleSearch('', badge.slug)}
               >
                 <div className="mr-4 flex">
                   <Image

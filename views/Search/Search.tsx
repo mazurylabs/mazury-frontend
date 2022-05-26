@@ -11,10 +11,13 @@ import {
 import { SearchInput } from 'components/SearchInput';
 import { Toggle } from 'components/Toggle';
 import { SearchContext, SearchStateType } from 'contexts/search';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   useBadgesSearch,
+  useClickOutside,
   useCurrentBreakpoint,
   useDebounce,
+  useMobile,
   useProfileSearch,
   useReferralCount,
   useSkillsSearch,
@@ -27,17 +30,46 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   VFC,
 } from 'react';
 import { BadgeIssuer, FCWithClassName, Profile, Role } from 'types';
 import {
   colors,
+  commify,
   getOffsetArray,
   getSkillsFromProfile,
   returnTruncatedIfEthAddress,
   toCapitalizedWord,
 } from 'utils';
+
+const keywordSuggestions = [
+  { title: 'React developer', results: 13048, mostSearched: 5 },
+  { title: 'Python developer', results: 10048, mostSearched: 10 },
+  { title: 'Full stack developer', results: 760 },
+];
+
+const badgeSuggestions = [
+  {
+    title: 'Aave voters',
+    img: '/icons/aave.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'aave_voter',
+  },
+  {
+    title: 'Early Mazury adopter',
+    img: '/icons/mazury.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'mazury_early_adopter',
+  },
+  {
+    title: 'Graph voter',
+    img: '/icons/graph.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'graph_voter',
+  },
+];
 
 interface SearchProps {}
 
@@ -50,18 +82,45 @@ export const Search: FC<SearchProps> = ({}) => {
     selectedBadgeSlugs: [],
     selectedRoles: [],
     selectedSkillSlugs: [],
+    currentPage: 1,
   });
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const queryParams = router.query;
+  const isMobile = useMobile();
 
-  const { searchQuery, touched, hasSearched, isContactableToggled } =
-    searchState;
+  const [inputFocused, setInputFocused] = useState(false);
+  const searchInputRef = useRef<HTMLDivElement>(null!);
+
+  const handleCloseSearch = () => {
+    setInputFocused(false);
+  };
+  useClickOutside(searchInputRef, handleCloseSearch);
+
+  const animationAttributes = !isMobile
+    ? {
+        initial: { opacity: 0.5, scale: 0.9 },
+        animate: {
+          opacity: 1,
+          scale: 1,
+        },
+        exit: { opacity: 0 },
+      }
+    : {};
+
+  const {
+    searchQuery,
+    touched,
+    hasSearched,
+    isContactableToggled,
+    currentPage,
+  } = searchState;
 
   const setTouched = (touched: boolean) => {
     setSearchState((prevState) => ({ ...prevState, touched }));
   };
 
   const setSearchQuery = (searchQuery: string) => {
-    setSearchState((prevState) => ({ ...prevState, searchQuery }));
+    router.push({ pathname: '/search', query: { query: searchQuery } });
   };
 
   const setHasSearched = (hasSearched: boolean) => {
@@ -69,10 +128,21 @@ export const Search: FC<SearchProps> = ({}) => {
   };
 
   const setIsContactableToggled = (isContactableToggled: boolean) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...queryParams,
+        contactable: isContactableToggled,
+      },
+    });
     setSearchState((prevState) => ({
       ...prevState,
       isContactableToggled,
     }));
+  };
+
+  const setCurrentPage = (currentPage: number) => {
+    setSearchState((prevState) => ({ ...prevState, currentPage }));
   };
 
   const breakpoint = useCurrentBreakpoint();
@@ -97,11 +167,35 @@ export const Search: FC<SearchProps> = ({}) => {
     }
   };
 
-  useEffect(() => {
-    if (!touched) {
-      setSearchQuery('');
-    }
-  }, [touched]);
+  const handleSuggestionSearch = (searchQuery: string) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        query: searchQuery,
+      },
+    });
+  };
+
+  const handleBadgeSearch = (slug: string) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        query: '',
+        badge: slug,
+      },
+    });
+  };
+
+  const handleGoBack = () => {
+    setTouched(false);
+    setHasSearched(false);
+  };
+
+  // useEffect(() => {
+  //   if (!touched) {
+  //     setSearchQuery('');
+  //   }
+  // }, [touched]);
 
   useEffect(() => {
     // We are just making sure that whenever there is some input, `touched` is true
@@ -110,13 +204,36 @@ export const Search: FC<SearchProps> = ({}) => {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    if (Object.keys(queryParams).length > 0) {
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchQuery: queryParams.query as string,
+
+        // please find a better way to do this
+        selectedBadgeSlugs:
+          [...decodeURIComponent(queryParams.badges as string).split(',')] ===
+          ['undefined']
+            ? []
+            : [...decodeURIComponent(queryParams.badges as string).split(',')],
+
+        isContactableToggled: queryParams.contactable === 'true',
+      }));
+      setHasSearched(true);
+    }
+  }, [queryParams]);
+
   return (
     <SearchContext.Provider value={{ searchState, setSearchState }}>
       {/* Search input START */}
       <div
+        ref={searchInputRef}
         role="input"
-        className={`mt-8 flex items-center gap-2 rounded-xl bg-indigoGray-5 p-[14px] text-[14px] font-normal`}
-        onFocus={() => setTouched(true)}
+        className={`relative mt-8 flex items-center gap-2 rounded-xl bg-indigoGray-5 p-[14px] text-[14px] font-normal`}
+        onFocus={() => {
+          setTouched(true);
+          setInputFocused(true);
+        }}
         onClick={() => {
           if (!touched) {
             setTouched(true);
@@ -132,7 +249,7 @@ export const Search: FC<SearchProps> = ({}) => {
             height={24}
             alt="Go back icon"
             className="hover:cursor-pointer"
-            onClick={() => setTouched(false)}
+            onClick={handleGoBack}
           />
         ) : (
           <SearchIcon
@@ -168,34 +285,146 @@ export const Search: FC<SearchProps> = ({}) => {
             onClick={handleButtonClick}
           />
         )}
+
+        <AnimatePresence>
+          {inputFocused && !hasSearched && (
+            <motion.div
+              {...animationAttributes}
+              className={`top-[99%] right-[0px] z-50 flex w-full flex-grow flex-col px-4 pt-6 md:h-[16.8125rem] md:flex-row md:rounded-b-lg lg:absolute lg:mt-0 lg:bg-indigoGray-5 lg:pt-5 lg:shadow-xl`}
+            >
+              <div className="w-full lg:flex">
+                <div className="grow-[3] border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0">
+                  <div className="mb-3 flex text-xs font-medium text-indigoGray-40">
+                    <h2>KEYWORD SUGGESTIONS</h2>
+                  </div>
+
+                  <ul className="font-inter font-medium">
+                    {keywordSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        className="mb-6 cursor-pointer"
+                        onClick={() => handleSuggestionSearch(suggestion.title)}
+                      >
+                        <p className="text-sm text-indigoGray-90">
+                          {suggestion.title}
+                        </p>
+
+                        <div className="flex text-xs  text-indigoGray-50">
+                          <p>{commify(suggestion.results)} results</p>
+
+                          {suggestion.mostSearched && (
+                            <>
+                              <div className="mx-2 flex">
+                                <Image
+                                  width={4}
+                                  height={4}
+                                  src="/icons/list-disc-grey.svg"
+                                  alt="list-disc"
+                                />
+                              </div>
+                              <p>#{suggestion.mostSearched} most searched</p>
+                            </>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mb-[44.5px] mt-7 mr-14 hidden justify-center lg:flex">
+                  <div className=" w-[1px] shrink-0 bg-indigoGray-20 " />
+                </div>
+
+                <div className="pt-8 lg:mr-12 lg:pt-0">
+                  <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
+                    <h2>BADGE SEARCH SUGGESTIONS</h2>
+                  </div>
+
+                  <div className="font-inter px-2 font-medium">
+                    <ul className="mb-4">
+                      {badgeSuggestions.map((badge, index) => (
+                        <li
+                          key={index}
+                          className=" mb-4 flex cursor-pointer items-center"
+                          onClick={() => handleBadgeSearch(badge.slug)}
+                        >
+                          <div className="mr-4 flex">
+                            <Image
+                              src={badge.img}
+                              width={24}
+                              height={24}
+                              layout="fixed"
+                              alt="badge"
+                            />
+                          </div>
+
+                          <div>
+                            <p className=" text-base font-semibold text-indigoGray-90">
+                              {badge.title}
+                            </p>
+
+                            <p className="text-sm text-indigoGray-60">
+                              {badge.detail}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       {/* Search input END */}
 
-      {touched && !queryEntered && (
+      {touched && !queryEntered && !hasSearched && (
         <>
-          <div className="mt-5">
-            <HistorySection />
+          <div className="mt-8 flex flex-col">
+            <h3 className="text-xs font-medium uppercase text-indigoGray-50">
+              Keyword suggestions
+            </h3>
+
+            <div className="mt-1 flex flex-col gap-3">
+              {keywordSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="cursor-pointer"
+                  onClick={() => handleSuggestionSearch(suggestion.title)}
+                  // onClick={() => handleSearch(suggestion.title)}
+                >
+                  <p className="text-sm text-indigoGray-90">
+                    {suggestion.title}
+                  </p>
+
+                  <div className="flex text-xs  text-indigoGray-50">
+                    <p>{commify(suggestion.results)} results</p>
+
+                    {suggestion.mostSearched && (
+                      <>
+                        <div className="mx-2 flex">
+                          <Image
+                            width={4}
+                            height={4}
+                            src="/icons/list-disc-grey.svg"
+                            alt="list-disc"
+                          />
+                        </div>
+                        <p>#{suggestion.mostSearched} most searched</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </>
       )}
 
-      {touched && queryEntered && !hasSearched && (
-        <div className="mt-6 flex flex-col items-start">
-          <HistorySectionItem>Frontend developer</HistorySectionItem>
-
-          <SectionHeading className="mt-8">Keyword suggestions</SectionHeading>
-
-          <div className="mt-1 flex flex-col gap-3">
-            <KeywordSuggestion />
-            <KeywordSuggestion />
-            <KeywordSuggestion />
-          </div>
-        </div>
-      )}
-
       {hasSearched && (
         <div className="flex flex-col">
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-around">
             <Dropdown label="Badges">
               <BadgesFilterView />
             </Dropdown>
@@ -208,9 +437,10 @@ export const Search: FC<SearchProps> = ({}) => {
               <ReferredSkillsFilterView />
             </Dropdown>
 
-            <Dropdown label="Number of referrals">
+            {/* We have temporarily disabled this for the launch */}
+            {/* <Dropdown label="Number of referrals">
               <NumberOfReferralsFilterView />
-            </Dropdown>
+            </Dropdown> */}
 
             <div className="flex">
               <Toggle
@@ -228,15 +458,14 @@ export const Search: FC<SearchProps> = ({}) => {
           </div>
 
           <div className="mt-4 flex flex-col gap-4 pb-4">
-            {getOffsetArray(currentPage).map((offset) => (
-              <SearchResultPage offset={offset} key={`search-page-${offset}`} />
+            {getOffsetArray(currentPage).map((offset, idx) => (
+              <SearchResultPage
+                offset={offset}
+                key={`search-page-${offset}`}
+                lastResult={!getOffsetArray(currentPage)[idx + 1]}
+                firstResult={idx === 0}
+              />
             ))}
-            <Button
-              onClick={() => setCurrentPage((v) => v + 1)}
-              className="mx-auto w-fit uppercase"
-            >
-              Load more
-            </Button>
           </div>
         </div>
       )}
@@ -344,26 +573,24 @@ const SuggestionInnerText: FCWithClassName = ({ children, className }) => {
   );
 };
 
-const KeywordSuggestion: FCWithClassName = ({ className }) => {
-  return (
-    <div className={`flex flex-col ${className}`}>
-      <HistorySectionItem>React developer</HistorySectionItem>
-      <div className="flex">
-        <SuggestionInnerText>13 048 results</SuggestionInnerText>
-      </div>
-    </div>
-  );
-};
-
 const BadgesFilterView: FCWithClassName = ({ className }) => {
   const [issuer, setIssuer] = useState<BadgeIssuer>('mazury');
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query);
+  const router = useRouter();
+  const queryParams = router.query;
 
   const { searchState, setSearchState } = useContext(SearchContext);
   const { selectedBadgeSlugs } = searchState;
 
   const setSelectedBadgeSlugs = (slugs: string[]) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...queryParams,
+        badges: slugs.join(','),
+      },
+    });
     setSearchState({
       ...searchState,
       selectedBadgeSlugs: slugs,
@@ -533,10 +760,10 @@ const ReferredSkillsFilterView: FCWithClassName = ({ className }) => {
         placeholder="Search skills"
       />
       <div className="mt-6 flex flex-col gap-6 capitalize">
-        {skills?.map((skill) => {
+        {skills?.map((skill, idx) => {
           return (
             <Checkbox
-              key={`skill-${skill.slug}`}
+              key={`skill-${skill.slug}-${idx}`}
               label={skill.name}
               checked={selectedSkillSlugs.includes(skill.slug)}
               setChecked={() => handleCheck(skill.slug)}
@@ -594,7 +821,11 @@ const SearchResultBadge: FCWithClassName<{
   return (
     <div className={`flex items-center ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={iconSrc} className="h-4 w-4" alt={label} />
+      <img
+        src={iconSrc || '/default-avi.png'}
+        className="h-4 w-4 rounded-full"
+        alt={label}
+      />
       <span className="ml-2 text-xs font-bold text-indigoGray-90">{label}</span>
     </div>
   );
@@ -671,27 +902,66 @@ const SearchResult: FCWithClassName<SearchResultProps> = ({
         })}
       </div>
 
-      {profile?.top_badges?.length && profile?.top_badges?.length > 2 && (
+      {profile?.top_badges?.length && profile?.top_badges?.length > 2 ? (
         <span className="ml-4 text-xs font-bold text-indigoGray-90">
           {profile?.top_badges?.length - 2} more
         </span>
-      )}
+      ) : null}
     </div>
   );
 };
 
-const SearchResultPage: FCWithClassName<{ offset: number }> = ({
-  className,
-  offset,
-}) => {
-  const { searchState } = useContext(SearchContext);
-  const { selectedBadgeSlugs, selectedRoles, selectedSkillSlugs } = searchState;
-  const { profiles, error: profilesError } = useProfileSearch(
+const SearchResultPage: FCWithClassName<{
+  offset: number;
+  lastResult?: boolean;
+  firstResult?: boolean;
+}> = ({ className, offset, lastResult = false, firstResult = false }) => {
+  const router = useRouter();
+
+  const { searchState, setSearchState } = useContext(SearchContext);
+  const {
+    selectedBadgeSlugs,
+    selectedRoles,
+    selectedSkillSlugs,
+    searchQuery,
+    currentPage,
+    isContactableToggled,
+  } = searchState;
+
+  const setCurrentPage = (page: number) => {
+    setSearchState({ ...searchState, currentPage: page });
+  };
+
+  const debouncedQuery = useDebounce(searchQuery);
+
+  const {
+    profiles,
+    error: profilesError,
+    hasNextPage,
+  } = useProfileSearch(
     offset,
     selectedBadgeSlugs,
     selectedRoles,
-    selectedSkillSlugs
+    selectedSkillSlugs,
+    debouncedQuery,
+    isContactableToggled
   );
+
+  const cleanFilters = () => {
+    setSearchState({
+      ...searchState,
+      selectedBadgeSlugs: [],
+      selectedRoles: [],
+      selectedSkillSlugs: [],
+      isContactableToggled: false,
+    });
+    router.push({
+      pathname: '/search',
+      query: {
+        query: searchQuery,
+      },
+    });
+  };
 
   if (!profilesError && !profiles) {
     return (
@@ -726,6 +996,30 @@ const SearchResultPage: FCWithClassName<{ offset: number }> = ({
       {profiles?.map((profile) => {
         return <SearchResult profile={profile} key={profile.id} />;
       })}
+      {firstResult && (!profiles || profiles.length === 0) && (
+        <div className="mx-auto mt-32 flex flex-col text-center">
+          <span className="text-lg font-bold text-indigoGray-60">
+            No users found.
+          </span>
+          <span className="font-regular mt-1 text-lg text-indigoGray-60">
+            Try looking using different words or
+          </span>
+          <span
+            onClick={cleanFilters}
+            className="mt-1 cursor-pointer text-lg font-medium text-blue-800 underline"
+          >
+            clean filters
+          </span>
+        </div>
+      )}
+      {lastResult && hasNextPage && (
+        <Button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className="mx-auto w-fit uppercase"
+        >
+          Load more
+        </Button>
+      )}
     </>
   );
 };
