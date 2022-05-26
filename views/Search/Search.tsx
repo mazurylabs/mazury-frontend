@@ -11,10 +11,13 @@ import {
 import { SearchInput } from 'components/SearchInput';
 import { Toggle } from 'components/Toggle';
 import { SearchContext, SearchStateType } from 'contexts/search';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   useBadgesSearch,
+  useClickOutside,
   useCurrentBreakpoint,
   useDebounce,
+  useMobile,
   useProfileSearch,
   useReferralCount,
   useSkillsSearch,
@@ -27,6 +30,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   VFC,
 } from 'react';
@@ -46,6 +50,27 @@ const keywordSuggestions = [
   { title: 'Full stack developer', results: 760 },
 ];
 
+const badgeSuggestions = [
+  {
+    title: 'Aave voters',
+    img: '/icons/aave.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'aave_voter',
+  },
+  {
+    title: 'Early Mazury adopter',
+    img: '/icons/mazury.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'mazury_early_adopter',
+  },
+  {
+    title: 'Graph voter',
+    img: '/icons/graph.svg',
+    detail: 'Search for people who voted on Aave',
+    slug: 'graph_voter',
+  },
+];
+
 interface SearchProps {}
 
 export const Search: FC<SearchProps> = ({}) => {
@@ -61,7 +86,26 @@ export const Search: FC<SearchProps> = ({}) => {
   });
   const router = useRouter();
   const queryParams = router.query;
-  const queryParamsExist = queryParams && Object.keys(queryParams).length > 0;
+  const isMobile = useMobile();
+
+  const [inputFocused, setInputFocused] = useState(false);
+  const searchInputRef = useRef<HTMLDivElement>(null!);
+
+  const handleCloseSearch = () => {
+    setInputFocused(false);
+  };
+  useClickOutside(searchInputRef, handleCloseSearch);
+
+  const animationAttributes = !isMobile
+    ? {
+        initial: { opacity: 0.5, scale: 0.9 },
+        animate: {
+          opacity: 1,
+          scale: 1,
+        },
+        exit: { opacity: 0 },
+      }
+    : {};
 
   const {
     searchQuery,
@@ -132,6 +176,16 @@ export const Search: FC<SearchProps> = ({}) => {
     });
   };
 
+  const handleBadgeSearch = (slug: string) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        query: '',
+        badge: slug,
+      },
+    });
+  };
+
   const handleGoBack = () => {
     setTouched(false);
     setHasSearched(false);
@@ -173,9 +227,13 @@ export const Search: FC<SearchProps> = ({}) => {
     <SearchContext.Provider value={{ searchState, setSearchState }}>
       {/* Search input START */}
       <div
+        ref={searchInputRef}
         role="input"
-        className={`mt-8 flex items-center gap-2 rounded-xl bg-indigoGray-5 p-[14px] text-[14px] font-normal`}
-        onFocus={() => setTouched(true)}
+        className={`relative mt-8 flex items-center gap-2 rounded-xl bg-indigoGray-5 p-[14px] text-[14px] font-normal`}
+        onFocus={() => {
+          setTouched(true);
+          setInputFocused(true);
+        }}
         onClick={() => {
           if (!touched) {
             setTouched(true);
@@ -227,6 +285,97 @@ export const Search: FC<SearchProps> = ({}) => {
             onClick={handleButtonClick}
           />
         )}
+
+        <AnimatePresence>
+          {inputFocused && !hasSearched && (
+            <motion.div
+              {...animationAttributes}
+              className={`top-[99%] right-[0px] z-50 flex w-full flex-grow flex-col px-4 pt-6 md:h-[16.8125rem] md:flex-row md:rounded-b-lg lg:absolute lg:mt-0 lg:bg-indigoGray-5 lg:pt-5 lg:shadow-xl`}
+            >
+              <div className="w-full lg:flex">
+                <div className="grow-[3] border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0">
+                  <div className="mb-3 flex text-xs font-medium text-indigoGray-40">
+                    <h2>KEYWORD SUGGESTIONS</h2>
+                  </div>
+
+                  <ul className="font-inter font-medium">
+                    {keywordSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        className="mb-6 cursor-pointer"
+                        onClick={() => handleSuggestionSearch(suggestion.title)}
+                      >
+                        <p className="text-sm text-indigoGray-90">
+                          {suggestion.title}
+                        </p>
+
+                        <div className="flex text-xs  text-indigoGray-50">
+                          <p>{commify(suggestion.results)} results</p>
+
+                          {suggestion.mostSearched && (
+                            <>
+                              <div className="mx-2 flex">
+                                <Image
+                                  width={4}
+                                  height={4}
+                                  src="/icons/list-disc-grey.svg"
+                                  alt="list-disc"
+                                />
+                              </div>
+                              <p>#{suggestion.mostSearched} most searched</p>
+                            </>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mb-[44.5px] mt-7 mr-14 hidden justify-center lg:flex">
+                  <div className=" w-[1px] shrink-0 bg-indigoGray-20 " />
+                </div>
+
+                <div className="pt-8 lg:mr-12 lg:pt-0">
+                  <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
+                    <h2>BADGE SEARCH SUGGESTIONS</h2>
+                  </div>
+
+                  <div className="font-inter px-2 font-medium">
+                    <ul className="mb-4">
+                      {badgeSuggestions.map((badge, index) => (
+                        <li
+                          key={index}
+                          className=" mb-4 flex cursor-pointer items-center"
+                          onClick={() => handleBadgeSearch(badge.slug)}
+                        >
+                          <div className="mr-4 flex">
+                            <Image
+                              src={badge.img}
+                              width={24}
+                              height={24}
+                              layout="fixed"
+                              alt="badge"
+                            />
+                          </div>
+
+                          <div>
+                            <p className=" text-base font-semibold text-indigoGray-90">
+                              {badge.title}
+                            </p>
+
+                            <p className="text-sm text-indigoGray-60">
+                              {badge.detail}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       {/* Search input END */}
 
