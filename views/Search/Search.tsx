@@ -848,7 +848,7 @@ const SearchResultPage: FCWithClassName<{
         return <SearchResult profile={profile} key={profile.id} />;
       })}
       {firstResult && (!profiles || profiles.length === 0) && (
-        <div className="mx-auto mt-16 flex flex-col text-center">
+        <div className="mx-auto mt-32 flex flex-col text-center">
           <span className="text-lg font-bold text-indigoGray-60">
             No users found.
           </span>
