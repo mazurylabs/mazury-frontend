@@ -556,10 +556,10 @@ const ReferredSkillsFilterView: FCWithClassName = ({ className }) => {
         placeholder="Search skills"
       />
       <div className="mt-6 flex flex-col gap-6 capitalize">
-        {skills?.map((skill) => {
+        {skills?.map((skill, idx) => {
           return (
             <Checkbox
-              key={`skill-${skill.slug}`}
+              key={`skill-${skill.slug}-${idx}`}
               label={skill.name}
               checked={selectedSkillSlugs.includes(skill.slug)}
               setChecked={() => handleCheck(skill.slug)}
