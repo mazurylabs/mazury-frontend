@@ -1,18 +1,24 @@
 import { Avatar, Button, InfoBox, Input, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useReferrals } from 'hooks';
+import { useDebounce, useProfileSearch, useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FC, useContext, useRef } from 'react';
-import { getMonthAndYear, getSkillSlugsFromReferral } from 'utils';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
+import {
+  getMonthAndYear,
+  getSkillsFromProfile,
+  getSkillSlugsFromReferral,
+  returnTruncatedIfEthAddress,
+} from 'utils';
 import { useAccount } from 'wagmi';
 
 interface PersonProps {
-  date: string;
+  date?: string;
   avatarSrc: string;
   username: string;
   role: string;
   onReferClick: () => void;
+  showDate?: boolean;
 }
 
 const Person: FC<PersonProps> = ({
@@ -21,15 +27,18 @@ const Person: FC<PersonProps> = ({
   username,
   role,
   onReferClick,
+  showDate = true,
 }) => {
   return (
     <div className="flex items-center">
       <Avatar src={avatarSrc} width="56px" height="56px" />
 
       <div className="ml-4 flex flex-col">
-        <span className="text-xs font-medium text-teal-500">{date}</span>
+        {showDate && (
+          <span className="text-xs font-medium text-teal-500">{date}</span>
+        )}
         <span className="font-serif text-xl font-bold text-indigoGray-90">
-          {username}
+          {returnTruncatedIfEthAddress(username)}
         </span>
         <span className="mt-1 text-xs font-medium text-indigoGray-50">
           {role}
@@ -52,6 +61,11 @@ const ReferPage: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { referrals } = useReferrals(accountData?.address as string);
   const { setReferralReceiver } = useContext(OnboardingContext);
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedQuery = useDebounce(searchQuery);
+  const { profiles } = useProfileSearch(0, [], [], [], debouncedQuery, false);
+
+  const showSearchResults = !!searchQuery;
 
   return (
     <OnboardingLayout
@@ -65,11 +79,15 @@ const ReferPage: NextPage = () => {
           make sure you get credit for your reputation on web3.
         </InfoBox>
 
-        {referrals && referrals.length > 0 && (
-          <>
-            {/* TODO: Add search icon & implement search */}
-            <Input className="mt-6" placeholder="Search for a user" />
+        <Input
+          className="mt-6"
+          placeholder="Search for a user"
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
 
+        {!showSearchResults && referrals && referrals.length > 0 && (
+          <>
             <span className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
               People that referred you
             </span>
@@ -89,6 +107,45 @@ const ReferPage: NextPage = () => {
                       setReferralReceiver?.(referral.author);
                       router.push('/onboarding/write');
                     }}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {showSearchResults && (
+          <>
+            <span className="mt-6 text-sm font-medium uppercase text-indigoGray-40">
+              Search results
+            </span>
+
+            <div className="mt-2 flex flex-col gap-4">
+              {!profiles ||
+                (profiles.length === 0 && (
+                  <span className="mt-8 text-center text-base font-medium text-indigoGray-80">
+                    No users found. Try searching for someone else.
+                  </span>
+                ))}
+              {profiles?.map((profile) => {
+                const skillSlugs = getSkillsFromProfile(profile);
+
+                return (
+                  <Person
+                    avatarSrc={profile.avatar}
+                    username={profile.username}
+                    role={skillSlugs ? skillSlugs[0] : 'No role'}
+                    key={profile.id}
+                    onReferClick={() => {
+                      setReferralReceiver?.({
+                        eth_address: profile.eth_address,
+                        username: profile.username,
+                        avatar: profile.avatar,
+                        ens_name: profile.ens_name,
+                      });
+                      router.push('/onboarding/write');
+                    }}
+                    showDate={false}
                   />
                 );
               })}

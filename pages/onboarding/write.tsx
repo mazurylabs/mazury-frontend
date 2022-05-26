@@ -1,10 +1,10 @@
 import { Avatar, OnboardingLayout } from 'components';
 import { Tags, ITagItem } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useReferrals } from 'hooks';
+import { useReferralCount, useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { Referral } from 'types';
 import {
@@ -32,6 +32,10 @@ const WritePage: NextPage = () => {
   const [content, setContent] = useState(existingReferral?.content || '');
   const { referralReceiver: receiver } = useContext(OnboardingContext);
   const receiverAddress = receiver?.eth_address;
+
+  const { referralCount: receiverReferralCount } = useReferralCount(
+    receiverAddress as string
+  );
 
   const [{ data: accountData }] = useAccount();
   const authorAddress = accountData?.address;
@@ -123,6 +127,14 @@ const WritePage: NextPage = () => {
     alert('Referral created successfully!');
   };
 
+  const receivedReferralContent = useMemo(
+    () =>
+      referrals?.find(
+        (referral) => referral.author.eth_address === receiverAddress
+      )?.content,
+    [referrals, receiverAddress]
+  );
+
   return (
     <OnboardingLayout
       firstHeading="Referrals"
@@ -149,20 +161,20 @@ const WritePage: NextPage = () => {
               getTruncatedAddress(receiver?.eth_address)}
           </span>
 
-          <span className="ml-auto text-xs font-medium text-indigoGray-50">
-            13 referrals
-          </span>
+          {receiverReferralCount && (
+            <span className="ml-auto text-xs font-medium text-indigoGray-50">
+              {receiverReferralCount} referrals
+            </span>
+          )}
         </div>
 
-        <div className="mt-2 rounded-tl-[2px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px] border-[2px] border-indigoGray-30 bg-indigoGray-10 p-4 shadow-lg">
-          <p className="text-sm font-medium text-indigoGray-80">
-            {
-              referrals?.find(
-                (referral) => referral.author.eth_address === receiverAddress
-              )?.content
-            }
-          </p>
-        </div>
+        {receivedReferralContent && (
+          <div className="mt-2 rounded-tl-[2px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px] border-[2px] border-indigoGray-30 bg-indigoGray-10 p-4 shadow-lg">
+            <p className="text-sm font-medium text-indigoGray-80">
+              {receivedReferralContent}
+            </p>
+          </div>
+        )}
 
         <textarea
           placeholder="Write your referral here..."
