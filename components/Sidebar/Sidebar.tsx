@@ -135,22 +135,6 @@ export const Sidebar: FC = () => {
                     active={pathname.startsWith('/people')}
                     className="mt-8"
                   />
-
-                  <a
-                    onClick={logout}
-                    className={`mt-8 flex h-[40px] hover:cursor-pointer ${
-                      isOpen && 'w-full'
-                    } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
-                  >
-                    <img
-                      width="16px"
-                      height="16px"
-                      src="/icons/login.svg"
-                      alt="Sign in icon"
-                      className="scale-x-[-1]"
-                    />{' '}
-                    {isOpen && <span>Sign out</span>}
-                  </a>
                 </>
               ) : (
                 // Sign in button
@@ -186,6 +170,23 @@ export const Sidebar: FC = () => {
                 className="mb-4 mt-4"
                 active={pathname.startsWith('/settings')}
               />
+
+              {isSignedIn && (
+                <a
+                  onClick={logout}
+                  className={`mt-4 flex h-[40px] hover:cursor-pointer ${
+                    isOpen && 'w-full'
+                  } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
+                >
+                  <img
+                    width="16px"
+                    height="16px"
+                    src="/icons/sign-out.svg"
+                    alt="Sign out icon"
+                  />{' '}
+                  {isOpen && <span>Sign out</span>}
+                </a>
+              )}
             </div>
           </>
         )}

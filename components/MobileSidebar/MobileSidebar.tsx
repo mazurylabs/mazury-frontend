@@ -60,11 +60,10 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
 
               <a onClick={logout}>
                 <Image
-                  src="/icons/login.svg"
+                  src="/icons/sign-out.svg"
                   alt="Sign out icon"
                   width="24px"
                   height="24px"
-                  className="scale-x-[-1]"
                 />{' '}
               </a>
             </>
