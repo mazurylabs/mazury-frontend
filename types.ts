@@ -226,6 +226,19 @@ export interface MirrorPost {
   timestamp: number;
   title: string;
 }
+
+export interface Post {
+  id: string;
+  author: {
+    eth_address: string;
+  };
+  posted_at: string;
+  title: string;
+  background_image: string;
+  preview: string;
+  url: string;
+}
+
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
 export type BadgeIssuer = 'mazury' | 'poap';
