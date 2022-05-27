@@ -425,29 +425,35 @@ const Home: NextPage = () => {
 
                 <div className="mt-3 ">
                   <ul className="space-y-6">
-                    {Boolean(activity)
-                      ? activity?.map((item) => {
-                          return (
-                            <ActivityPreview
-                              activity={item}
-                              key={item.id}
-                              avatarSize="md"
-                            />
-                          );
-                        })
-                      : skeletonArray.map((_, index) => (
-                          <div
-                            className="flex w-full animate-pulse items-end"
-                            key={index}
-                          >
-                            <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
+                    {!accountData?.address ? (
+                      <p className="text-lg text-indigoGray-60">
+                        No recent activity to show
+                      </p>
+                    ) : Boolean(activity) ? (
+                      activity?.map((item) => {
+                        return (
+                          <ActivityPreview
+                            activity={item}
+                            key={item.id}
+                            avatarSize="md"
+                          />
+                        );
+                      })
+                    ) : (
+                      skeletonArray.map((_, index) => (
+                        <div
+                          className="flex w-full animate-pulse items-end"
+                          key={index}
+                        >
+                          <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
 
-                            <div className="ml-3 flex w-full flex-col justify-center space-y-[2px] lg:mr-[60px] lg:w-fit">
-                              <div className="h-4 w-20 rounded bg-indigoGray-20" />
-                              <div className="h-4 w-full rounded bg-indigoGray-20 lg:w-[400px]" />
-                            </div>
+                          <div className="ml-3 flex w-full flex-col justify-center space-y-[2px] lg:mr-[60px] lg:w-fit">
+                            <div className="h-4 w-20 rounded bg-indigoGray-20" />
+                            <div className="h-4 w-full rounded bg-indigoGray-20 lg:w-[400px]" />
                           </div>
-                        ))}
+                        </div>
+                      ))
+                    )}
                   </ul>
                 </div>
               </div>
