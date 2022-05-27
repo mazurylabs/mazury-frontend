@@ -22,7 +22,7 @@ export const usePosts = (address?: string) => {
     };
 
     getMirrorPost();
-  }, []);
+  }, [address]);
 
   React.useEffect(() => {
     const getGmPost = async () => {
@@ -35,7 +35,7 @@ export const usePosts = (address?: string) => {
     };
 
     getGmPost();
-  }, []);
+  }, [address]);
 
   return {
     posts: [...mirror, ...gm],
