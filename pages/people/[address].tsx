@@ -41,6 +41,7 @@ import {
   useActiveProfileSection,
   useMobile,
   useActivity,
+  usePosts,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -100,11 +101,14 @@ const Profile: React.FC<Props> = ({ address }) => {
     count: badgesCount,
   } = useBadges(eth_address, badgeIssuer);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  const {
-    posts,
-    error: postsError,
-    count: postsCount,
-  } = useMirrorPosts(eth_address);
+  // const {
+  //   posts,
+  //   error: postsError,
+  //   count: postsCount,
+  // } = useMirrorPosts(eth_address);
+  // const posts = [];
+
+  const { posts } = usePosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
@@ -509,7 +513,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(postsCount)}
+                      {getMetricDisplayValue(posts.length)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Posts
@@ -555,18 +559,16 @@ const Profile: React.FC<Props> = ({ address }) => {
                       Badges
                     </div>
                   </div>
-                  <div className="flex flex-col items-center gap-0">
-                    <motion.span
-                      style={{
-                        fontSize: shouldCollapseHeader ? '24px' : '36px',
-                      }}
-                      className="font-serif font-bold"
-                    >
-                      {getMetricDisplayValue(postsCount)}
-                    </motion.span>
-                    <div className="text-xs uppercase text-indigoGray-60 opacity-60">
-                      Posts
-                    </div>
+                </div>
+                <div className="flex flex-col items-center gap-0">
+                  <motion.span
+                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
+                    className="font-serif font-bold"
+                  >
+                    {getMetricDisplayValue(posts.length)}
+                  </motion.span>
+                  <div className="text-xs uppercase text-indigoGray-60 opacity-60">
+                    Posts
                   </div>
                 </div>
               </div>
@@ -913,20 +915,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                 {posts && posts.length > 0 ? (
                   posts
                     ?.slice(0, postsExpanded ? posts.length : 4)
-                    .map((post) => {
-                      return (
-                        <MirrorPost
-                          author={{
-                            username: profile?.username,
-                            avatarSrc: profile?.avatar,
-                          }}
-                          bgImageSrc={post.featuredImage?.url || ''}
-                          title={post.title}
-                          link={`https://mirror.xyz/${eth_address}/${post.digest}`}
-                          key={post.digest}
-                        />
-                      );
-                    })
+                    .map((post) => (
+                      <MirrorPost
+                        author={{
+                          username: profile?.username,
+                          avatarSrc: profile?.avatar,
+                        }}
+                        bgImageSrc={post?.background_image || ''}
+                        title={post.title}
+                        link={post?.url}
+                        key={post.id}
+                      />
+                    ))
                 ) : (
                   <p className="text-lg text-indigoGray-60">
                     No recent posts to show
