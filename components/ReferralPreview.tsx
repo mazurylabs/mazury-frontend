@@ -3,6 +3,7 @@ import { Avatar, ITagItem, Tags } from '.';
 import { Referral, Skill } from 'types';
 import { colors, getMonthAndYear, toCapitalizedWord } from 'utils';
 import { useReferralCount } from 'hooks';
+import Link from 'next/link';
 
 interface Props {
   referral: Referral;
@@ -62,9 +63,11 @@ export const ReferralPreview: React.FC<Props> = ({
           <span className="text-xs font-medium text-teal-500">
             {getMonthAndYear(new Date(date))}
           </span>
-          <h5 className="w-1/12 overflow-ellipsis font-serif text-xl font-bold text-indigoGray-90">
-            {referredBy.username.slice(0, 15)}
-          </h5>
+          <Link href={`/people/${referredBy.username}`}>
+            <a className="w-1/12 overflow-ellipsis font-serif text-xl font-bold text-indigoGray-90">
+              {referredBy.username.slice(0, 15)}
+            </a>
+          </Link>
         </div>
 
         {referralCount !== undefined && (
