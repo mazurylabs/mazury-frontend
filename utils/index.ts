@@ -188,3 +188,7 @@ export const sectionToColor: { [key in ProfileSection]: ColorName } = {
   Writing: 'amber',
   DAOs: 'purple',
 };
+
+export const truncateString = (str: string, maxLength: number = 50) => {
+  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};

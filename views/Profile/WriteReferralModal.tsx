@@ -126,7 +126,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
         resetState();
         onClose();
       }}
-      containerClassName={modalClassName + 'max-w-full'}
+      containerClassName={modalClassName + ' max-w-full'}
     >
       <div className="flex flex-col">
         {status === 'writing' && (

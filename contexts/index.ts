@@ -33,6 +33,7 @@ export interface OnboardingFormDataType {
   avatar?: string;
   twitter?: string;
   github?: string;
+  full_name?: string;
 }
 
 interface OnboardingContextType {
