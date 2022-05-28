@@ -60,6 +60,9 @@ export const updateProfile: (
       // @ts-ignore
       formData.append(key, data[key]);
     }
+    if (shouldRemoveAvi) {
+      formData.append('avatar', '');
+    }
     if (avatarFile) {
       formData.append('avatar', avatarFile, avatarFile?.name);
     }
