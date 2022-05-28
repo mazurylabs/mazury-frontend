@@ -154,6 +154,11 @@ export const ProfileView: FC = () => {
               Full name <span className="text-indigoGray-20">(optional)</span>
             </>
           }
+          value={formData.full_name}
+          onChange={(val) => {
+            const newFd = { ...formData, full_name: val };
+            setFormData(newFd);
+          }}
         />
 
         <div className="mt-6 flex items-center justify-center gap-6 p-4 sm:justify-start">

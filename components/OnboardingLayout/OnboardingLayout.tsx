@@ -86,6 +86,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         avatar,
         twitter,
         github,
+        full_name,
       } = profileData;
       setFormData({
         bio,
@@ -105,6 +106,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         avatar,
         twitter,
         github,
+        full_name,
       });
       if (profileData.twitter) {
         setTwitterConnected(true);

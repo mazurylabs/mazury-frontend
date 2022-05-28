@@ -411,23 +411,22 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ? profile.username.slice(0, 10) + '...'
                             : profile.username}
                         </motion.h1>
-                        {/* TODO: The backend does not have a field for full name yet */}
-                        {/* <h3
+                        <h3
                           className={`hidden text-indigoGray-40 md:inline-block ${
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
-                          Michael Scott
-                        </h3> */}
+                          {profile.full_name}
+                        </h3>
                       </div>
 
-                      {/* <h3
+                      <h3
                         className={`text-indigoGray-40 md:hidden ${
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
-                        Michael Scott
-                      </h3> */}
+                        {profile.full_name}
+                      </h3>
 
                       <div className="flex items-center">
                         <p
