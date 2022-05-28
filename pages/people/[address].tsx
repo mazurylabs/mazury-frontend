@@ -50,6 +50,7 @@ import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
 import toast, { Toaster } from 'react-hot-toast';
 import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
+import { EditProfileModal } from 'views/Profile/EditProfileModal';
 
 interface Props {
   address: string;
@@ -121,6 +122,9 @@ const Profile: React.FC<Props> = ({ address }) => {
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
 
+  // To track whether the 'edit profile' modal is open or not
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+
   // If the author has already referred the receiver, this holds that referral. Else it's null.
   const [existingReferral, setExistingReferral] = useState<Referral | null>(
     null
@@ -188,6 +192,14 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const onReferralModalClose = () => {
     setReferralModalOpen(false);
+  };
+
+  const handleEditProfileClick = () => {
+    setEditProfileModalOpen(true);
+  };
+
+  const onEditProfileModalClose = () => {
+    setEditProfileModalOpen(false);
   };
 
   const copyAddressToClipboard = async () => {
@@ -273,6 +285,11 @@ const Profile: React.FC<Props> = ({ address }) => {
       <Head>
         <title>{profile.username} | Mazury</title>
       </Head>
+      <EditProfileModal
+        isOpen={editProfileModalOpen}
+        onClose={onEditProfileModalClose}
+        address={eth_address}
+      />
       <WriteReferralModal
         isOpen={referralModalOpen}
         onClose={onReferralModalClose}
@@ -483,38 +500,55 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="ml-auto hidden gap-16 pr-24 lg:flex">
-                <div className="flex flex-col items-center gap-0">
-                  <motion.span
-                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
-                    className="font-serif font-bold"
+              <div className="ml-auto flex flex-col">
+                {accountData?.address === eth_address && (
+                  <Button
+                    className="ml-auto mr-24 w-fit"
+                    onClick={handleEditProfileClick}
                   >
-                    {getMetricDisplayValue(referralsCount)}
-                  </motion.span>
-                  <div className="text-sm uppercase text-indigoGray-60 opacity-60">
-                    Referrals
+                    EDIT PROFILE
+                  </Button>
+                )}
+
+                <div className="mt-8 hidden gap-16 pr-24 lg:flex">
+                  <div className="flex flex-col items-center gap-0">
+                    <motion.span
+                      style={{
+                        fontSize: shouldCollapseHeader ? '24px' : '36px',
+                      }}
+                      className="font-serif font-bold"
+                    >
+                      {getMetricDisplayValue(referralsCount)}
+                    </motion.span>
+                    <div className="text-sm uppercase text-indigoGray-60 opacity-60">
+                      Referrals
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col items-center gap-0">
-                  <motion.span
-                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
-                    className="font-serif font-bold"
-                  >
-                    {getMetricDisplayValue(badgesCount)}
-                  </motion.span>
-                  <div className="text-sm uppercase text-indigoGray-60 opacity-60">
-                    Badges
+                  <div className="flex flex-col items-center gap-0">
+                    <motion.span
+                      style={{
+                        fontSize: shouldCollapseHeader ? '24px' : '36px',
+                      }}
+                      className="font-serif font-bold"
+                    >
+                      {getMetricDisplayValue(badgesCount)}
+                    </motion.span>
+                    <div className="text-sm uppercase text-indigoGray-60 opacity-60">
+                      Badges
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col items-center gap-0">
-                  <motion.span
-                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
-                    className="font-serif font-bold"
-                  >
-                    {getMetricDisplayValue(postsCount)}
-                  </motion.span>
-                  <div className="text-xs uppercase text-indigoGray-60 opacity-60">
-                    Posts
+                  <div className="flex flex-col items-center gap-0">
+                    <motion.span
+                      style={{
+                        fontSize: shouldCollapseHeader ? '24px' : '36px',
+                      }}
+                      className="font-serif font-bold"
+                    >
+                      {getMetricDisplayValue(postsCount)}
+                    </motion.span>
+                    <div className="text-xs uppercase text-indigoGray-60 opacity-60">
+                      Posts
+                    </div>
                   </div>
                 </div>
               </div>
