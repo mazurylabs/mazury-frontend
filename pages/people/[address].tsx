@@ -137,6 +137,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   const referralsToShow =
     referralsToggle === 'received' ? referrals : authoredReferrals;
 
+  const viewingOwnProfile = accountData?.address === eth_address;
+
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLHeadingElement>(null);
@@ -318,16 +320,18 @@ const Profile: React.FC<Props> = ({ address }) => {
               <p className="font-demi">{profile.username}</p>
 
               {/* Write referral button, large screens */}
-              <div
-                className="ml-auto flex items-center"
-                role="button"
-                onClick={handleWriteReferralClick}
-              >
-                <PenIcon color={colors.indigoGray[90]} />
-                <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                  {writeReferralButtonText}
-                </span>
-              </div>
+              {!viewingOwnProfile && (
+                <div
+                  className="ml-auto flex items-center"
+                  role="button"
+                  onClick={handleWriteReferralClick}
+                >
+                  <PenIcon color={colors.indigoGray[90]} />
+                  <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
+                    {writeReferralButtonText}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div
@@ -351,16 +355,30 @@ const Profile: React.FC<Props> = ({ address }) => {
                     <p className="font-demi">{profile.username}</p>
 
                     {/* Write referral button, small screens */}
-                    <div
-                      className="ml-auto flex items-center"
-                      role="button"
-                      onClick={handleWriteReferralClick}
-                    >
-                      <PenIcon color={colors.indigoGray[90]} />
-                      <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                        {writeReferralButtonText}
-                      </span>
-                    </div>
+                    {!viewingOwnProfile && (
+                      <div
+                        className="ml-auto flex items-center"
+                        role="button"
+                        onClick={handleWriteReferralClick}
+                      >
+                        <PenIcon color={colors.indigoGray[90]} />
+                        <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
+                          {writeReferralButtonText}
+                        </span>
+                      </div>
+                    )}
+
+                    {
+                      // Edit profile button, small screens
+                      viewingOwnProfile && (
+                        <Button
+                          className="ml-auto"
+                          onClick={handleEditProfileClick}
+                        >
+                          EDIT PROFILE
+                        </Button>
+                      )
+                    }
                   </div>
                   <div className="flex items-center gap-6">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -501,7 +519,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               <div className="ml-auto flex flex-col">
-                {accountData?.address === eth_address && (
+                {viewingOwnProfile && !isMobile && (
                   <Button
                     className="ml-auto mr-24 w-fit"
                     onClick={handleEditProfileClick}
