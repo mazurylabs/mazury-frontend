@@ -1,6 +1,7 @@
 import { Button, Input, Modal, RoleCard } from 'components';
 import { OnboardingFormDataType } from 'contexts';
-import { useProfile } from 'hooks';
+import { useMobile, useProfile } from 'hooks';
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { FC } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
@@ -28,6 +29,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const [fileUrl, setFileUrl] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [shouldRemoveAvi, setShouldRemoveAvi] = useState(false);
+  const isMobile = useMobile();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -118,15 +120,32 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} containerClassName="">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      containerClassName={isMobile ? 'w-full' : ''}
+    >
       <Toaster />
       <div className="flex flex-col">
-        <h3 className="text-xl font-medium text-indigoGray-90">
-          Modify profile
-        </h3>
+        <div className="flex">
+          <Image
+            src="/icons/x.svg"
+            className="cursor-pointer"
+            onClick={onClose}
+            alt="Close modal"
+            width="24px"
+            height="24px"
+          />
 
-        <div className="mt-6 flex">
-          <div className="flex w-1/2 flex-col">
+          <h3 className="ml-4 text-xl font-medium text-indigoGray-90">
+            Modify profile
+          </h3>
+        </div>
+
+        <div
+          className={`mt-6 flex ${isMobile ? 'flex-col' : 'flex-row'} gap-6`}
+        >
+          <div className={`flex ${isMobile ? 'w-full' : 'w-1/2'} flex-col`}>
             <div className="flex">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -184,7 +203,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             </form>
           </div>
 
-          <div className="ml-6 flex w-1/2 flex-col">
+          <div className={`flex ${isMobile ? 'w-full' : 'w-1/2'} flex-col`}>
             <div className="grid grid-cols-3 gap-3">
               <RoleCard
                 role="role_developer"
