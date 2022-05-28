@@ -115,18 +115,6 @@ exports[`Layout all parts are being rendered correctly 1`] = `
            
         </a>
         <a
-          class="mt-8 flex h-[40px] hover:cursor-pointer false items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80"
-        >
-          <img
-            alt="Sign in icon"
-            class="scale-x-[-1]"
-            height="16px"
-            src="/icons/login.svg"
-            width="16px"
-          />
-           
-        </a>
-        <a
           class="flex h-[40px] false items-center gap-4 rounded-md border border-hidden p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 false mb-4 mt-4"
           href="/settings"
         >
@@ -205,6 +193,17 @@ exports[`Layout all parts are being rendered correctly 1`] = `
               />
             </svg>
           </span>
+           
+        </a>
+        <a
+          class="mt-4 flex h-[40px] hover:cursor-pointer false items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80"
+        >
+          <img
+            alt="Sign out icon"
+            height="16px"
+            src="/icons/sign-out.svg"
+            width="16px"
+          />
            
         </a>
       </div>
@@ -318,7 +317,6 @@ exports[`Layout all parts are being rendered correctly 1`] = `
         </span>
         <img
           alt="Sign out icon"
-          class="scale-x-[-1]"
           data-nimg="intrinsic"
           decoding="async"
           src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
