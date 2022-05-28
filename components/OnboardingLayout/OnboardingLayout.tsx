@@ -44,6 +44,9 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
     if (bottomButtonOnClick) {
       await bottomButtonOnClick();
     }
+    if (currentRoute === 'write') {
+      return router.push('/onboarding/socials');
+    }
     const nextRoute =
       onboardingRoutes[onboardingRoutes.indexOf(currentRoute) + 1];
     router.push(`/onboarding/${nextRoute}`);
