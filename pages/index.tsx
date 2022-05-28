@@ -467,39 +467,42 @@ const Home: NextPage = () => {
                   <ul className="space-y-6">
                     {Boolean(profiles) ? (
                       profiles?.map((suggestion, index) => (
-                        <li key={index} className="flex">
-                          <Avatar
-                            src={suggestion.avatar}
-                            width={40}
-                            height={40}
-                            alt="user"
-                          />
+                        <li key={index}>
+                          <Link
+                            href={`/people/${
+                              suggestion?.username || suggestion?.eth_address
+                            }`}
+                          >
+                            <a className="flex">
+                              <Avatar
+                                src={suggestion.avatar}
+                                width={40}
+                                height={40}
+                                alt="user"
+                              />
 
-                          <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
-                            <Link
-                              href={`/people/${
-                                suggestion?.username || suggestion?.eth_address
-                              }`}
-                            >
-                              <a className="font-serif text-base font-bold text-indigoGray-90">
-                                {returnTruncatedIfEthAddress(
-                                  suggestion.username
-                                )}
-                              </a>
-                            </Link>
-                            <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
-                              Talent spotlight
-                            </p>
-                          </div>
+                              <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
+                                <p className="font-serif text-base font-bold text-indigoGray-90">
+                                  {returnTruncatedIfEthAddress(
+                                    suggestion.username
+                                  )}
+                                </p>
 
-                          <div className="flex">
-                            <Image
-                              src="/icons/arrow-right.svg"
-                              width={8}
-                              height={12}
-                              alt="arrow-right"
-                            />
-                          </div>
+                                <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
+                                  Talent spotlight
+                                </p>
+                              </div>
+
+                              <div className="flex">
+                                <Image
+                                  src="/icons/arrow-right.svg"
+                                  width={8}
+                                  height={12}
+                                  alt="arrow-right"
+                                />
+                              </div>
+                            </a>
+                          </Link>
                         </li>
                       ))
                     ) : (
