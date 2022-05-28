@@ -5,6 +5,7 @@ import { AnimatePresence } from 'framer-motion';
 import { BadgeDetail } from './BadgeDetail';
 import { useMobile } from 'hooks';
 import { useEffect } from 'react';
+import { truncateString } from 'utils';
 
 interface Props {
   imgSrc: string;
@@ -54,13 +55,17 @@ export const BadgePreview: React.FC<Props> = ({
           </AnimatePresence>
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={imgSrc} className="h-[100px]" alt={`${heading} badge`} />
+        <img
+          src={imgSrc || '/default-avi.png'}
+          className="h-[100px] rounded-full"
+          alt={`${heading} badge`}
+        />
         <div className="ml-6 flex flex-col gap-2">
           <h5 className="font-serif text-2xl font-bold text-indigoGray-90">
             {heading}
           </h5>
           <p className="text-sm font-medium text-indigoGray-80">
-            {description}
+            {truncateString(description, 100)}
           </p>
           {totalCount && (
             <span className="text-sm font-medium text-indigoGray-50">
