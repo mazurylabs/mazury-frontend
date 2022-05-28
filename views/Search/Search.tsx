@@ -954,11 +954,12 @@ const SearchResultPage: FCWithClassName<{
       selectedRoles: [],
       selectedSkillSlugs: [],
       isContactableToggled: false,
+      searchQuery: '',
     });
     router.push({
       pathname: '/search',
       query: {
-        query: searchQuery,
+        query: '',
       },
     });
   };

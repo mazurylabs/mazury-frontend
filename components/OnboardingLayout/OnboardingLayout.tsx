@@ -44,6 +44,9 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
     if (bottomButtonOnClick) {
       await bottomButtonOnClick();
     }
+    if (currentRoute === 'write') {
+      return router.push('/onboarding/socials');
+    }
     const nextRoute =
       onboardingRoutes[onboardingRoutes.indexOf(currentRoute) + 1];
     router.push(`/onboarding/${nextRoute}`);
@@ -83,6 +86,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         avatar,
         twitter,
         github,
+        full_name,
       } = profileData;
       setFormData({
         bio,
@@ -102,6 +106,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         avatar,
         twitter,
         github,
+        full_name,
       });
       if (profileData.twitter) {
         setTwitterConnected(true);

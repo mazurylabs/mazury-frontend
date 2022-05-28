@@ -84,6 +84,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       role_researcher: false,
       role_trader: false,
       open_to_opportunities: false,
+      full_name: '',
     });
   const [fetchedProfile, setFetchedProfile] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
