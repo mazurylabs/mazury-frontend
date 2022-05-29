@@ -194,27 +194,23 @@ export const truncateString = (str: string, maxLength: number = 50) => {
 };
 
 export const trayAnimation = {
-  initial: { y: '100%', opacity: 1 },
+  initial: { y: '100%' },
   animate: {
     y: 0,
-    opacity: 1,
     transition: { duration: 0.4, ease: [0.36, 0.66, 0.04, 1] },
   },
   exit: {
     y: '100%',
-    opacity: 1,
     transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] },
   },
 };
 
 export const fadeAnimation = {
-  initial: { opacity: 0, y: 0 },
+  initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    y: 0,
   },
   exit: {
     opacity: 0,
-    y: 0,
   },
 };

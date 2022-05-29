@@ -2,22 +2,35 @@ import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import ScrollLock from 'react-scrolllock';
 import debounce from 'lodash.debounce';
+import { motion } from 'framer-motion';
 
 import { Checkbox, Pill } from 'components';
 
-import { useBadgeTypes, useIntersection } from 'hooks';
-import { BadgeIssuer, BadgeType } from 'types';
-import { api, commify } from 'utils';
+import {
+  useBadgeTypes,
+  useIntersection,
+  useClickOutside,
+  useScreenWidth,
+} from 'hooks';
+
+import { BadgeIssuer, BadgeType, FilterType } from 'types';
+import { api, commify, trayAnimation, fadeAnimation } from 'utils';
 
 interface BadgeFilterProps {
   selectedBadges: string[];
   handleSelectBadge: (badge: string) => void;
+  handleGoBack: (filter: FilterType) => void;
 }
 
 export const BadgeFilter = ({
   selectedBadges,
   handleSelectBadge,
+  handleGoBack,
 }: BadgeFilterProps) => {
+  const containerRef = React.useRef(null!);
+  const screenWidth = useScreenWidth();
+  useClickOutside(containerRef, () => handleGoBack('empty'));
+
   const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer>('mazury');
   const [badges, setBadges] = React.useState<BadgeType[]>([]);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -26,6 +39,9 @@ export const BadgeFilter = ({
   const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
   const intersectionRef = React.useRef(null!);
   const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
+
+  const variants =
+    screenWidth > 768 ? {} : screenWidth <= 640 ? trayAnimation : fadeAnimation;
 
   const handleBadgeIssuer = (issuer: 'mazury' | 'poap') => {
     setCursor('');
@@ -41,9 +57,12 @@ export const BadgeFilter = ({
 
   const handleSearch = React.useCallback(
     debounce(async (nextValue) => {
+      const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
       const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
 
-      const result = await api.get(searchEndpoint);
+      const result = await api.get(
+        nextValue ? searchEndpoint : badgeTypesEndpoint
+      );
 
       const nextCursor = result.data.next?.split('.com/')[1];
 
@@ -86,10 +105,22 @@ export const BadgeFilter = ({
   }, [shouldFetchBadge, badgeIssuer]);
 
   return (
-    <div className="flex h-full w-full !cursor-default flex-col p-6">
+    <motion.div
+      variants={variants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 pb-10 shadow-base md:h-[600px] md:w-[500px] lg:h-[400px]"
+    >
       <div className="mb-6 lg:hidden">
-        <button type="button" className="flex space-x-4">
-          <SVG src="/icons/" height={24} width={24} />
+        <button
+          type="button"
+          className="flex space-x-4"
+          onClick={() => handleGoBack('empty')}
+        >
+          <div className="h-6 w-6">
+            <SVG src="/icons/back.svg" height={24} width={24} />
+          </div>
           <span className="font-sans text-xl font-medium leading-[30px] text-indigoGray-90">
             Badges
           </span>
@@ -98,7 +129,7 @@ export const BadgeFilter = ({
 
       <div>
         <form className="flex h-12 w-full items-center space-x-[18px] rounded-lg bg-indigoGray-5 py-2 pl-[14px] pr-2">
-          <div className="flex space-x-4">
+          <div className="flex h-6 w-6 space-x-4">
             <SVG height={24} width={24} src={`/icons/search-black.svg`} />
           </div>
 
@@ -132,11 +163,11 @@ export const BadgeFilter = ({
         />
       </div>
 
-      <div className="mb-10">
-        <ScrollLock>
-          <ul className="mt-7 h-[222px] space-y-8 overflow-y-auto overflow-x-hidden">
-            {badges?.map((badge) => (
-              <li className="flex space-x-4">
+      <ScrollLock>
+        <div className="flex overflow-y-auto">
+          <ul className="mt-7 grow space-y-8 overflow-x-hidden">
+            {badges?.map((badge, index) => (
+              <li className="flex space-x-4" key={badge.id}>
                 <Checkbox
                   key={badge.id}
                   label={
@@ -171,8 +202,8 @@ export const BadgeFilter = ({
               ref={intersectionRef}
             />
           </ul>
-        </ScrollLock>
-      </div>
-    </div>
+        </div>
+      </ScrollLock>
+    </motion.div>
   );
 };
