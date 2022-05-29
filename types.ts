@@ -242,3 +242,10 @@ export interface Post {
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
 export type BadgeIssuer = 'mazury' | 'poap';
+
+export type FilterType =
+  | 'Badges'
+  | 'Roles'
+  | 'Referred skills'
+  | 'Number of referrals'
+  | 'empty';
