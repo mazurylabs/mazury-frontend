@@ -289,7 +289,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     <>
       <Toaster />
       <Head>
-        <title>{profile.username} | Mazury</title>
+        <title>{returnTruncatedIfEthAddress(profile.username)} | Mazury</title>
       </Head>
       <EditProfileModal
         isOpen={editProfileModalOpen}
@@ -321,7 +321,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                 width={16}
                 height={16}
               />
-              <p className="font-demi">{profile.username}</p>
+              <p className="font-demi">
+                {returnTruncatedIfEthAddress(profile.username)}
+              </p>
 
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
@@ -411,7 +413,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }}
                           className={`no-scrollbar overflow-x-scroll font-demi text-indigoGray-90 md:overflow-auto`}
                         >
-                          {profile.username.length > 15 && isMobile
+                          {profile.username == profile.eth_address
+                            ? returnTruncatedIfEthAddress(profile.eth_address)
+                            : profile.username.length > 15 && isMobile
                             ? profile.username.slice(0, 10) + '...'
                             : profile.username}
                         </motion.h1>
@@ -558,16 +562,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                       Badges
                     </div>
                   </div>
-                </div>
-                <div className="flex flex-col items-center gap-0">
-                  <motion.span
-                    style={{ fontSize: shouldCollapseHeader ? '24px' : '36px' }}
-                    className="font-serif font-bold"
-                  >
-                    {getMetricDisplayValue(posts.length)}
-                  </motion.span>
-                  <div className="text-xs uppercase text-indigoGray-60 opacity-60">
-                    Posts
+                  <div className="flex flex-col items-center gap-0">
+                    <motion.span
+                      style={{
+                        fontSize: shouldCollapseHeader ? '24px' : '36px',
+                      }}
+                      className="font-serif font-bold"
+                    >
+                      {getMetricDisplayValue(posts.length)}
+                    </motion.span>
+                    <div className="text-xs uppercase text-indigoGray-60 opacity-60">
+                      Posts
+                    </div>
                   </div>
                 </div>
               </div>
