@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import { FC, useRef } from 'react';
+import SVG from 'react-inlinesvg';
 
 interface ToggleProps {
   isToggled: boolean;
@@ -22,15 +22,13 @@ export const Toggle: FC<ToggleProps> = ({
 
   return (
     <div className={`${className}`} data-testid="toggle-outer-container">
-      <Image
-        role="button"
-        src={`/icons/toggle-${isToggled ? 'on' : 'off'}.svg`}
-        alt="Toggle"
-        width="40px"
-        height="24px"
-        onClick={onClick}
-        className="hover:cursor-pointer"
-      />
+      <button type="button" onClick={onClick} className="hover:cursor-pointer">
+        <SVG
+          src={`/icons/toggle-${isToggled ? 'on' : 'off'}.svg`}
+          width="40px"
+          height="24px"
+        />
+      </button>
       <input
         data-testid="Hidden Checkbox"
         ref={hiddenCheckboxRef}
