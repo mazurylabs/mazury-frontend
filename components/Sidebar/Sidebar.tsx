@@ -154,22 +154,24 @@ export const Sidebar: FC = () => {
                 </a>
               )}
 
-              <SidebarItem
-                href="/settings"
-                label="Settings"
-                icon={
-                  <SlidersIcon
-                    color={
-                      pathname.startsWith('/settings')
-                        ? iconColors.active
-                        : iconColors.inactive
-                    }
-                  />
-                }
-                isOpen={isOpen}
-                className="mb-4 mt-4"
-                active={pathname.startsWith('/settings')}
-              />
+              {isSignedIn && (
+                <SidebarItem
+                  href="/settings"
+                  label="Settings"
+                  icon={
+                    <SlidersIcon
+                      color={
+                        pathname.startsWith('/settings')
+                          ? iconColors.active
+                          : iconColors.inactive
+                      }
+                    />
+                  }
+                  isOpen={isOpen}
+                  className="mb-4 mt-4"
+                  active={pathname.startsWith('/settings')}
+                />
+              )}
 
               {isSignedIn && (
                 <a
