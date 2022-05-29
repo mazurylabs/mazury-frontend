@@ -766,7 +766,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                     ?.slice(0, badgesExpanded ? badges.length : 4)
                     .map((badge) => {
                       const { badge_type, id } = badge;
-                      const { image, description, title } = badge_type;
+                      const { image, description, title, issuer } = badge_type;
+
+                      console.log(title, issuer.name);
 
                       return (
                         <BadgePreview
@@ -776,6 +778,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           imgSrc={image}
                           totalCount={totalBadgeCounts[badge_type.id]}
                           badgeCount={badgesCount}
+                          issuer={issuer.name}
                         />
                       );
                     })
