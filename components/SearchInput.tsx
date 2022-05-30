@@ -63,7 +63,7 @@ export const SearchInput: FCWithClassName<SearchInputProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoFocus
-        placeholder={placeholder || 'wojtek.eth, Frontend dev...'}
+        placeholder={placeholder || 'woj.eth, frontend developer...'}
       />
     </div>
   );
