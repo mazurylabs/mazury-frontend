@@ -615,7 +615,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                     )
                   }
                 >
-                  <Image src="/icons/blockscan.svg" height={14} width={14}></Image>
+                  <Image
+                    src="/icons/blockscan.svg"
+                    height={14}
+                    width={14}
+                  ></Image>
                   {returnTruncatedIfEthAddress(profile.eth_address)}
                 </BlueSocialButton>
               )}
