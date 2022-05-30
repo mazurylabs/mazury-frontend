@@ -45,29 +45,29 @@ import {
 } from 'utils';
 
 const keywordSuggestions = [
-  { title: 'React developer', results: 13048, mostSearched: 5 },
-  { title: 'Python developer', results: 10048, mostSearched: 10 },
+  { title: 'React developer', results: 2512 },
+  { title: 'Python developer', results: 1100 },
   { title: 'Full stack developer', results: 760 },
 ];
 
 const badgeSuggestions = [
   {
-    title: 'Aave voters',
-    img: '/icons/aave.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'aave_voter',
+    title: 'Contract deployer',
+    slug: 'contract_deployer',
+    img: '/badges/contract_deployer.png',
+    detail: 'People who deployed a smart contract',
   },
   {
-    title: 'Early Mazury adopter',
-    img: '/icons/mazury.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'mazury_early_adopter',
+    title: 'Buildspace alumni',
+    slug: 'buildspace',
+    img: '/badges/buildspace.png',
+    detail: 'People who finished a buildspace course',
   },
   {
-    title: 'Graph voter',
-    img: '/icons/graph.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'graph_voter',
+    title: 'Developer DAO member',
+    slug: 'd_d_member',
+    img: '/badges/d_d.png',
+    detail: 'Members of Developer DAO',
   },
 ];
 
@@ -311,20 +311,6 @@ export const Search: FC<SearchProps> = ({}) => {
 
                         <div className="flex text-xs  text-indigoGray-50">
                           <p>{commify(suggestion.results)} results</p>
-
-                          {suggestion.mostSearched && (
-                            <>
-                              <div className="mx-2 flex">
-                                <Image
-                                  width={4}
-                                  height={4}
-                                  src="/icons/list-disc-grey.svg"
-                                  alt="list-disc"
-                                />
-                              </div>
-                              <p>#{suggestion.mostSearched} most searched</p>
-                            </>
-                          )}
                         </div>
                       </li>
                     ))}
@@ -352,7 +338,7 @@ export const Search: FC<SearchProps> = ({}) => {
                             <Image
                               src={badge.img}
                               width={24}
-                              height={24}
+                              height={38}
                               layout="fixed"
                               alt="badge"
                             />
@@ -400,20 +386,6 @@ export const Search: FC<SearchProps> = ({}) => {
 
                   <div className="flex text-xs  text-indigoGray-50">
                     <p>{commify(suggestion.results)} results</p>
-
-                    {suggestion.mostSearched && (
-                      <>
-                        <div className="mx-2 flex">
-                          <Image
-                            width={4}
-                            height={4}
-                            src="/icons/list-disc-grey.svg"
-                            alt="list-disc"
-                          />
-                        </div>
-                        <p>#{suggestion.mostSearched} most searched</p>
-                      </>
-                    )}
                   </div>
                 </div>
               ))}
