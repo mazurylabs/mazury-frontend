@@ -15,6 +15,7 @@ interface BadgeDetailProps {
   isBadgeHidden: boolean;
   badgeCount?: number;
   image: string;
+  slug: string;
   variant: 'badge' | 'poap';
 }
 
@@ -85,6 +86,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   badgeCount = 0,
   image,
   variant,
+  slug,
 }) => {
   const router = useRouter();
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
@@ -185,7 +187,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <BadgeDetailButton
                       label={`Search using ${variant}`}
                       icon="search-black"
-                      handleClick={() => handleSearch(title)}
+                      handleClick={() => handleSearch(slug)}
                     />
                   </div>
 
@@ -202,7 +204,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <button
                     type="button"
                     className="flex shrink-0 items-center space-x-2"
-                    onClick={() => handleSearch(title)}
+                    onClick={() => handleSearch(slug)}
                   >
                     <div className="flex">
                       <Image
