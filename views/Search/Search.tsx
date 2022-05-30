@@ -265,7 +265,7 @@ export const Search: FC<SearchProps> = ({}) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           autoFocus
-          placeholder={touched ? 'wojtek.eth, Frontend dev...' : ''}
+          placeholder={touched ? 'woj.eth, frontend developer...' : ''}
         />
 
         {touched && (
