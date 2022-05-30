@@ -311,20 +311,6 @@ export const Search: FC<SearchProps> = ({}) => {
 
                         <div className="flex text-xs  text-indigoGray-50">
                           <p>{commify(suggestion.results)} results</p>
-
-                          {suggestion.mostSearched && (
-                            <>
-                              <div className="mx-2 flex">
-                                <Image
-                                  width={4}
-                                  height={4}
-                                  src="/icons/list-disc-grey.svg"
-                                  alt="list-disc"
-                                />
-                              </div>
-                              <p>#{suggestion.mostSearched} most searched</p>
-                            </>
-                          )}
                         </div>
                       </li>
                     ))}
@@ -400,20 +386,6 @@ export const Search: FC<SearchProps> = ({}) => {
 
                   <div className="flex text-xs  text-indigoGray-50">
                     <p>{commify(suggestion.results)} results</p>
-
-                    {suggestion.mostSearched && (
-                      <>
-                        <div className="mx-2 flex">
-                          <Image
-                            width={4}
-                            height={4}
-                            src="/icons/list-disc-grey.svg"
-                            alt="list-disc"
-                          />
-                        </div>
-                        <p>#{suggestion.mostSearched} most searched</p>
-                      </>
-                    )}
                   </div>
                 </div>
               ))}
