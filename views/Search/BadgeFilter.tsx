@@ -13,12 +13,21 @@ import {
   useScreenWidth,
 } from 'hooks';
 
-import { BadgeIssuer, BadgeType, FilterType } from 'types';
+import {
+  BadgeIssuer,
+  BadgeType,
+  FilterState,
+  FilterType,
+  ValueOf,
+} from 'types';
 import { api, commify, trayAnimation, fadeAnimation } from 'utils';
 
 interface BadgeFilterProps {
   selectedBadges: string[];
-  handleSelectBadge: (badge: string) => void;
+  handleSelectBadge: (
+    key: keyof FilterState,
+    value: ValueOf<FilterState>
+  ) => void;
   handleGoBack: (filter: FilterType) => void;
 }
 
@@ -48,6 +57,16 @@ export const BadgeFilter = ({
     setSearchTerm('');
     setBadges([]);
     setBadgeIssuer(issuer);
+  };
+
+  const handleBadge = (slug: string) => {
+    if (selectedBadges.includes(slug)) {
+      const updatedBadges = selectedBadges.filter((badge) => badge !== slug);
+      handleSelectBadge('badges', updatedBadges);
+    } else {
+      const updatedBadges = [...selectedBadges, slug];
+      handleSelectBadge('badges', updatedBadges);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,7 +209,7 @@ export const BadgeFilter = ({
                     </div>
                   }
                   checked={selectedBadges.includes(badge.slug)}
-                  setChecked={() => handleSelectBadge(badge.slug)}
+                  setChecked={() => handleBadge(badge.slug)}
                   id={badge.id}
                   outerClassName="shrink-0"
                 />
