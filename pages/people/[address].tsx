@@ -606,10 +606,27 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
-                    goToLink(`https://github.com/${profile.twitter}`)
+                    goToLink(`https://github.com/${profile.github}`)
                   }
                 >
                   <FaGithub /> {profile.github}
+                </BlueSocialButton>
+              )}
+              {profile.eth_address && (
+                <BlueSocialButton
+                  variant="secondary"
+                  onClick={() =>
+                    goToLink(
+                      `https://chat.blockscan.com/index?a=${profile.eth_address}`
+                    )
+                  }
+                >
+                  <Image
+                    src="/icons/blockscan.svg"
+                    height={14}
+                    width={14}
+                  ></Image>
+                  {returnTruncatedIfEthAddress(profile.eth_address)}
                 </BlueSocialButton>
               )}
             </div>
