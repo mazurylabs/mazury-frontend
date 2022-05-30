@@ -768,8 +768,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                       const { badge_type, id } = badge;
                       const { image, description, title, issuer } = badge_type;
 
-                      console.log(title, issuer.name);
-
                       return (
                         <BadgePreview
                           key={id}
