@@ -1,16 +1,13 @@
-import React, { useState, useRef, useCallback } from 'react';
+import * as React from 'react';
 import type { NextPage } from 'next';
-import Image from 'next/image';
-import { useAccount } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import debounce from 'lodash.debounce';
+import SVG from 'react-inlinesvg';
 
 import { Button, MobileSidebar } from 'components';
 
 import { useClickOutside, useMobile } from 'hooks';
 
-import { LoadingState } from './LoadingState';
 import { ResultState } from './ResultState';
 import { EmptyState } from './EmptyState';
 import { IdleState } from './IdleState';
@@ -18,27 +15,34 @@ import { IdleState } from './IdleState';
 type SearchState = 'idle' | 'result' | 'empty';
 
 const SearchPage: NextPage = () => {
-  const searchRef = useRef<HTMLDivElement>(null!);
-  const inputRef = useRef<HTMLInputElement>(null!);
+  const searchRef = React.useRef<HTMLDivElement>(null!);
+  const inputRef = React.useRef<HTMLInputElement>(null!);
 
   const router = useRouter();
-  const [{ data: accountData }] = useAccount();
   const isMobile = useMobile();
   useClickOutside(searchRef, handleCloseSearch);
 
-  const [isFocused, setIsFocused] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [UIState, setUIState] = useState<SearchState>('idle');
+  const [isFocused, setIsFocused] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [UIState, setUIState] = React.useState<SearchState>('idle');
+
+  const animationAttributes = !isMobile
+    ? {
+        initial: { opacity: 0.5, scale: 0.9 },
+        animate: {
+          opacity: 1,
+          scale: 1,
+        },
+        exit: { opacity: 0 },
+      }
+    : {};
 
   const handleFocusBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(() => (event.type === 'focus' ? true : false));
   };
 
-  const handleSearch = (query?: string, badge?: string) => {
-    const badgeParam = query ? 'query=' + encodeURIComponent(query) : '';
-    const queryParam = badge ? 'badges=' + encodeURIComponent(badge) : '';
-
-    // router.push(`/search?${queryParam}${badgeParam}`);
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setUIState('result');
     setIsFocused(false);
   };
@@ -60,32 +64,27 @@ const SearchPage: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    // handleSearchh(event.target.value);
+
+    const query = event.target.value;
+
+    router.push(
+      { pathname: '/search', query: { ...router.query, query } },
+      undefined,
+      { shallow: true }
+    );
   };
 
-  const handleSearchh = useCallback(
-    debounce(async (nextValue) => {
+  React.useEffect(() => {
+    const query = router.query?.query || '';
+    if (Object.keys(router.query).length !== 0) {
+      setSearchTerm(query as string);
       setUIState('result');
-      console.log(nextValue); //make api call
-    }, 500),
-    []
-  );
-
-  const animationAttributes = !isMobile
-    ? {
-        initial: { opacity: 0.5, scale: 0.9 },
-        animate: {
-          opacity: 1,
-          scale: 1,
-        },
-        exit: { opacity: 0 },
-      }
-    : {};
+    }
+  }, [router.query]);
 
   const searchStates: Record<SearchState, JSX.Element> = {
     idle: isMobile ? <IdleState /> : <></>,
-    // loading: <LoadingState />,
-    result: <ResultState />,
+    result: <ResultState handleNoResult={() => setUIState('empty')} />,
     empty: <EmptyState />,
   };
 
@@ -97,15 +96,12 @@ const SearchPage: NextPage = () => {
           onKeyDown={handleKeydown}
           className={`relative sticky top-8 z-10 flex w-full grow flex-col rounded-lg bg-indigoGray-5`}
         >
-          <form className="flex w-full items-center py-2 pl-[14px] pr-2">
-            <div className="flex">
-              <Image
-                height={24}
-                width={24}
-                layout="fixed"
-                src={`/icons/search-black.svg`}
-                alt="search"
-              />
+          <form
+            className="flex w-full items-center py-2 pl-[14px] pr-2"
+            onSubmit={handleSearch}
+          >
+            <div className="flex h-6 w-6">
+              <SVG height={24} width={24} src={`/icons/search-black.svg`} />
             </div>
 
             <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
@@ -123,21 +119,20 @@ const SearchPage: NextPage = () => {
 
             <div className="h-8 w-8">
               {isFocused && (
-                <Button
+                <button
+                  type="submit"
                   className="border-none !p-0"
                   disabled={searchTerm === ''}
-                  onClick={() => handleSearch(searchTerm)}
                 >
-                  <Image
+                  <SVG
                     height={32}
                     width={32}
-                    layout="fixed"
                     src={`/icons/search-forward${
                       searchTerm ? '' : '-inactive'
                     }.svg`}
-                    alt="search"
                   />
-                </Button>
+                  <span className="sr-only">Submit</span>
+                </button>
               )}
             </div>
           </form>
