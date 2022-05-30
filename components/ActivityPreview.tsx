@@ -28,12 +28,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-badge') {
     return (
       <div className="flex w-full items-center">
-        <Avatar
-          src={metadata?.badge?.image_url as string}
-          width={avatarSizes[avatarSize]}
-          height={avatarSizes[avatarSize]}
-          className="border border-indigoGray-30"
-        />
+        <div className="w-16">
+          <img
+            src={metadata?.badge?.image_url as string}
+            className="mx-auto h-16"
+          />
+        </div>
 
         <div className="ml-6 flex flex-col">
           <div className="flex items-center">
