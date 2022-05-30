@@ -18,6 +18,11 @@ const smallAvatarPosition = {
   md: 'top-6 left-6',
   lg: 'top-9 left-9',
 };
+const newBadgeImageWidths = {
+  sm: 'w-[16px]',
+  md: 'w-[40px]',
+  lg: 'w-[64px]',
+};
 
 export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
@@ -33,8 +38,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-badge') {
     return (
       <div className="flex w-full items-center">
-        {/* for tailwind pruning hack: w-[40px] w-[16px] */}
-        <div className={`w-[${avatarSizes[avatarSize]}px]`}>
+        <div className={newBadgeImageWidths[avatarSize]}>
           <Avatar
             src={metadata?.badge?.image_url as string}
             width={avatarSizes[avatarSize] * 0.62}
