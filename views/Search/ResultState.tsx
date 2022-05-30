@@ -14,82 +14,158 @@ import { RoleFilter } from './RoleFilter';
 import { SkillFilter } from './SkillFilter';
 import { InitialFilterState } from './InitialFilterState';
 
-import { FilterType } from 'types';
-import { fadeAnimation } from 'utils';
+import { FilterState, FilterType, Profile, ValueOf } from 'types';
+import { api, fadeAnimation } from 'utils';
 
-const filters = ['Badges', 'Roles', 'Referred skills', 'Number of referrals'];
+const filters = ['Badges', 'Roles', 'Referred skills'];
 
-export const ResultState = () => {
+interface ResultStateProps {
+  handleNoResult: () => void;
+}
+
+export const ResultState = ({ handleNoResult }: ResultStateProps) => {
   const router = useRouter();
+  const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [searchFilters, setSearchFilters] = React.useState<string[]>([]);
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
-  const [isContactable, setIsContactable] = React.useState(false);
   const [selectedFilter, setSelectedFilter] =
     React.useState<FilterType>('empty');
 
-  const queryFromRoute = 'Frontend developer'; //will be gotten from route
+  const [filter, setFilter] = React.useState<FilterState>({
+    query: '',
+    badges: [],
+    skills: [],
+    role: '',
+    contactable: false,
+  });
+
+  const handleFilter = (
+    key: keyof FilterState,
+    value: ValueOf<FilterState>
+  ) => {
+    setFilter((filter) => {
+      return { ...filter, [key]: value };
+    });
+
+    if (key !== 'query') {
+      let params = router.query;
+      router.push(
+        {
+          pathname: '/search',
+          query: {
+            ...params,
+            [key]:
+              key === 'role' || key === 'contactable'
+                ? value
+                : (value as any).join(';'),
+          },
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
+
+    handleSearch();
+  };
 
   const handleSearch = React.useCallback(
-    debounce(async (nextValue) => {
-      setIsLoading(false);
-      // console.log(nextValue); //make api call
-    }, 500),
-    []
+    debounce(async () => {
+      try {
+        setIsLoading(true);
+        const path = router.asPath
+          .split('&')
+          .filter((query) => !query.endsWith('='))
+          .join('&');
+
+        let queryPath = path.includes('?') ? path : '?' + path;
+        const result = await api.get('/search/profiles' + queryPath);
+        setSearchResults(result.data.results);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 1000),
+    [router.query]
   );
 
-  const handleAddFilter = (selectedFilter: string) => {
-    setSearchFilters((filters) => {
-      if (filters.includes(selectedFilter)) {
-        return searchFilters.filter((filter) => filter !== selectedFilter);
-      } else {
-        return [...filters, selectedFilter];
-      }
-    });
-  };
-
   const handleSelectFilter = (filter: FilterType) => setSelectedFilter(filter);
-  const handleToggleContactable = () => {
-    setIsContactable((isContactable) => !isContactable);
-  };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
     Roles: (
       <RoleFilter
-        handleSelect={handleAddFilter}
+        selectedRole={filter.role}
+        handleSelect={handleFilter}
         handleGoBack={handleSelectFilter}
       />
     ),
-    'Number of referrals': <ReferralFilter handleSelect={handleAddFilter} />,
-    'Referred skills': <SkillFilter handleSelect={handleAddFilter} />,
+    'Number of referrals': (
+      <ReferralFilter
+        selectedReferrals={[]}
+        handleSelectReferral={() => {}}
+        handleGoBack={handleSelectFilter}
+      />
+    ),
+    'Referred skills': (
+      <SkillFilter
+        selectedSkills={filter.skills}
+        handleSelectSkill={handleFilter}
+        handleGoBack={handleSelectFilter}
+      />
+    ),
     empty: (
       <InitialFilterState
         handleFilterNavigation={handleSelectFilter}
         handleCloseModal={() => setIsFiltersOpen(false)}
-        handleContactable={handleToggleContactable}
-        isContactable={isContactable}
+        handleContactable={() =>
+          handleFilter('contactable', !filter.contactable)
+        }
+        isContactable={filter.contactable}
       />
     ),
     Badges: (
       <BadgeFilter
-        handleSelectBadge={handleAddFilter}
+        handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}
-        selectedBadges={searchFilters}
+        selectedBadges={filter.badges}
       />
     ),
   };
 
   React.useEffect(() => {
-    handleSearch(queryFromRoute);
-  }, [handleSearch, queryFromRoute]);
+    handleSearch();
+  }, [handleSearch]);
 
-  if (isLoading) {
-    return <LoadingState />;
-  }
+  React.useEffect(() => {
+    const populateFiltersFromRoute = () => {
+      let routeFilters: any = router.query;
+
+      let filtersFromRoute = {};
+
+      Object.keys(routeFilters).forEach((key: any) => {
+        let filter = routeFilters[key].split(';');
+        filtersFromRoute = {
+          ...filtersFromRoute,
+          [key]:
+            key === 'role'
+              ? filter.join('')
+              : key === 'contactable'
+              ? filter.join('').toLowerCase() === 'true'
+              : filter,
+        };
+      });
+
+      setFilter((filter) => {
+        return { ...filter, ...filtersFromRoute };
+      });
+    };
+
+    populateFiltersFromRoute();
+  }, []);
 
   return (
     <div className="h-full w-full">
-      <div className="lg:hidden">
+      <div className="flex lg:hidden">
         <button
           type="button"
           className="flex items-center space-x-2"
@@ -98,6 +174,40 @@ export const ResultState = () => {
           <SVG src="/icons/filter.svg" height={16} width={16} />
           <span>FILTERS</span>
         </button>
+
+        <div>
+          <ul>
+            {filter.role && (
+              <li>
+                <button type="button" onClick={() => handleFilter('role', '')}>
+                  <SVG height={16} width={16} src="/icons/x.svg" />
+                </button>
+                <span>{filter.role}</span>
+              </li>
+            )}
+
+            <>
+              {filter.badges.map((badge, index) => (
+                <li key={index + badge}>{badge}</li>
+              ))}
+            </>
+
+            <>
+              {filter.skills.map((skill, index) => (
+                <li key={index + skill}>{skill}</li>
+              ))}
+            </>
+
+            {filter.contactable && <li>{filter.contactable}</li>}
+          </ul>
+        </div>
+
+        <div className="ml-auto">
+          <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
+            {searchResults.length} result
+            {searchResults.length === 1 ? '' : 's'}
+          </p>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -116,52 +226,63 @@ export const ResultState = () => {
         )}
       </AnimatePresence>
 
-      <div className="hidden lg:flex">
-        <ul className="flex space-x-[52.47px] pl-6">
-          {filters.map((filter) => (
-            <li
-              key={filter}
-              className="relative flex cursor-pointer items-center space-x-2"
-              onMouseEnter={() => handleSelectFilter(filter as FilterType)}
-              onMouseLeave={() => handleSelectFilter('empty')}
-            >
-              <span>{filter}</span>
-              <SVG src="/icons/angle-down.svg" height={16} width={16} />
+      <div className="hidden space-y-4 pl-6 lg:block">
+        <div className="flex">
+          <ul className="flex space-x-[52.47px]">
+            {filters.map((filter) => (
+              <li
+                key={filter}
+                className="relative flex cursor-pointer items-center space-x-2"
+                onMouseEnter={() => handleSelectFilter(filter as FilterType)}
+                onMouseLeave={() => handleSelectFilter('empty')}
+              >
+                <span>{filter}</span>
+                <SVG src="/icons/angle-down.svg" height={16} width={16} />
 
-              <AnimatePresence>
-                {selectedFilter === filter && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className={clsx(
-                      'absolute top-[100%] left-0 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl',
-                      selectedFilter === 'Number of referrals' &&
-                        'h-[136px] w-[260px]'
-                    )}
-                  >
-                    {selectedFilterState[selectedFilter]}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-          ))}
+                <AnimatePresence>
+                  {selectedFilter === filter && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className={clsx(
+                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl',
+                        selectedFilter === 'Number of referrals' &&
+                          'h-[136px] w-[260px]'
+                      )}
+                    >
+                      {selectedFilterState[selectedFilter]}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </li>
+            ))}
+          </ul>
 
-          <li
-            className="flex items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
-            onClick={handleToggleContactable}
-          >
-            <Toggle
-              isToggled={isContactable}
-              onToggle={handleToggleContactable}
-              className="flex h-fit"
-            />
-            <span>Contactable</span>
-          </li>
-        </ul>
+          <div className="ml-auto">
+            <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
+              {searchResults.length} result
+              {searchResults.length === 1 ? '' : 's'}
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="flex items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
+          onClick={() => handleFilter('contactable', !filter.contactable)}
+        >
+          <Toggle
+            isToggled={filter.contactable}
+            onToggle={() => handleFilter('contactable', !filter.contactable)}
+            className="flex h-fit"
+          />
+          <span>Contactable</span>
+        </div>
       </div>
 
-      <p>Hello result</p>
+      <div className="mt-5">
+        {isLoading ? <LoadingState /> : <p>Hello result</p>}
+      </div>
     </div>
   );
 };
