@@ -249,3 +249,13 @@ export type FilterType =
   | 'Referred skills'
   | 'Number of referrals'
   | 'empty';
+
+export interface FilterState {
+  query: string;
+  role: string;
+  skills: string[];
+  badges: string[];
+  contactable: boolean;
+}
+
+export type ValueOf<T> = T[keyof T];
