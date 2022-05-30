@@ -6,10 +6,11 @@ import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
 import { colors } from 'utils';
 import { SlidersIcon } from 'components/Icons';
-import { useAccount, useConnect } from 'wagmi';
+import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import Image from 'next/image';
 import { SignIn } from 'views/SignIn';
 import { useProfile } from 'hooks';
+import { getMessageToBeSigned, verifyEmail } from 'utils/api';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -22,6 +23,7 @@ export const Sidebar: FC = () => {
   const { pathname } = router;
   const [{ data: accountData }, disconnect] = useAccount();
   const { profile } = useProfile(accountData?.address);
+  const [_, signMessage] = useSignMessage();
 
   const isSignedIn = !!accountData;
 
@@ -29,6 +31,41 @@ export const Sidebar: FC = () => {
   const closeSignIn = () => setSignInOpen(false);
 
   const logout = () => disconnect();
+
+  const handleEmailVerification = async () => {
+    const signature = await handleRequestSignature();
+
+    if (signature && accountData?.address) {
+      const data = await verifyEmail(accountData?.address, signature);
+      // console.log(data);
+    }
+  };
+
+  const handleRequestSignature = async () => {
+    if (!accountData?.address) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    const { data: messageToBeSigned, error: messageSignError } =
+      await getMessageToBeSigned(accountData?.address);
+
+    if (!messageToBeSigned || messageSignError) {
+      alert('Couldnt get the message to be signed. Please try again later.');
+      return;
+    }
+
+    const { data: signature, error: signatureError } = await signMessage({
+      message: messageToBeSigned,
+    });
+
+    if (!signature || signatureError) {
+      alert('Error signing message');
+      return;
+    }
+
+    return signature;
+  };
 
   return (
     <>
@@ -96,7 +133,7 @@ export const Sidebar: FC = () => {
 
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
-              {isOpen && (
+              {isOpen && !profile?.email_verified && (
                 <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
                   <img
                     src="/icons/info.svg"
@@ -110,7 +147,13 @@ export const Sidebar: FC = () => {
                       Your e-mail is not verified.
                     </span>{' '}
                     Check your mailbox or{' '}
-                    <a className="underline hover:cursor-pointer">click here</a>{' '}
+                    <button
+                      type="button"
+                      className="underline hover:cursor-pointer"
+                      onClick={handleEmailVerification}
+                    >
+                      click here
+                    </button>{' '}
                     to resend the message.
                   </p>
                 </div>

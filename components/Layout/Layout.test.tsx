@@ -23,7 +23,7 @@ describe('Layout', () => {
     });
     render(
       <Layout
-        sidebarContent={<Sidebar />}
+        sidebarContent={<menu>Sidebar</menu>}
         innerLeftContent={<span>Inner left content</span>}
         innerRightContent={<span>Inner right content</span>}
         headerContent={<span>Header content</span>}

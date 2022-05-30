@@ -135,6 +135,7 @@ export interface Profile
   open_to_opportunities: boolean;
   onboarded: boolean;
   email: string;
+  email_verified?: boolean;
   website: string;
   full_name?: string;
 }
