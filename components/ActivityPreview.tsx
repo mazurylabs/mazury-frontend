@@ -13,6 +13,11 @@ interface ActivityPreviewProps {
 }
 
 const avatarSizes = { sm: 16, md: 40, lg: 64 };
+const smallAvatarPosition = {
+  sm: 'top-4 left-4',
+  md: 'top-6 left-6',
+  lg: 'top-9 left-9',
+};
 
 export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
@@ -28,6 +33,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-badge') {
     return (
       <div className="flex w-full items-center">
+        {/* for tailwind pruning hack: w-[40px] w-[16px] */}
         <div className={`w-[${avatarSizes[avatarSize]}px]`}>
           <Avatar
             src={metadata?.badge?.image_url as string}
@@ -75,9 +81,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           />
           <Avatar
             src={metadata?.referral_receiver?.avatar as string}
-            width={avatarSize ? 20 : 32}
-            height={avatarSize ? 20 : 32}
-            className="absolute top-8 left-8 border border-indigoGray-30"
+            width={avatarSizes[avatarSize] / 2}
+            height={avatarSizes[avatarSize] / 2}
+            className={
+              'absolute border border-indigoGray-30 ' +
+              smallAvatarPosition[avatarSize]
+            }
           />
         </div>
 
@@ -135,12 +144,23 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-referral-given') {
     return (
       <div className="flex w-full items-center">
-        <Avatar
-          src={metadata?.referral_receiver?.avatar as string}
-          width={avatarSizes[avatarSize]}
-          height={avatarSizes[avatarSize]}
-          className="border border-indigoGray-30"
-        />
+        <div className="relative">
+          <Avatar
+            src={metadata?.referral_author?.avatar as string}
+            width={avatarSizes[avatarSize]}
+            height={avatarSizes[avatarSize]}
+            className="border border-indigoGray-30"
+          />
+          <Avatar
+            src={metadata?.referral_receiver?.avatar as string}
+            width={avatarSizes[avatarSize] / 2}
+            height={avatarSizes[avatarSize] / 2}
+            className={
+              'absolute border border-indigoGray-30 ' +
+              smallAvatarPosition[avatarSize]
+            }
+          />
+        </div>
 
         <div className="ml-6 flex flex-col">
           <div className="flex items-center">
