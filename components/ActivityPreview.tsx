@@ -63,7 +63,15 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             </span>
           </div>
 
-          <p>{metadata?.badge?.name}</p>
+          <p>
+            <Link href={`/people/${user.username || user.eth_address}`}>
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(user.username as string)}
+              </a>
+            </Link>
+            {' claimed badge '}
+            {metadata?.badge?.name}
+          </p>
         </div>
       </div>
     );
