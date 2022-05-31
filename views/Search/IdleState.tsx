@@ -10,9 +10,9 @@ interface IdleStateProps {
 }
 
 const keywordSuggestions = [
-  { title: 'React developer', results: 13048, mostSearched: 5 },
-  { title: 'Python developer', results: 10048, mostSearched: 10 },
-  { title: 'Full stack developer', results: 760 },
+  { title: 'Frontend developer', results: 259 },
+  { title: 'Smart contract developer', results: 792 },
+  { title: 'Designer', results: 163 },
 ];
 
 const badgeSuggestions = [
@@ -68,7 +68,7 @@ export const IdleState = () => {
               <div className="flex text-xs  text-indigoGray-50">
                 <p>{commify(suggestion.results)} results</p>
 
-                {suggestion.mostSearched && (
+                {/* {suggestion.mostSearched && (
                   <>
                     <div className="mx-2 flex">
                       <Image
@@ -80,7 +80,7 @@ export const IdleState = () => {
                     </div>
                     <p>#{suggestion.mostSearched} most searched</p>
                   </>
-                )}
+                )} */}
               </div>
             </li>
           ))}
