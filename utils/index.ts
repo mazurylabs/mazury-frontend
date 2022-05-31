@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { ParsedUrlQuery } from 'querystring';
 import type {
+  Badge,
   ColorName,
   Profile,
   ProfileSection,
@@ -191,4 +193,65 @@ export const sectionToColor: { [key in ProfileSection]: ColorName } = {
 
 export const truncateString = (str: string, maxLength: number = 50) => {
   return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};
+
+export const trayAnimation = {
+  initial: { y: '100%' },
+  animate: {
+    y: 0,
+    transition: { duration: 0.4, ease: [0.36, 0.66, 0.04, 1] },
+  },
+  exit: {
+    y: '100%',
+    transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] },
+  },
+};
+
+export const fadeAnimation = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+  },
+};
+
+export const getRoles = (data: Profile, query: ParsedUrlQuery) => {
+  let keys = Object.entries(data);
+
+  let roles = keys.map(([key, value]) => {
+    if (key.startsWith('role') && value) {
+      let role = key.split('_')[1];
+
+      return {
+        title: role,
+        hightlighted: (query?.role as string)?.includes(role),
+      };
+    }
+  });
+
+  const validRoles = roles.filter((role) => Boolean(role)).slice(0, 2);
+  let remainder = validRoles.length - 2;
+
+  return { roles: validRoles, remainder: remainder < 1 ? 0 : remainder };
+};
+
+export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
+  let badges = data.map((badge) => {
+    const title = badge.badge_type.title;
+    const hightlighted =
+      (query?.badges as string)?.slice(1)?.split('_')?.join(' ') ===
+      title.toLowerCase();
+
+    return {
+      title,
+      hightlighted,
+    };
+  });
+
+  const validBadges = badges.slice(0, 2);
+  let remainder = validBadges.length - 2;
+
+  return { badges: validBadges, remainder: remainder < 1 ? 0 : remainder };
 };

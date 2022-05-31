@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import SVG from 'react-inlinesvg';
 import { FC, useRef } from 'react';
 import { CheckboxProps } from './Checkbox.types';
 
@@ -17,18 +17,21 @@ export const Checkbox: FC<CheckboxProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-[11px] ${outerClassName}`}
+      className={`flex items-center space-x-[11px] ${outerClassName}`}
       data-testid="checkbox-outer-container"
     >
-      <Image
-        role="checkbox"
-        src={`/icons/checkbox-${checked ? 'checked' : 'unchecked'}.svg`}
-        alt="Checkbox"
-        width="24px"
-        height="24px"
+      <button
+        type="button"
         onClick={onVisibleCheckboxClick}
-        className="hover:cursor-pointer"
-      />
+        className="h-6 h-4 hover:cursor-pointer"
+      >
+        <SVG
+          src={`/icons/checkbox-${checked ? 'checked' : 'unchecked'}.svg`}
+          width="24px"
+          height="24px"
+        />
+      </button>
+
       <label htmlFor={id} className="text-base font-medium text-indigoGray-70">
         {label}
       </label>

@@ -3,18 +3,19 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Search } from 'views';
+import SearchPage from 'views/Search/SearchPage';
 
-const SearchPage: NextPage = () => {
+const SearchPagee: NextPage = () => {
   return (
     <>
       <Head>
         <title>Search - Mazury</title>
       </Head>
       <Layout variant="plain">
-        <Search />
+        <SearchPage />
       </Layout>
     </>
   );
 };
 
-export default SearchPage;
+export default SearchPagee;

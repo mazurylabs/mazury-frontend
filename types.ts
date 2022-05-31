@@ -243,3 +243,20 @@ export interface Post {
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
 export type BadgeIssuer = 'mazury' | 'poap';
+
+export type FilterType =
+  | 'Badges'
+  | 'Roles'
+  | 'Referred skills'
+  | 'Number of referrals'
+  | 'empty';
+
+export interface FilterState {
+  query: string;
+  role: string;
+  skills: string[];
+  badges: string[];
+  contactable: boolean;
+}
+
+export type ValueOf<T> = T[keyof T];

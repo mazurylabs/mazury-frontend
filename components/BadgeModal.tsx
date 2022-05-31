@@ -222,6 +222,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   isBadgeHidden={false}
                   badgeCount={badgesCount}
                   image={hoveredBadge.image}
+                  slug={hoveredBadge.slug}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
                 />
               </Portal>
@@ -364,6 +365,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   badgeCount={badgesCount}
                   image={showBadgeDetails.image}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
+                  slug={showBadgeDetails.slug}
                 />
               )}
 
