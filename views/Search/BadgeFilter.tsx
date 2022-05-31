@@ -147,7 +147,10 @@ export const BadgeFilter = ({
       </div>
 
       <div>
-        <form className="flex h-12 w-full items-center space-x-[18px] rounded-lg bg-indigoGray-5 py-2 pl-[14px] pr-2">
+        <form
+          className="flex h-12 w-full items-center space-x-[18px] rounded-lg bg-indigoGray-5 py-2 pl-[14px] pr-2"
+          onSubmit={(event) => event.preventDefault()}
+        >
           <div className="flex h-6 w-6 space-x-4">
             <SVG height={24} width={24} src={`/icons/search-black.svg`} />
           </div>
