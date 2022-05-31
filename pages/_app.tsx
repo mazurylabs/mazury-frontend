@@ -11,9 +11,6 @@ import axios from 'axios';
 import { OnboardingContext, OnboardingFormDataType } from 'contexts';
 import { PersonBasicDetails } from 'types';
 
-// Get environment variables
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
-
 // Pick chains
 const chains = defaultChains;
 const defaultChain = chain.mainnet;
@@ -21,15 +18,11 @@ const defaultChain = chain.mainnet;
 // Set up connectors
 type ConnectorsConfig = { chainId?: number };
 const connectors = ({ chainId }: ConnectorsConfig) => {
-  const rpcUrl =
-    chains.find((x) => x.id === chainId)?.rpcUrls?.[0] ??
-    defaultChain.rpcUrls[0];
   return [
     new InjectedConnector({ chains }),
     new WalletConnectConnector({
       chains,
       options: {
-        infuraId,
         qrcode: true,
       },
     }),
@@ -41,13 +34,9 @@ type ProviderConfig = { chainId?: number; connector?: Connector };
 const isChainSupported = (chainId?: number) =>
   chains.some((x) => x.id === chainId);
 
-const provider = ({ chainId }: ProviderConfig) =>
-  providers.getDefaultProvider(
-    isChainSupported(chainId) ? chainId : defaultChain.id,
-    {
-      infuraId,
-    }
-  );
+const provider = new providers.JsonRpcProvider(
+  process.env.NEXT_PUBLIC_INFURA_URL
+);
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
