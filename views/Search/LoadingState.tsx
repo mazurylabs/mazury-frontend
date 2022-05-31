@@ -1,6 +1,6 @@
 export const LoadingState = () => {
   return (
-    <div className="mt-1 w-[60%]">
+    <div className="mt-4 w-[60%]">
       <div className="animate-pulse">
         <div className="h-5 w-full rounded bg-indigoGray-20" />
 
