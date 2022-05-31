@@ -399,7 +399,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       src={profile.avatar}
                       alt={`${profile.username}'s avatar`}
-                      className="rounded-full"
+                      className="rounded-full object-cover"
                     />
                     <div className="flex flex-col">
                       <div className="flex items-baseline gap-4">

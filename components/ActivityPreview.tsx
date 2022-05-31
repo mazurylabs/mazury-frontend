@@ -89,14 +89,14 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             src={metadata?.referral_author?.avatar as string}
             width={avatarSizes[avatarSize]}
             height={avatarSizes[avatarSize]}
-            className="border border-indigoGray-30"
+            className="border border-indigoGray-30 object-cover"
           />
           <Avatar
             src={metadata?.referral_receiver?.avatar as string}
             width={avatarSizes[avatarSize] / 2}
             height={avatarSizes[avatarSize] / 2}
             className={
-              'absolute border border-indigoGray-30 ' +
+              'absolute border border-indigoGray-30 object-cover ' +
               smallAvatarPosition[avatarSize]
             }
           />
@@ -161,14 +161,14 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             src={metadata?.referral_author?.avatar as string}
             width={avatarSizes[avatarSize]}
             height={avatarSizes[avatarSize]}
-            className="border border-indigoGray-30"
+            className="border border-indigoGray-30 object-cover"
           />
           <Avatar
             src={metadata?.referral_receiver?.avatar as string}
             width={avatarSizes[avatarSize] / 2}
             height={avatarSizes[avatarSize] / 2}
             className={
-              'absolute border border-indigoGray-30 ' +
+              'absolute border border-indigoGray-30 object-cover ' +
               smallAvatarPosition[avatarSize]
             }
           />

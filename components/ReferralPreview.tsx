@@ -58,6 +58,7 @@ export const ReferralPreview: React.FC<Props> = ({
           alt={`${referredBy.username} avatar`}
           width="40px"
           height="40px"
+          className="object-cover"
         />
         <div className="flex flex-col">
           <span className="text-xs font-medium text-teal-500">
