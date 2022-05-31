@@ -41,7 +41,7 @@ export const Talent = ({ result }: Props) => {
   const composeBadges = (data: Badge[]) => getHighlightedBadges(data, query);
 
   return (
-    <div>
+    <div className="space-y-4">
       {result?.map((result) => {
         const { roles, remainder: roleRemainder } = composeRoles(result);
         const { badges, remainder } = composeBadges(result.top_badges);
