@@ -6,7 +6,6 @@ import NextHead from 'next/head';
 import { Connector, Provider, chain, defaultChains } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 import { SWRConfig } from 'swr';
 import axios from 'axios';
 import { OnboardingContext, OnboardingFormDataType } from 'contexts';
@@ -32,13 +31,6 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
       options: {
         infuraId,
         qrcode: true,
-      },
-    }),
-    new WalletLinkConnector({
-      chains,
-      options: {
-        appName: 'Mazury',
-        jsonRpcUrl: `${rpcUrl}/${infuraId}`,
       },
     }),
   ];
