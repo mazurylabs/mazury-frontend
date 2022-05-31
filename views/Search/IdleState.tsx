@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import { BadgeModal } from 'components';
 import { commify } from 'utils';
+import { FilterState, ValueOf } from 'types';
 
 interface IdleStateProps {
   handleSearch: (term: string) => void;
@@ -38,7 +39,15 @@ const badgeSuggestions = [
 export const IdleState = () => {
   const router = useRouter();
 
-  const handleSearch = (term: string, slug?: string) => {};
+  const handleSearch = (key: string, searchTerm: string) => {
+    router.push(
+      { pathname: '/search', query: { [key]: searchTerm } },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  // const handleSearch = (term: string, slug?: string) => {};
 
   return (
     <div className="w-full lg:flex">
@@ -52,7 +61,7 @@ export const IdleState = () => {
             <li
               key={index}
               className="mb-6 cursor-pointer"
-              onClick={() => handleSearch(suggestion.title)}
+              onClick={() => handleSearch('query', suggestion.title)}
             >
               <p className="text-sm text-indigoGray-90">{suggestion.title}</p>
 
@@ -93,7 +102,7 @@ export const IdleState = () => {
               <li
                 key={index}
                 className=" mb-4 flex cursor-pointer items-center"
-                onClick={() => handleSearch('', badge.slug)}
+                onClick={() => handleSearch('badges', badge.slug)}
               >
                 <div className="mr-4 flex">
                   <Image
@@ -116,7 +125,7 @@ export const IdleState = () => {
             ))}
           </ul>
 
-          <div className="flex">
+          {/* <div className="flex">
             <div className="mr-4 w-6" aria-hidden={true} />
             <BadgeModal
               triggerButton={
@@ -134,7 +143,7 @@ export const IdleState = () => {
                 </button>
               }
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
