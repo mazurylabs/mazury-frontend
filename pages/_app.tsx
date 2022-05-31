@@ -48,10 +48,6 @@ const provider = ({ chainId }: ProviderConfig) =>
       infuraId,
     }
   );
-const webSocketProvider = ({ chainId }: ProviderConfig) =>
-  isChainSupported(chainId)
-    ? new providers.InfuraWebSocketProvider(chainId, infuraId)
-    : undefined;
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -101,12 +97,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <SWRConfig value={{ fetcher }}>
-      <Provider
-        autoConnect
-        connectors={connectors}
-        provider={provider}
-        webSocketProvider={webSocketProvider}
-      >
+      <Provider autoConnect connectors={connectors} provider={provider}>
         <OnboardingContext.Provider
           value={{
             formData: onboardingFormData,
