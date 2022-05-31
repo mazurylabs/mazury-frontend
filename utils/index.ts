@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { ParsedUrlQuery } from 'querystring';
 import type {
+  Badge,
   ColorName,
   Profile,
   ProfileSection,
@@ -213,4 +215,43 @@ export const fadeAnimation = {
   exit: {
     opacity: 0,
   },
+};
+
+export const getRoles = (data: Profile, query: ParsedUrlQuery) => {
+  let keys = Object.entries(data);
+
+  let roles = keys.map(([key, value]) => {
+    if (key.startsWith('role') && value) {
+      let role = key.split('_')[1];
+
+      return {
+        title: role,
+        hightlighted: (query?.role as string)?.includes(role),
+      };
+    }
+  });
+
+  const validRoles = roles.filter((role) => Boolean(role)).slice(0, 2);
+  let remainder = validRoles.length - 2;
+
+  return { roles: validRoles, remainder: remainder < 1 ? 0 : remainder };
+};
+
+export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
+  let badges = data.map((badge) => {
+    const title = badge.badge_type.title;
+    const hightlighted =
+      (query?.badges as string)?.slice(1)?.split('_')?.join(' ') ===
+      title.toLowerCase();
+
+    return {
+      title,
+      hightlighted,
+    };
+  });
+
+  const validBadges = badges.slice(0, 2);
+  let remainder = validBadges.length - 2;
+
+  return { badges: validBadges, remainder: remainder < 1 ? 0 : remainder };
 };
