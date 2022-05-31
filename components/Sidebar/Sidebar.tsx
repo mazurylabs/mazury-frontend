@@ -171,7 +171,7 @@ export const Sidebar: FC = () => {
                       <img
                         src={profile?.avatar || '/profile-active.svg'}
                         alt="Profile icon"
-                        className="h-5 w-5 rounded-full"
+                        className="h-5 w-5 rounded-full object-cover"
                       />
                     }
                     isOpen={isOpen}

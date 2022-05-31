@@ -467,6 +467,7 @@ const Home: NextPage = () => {
                                 width={40}
                                 height={40}
                                 alt="user"
+                                className="object-cover"
                               />
 
                               <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
