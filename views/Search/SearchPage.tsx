@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 
-import { Button, MobileSidebar } from 'components';
-
 import { useClickOutside, useMobile } from 'hooks';
 
 import { ResultState } from './ResultState';
