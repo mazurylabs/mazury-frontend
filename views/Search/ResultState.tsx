@@ -13,20 +13,20 @@ import { ReferralFilter } from './ReferralFilter';
 import { RoleFilter } from './RoleFilter';
 import { SkillFilter } from './SkillFilter';
 import { InitialFilterState } from './InitialFilterState';
+import { EmptyState } from './EmptyState';
+import { SearchResults } from './SearchResults';
 
 import { FilterState, FilterType, Profile, ValueOf } from 'types';
 import { api, fadeAnimation } from 'utils';
 
 const filters = ['Badges', 'Roles', 'Referred skills'];
 
-interface ResultStateProps {
-  handleNoResult: () => void;
-}
+type ResultSteps = 'loading' | 'empty' | 'result';
 
-export const ResultState = ({ handleNoResult }: ResultStateProps) => {
+export const ResultState = () => {
   const router = useRouter();
   const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [currentStep, setCurrentStep] = React.useState<ResultSteps>('loading');
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
   const [selectedFilter, setSelectedFilter] =
     React.useState<FilterType>('empty');
@@ -71,25 +71,42 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
   const handleSearch = React.useCallback(
     debounce(async () => {
       try {
-        setIsLoading(true);
+        setCurrentStep('loading');
+        setSearchResults([]);
         const path = router.asPath
           .split('&')
           .filter((query) => !query.endsWith('='))
           .join('&');
 
         let queryPath = path.includes('?') ? path : '?' + path;
-        const result = await api.get('/search/profiles' + queryPath);
-        setSearchResults(result.data.results);
+
+        const decodedPath = decodeURIComponent(
+          queryPath.replace('?', '/profiles?')
+        );
+
+        const result = await api.get(decodedPath);
+
+        if (result.data?.results?.length !== 0) {
+          setSearchResults(result.data.results);
+          setCurrentStep('result');
+        } else {
+          setCurrentStep('empty');
+        }
       } catch (error) {
         console.log(error);
-      } finally {
-        setIsLoading(false);
+        setCurrentStep('empty');
       }
-    }, 1000),
+    }, 0),
     [router.query]
   );
 
   const handleSelectFilter = (filter: FilterType) => setSelectedFilter(filter);
+
+  const resultStates = {
+    loading: <LoadingState />,
+    empty: <EmptyState />,
+    result: <SearchResults result={searchResults} />,
+  };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
     Roles: (
@@ -164,8 +181,8 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
   }, []);
 
   return (
-    <div className="h-full w-full">
-      <div className="flex lg:hidden">
+    <div className="mt-5 flex w-full flex-col lg:mt-6">
+      <div className="ml-[25px] flex lg:hidden">
         <button
           type="button"
           className="flex items-center space-x-2"
@@ -175,7 +192,7 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
           <span>FILTERS</span>
         </button>
 
-        <div>
+        {/* <div>
           <ul>
             {filter.role && (
               <li>
@@ -200,7 +217,7 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
 
             {filter.contactable && <li>{filter.contactable}</li>}
           </ul>
-        </div>
+        </div> */}
 
         <div className="ml-auto">
           <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
@@ -268,7 +285,7 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
         </div>
 
         <div
-          className="flex items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
+          className="flex w-fit items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
           onClick={() => handleFilter('contactable', !filter.contactable)}
         >
           <Toggle
@@ -280,9 +297,7 @@ export const ResultState = ({ handleNoResult }: ResultStateProps) => {
         </div>
       </div>
 
-      <div className="mt-5">
-        {isLoading ? <LoadingState /> : <p>Hello result</p>}
-      </div>
+      <div className="flex grow flex-col">{resultStates[currentStep]}</div>
     </div>
   );
 };
