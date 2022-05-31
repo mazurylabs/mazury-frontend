@@ -253,7 +253,9 @@ export const ResultState = () => {
                 onMouseEnter={() => handleSelectFilter(filter as FilterType)}
                 onMouseLeave={() => handleSelectFilter('empty')}
               >
-                <span>{filter}</span>
+                <span className="font-sans text-sm font-bold leading-[21px] text-indigoGray-90">
+                  {filter}
+                </span>
                 <SVG src="/icons/angle-down.svg" height={16} width={16} />
 
                 <AnimatePresence>
