@@ -20,7 +20,13 @@ import {
   FilterType,
   ValueOf,
 } from 'types';
-import { api, commify, trayAnimation, fadeAnimation } from 'utils';
+import {
+  api,
+  commify,
+  trayAnimation,
+  fadeAnimation,
+  truncateString,
+} from 'utils';
 
 interface BadgeFilterProps {
   selectedBadges: string[];
@@ -194,20 +200,22 @@ export const BadgeFilter = ({
                   key={badge.id}
                   label={
                     <div className="w-full font-sans">
-                      <p className="flex w-full truncate text-base font-medium text-indigoGray-90">
-                        <span className="max-w-[80%] truncate">
-                          {badge.title}
+                      <p className="flex w-full text-base font-medium text-indigoGray-90">
+                        <span className="">
+                          {truncateString(badge.title, 40)}
                         </span>
                         <span className="opacity-0" role="presentation">
                           i
                         </span>
-                        <span className="text-indigoGray-40">
-                          ({commify(Number(badge.total_supply))})
-                        </span>
+                        {badge.total_supply && (
+                          <span className="text-indigoGray-40">
+                            ({commify(Number(badge.total_supply))})
+                          </span>
+                        )}
                       </p>
 
                       <p className="text-xs font-normal leading-[18px]">
-                        {badge.description}
+                        {truncateString(badge.description, 50)}
                       </p>
                     </div>
                   }
