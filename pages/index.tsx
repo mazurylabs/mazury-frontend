@@ -26,9 +26,9 @@ import { commify, returnTruncatedIfEthAddress } from 'utils';
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
 
 const keywordSuggestions = [
-  { title: 'React developer', results: 2512 },
-  { title: 'Python developer', results: 1100 },
-  { title: 'Full stack developer', results: 760 },
+  { title: 'Frontend developer', results: 259 },
+  { title: 'Smart contract developer', results: 792 },
+  { title: 'Designer', results: 163 },
 ];
 
 const badgeSuggestions = [
@@ -414,8 +414,8 @@ const Home: NextPage = () => {
                     {!accountData?.address ? (
                       <p className="text-lg text-indigoGray-60">
                         No recent activity to show. Use the searchbox to find
-                        your friend and give them a referral to see their
-                        activity here!
+                        your friend and give them a referral to spy on them
+                        here!
                       </p>
                     ) : Boolean(activity) ? (
                       activity?.map((item) => {

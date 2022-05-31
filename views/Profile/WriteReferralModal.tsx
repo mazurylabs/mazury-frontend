@@ -1,4 +1,12 @@
-import { Avatar, Button, ITagItem, Modal, Tags, XIcon } from 'components';
+import {
+  Avatar,
+  Button,
+  ITagItem,
+  Modal,
+  Spinner,
+  Tags,
+  XIcon,
+} from 'components';
 import { useReferralCount } from 'hooks';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
@@ -221,7 +229,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
             </span>
 
             <div className="mt-4 flex justify-center">
-              <p>Spinner will be ported over here shortly</p>
+              <Spinner />
             </div>
 
             <div className="mt-4 flex w-full justify-around gap-4">
