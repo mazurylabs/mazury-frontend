@@ -210,7 +210,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
     </menu>
   </aside>
   <main
-    class="mx-auto flex min-h-[90vh] w-full flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12 lg:grow"
+    class="mx-auto flex w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12"
   >
     <span>
       Header content

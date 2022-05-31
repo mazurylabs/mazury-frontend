@@ -21,12 +21,11 @@ export const Checkbox: FC<CheckboxProps> = ({
       data-testid="checkbox-outer-container"
     >
       <button
-        role="checkbox"
+        type="button"
         onClick={onVisibleCheckboxClick}
         className="h-6 h-4 hover:cursor-pointer"
       >
         <SVG
-          role="checkbox"
           src={`/icons/checkbox-${checked ? 'checked' : 'unchecked'}.svg`}
           width="24px"
           height="24px"

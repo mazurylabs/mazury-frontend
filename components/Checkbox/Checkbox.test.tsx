@@ -20,16 +20,10 @@ describe('Checkbox', () => {
     render(<WrappedCheckbox />);
     const outerContainer = screen.getByTestId('checkbox-outer-container');
     expect(outerContainer).toMatchSnapshot();
-    const checkbox = screen.getByRole('checkbox', { name: 'Checkbox' });
     const hiddenCheckbox = screen.getByTestId(
       'Hidden Checkbox'
     ) as HTMLInputElement;
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).toMatchSnapshot();
     expect(hiddenCheckbox.checked).toBe(false);
     expect(hiddenCheckbox).toBeInTheDocument();
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeInTheDocument();
-    expect(hiddenCheckbox.checked).toBe(true);
   });
 });

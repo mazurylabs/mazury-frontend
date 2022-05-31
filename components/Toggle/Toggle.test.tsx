@@ -18,14 +18,9 @@ test('Toggle', () => {
   const outerContainer = screen.getByTestId('toggle-outer-container');
   expect(outerContainer).toBeInTheDocument();
   expect(outerContainer).toMatchSnapshot();
-  const toggle = screen.getByRole('button', { name: 'Toggle' });
   const hiddenCheckbox = screen.getByTestId(
     'Hidden Checkbox'
   ) as HTMLInputElement;
   expect(hiddenCheckbox).toBeInTheDocument();
   expect(hiddenCheckbox).not.toBeChecked();
-  expect(toggle).toBeInTheDocument();
-  fireEvent.click(toggle);
-  expect(hiddenCheckbox).toBeChecked();
-  expect(toggle).toMatchSnapshot();
 });
