@@ -217,23 +217,25 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     </span>
                   </button>
 
-                  <button
-                    type="button"
-                    disabled
-                    className="flex max-h-[36px] shrink-0 items-center space-x-6 rounded-lg bg-violet-600 p-[10px] pl-6"
-                  >
-                    <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
-                      Mint NFT
-                    </span>
+                  {variant == 'badge' && (
+                    <button
+                      type="button"
+                      disabled
+                      className="flex max-h-[36px] shrink-0 items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6"
+                    >
+                      <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
+                        Mint NFT (coming soon)
+                      </span>
 
-                    <div className="flex border-l border-violet-500 pl-2">
-                      <Image
-                        src={`/icons/arrow-down.svg`}
-                        height={16}
-                        width={16}
-                      />
-                    </div>
-                  </button>
+                      {/* <div className="flex border-l border-violet-500 pl-2">
+                        <Image
+                          src={`/icons/arrow-down.svg`}
+                          height={16}
+                          width={16}
+                        />
+                      </div> */}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

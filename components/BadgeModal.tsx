@@ -4,6 +4,7 @@ import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 import { useAccount } from 'wagmi';
 import debounce from 'lodash.debounce';
+import { truncateString } from 'utils';
 
 import {
   useClickOutside,
@@ -230,16 +231,24 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
           <div className="flex items-center space-x-3">
             <div className="flex shrink-0">
-              <img src={badge.image} className="h-10 w-[27px]" alt="badge" />
+              {badge.issuer.name == 'poap' ? (
+                <img
+                  src={badge.image}
+                  className="h-10 w-10 rounded-full"
+                  alt="badge"
+                />
+              ) : (
+                <img src={badge.image} className="h-10 w-[27px]" alt="badge" />
+              )}
             </div>
 
             <div className="space-y-2">
               <div className="space-y-[2px]">
                 <p className="font-demi text-lg font-normal leading-5 text-indigoGray-90">
-                  {badge.title}
+                  {truncateString(badge.title, 25)}
                 </p>
                 <p className="font-inter text-sm font-medium text-indigoGray-60 line-clamp-2">
-                  {badge.description}
+                  {truncateString(badge.description, 36)}
                 </p>
               </div>
 
