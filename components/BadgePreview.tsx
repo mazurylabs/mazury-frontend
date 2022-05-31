@@ -14,6 +14,7 @@ interface Props {
   totalCount: number;
   badgeCount?: number;
   slug: string;
+  issuer: string;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const BadgePreview: React.FC<Props> = ({
   totalCount,
   badgeCount,
   slug,
+  issuer,
 }) => {
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
@@ -60,7 +62,7 @@ export const BadgePreview: React.FC<Props> = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgSrc || '/default-avi.png'}
-          className="h-[100px] rounded-full"
+          className={'h-[100px] ' + (issuer === 'poap' ? 'rounded-full' : '')}
           alt={`${heading} badge`}
         />
         <div className="ml-6 flex flex-col gap-2">

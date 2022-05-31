@@ -13,6 +13,16 @@ interface ActivityPreviewProps {
 }
 
 const avatarSizes = { sm: 16, md: 40, lg: 64 };
+const smallAvatarPosition = {
+  sm: 'top-4 left-4',
+  md: 'top-6 left-6',
+  lg: 'top-9 left-9',
+};
+const newBadgeImageWidths = {
+  sm: 'w-[16px]',
+  md: 'w-[40px]',
+  lg: 'w-[64px]',
+};
 
 export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   activity,
@@ -28,12 +38,15 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-badge') {
     return (
       <div className="flex w-full items-center">
-        <Avatar
-          src={metadata?.badge?.image_url as string}
-          width={avatarSizes[avatarSize]}
-          height={avatarSizes[avatarSize]}
-          className="border border-indigoGray-30"
-        />
+        <div className={newBadgeImageWidths[avatarSize]}>
+          <Avatar
+            src={metadata?.badge?.image_url as string}
+            width={avatarSizes[avatarSize] * 0.62}
+            height={avatarSizes[avatarSize]}
+            borderRadius={'0%'}
+            className="mx-auto"
+          />
+        </div>
 
         <div className="ml-6 flex flex-col">
           <div className="flex items-center">
@@ -54,7 +67,15 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
             </span>
           </div>
 
-          <p>{metadata?.badge?.name}</p>
+          <p>
+            <Link href={`/people/${user.username || user.eth_address}`}>
+              <a className="font-bold">
+                {returnTruncatedIfEthAddress(user.username as string)}
+              </a>
+            </Link>
+            {' claimed badge '}
+            {metadata?.badge?.name}
+          </p>
         </div>
       </div>
     );
@@ -72,9 +93,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           />
           <Avatar
             src={metadata?.referral_receiver?.avatar as string}
-            width={avatarSize ? 20 : 32}
-            height={avatarSize ? 20 : 32}
-            className="absolute top-8 left-8 border border-indigoGray-30"
+            width={avatarSizes[avatarSize] / 2}
+            height={avatarSizes[avatarSize] / 2}
+            className={
+              'absolute border border-indigoGray-30 ' +
+              smallAvatarPosition[avatarSize]
+            }
           />
         </div>
 
@@ -132,12 +156,23 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
   if (activityType === 'new-referral-given') {
     return (
       <div className="flex w-full items-center">
-        <Avatar
-          src={metadata?.referral_receiver?.avatar as string}
-          width={avatarSizes[avatarSize]}
-          height={avatarSizes[avatarSize]}
-          className="border border-indigoGray-30"
-        />
+        <div className="relative">
+          <Avatar
+            src={metadata?.referral_author?.avatar as string}
+            width={avatarSizes[avatarSize]}
+            height={avatarSizes[avatarSize]}
+            className="border border-indigoGray-30"
+          />
+          <Avatar
+            src={metadata?.referral_receiver?.avatar as string}
+            width={avatarSizes[avatarSize] / 2}
+            height={avatarSizes[avatarSize] / 2}
+            className={
+              'absolute border border-indigoGray-30 ' +
+              smallAvatarPosition[avatarSize]
+            }
+          />
+        </div>
 
         <div className="ml-6 flex flex-col">
           <div className="flex items-center">

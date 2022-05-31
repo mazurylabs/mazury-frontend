@@ -3,7 +3,12 @@ import Image from 'next/image';
 import { NextPage } from 'next';
 import { useAccount, useSignMessage } from 'wagmi';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
+import {
+  getMessageToBeSigned,
+  getProfile,
+  updateProfile,
+  verifyEmail,
+} from 'utils/api';
 import { useProtectedRoute } from 'hooks';
 
 type Steps = 'idle' | 'active' | 'error';
@@ -16,6 +21,7 @@ const EmailPage: NextPage = () => {
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
   const [email, setEmail] = useState('');
+  const [emailVerified, setEmailVerified] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
   // Prefill form with exisiting email
@@ -23,11 +29,10 @@ const EmailPage: NextPage = () => {
     if (accountData?.address) {
       getProfile(accountData?.address).then((res) => {
         setEmail(res.data?.email as string);
+        setEmailVerified(res.data?.email_verified as boolean);
       });
     }
   }, [accountData?.address]);
-
-  const emailConfirmed = true; //dummy data
 
   const onEmailChange = (value: string) => {
     setEmail(value);
@@ -36,21 +41,30 @@ const EmailPage: NextPage = () => {
 
   const onSubmit = async (email: string) => {
     setCurrentStep('active');
-    await handleRequestSignature(email);
+    await handleRetry(email);
   };
 
-  const handleRequestSignature = async (email: string) => {
+  const handleEmailVerification = async () => {
+    const signature = await handleRequestSignature();
+
+    if (signature && accountData?.address) {
+      const data = await verifyEmail(accountData?.address, signature);
+      // console.log(data);
+    }
+  };
+
+  const handleRequestSignature = async () => {
     if (!accountData?.address) {
-      return alert('Please connect your wallet first');
+      alert('Please connect your wallet first');
+      return;
     }
 
     const { data: messageToBeSigned, error: messageSignError } =
       await getMessageToBeSigned(accountData?.address);
 
     if (!messageToBeSigned || messageSignError) {
-      return alert(
-        'Couldnt get the message to be signed. Please try again later.'
-      );
+      alert('Couldnt get the message to be signed. Please try again later.');
+      return;
     }
 
     const { data: signature, error: signatureError } = await signMessage({
@@ -58,26 +72,35 @@ const EmailPage: NextPage = () => {
     });
 
     if (!signature || signatureError) {
-      return alert('Error signing message');
+      alert('Error signing message');
+      return;
     }
 
-    const formData = {
-      email,
-    };
+    return signature;
+  };
 
-    const { error: updateProfileError, data } = await updateProfile(
-      accountData?.address,
-      signature,
-      formData
-    );
+  const handleRetry = async (email: string) => {
+    if (accountData?.address) {
+      const signature = await handleRequestSignature();
 
-    setIsNewChange(true);
-    setCurrentStep('idle');
-    setEmail(data.email); //optimistic update for the input fields
-    setDisabled(true);
+      const formData = {
+        email,
+      };
 
-    if (updateProfileError) {
-      return alert('Error updating profile.');
+      const { error: updateProfileError, data } = await updateProfile(
+        accountData?.address,
+        signature as string,
+        formData
+      );
+
+      setIsNewChange(true);
+      setCurrentStep('idle');
+      setEmail(data.email); //optimistic update for the input fields
+      setDisabled(true);
+
+      if (updateProfileError) {
+        return alert('Error updating profile.');
+      }
     }
   };
 
@@ -102,7 +125,7 @@ const EmailPage: NextPage = () => {
         <Button variant="secondary" onClick={() => setCurrentStep('idle')}>
           SKIP
         </Button>
-        <Button onClick={() => handleRequestSignature(email)} variant="primary">
+        <Button onClick={() => handleRetry(email)} variant="primary">
           RETRY
         </Button>
       </div>
@@ -120,7 +143,7 @@ const EmailPage: NextPage = () => {
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={() => handleRequestSignature(email)} variant="primary">
+        <Button onClick={() => handleRetry(email)} variant="primary">
           RETRY
         </Button>
       </div>
@@ -141,7 +164,7 @@ const EmailPage: NextPage = () => {
             <h2>Email</h2>
           </div>
 
-          {!emailConfirmed && (
+          {!emailVerified && (
             <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
               <div>
                 <h3 className="font-bold">Confirmation</h3>
@@ -155,6 +178,7 @@ const EmailPage: NextPage = () => {
                   className="bg-transparent text-lg uppercase"
                   size="large"
                   variant="secondary"
+                  onClick={handleEmailVerification}
                 >
                   RESEND E-MAIL
                 </Button>

@@ -38,6 +38,33 @@ export const getMessageToBeSigned: (
   }
 };
 
+export const verifyEmail: (
+  address: string,
+  signature: string
+) => Promise<APIResponse<string | null>> = async (address, signature) => {
+  try {
+    const res = await api.patch(
+      `/profiles/${address}/send_verification_email`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
 export const updateProfile: (
   address: string,
   signature: string,
