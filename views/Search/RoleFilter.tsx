@@ -3,7 +3,7 @@ import SVG from 'react-inlinesvg';
 import clsx from 'clsx';
 
 import { useScreenWidth } from 'hooks';
-import { FilterState, FilterType, ValueOf } from 'types';
+import { FilterState, FilterType, TrimmedRole, ValueOf } from 'types';
 import { fadeAnimation, trayAnimation } from 'utils';
 
 interface RoleFilterProps {
@@ -11,6 +11,18 @@ interface RoleFilterProps {
   handleSelect: (key: keyof FilterState, value: ValueOf<FilterState>) => void;
   handleGoBack: (filter: FilterType) => void;
 }
+
+// type Role = Omit<TrimmedRole, 'community_manager'>;
+
+const styleVariants = {
+  developer: 'bg-lime-100 text-lime-900 border-lime-400',
+  designer: 'bg-amber-100 text-amber-900 border-amber-400',
+  trader: 'bg-teal-100 text-teal-900 border-teal-400',
+  creator: 'bg-violet-50 text-violet-900 border-violet-400',
+  researcher: 'bg-pink-100 text-pink-900 border-pink-400',
+  investor: 'bg-sky-100 border-sky-400 text-sky-900',
+  community: 'bg-violet-100 border-violet-400 text-violet-900',
+};
 
 const roles = [
   { title: 'developer', icon: 'developer', supply: 658 },
@@ -22,7 +34,11 @@ const roles = [
   { title: 'community manager', icon: 'community', supply: 658 },
 ];
 
-export const RoleFilter = ({ handleGoBack, handleSelect }: RoleFilterProps) => {
+export const RoleFilter = ({
+  handleGoBack,
+  handleSelect,
+  selectedRole,
+}: RoleFilterProps) => {
   const screenWidth = useScreenWidth();
 
   const variants =
@@ -30,6 +46,11 @@ export const RoleFilter = ({ handleGoBack, handleSelect }: RoleFilterProps) => {
 
   const handleRole = (role: string) => {
     const slug = role.split(' ').join('_');
+
+    if (selectedRole === slug) {
+      handleSelect('role', '');
+      return;
+    }
 
     handleSelect('role', slug);
   };
@@ -63,7 +84,12 @@ export const RoleFilter = ({ handleGoBack, handleSelect }: RoleFilterProps) => {
             <li
               key={role.title}
               className={clsx(
-                'flex h-[100px] max-h-[100px] cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border'
+                'flex h-[100px] max-h-[100px] cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border border-[1.5px] font-sans font-bold',
+                role.title === selectedRole &&
+                  (styleVariants as any)[selectedRole],
+                selectedRole === 'community_manager' &&
+                  role.title === 'community manager' &&
+                  styleVariants['community']
               )}
               onClick={() => handleRole(role.title)}
             >
@@ -79,8 +105,8 @@ export const RoleFilter = ({ handleGoBack, handleSelect }: RoleFilterProps) => {
                 <p className="indigoGray-50 text-center text-xs font-bold uppercase leading-[18px]">
                   <span>{role.title}</span> <br />
                   {/* <span className="font-normal text-indigoGray-40 ">
-                    ({role.supply})
-                  </span> */}
+                      ({role.supply})
+                    </span> */}
                 </p>
               </div>
             </li>
