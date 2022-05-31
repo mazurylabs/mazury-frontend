@@ -13,6 +13,7 @@ interface Props {
   description: string;
   totalCount: number;
   badgeCount?: number;
+  slug: string;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -21,6 +22,7 @@ export const BadgePreview: React.FC<Props> = ({
   description,
   totalCount,
   badgeCount,
+  slug,
 }) => {
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
@@ -50,6 +52,7 @@ export const BadgePreview: React.FC<Props> = ({
                 image={imgSrc}
                 badgeCount={badgeCount}
                 variant="badge"
+                slug={slug}
               />
             )}
           </AnimatePresence>
@@ -95,6 +98,7 @@ export const BadgePreview: React.FC<Props> = ({
               image={imgSrc}
               badgeCount={badgeCount}
               variant="badge"
+              slug={slug}
             />
           )}
         </AnimatePresence>
