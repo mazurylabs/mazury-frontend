@@ -17,14 +17,20 @@ import { EmptyState } from './EmptyState';
 import { SearchResults } from './SearchResults';
 
 import { FilterState, FilterType, Profile, ValueOf } from 'types';
-import { api, fadeAnimation } from 'utils';
+import { api, commify, fadeAnimation } from 'utils';
+import { useIntersection } from 'hooks';
 
 const filters = ['Badges', 'Roles', 'Referred skills'];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
 export const ResultState = () => {
+  // const initialMount = React.useRef(true);
+  const [cursor, setCursor] = React.useState('');
+  const loadMoreRef = React.useRef(null!);
+  const shouldFetchMore = useIntersection(loadMoreRef.current, '50px');
   const router = useRouter();
+  const [resultCount, setResultCount] = React.useState(0);
   const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
   const [currentStep, setCurrentStep] = React.useState<ResultSteps>('loading');
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
@@ -71,8 +77,10 @@ export const ResultState = () => {
   const handleSearch = React.useCallback(
     debounce(async () => {
       try {
-        setCurrentStep('loading');
         setSearchResults([]);
+        setResultCount(0);
+        setCurrentStep('loading');
+
         const path = router.asPath
           .split('&')
           .filter((query) => !query.endsWith('='))
@@ -85,15 +93,24 @@ export const ResultState = () => {
         );
 
         const result = await api.get(decodedPath);
+        let nextCursor = result.data.next?.split('.com/')[1];
 
         if (result.data?.results?.length !== 0) {
           setSearchResults(result.data.results);
+          setResultCount(result.data.count);
+          setCursor(nextCursor);
           setCurrentStep('result');
         } else {
           setCurrentStep('empty');
+          setSearchResults([]);
+          setCursor('');
+          setResultCount(0);
         }
       } catch (error) {
         console.log(error);
+        setSearchResults([]);
+        setCursor('');
+        setResultCount(0);
         setCurrentStep('empty');
       }
     }, 0),
@@ -105,7 +122,7 @@ export const ResultState = () => {
   const resultStates = {
     loading: <LoadingState />,
     empty: <EmptyState />,
-    result: <SearchResults result={searchResults} />,
+    result: <SearchResults result={searchResults} ref={loadMoreRef} />,
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
@@ -152,6 +169,29 @@ export const ResultState = () => {
   React.useEffect(() => {
     handleSearch();
   }, [handleSearch]);
+
+  React.useEffect(() => {
+    const fetchMore = async () => {
+      try {
+        const result = await api.get(cursor);
+
+        const newCursor = result.data.next?.split('.com/')[1];
+
+        if (cursor !== newCursor) {
+          //only load add unique data
+          let updatedResult = searchResults?.concat(result?.data?.results);
+          setSearchResults(updatedResult);
+          setCursor(newCursor);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (shouldFetchMore) {
+      fetchMore();
+    }
+  }, [shouldFetchMore]);
 
   React.useEffect(() => {
     const populateFiltersFromRoute = () => {
@@ -280,8 +320,8 @@ export const ResultState = () => {
 
           <div className="ml-auto">
             <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
-              {searchResults.length} result
-              {searchResults.length === 1 ? '' : 's'}
+              {commify(searchResults.length)} / {commify(resultCount)} result
+              {resultCount === 1 ? '' : 's'}
             </p>
           </div>
         </div>
