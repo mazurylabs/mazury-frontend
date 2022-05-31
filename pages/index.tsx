@@ -414,8 +414,8 @@ const Home: NextPage = () => {
                     {!accountData?.address ? (
                       <p className="text-lg text-indigoGray-60">
                         No recent activity to show. Use the searchbox to find
-                        your friend and give them a referral to see their
-                        activity here!
+                        your friend and give them a referral to spy on them
+                        here!
                       </p>
                     ) : Boolean(activity) ? (
                       activity?.map((item) => {
