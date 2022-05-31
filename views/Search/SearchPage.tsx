@@ -84,17 +84,17 @@ const SearchPage: NextPage = () => {
 
   const searchStates: Record<SearchState, JSX.Element> = {
     idle: isMobile ? <IdleState /> : <></>,
-    result: <ResultState handleNoResult={() => setUIState('empty')} />,
+    result: <ResultState />,
     empty: <EmptyState />,
   };
 
   return (
     <div className="flex grow flex-col">
-      <div className="flex max-w-[1000px] flex-col items-center pl-4 pr-6 md:px-0  xl:w-[1000px]">
+      <div className="flex grow flex-col items-center pl-4 pr-6 pt-8 md:px-0 lg:pl-[64px] lg:pt-16">
         <div
           ref={searchRef}
           onKeyDown={handleKeydown}
-          className={`relative sticky top-8 z-10 flex w-full grow flex-col rounded-lg bg-indigoGray-5`}
+          className={`relative z-10 flex w-full flex-col rounded-lg bg-indigoGray-5`}
         >
           <form
             className="flex w-full items-center py-2 pl-[14px] pr-2"
@@ -155,12 +155,7 @@ const SearchPage: NextPage = () => {
           )} */}
         </div>
 
-        <div className="lg:16 mt-10 w-full lg:mt-16 lg:flex">
-          {/* <div className="grow lg:mr-16"></div>
-
-          <div className="font-inter mt-10  w-full shrink-0 pb-8 lg:mt-0 lg:w-fit lg:pb-0"></div> */}
-          {searchStates[UIState]}
-        </div>
+        <div className="lg:16 flex w-full grow">{searchStates[UIState]}</div>
       </div>
     </div>
   );
