@@ -44,7 +44,7 @@ export const verifyEmail: (
 ) => Promise<APIResponse<string | null>> = async (address, signature) => {
   try {
     const res = await api.patch(
-      `/profiles/${address}/send_verification_email`,
+      `/profiles/${address}/send_verification_email/`,
       {},
       {
         headers: {
