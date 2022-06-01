@@ -358,7 +358,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                       width={16}
                       height={16}
                     />
-                    <p className="font-demi">{profile.username}</p>
+                    <p className="font-demi">
+                      {returnTruncatedIfEthAddress(profile.username)}
+                    </p>
 
                     {/* Write referral button, small screens */}
                     {!viewingOwnProfile && (
