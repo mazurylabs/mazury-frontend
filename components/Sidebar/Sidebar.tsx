@@ -133,7 +133,7 @@ export const Sidebar: FC = () => {
 
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
-              {isOpen && !profile?.email_verified && (
+              {isOpen && (accountData?.address || profile?.email_verified) && (
                 <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
                   <img
                     src="/icons/info.svg"
