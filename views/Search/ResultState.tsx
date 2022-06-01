@@ -171,7 +171,8 @@ export const ResultState = () => {
 
   React.useEffect(() => {
     handleSearch();
-  }, [handleSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     const fetchMore = async () => {
