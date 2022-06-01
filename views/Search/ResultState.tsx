@@ -25,7 +25,7 @@ const filters = ['Badges', 'Roles', 'Referred skills'];
 type ResultSteps = 'loading' | 'empty' | 'result';
 
 export const ResultState = () => {
-  // const initialMount = React.useRef(true);
+  // const initialMount = React.useRef('');
   const [cursor, setCursor] = React.useState('');
   const loadMoreRef = React.useRef(null!);
   const shouldFetchMore = useIntersection(loadMoreRef.current, '50px');
@@ -49,43 +49,45 @@ export const ResultState = () => {
     key: keyof FilterState,
     value: ValueOf<FilterState>
   ) => {
-    setFilter((filter) => {
-      return { ...filter, [key]: value };
-    });
-
     let params = router.query;
-    router.push(
-      {
-        pathname: '/search',
-        query: {
-          ...params,
-          [key]:
-            key === 'role' || key === 'contactable'
-              ? value
-              : (value as any).join(';'),
-        },
-      },
-      undefined,
-      { shallow: true }
-    );
+    if (key !== 'query') {
+      setFilter((filter) => {
+        return { ...filter, [key]: value };
+      });
 
-    handleSearch();
+      router.push(
+        {
+          pathname: '/search',
+          query: {
+            ...params,
+            [key]:
+              key === 'role' || key === 'contactable'
+                ? value
+                : (value as any).join(';'),
+          },
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
+
+    handleSearch(router.asPath);
   };
 
   const handleSearch = React.useCallback(
-    debounce(async () => {
+    debounce(async (pathh) => {
       try {
         setSearchResults([]);
         setResultCount(0);
         setCurrentStep('loading');
 
-        const routePath = router.asPath.split('?');
+        const routePath = pathh.split('?');
 
         let path = [
           routePath[0],
           routePath[1]
             .split('&')
-            .filter((query) => !query.endsWith('='))
+            .filter((query: any) => !query.endsWith('='))
             .join('&'),
         ].join('?');
 
@@ -116,8 +118,8 @@ export const ResultState = () => {
         setResultCount(0);
         setCurrentStep('empty');
       }
-    }, 0),
-    [router.query]
+    }, 250),
+    []
   );
 
   const handleSelectFilter = (filter: FilterType) => setSelectedFilter(filter);
@@ -169,9 +171,17 @@ export const ResultState = () => {
     ),
   };
 
+  // React.useEffect(() => {
+  //   const decodedPath = fo(router.asPath);
+  //   if (initialMount.current !== decodedPath) {
+  //     handleSearch();
+  //     initialMount.current = decodedPath;
+  //   }
+  // }, [router.asPath]);
+
   React.useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+    handleSearch(router.asPath);
+  }, [handleSearch, router.query]);
 
   React.useEffect(() => {
     const fetchMore = async () => {
