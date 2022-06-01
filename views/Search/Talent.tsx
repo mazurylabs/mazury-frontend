@@ -60,6 +60,7 @@ export const Talent = ({ result }: Props) => {
                     height={40}
                     width={40}
                     alt={result?.username}
+                    className={'object-cover'}
                   />
                 </div>
 
@@ -69,10 +70,12 @@ export const Talent = ({ result }: Props) => {
                   </p>
 
                   <div className="flex flex-col lg:flex-row">
-                    <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
-                      {commify(result.referred_by.length)} referral
-                      {result.referred_by.length > 1 && 's'}
-                    </p>
+                    {result.referred_by.length > 0 && (
+                      <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
+                        {commify(result.referred_by.length)} referral
+                        {result.referred_by.length > 1 && 's'}
+                      </p>
+                    )}
 
                     {roles.length !== 0 && (
                       <div className="flex space-x-2 lg:hidden">
