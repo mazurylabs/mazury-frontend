@@ -626,7 +626,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     height={14}
                     width={14}
                   ></Image>
-                  {returnTruncatedIfEthAddress(profile.eth_address)}
+                  Chat
                 </BlueSocialButton>
               )}
             </div>
