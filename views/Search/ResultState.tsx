@@ -261,8 +261,8 @@ export const ResultState = () => {
 
         <div className="ml-auto">
           <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
-            {searchResults.length} result
-            {searchResults.length === 1 ? '' : 's'}
+            {commify(searchResults.length)} / {commify(resultCount)} result
+            {resultCount === 1 ? '' : 's'}
           </p>
         </div>
       </div>
