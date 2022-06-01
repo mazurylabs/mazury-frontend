@@ -53,23 +53,21 @@ export const ResultState = () => {
       return { ...filter, [key]: value };
     });
 
-    if (key !== 'query') {
-      let params = router.query;
-      router.push(
-        {
-          pathname: '/search',
-          query: {
-            ...params,
-            [key]:
-              key === 'role' || key === 'contactable'
-                ? value
-                : (value as any).join(';'),
-          },
+    let params = router.query;
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          ...params,
+          [key]:
+            key === 'role' || key === 'contactable'
+              ? value
+              : (value as any).join(';'),
         },
-        undefined,
-        { shallow: true }
-      );
-    }
+      },
+      undefined,
+      { shallow: true }
+    );
 
     handleSearch();
   };
@@ -81,10 +79,15 @@ export const ResultState = () => {
         setResultCount(0);
         setCurrentStep('loading');
 
-        const path = router.asPath
-          .split('&')
-          .filter((query) => !query.endsWith('='))
-          .join('&');
+        const routePath = router.asPath.split('?');
+
+        let path = [
+          routePath[0],
+          routePath[1]
+            .split('&')
+            .filter((query) => !query.endsWith('='))
+            .join('&'),
+        ].join('?');
 
         let queryPath = path.includes('?') ? path : '?' + path;
 
