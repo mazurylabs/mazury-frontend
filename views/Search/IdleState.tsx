@@ -17,22 +17,22 @@ const keywordSuggestions = [
 
 const badgeSuggestions = [
   {
-    title: 'Aave voters',
-    img: '/icons/aave.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'aave_voter',
+    title: 'Contract deployer',
+    slug: 'contract_deployer',
+    img: '/badges/contract_deployer.png',
+    detail: 'People who deployed a smart contract',
   },
   {
-    title: 'Early Mazury adopter',
-    img: '/icons/mazury.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'mazury_early_adopter',
+    title: 'Buildspace alumni',
+    slug: 'buildspace',
+    img: '/badges/buildspace.png',
+    detail: 'People who finished a buildspace course',
   },
   {
-    title: 'Graph voter',
-    img: '/icons/graph.svg',
-    detail: 'Search for people who voted on Aave',
-    slug: 'graph_voter',
+    title: 'Developer DAO member',
+    slug: 'd_d_member',
+    img: '/badges/d_d.png',
+    detail: 'Members of Developer DAO',
   },
 ];
 
@@ -108,7 +108,7 @@ export const IdleState = () => {
                   <Image
                     src={badge.img}
                     width={24}
-                    height={24}
+                    height={38}
                     layout="fixed"
                     alt="badge"
                   />
