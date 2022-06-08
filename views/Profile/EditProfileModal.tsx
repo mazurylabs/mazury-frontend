@@ -1,4 +1,4 @@
-import { Button, Input, Modal, RoleCard } from 'components';
+import { Button, Input, Modal, RoleCard, WalletRequestModal } from 'components';
 import { OnboardingFormDataType } from 'contexts';
 import { useMobile, useProfile } from 'hooks';
 import Image from 'next/image';
@@ -9,6 +9,8 @@ import { useSWRConfig } from 'swr';
 import { Role } from 'types';
 import { getMessageToBeSigned, updateProfile } from 'utils/api';
 import { useSignMessage } from 'wagmi';
+
+type Steps = 'active' | 'idle' | 'error';
 
 interface IEditProfileModalProps {
   isOpen: boolean;
@@ -29,6 +31,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const [fileUrl, setFileUrl] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [shouldRemoveAvi, setShouldRemoveAvi] = useState(false);
+  const [walletRequestStep, setWalletRequestStep] = useState<Steps>('idle');
   const isMobile = useMobile();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +64,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
+      setWalletRequestStep('active');
       if (!formData) {
         return toast.error('Something went wrong.');
       }
@@ -93,9 +97,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
         shouldRemoveAvi
       );
       if (error || !data) {
+        setWalletRequestStep('error');
         return toast.error('Failed to update profile');
       }
       toast.success('Profile updated successfully');
+      setWalletRequestStep('idle');
       mutate(`/profiles/${address}`);
       onClose();
     } catch (error) {
@@ -126,6 +132,12 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
       containerClassName={isMobile ? 'w-full' : ''}
     >
       <Toaster />
+
+      <WalletRequestModal
+        step={walletRequestStep}
+        handleSkip={() => setWalletRequestStep('idle')}
+        handleRequestSignature={handleSubmit}
+      />
       <div className="flex flex-col">
         <div className="flex">
           <Image

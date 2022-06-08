@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, ReactNode, useContext } from 'react';
+import { FC, ReactNode, useContext, useState } from 'react';
 import { HomeIcon, SearchIcon } from 'components';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
@@ -11,13 +11,17 @@ import Image from 'next/image';
 import { SignIn } from 'views/SignIn';
 import { useProfile } from 'hooks';
 import { getMessageToBeSigned, verifyEmail } from 'utils/api';
+import { WalletRequestModal } from 'components/WalletRequestModal';
 
 const iconColors = {
   active: colors.indigo[50],
   inactive: colors.indigoGray[90],
 };
 
+type Steps = 'idle' | 'active' | 'error';
+
 export const Sidebar: FC = () => {
+  const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const { isOpen, signInOpen, setSignInOpen } = useContext(SidebarContext);
   const router = useRouter();
   const { pathname } = router;
@@ -33,11 +37,16 @@ export const Sidebar: FC = () => {
   const logout = () => disconnect();
 
   const handleEmailVerification = async () => {
+    setCurrentStep('active');
     const signature = await handleRequestSignature();
 
     if (signature && accountData?.address) {
-      const data = await verifyEmail(accountData?.address, signature);
-      // console.log(data);
+      const { error } = await verifyEmail(accountData?.address, signature);
+      if (!error) {
+        setCurrentStep('idle');
+      } else {
+        setCurrentStep('error');
+      }
     }
   };
 
@@ -129,6 +138,12 @@ export const Sidebar: FC = () => {
               isOpen={isOpen}
               active={pathname === '/'}
               className="mt-4"
+            />
+
+            <WalletRequestModal
+              step={currentStep}
+              handleSkip={() => setCurrentStep('idle')}
+              handleRequestSignature={handleEmailVerification}
             />
 
             <div className="mt-auto flex flex-col">

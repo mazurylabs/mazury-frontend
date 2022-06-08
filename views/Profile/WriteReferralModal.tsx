@@ -63,6 +63,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
     // If a referral already exists, set the content and tags
     if (existingReferral && isOpen) {
       setContent(existingReferral.content);
+      setStatus('writing');
       const existingTags: ITagItem[] | undefined = existingReferral.skills?.map(
         (skill) => {
           return {
