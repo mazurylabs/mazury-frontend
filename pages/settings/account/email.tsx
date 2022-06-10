@@ -20,6 +20,7 @@ const EmailPage: NextPage = () => {
   const [isNewChange, setIsNewChange] = useState(false);
   const [_, signMessage] = useSignMessage();
   const [{ data: accountData }] = useAccount();
+  const [accountEmail, setAccountEmail] = useState('');
   const [email, setEmail] = useState('');
   const [emailVerified, setEmailVerified] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -29,6 +30,7 @@ const EmailPage: NextPage = () => {
     if (accountData?.address) {
       getProfile(accountData?.address).then((res) => {
         setEmail(res.data?.email as string);
+        setAccountEmail(res.data?.email as string);
         setEmailVerified(res.data?.email_verified as boolean);
       });
     }
@@ -96,6 +98,7 @@ const EmailPage: NextPage = () => {
       setIsNewChange(true);
       setCurrentStep('idle');
       setEmail(data.email); //optimistic update for the input fields
+      setAccountEmail(data.email);
       setDisabled(true);
 
       if (updateProfileError) {
@@ -164,7 +167,7 @@ const EmailPage: NextPage = () => {
             <h2>Email</h2>
           </div>
 
-          {!emailVerified && (
+          {accountEmail && !emailVerified && (
             <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
               <div>
                 <h3 className="font-bold">Confirmation</h3>

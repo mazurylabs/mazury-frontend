@@ -133,31 +133,34 @@ export const Sidebar: FC = () => {
 
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
-              {isOpen && isSignedIn && !profile?.email_verified && (
-                <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
-                  <img
-                    src="/icons/info.svg"
-                    width="16px"
-                    height="16px"
-                    alt="Info icon"
-                  />
+              {isOpen &&
+                isSignedIn &&
+                profile?.email &&
+                !profile?.email_verified && (
+                  <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
+                    <img
+                      src="/icons/info.svg"
+                      width="16px"
+                      height="16px"
+                      alt="Info icon"
+                    />
 
-                  <p className="ml-3 text-sm font-medium text-indigoGray-90">
-                    <span className="font-bold">
-                      Your e-mail is not verified.
-                    </span>{' '}
-                    Check your mailbox or{' '}
-                    <button
-                      type="button"
-                      className="underline hover:cursor-pointer"
-                      onClick={handleEmailVerification}
-                    >
-                      click here
-                    </button>{' '}
-                    to resend the message.
-                  </p>
-                </div>
-              )}
+                    <p className="ml-3 text-sm font-medium text-indigoGray-90">
+                      <span className="font-bold">
+                        Your e-mail is not verified.
+                      </span>{' '}
+                      Check your mailbox or{' '}
+                      <button
+                        type="button"
+                        className="underline hover:cursor-pointer"
+                        onClick={handleEmailVerification}
+                      >
+                        click here
+                      </button>{' '}
+                      to resend the message.
+                    </p>
+                  </div>
+                )}
 
               <Divider />
 
