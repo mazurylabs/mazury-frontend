@@ -13,6 +13,7 @@ export { RoleCard } from './RoleCard';
 export { InfoBox } from './InfoBox';
 export { BadgeModal } from './BadgeModal';
 export { BadgeDetail } from './BadgeDetail';
+export { WalletRequestModal } from './WalletRequestModal';
 export { Portal } from './Portal';
 export * from './Tags';
 export * from './Icons';
