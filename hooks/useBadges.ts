@@ -1,15 +1,45 @@
+import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
+import { api } from 'utils';
 import type { ListResponse, Badge, BadgeIssuer } from '../types';
 
 export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
-  // TODO: Pagination
+  const [fetchMore, setFetchMore] = useState(false);
+  const [badges, setBadges] = useState<Badge[]>([]);
+  const [nextEndpoint, setNextEndpoint] = useState('');
+
   const { data, error } = useSWR<ListResponse<Badge>>(
-    `/badges/?owner=${address}&issuer=${issuer}`
+    `/badges/?owner=${address}&issuer=${issuer}&limit=4`
   );
 
+  const handleFetchMore = () => setFetchMore(true);
+
+  useEffect(() => {
+    setBadges(data?.results as Badge[]);
+    data?.next && setNextEndpoint(data?.next);
+  }, [data]);
+
+  useEffect(() => {
+    const fetchMoreBadges = async () => {
+      if (fetchMore && nextEndpoint) {
+        const { data } = await api.get(nextEndpoint);
+
+        if (data?.results.length !== 0) {
+          setBadges((badges) => badges.concat(data?.results));
+          setFetchMore(false);
+          setNextEndpoint(data?.next);
+        }
+      }
+    };
+
+    fetchMoreBadges();
+  }, [fetchMore, nextEndpoint]);
+
   return {
-    badges: data?.results,
+    badges,
     error,
     count: data?.count,
+    handleFetchMore,
+    hasMoreData: Boolean(nextEndpoint),
   };
 };

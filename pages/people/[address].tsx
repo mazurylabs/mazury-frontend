@@ -97,8 +97,9 @@ const Profile: React.FC<Props> = ({ address }) => {
     useReferrals(eth_address, true);
   const {
     badges,
-    error: badgesError,
+    handleFetchMore,
     count: badgesCount,
+    hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   // const {
@@ -781,26 +782,24 @@ const Profile: React.FC<Props> = ({ address }) => {
 
               <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
                 {badges && badges.length > 0 ? (
-                  badges
-                    ?.slice(0, badgesExpanded ? badges.length : 4)
-                    .map((badge) => {
-                      const { badge_type, id } = badge;
-                      const { image, description, title, issuer, slug } =
-                        badge_type;
+                  badges.map((badge) => {
+                    const { badge_type, id } = badge;
+                    const { image, description, title, issuer, slug } =
+                      badge_type;
 
-                      return (
-                        <BadgePreview
-                          key={id}
-                          description={description}
-                          heading={title}
-                          imgSrc={image}
-                          totalCount={totalBadgeCounts[badge_type.id]}
-                          badgeCount={badgesCount}
-                          slug={slug}
-                          issuer={issuer.name}
-                        />
-                      );
-                    })
+                    return (
+                      <BadgePreview
+                        key={id}
+                        description={description}
+                        heading={title}
+                        imgSrc={image}
+                        totalCount={totalBadgeCounts[badge_type.id]}
+                        badgeCount={badgesCount}
+                        slug={slug}
+                        issuer={issuer.name}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="text-lg text-indigoGray-60">
                     {badges?.length === 0
@@ -810,10 +809,10 @@ const Profile: React.FC<Props> = ({ address }) => {
                 )}
               </div>
 
-              {badges && badges.length > 4 && (
+              {badges && hasMoreData && (
                 <div className="xl:w-10/12">
                   <Button
-                    onClick={() => setBadgesExpanded((v) => !v)}
+                    onClick={handleFetchMore}
                     variant="secondary"
                     className="mx-auto mt-6"
                   >
