@@ -33,7 +33,7 @@ export const Layout: FC<LayoutProps> = ({
         value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
       >
         <motion.aside
-          className={`fixed top-0 z-20 hidden h-screen w-[75px] flex-col bg-white py-10 ${
+          className={`fixed top-0 hidden h-screen w-[75px] flex-col bg-white py-10 ${
             isOpen && 'px-5'
           } shadow-inner lg:flex`}
           whileHover={{
