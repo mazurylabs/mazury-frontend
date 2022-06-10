@@ -845,7 +845,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   </Button>
                 </div>
 
-                <div className="flex gap-[24px] lg:ml-12 lg:w-7/12">
+                <div className="flex gap-[24px] lg:ml-12 lg:grow">
                   <Pill
                     label="Received"
                     active={referralsToggle === 'received'}
@@ -882,7 +882,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
+              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
                 {referralsToShow && referralsToShow.length > 0 ? (
                   referralsToShow
                     ?.slice(0, referralsExpanded ? referralsToShow.length : 4)
@@ -903,7 +903,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
 
               {referralsToShow && referralsToShow.length > 4 && (
-                <div className="xl:w-10/12">
+                <div>
                   <Button
                     onClick={() => setReferralsExpanded((v) => !v)}
                     variant="secondary"
@@ -938,7 +938,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div> */}
               </div>
 
-              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
+              <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
                 {posts && posts.length > 0 ? (
                   posts
                     ?.slice(0, postsExpanded ? posts.length : 4)
@@ -961,7 +961,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 )}
               </div>
               {posts && posts.length > 4 && (
-                <div className="xl:w-10/12">
+                <div>
                   <Button
                     onClick={() => setPostsExpanded((v) => !v)}
                     variant="secondary"

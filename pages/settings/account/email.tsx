@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
 import { useAccount, useSignMessage } from 'wagmi';
-import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
+import {
+  Button,
+  Input,
+  Modal,
+  SettingsLayout,
+  Spinner,
+  WalletRequestModal,
+} from 'components';
 import {
   getMessageToBeSigned,
   getProfile,
@@ -47,11 +54,16 @@ const EmailPage: NextPage = () => {
   };
 
   const handleEmailVerification = async () => {
+    setCurrentStep('active');
     const signature = await handleRequestSignature();
 
     if (signature && accountData?.address) {
-      const data = await verifyEmail(accountData?.address, signature);
-      // console.log(data);
+      const { error } = await verifyEmail(accountData?.address, signature);
+      if (!error) {
+        setCurrentStep('idle');
+      } else {
+        setCurrentStep('error');
+      }
     }
   };
 
@@ -95,68 +107,21 @@ const EmailPage: NextPage = () => {
         formData
       );
 
-      setIsNewChange(true);
-      setCurrentStep('idle');
-      setEmail(data.email); //optimistic update for the input fields
-      setAccountEmail(data.email);
-      setDisabled(true);
-
       if (updateProfileError) {
+        setCurrentStep('error');
         return alert('Error updating profile.');
+      } else {
+        setIsNewChange(true);
+        setCurrentStep('idle');
+        setEmail(data.email); //optimistic update for the input fields
+        setAccountEmail(data.email);
+        setDisabled(true);
       }
     }
   };
 
   const onDelete = async () => {
     await onSubmit('');
-  };
-
-  const signWalletStep = (
-    <div className="flex flex-col">
-      <h3 className="font-demi text-3xl text-indigoGray-90">
-        Sign with wallet
-      </h3>
-      <span className="mt-2 text-sm text-indigoGray-60">
-        Before we finish we need you to sign this with your wallet
-      </span>
-
-      <div className="mt-4 flex justify-center">
-        <Spinner />
-      </div>
-
-      <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary" onClick={() => setCurrentStep('idle')}>
-          SKIP
-        </Button>
-        <Button onClick={() => handleRetry(email)} variant="primary">
-          RETRY
-        </Button>
-      </div>
-    </div>
-  );
-
-  const errorStep = (
-    <div className="flex flex-col">
-      <h3 className="font-demi text-3xl text-indigoGray-90">
-        Connection failed
-      </h3>
-      <span className="mt-2 text-sm text-indigoGray-60">
-        Something went wrong.
-      </span>
-
-      <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary">SKIP</Button>
-        <Button onClick={() => handleRetry(email)} variant="primary">
-          RETRY
-        </Button>
-      </div>
-    </div>
-  );
-
-  const steps: Record<Steps, JSX.Element> = {
-    idle: <></>,
-    active: signWalletStep,
-    error: errorStep,
   };
 
   return (
@@ -234,12 +199,11 @@ const EmailPage: NextPage = () => {
             </form>
           </div>
 
-          <Modal
-            isOpen={currentStep !== 'idle'}
-            onClose={() => setCurrentStep('idle')}
-          >
-            {steps[currentStep]}
-          </Modal>
+          <WalletRequestModal
+            step={currentStep}
+            handleSkip={() => setCurrentStep('idle')}
+            handleRequestSignature={() => handleRetry(email)}
+          />
         </div>
       }
     />
