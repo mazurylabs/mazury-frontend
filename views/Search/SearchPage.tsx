@@ -22,7 +22,7 @@ const SearchPage: NextPage = () => {
 
   const [isFocused, setIsFocused] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [UIState, setUIState] = React.useState<SearchState>('idle');
+  const [UIState, setUIState] = React.useState<SearchState>('result');
 
   const animationAttributes = !isMobile
     ? {

@@ -86,9 +86,9 @@ export const ResultState = () => {
         let path = [
           routePath[0],
           routePath[1]
-            .split('&')
-            .filter((query: any) => !query.endsWith('='))
-            .join('&'),
+            ?.split('&')
+            ?.filter((query: any) => !query.endsWith('='))
+            ?.join('&'),
         ].join('?');
 
         let queryPath = path.includes('?') ? path : '?' + path;
