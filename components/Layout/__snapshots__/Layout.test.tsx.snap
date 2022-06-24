@@ -6,7 +6,7 @@ exports[`Layout all parts are being rendered correctly 1`] = `
   data-testid="layout-container"
 >
   <aside
-    class="fixed top-0 hidden h-screen w-[75px] flex-col bg-white py-10 false shadow-inner lg:flex"
+    class="fixed top-0 z-30 hidden h-screen w-[75px] flex-col bg-white py-10 false shadow-inner lg:flex"
     role="menu"
   >
     <menu>
