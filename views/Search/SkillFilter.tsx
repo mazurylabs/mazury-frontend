@@ -131,7 +131,7 @@ export const SkillFilter = ({
           <div className="grow font-sans text-base font-medium">
             <input
               type="text"
-              placeholder="wojtek.eth, Frontend dev…"
+              placeholder="Skill name"
               aria-label="Search"
               className="h-full w-full bg-transparent"
               value={searchTerm}
