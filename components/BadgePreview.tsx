@@ -15,6 +15,8 @@ interface Props {
   badgeCount?: number;
   slug: string;
   issuer: string;
+  id: string;
+  canBeMinted: boolean;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -25,6 +27,8 @@ export const BadgePreview: React.FC<Props> = ({
   badgeCount,
   slug,
   issuer,
+  id,
+  canBeMinted,
 }) => {
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
@@ -34,10 +38,10 @@ export const BadgePreview: React.FC<Props> = ({
       <div
         className="relative flex"
         onClick={() => {
-          isMobile && setShowBadgeDetails(true);
+          setShowBadgeDetails(true);
         }}
-        onMouseEnter={() => setShowBadgeDetails(true)}
-        onMouseLeave={() => setShowBadgeDetails(false)}
+        // onMouseEnter={() => setShowBadgeDetails(true)}
+        // onMouseLeave={() => setShowBadgeDetails(false)}
       >
         {!isMobile && (
           <AnimatePresence>
@@ -55,6 +59,8 @@ export const BadgePreview: React.FC<Props> = ({
                 badgeCount={badgeCount}
                 variant="badge"
                 slug={slug}
+                id={id}
+                canBeMinted={canBeMinted}
               />
             )}
           </AnimatePresence>
@@ -101,6 +107,8 @@ export const BadgePreview: React.FC<Props> = ({
               badgeCount={badgeCount}
               variant="badge"
               slug={slug}
+              id={id}
+              canBeMinted={canBeMinted}
             />
           )}
         </AnimatePresence>

@@ -94,6 +94,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const handleResetModal = () => {
     handleCloseModal();
     setCurrentModalStep('idle');
+    setHoveredbadge(null);
   };
 
   const handleOpenBadgeDetail = (badge: BadgeType) => {
@@ -155,7 +156,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
   useEffect(() => {
     if (showUserBadges) {
-      const userBadges = badges?.map((badge) => badge.badge_type);
+      const userBadges = badges?.map((badge) => {
+        return badge.badge_type;
+      });
       setBadgesInView(userBadges);
     } else {
       setBadgesInView(badgeTypes);
@@ -203,9 +206,12 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
         <li
           key={index}
           className="relative flex items-center justify-between lg:h-[77px] lg:max-h-[98px] lg:min-w-[43.8%]"
-          onClick={() => handleOpenBadgeDetail(badge)}
-          onMouseEnter={(event) => handleShowDetailsOnHover(event, badge)}
-          onMouseLeave={() => setHoveredbadge(null)}
+          onClick={(event) => {
+            handleOpenBadgeDetail(badge);
+            handleShowDetailsOnHover(event, badge);
+          }}
+          // onMouseEnter={(event) => handleShowDetailsOnHover(event, badge)}
+          // onMouseLeave={() => setHoveredbadge(null)}
         >
           <div
             className={`z-[-1] hidden lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:block lg:h-[215.5px] lg:w-[502.23px] badge-${badge.id}`}
@@ -225,6 +231,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   image={hoveredBadge.image}
                   slug={hoveredBadge.slug}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
+                  id={hoveredBadge.id}
+                  canBeMinted={false}
                 />
               </Portal>
             )}
@@ -375,6 +383,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   image={showBadgeDetails.image}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
                   slug={showBadgeDetails.slug}
+                  id={showBadgeDetails.id}
+                  canBeMinted={false}
                 />
               )}
 

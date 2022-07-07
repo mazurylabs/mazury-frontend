@@ -783,7 +783,8 @@ const Profile: React.FC<Props> = ({ address }) => {
               <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
-                    const { badge_type, id } = badge;
+                    const { badge_type, id, minted, owner } = badge;
+
                     const { image, description, title, issuer, slug } =
                       badge_type;
 
@@ -797,6 +798,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                         badgeCount={badgesCount}
                         slug={slug}
                         issuer={issuer.name}
+                        id={id}
+                        canBeMinted={address === owner.eth_address && !minted}
                       />
                     );
                   })
