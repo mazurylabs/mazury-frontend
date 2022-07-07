@@ -13,7 +13,7 @@ import { PersonBasicDetails } from 'types';
 
 // Pick chains
 const chains = defaultChains;
-const defaultChain = chain.mainnet;
+const defaultChain = chain.polygonTestnetMumbai;
 
 // Set up connectors
 type ConnectorsConfig = { chainId?: number };
