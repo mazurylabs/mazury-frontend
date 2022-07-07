@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SVG from 'react-inlinesvg';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 import { useRouter } from 'next/router';
@@ -10,7 +11,7 @@ import { Button } from './Button';
 import { fadeAnimation, trayAnimation } from 'utils';
 import { Spinner } from './Spinner';
 import { getMessageToBeSigned, mintBadge } from 'utils/api';
-import contractABI from 'utils/abi.json';
+import contractInterface from 'utils/abi.json';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -23,6 +24,8 @@ interface BadgeDetailProps {
   image: string;
   slug: string;
   variant: 'badge' | 'poap';
+  id: string;
+  canBeMinted: boolean;
 }
 
 interface BadgeDetailButtonProp {
@@ -71,23 +74,15 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   image,
   variant,
   slug,
+  id,
+  canBeMinted,
 }) => {
   const [{ data: accountData }] = useAccount();
   const [_, signMessage] = useSignMessage();
   const router = useRouter();
 
-  useContractEvent(
-    {
-      addressOrName: '0x2cf3b4b267c75d0dc997656aeb4ef390d544327e',
-      contractInterface: contractABI.result,
-    },
-    'Claim',
-    (event) => {
-      console.log('minting', event);
-    }
-  );
-
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
+  const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
 
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
@@ -122,14 +117,29 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       const signature = await handleRequestSignature();
       if (signature) {
         handleSteps('submitting');
-        const data = await mintBadge(signature as string, badgeId);
-        console.log('data', data);
+        await mintBadge(signature as string, badgeId);
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong');
       handleSteps('initialise');
     }
   };
+
+  const handleMinting = (event: any) => {
+    setIsBadgeMinted(true);
+    setCurrentStep('idle');
+  };
+
+  const contractConfig = {
+    addressOrName: '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b',
+    contractInterface,
+  };
+
+  React.useEffect(() => {
+    setIsBadgeMinted(!canBeMinted);
+  }, [canBeMinted]);
+
+  useContractEvent(contractConfig, 'Mint', handleMinting);
 
   const idle = (
     <motion.div
@@ -196,14 +206,84 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </div>
             </div>
 
+            {isBadgeMinted && (
+              <motion.div
+                initial={{
+                  backgroundColor: '#6366F1',
+                  boxShadow: '0px 0px 20px #4D50FF',
+                }}
+                animate={{
+                  backgroundColor: '#fff',
+                  boxShadow: '0px 0px 0px #fff',
+                  transition: { duration: 1.5, delay: 0.5 },
+                }}
+                className="font-inter flex items-center justify-between rounded-lg py-1 px-2 text-xs"
+              >
+                <div className="space-y-[2px]">
+                  <motion.p
+                    initial={{ color: '#F8F9FC' }}
+                    animate={{
+                      color: '#110F2A',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="text-sm text-indigoGray-5"
+                  >
+                    Badge minted
+                  </motion.p>
+                  <motion.p
+                    initial={{ color: '#E0E7FF' }}
+                    animate={{
+                      color: '#646B8B',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="font-normal text-indigo-100"
+                  >
+                    {new Date().toDateString()}
+                  </motion.p>
+                </div>
+
+                <div className="flex space-x-2">
+                  <motion.div
+                    initial={{ backgroundColor: '#F8F9FC', color: '#2081E2' }}
+                    animate={{
+                      color: '#F8F9FC',
+                      backgroundColor: '#2081E2',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="relative h-4 w-4 rounded-full"
+                  >
+                    <SVG
+                      src={`/icons/open-sea.svg`}
+                      height={9}
+                      width={10}
+                      className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                    />
+                  </motion.div>
+
+                  <motion.p
+                    initial={{ color: '#F8F9FC' }}
+                    animate={{
+                      color: '#2081E2',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="text-indigoGray-5"
+                  >
+                    See on Opensea
+                  </motion.p>
+                </div>
+              </motion.div>
+            )}
+
             <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
-              <div>
-                <BadgeDetailButton
-                  label="Mint NFT"
-                  icon="jackhammer"
-                  handleClick={() => handleSteps('initialise')}
-                />
-              </div>
+              {!isBadgeMinted && (
+                <div>
+                  <BadgeDetailButton
+                    label="Mint NFT"
+                    icon="jackhammer"
+                    handleClick={() => handleSteps('initialise')}
+                  />
+                </div>
+              )}
 
               <div>
                 <BadgeDetailButton
@@ -223,28 +303,30 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             </div>
 
             <div className="hidden space-x-6 lg:flex ">
-              <button
-                type="button"
-                className="flex shrink-0 cursor-pointer items-center space-x-2"
-                onClick={() => handleSearch(slug)}
-              >
-                <div className="flex">
-                  <Image
-                    src={`/icons/search-violet.svg`}
-                    height={16}
-                    width={16}
-                  />
-                </div>
-
-                <span className="font-inter text-sm font-bold leading-6 text-violet-600">
-                  {`Search using ${variant}`}
-                </span>
-              </button>
-
-              {variant == 'badge' && (
+              {
                 <button
                   type="button"
-                  className="flex max-h-[36px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6"
+                  className="flex shrink-0 cursor-pointer items-center space-x-2"
+                  onClick={() => handleSearch(slug)}
+                >
+                  <div className="flex">
+                    <Image
+                      src={`/icons/search-violet.svg`}
+                      height={16}
+                      width={16}
+                    />
+                  </div>
+
+                  <span className="font-inter text-sm font-bold leading-6 text-violet-600">
+                    {`Search using ${variant}`}
+                  </span>
+                </button>
+              }
+
+              {variant == 'badge' && !isBadgeMinted && (
+                <button
+                  type="button"
+                  className="ml-auto flex max-h-[36px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6"
                   onClick={() => handleSteps('initialise')}
                 >
                   <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
@@ -313,9 +395,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 variant="primary"
                 size="large"
                 className="w-full bg-violet-600"
-                onClick={() =>
-                  handleInitialiseMint('53a9acc2-9ec4-489b-9a1b-32264f44355f')
-                }
+                onClick={() => handleInitialiseMint(id)}
               >
                 Mint NFT
               </Button>
