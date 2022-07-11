@@ -10,6 +10,7 @@ import { SWRConfig } from 'swr';
 import axios from 'axios';
 import { OnboardingContext, OnboardingFormDataType } from 'contexts';
 import { PersonBasicDetails } from 'types';
+import PlausibleProvider from 'next-plausible';
 
 // Pick chains
 const chains = defaultChains;
@@ -86,33 +87,35 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <SWRConfig value={{ fetcher }}>
-      <Provider autoConnect connectors={connectors} provider={provider}>
-        <OnboardingContext.Provider
-          value={{
-            formData: onboardingFormData,
-            setFormData: setOnboardingFormData,
-            fetched: fetchedProfile,
-            setFetched: setFetchedProfile,
-            avatarFile,
-            setAvatarFile,
-            referralReceiver,
-            setReferralReceiver,
-            twitterConnected,
-            setTwitterConnected,
-            githubConnected,
-            setGithubConnected,
-            valid,
-            setValid,
-          }}
-        >
-          <NextHead>
-            <title>Mazury</title>
-            <link rel="icon" href="/new-logo.svg" />
-          </NextHead>
+      <PlausibleProvider domain="app.mazury.xyz">
+        <Provider autoConnect connectors={connectors} provider={provider}>
+          <OnboardingContext.Provider
+            value={{
+              formData: onboardingFormData,
+              setFormData: setOnboardingFormData,
+              fetched: fetchedProfile,
+              setFetched: setFetchedProfile,
+              avatarFile,
+              setAvatarFile,
+              referralReceiver,
+              setReferralReceiver,
+              twitterConnected,
+              setTwitterConnected,
+              githubConnected,
+              setGithubConnected,
+              valid,
+              setValid,
+            }}
+          >
+            <NextHead>
+              <title>Mazury</title>
+              <link rel="icon" href="/new-logo.svg" />
+            </NextHead>
 
-          <Component {...pageProps} />
-        </OnboardingContext.Provider>
-      </Provider>
+            <Component {...pageProps} />
+          </OnboardingContext.Provider>
+        </Provider>
+      </PlausibleProvider>
     </SWRConfig>
   );
 };
