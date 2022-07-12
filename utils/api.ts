@@ -41,7 +41,10 @@ export const getMessageToBeSigned: (
 export const mintBadge: (
   signature: string,
   badgeId: string
-) => Promise<APIResponse<string | null>> = async (signature, badgeId) => {
+) => Promise<APIResponse<{ transaction_id: string }>> = async (
+  signature,
+  badgeId
+) => {
   try {
     const res = await api.patch(
       `/badges/${badgeId}/mintnft/`,
