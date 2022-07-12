@@ -536,7 +536,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   return (
     <div
-      className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
+      className="fixed bottom-0 left-0 z-10 z-[10000] flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
       // onClick={() => isMobile && handleCloseModal()}
     >
       <Toaster />
