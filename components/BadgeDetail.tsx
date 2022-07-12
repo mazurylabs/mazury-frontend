@@ -276,6 +276,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   </motion.div>
 
                   <motion.a
+                    rel="noreferrer"
                     href="https://testnets.opensea.io/collection/mazury"
                     target="_blank"
                     initial={!isBadgeMinted && { color: '#F8F9FC' }}
@@ -509,6 +510,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div className="flex justify-center">
             {transactionId && (
               <a
+                rel="noreferrer"
                 href={`https://mumbai.polygonscan.com/tx/${transactionId}`}
                 className="flex items-center space-x-2"
                 target="_blank"
