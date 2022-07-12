@@ -36,35 +36,13 @@ export const BadgePreview: React.FC<Props> = ({
   return (
     <>
       <div
-        className="relative flex"
+        className="relative flex cursor-pointer"
         onClick={() => {
           setShowBadgeDetails(true);
         }}
         // onMouseEnter={() => setShowBadgeDetails(true)}
         // onMouseLeave={() => setShowBadgeDetails(false)}
       >
-        {!isMobile && (
-          <AnimatePresence>
-            {showBadgeDetails && (
-              <BadgeDetail
-                handleCloseModal={() => {
-                  setShowBadgeDetails(false);
-                }}
-                isMobile={isMobile}
-                title={heading}
-                description={description}
-                videoUrl=""
-                isBadgeHidden={false}
-                image={imgSrc}
-                badgeCount={badgeCount}
-                variant="badge"
-                slug={slug}
-                id={id}
-                canBeMinted={canBeMinted}
-              />
-            )}
-          </AnimatePresence>
-        )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgSrc || '/default-avi.png'}
@@ -91,28 +69,26 @@ export const BadgePreview: React.FC<Props> = ({
         </div>
       </div>
 
-      {isMobile && (
-        <AnimatePresence>
-          {showBadgeDetails && (
-            <BadgeDetail
-              handleCloseModal={() => {
-                setShowBadgeDetails(false);
-              }}
-              isMobile={true}
-              title={heading}
-              description={description}
-              videoUrl=""
-              isBadgeHidden={false}
-              image={imgSrc}
-              badgeCount={badgeCount}
-              variant="badge"
-              slug={slug}
-              id={id}
-              canBeMinted={canBeMinted}
-            />
-          )}
-        </AnimatePresence>
-      )}
+      <AnimatePresence>
+        {showBadgeDetails && (
+          <BadgeDetail
+            handleCloseModal={() => {
+              setShowBadgeDetails(false);
+            }}
+            isMobile={isMobile}
+            title={heading}
+            description={description}
+            videoUrl=""
+            isBadgeHidden={false}
+            image={imgSrc}
+            badgeCount={badgeCount}
+            variant="badge"
+            slug={slug}
+            id={id}
+            canBeMinted={canBeMinted}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

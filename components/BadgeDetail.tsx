@@ -12,6 +12,7 @@ import { fadeAnimation, trayAnimation } from 'utils';
 import { Spinner } from './Spinner';
 import { getMessageToBeSigned, mintBadge } from 'utils/api';
 import contractInterface from 'utils/abi.json';
+import Link from 'next/link';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -83,6 +84,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
+  const [transactionId, setTransactionId] = React.useState('');
 
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
@@ -117,7 +119,8 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       const signature = await handleRequestSignature();
       if (signature) {
         handleSteps('submitting');
-        await mintBadge(signature as string, badgeId);
+        const { data } = await mintBadge(signature as string, badgeId);
+        if (data) setTransactionId(data?.transaction_id);
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong');
@@ -126,6 +129,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   };
 
   const handleMinting = (event: any) => {
+    console.log(event);
     setIsBadgeMinted(true);
     setCurrentStep('idle');
   };
@@ -146,7 +150,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:p-0 "
+      className="flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0 "
     >
       <div className="lg:hidden">
         <Button
@@ -160,18 +164,22 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       </div>
 
       <ScrollLock>
-        <div className="flex grow flex-col lg:flex-row lg:pt-6 lg:pr-4 lg:pb-4">
-          <div className="flex grow items-center justify-center">
+        <div className="flex grow flex-col lg:flex-row lg:items-center">
+          <div className="flex grow items-center justify-center lg:max-w-[45%]">
             <img
               src={image}
-              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[156px] lg:w-[110px] lg:px-[15px] lg:pt-[30px]"
+              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
               alt={title + ' badge'}
             />
           </div>
 
-          <div className="space-y-[25.5px]">
-            <div className="space-y-2 lg:mb-[48.5px]">
-              <h2 className="font-demi text-2xl leading-6 text-indigoGray-90">
+          <div
+            className={`space-y-[25.5px] lg:grow lg:space-y-[${
+              isBadgeMinted ? '40px' : '90px'
+            }]`}
+          >
+            <div className="space-y-2">
+              <h2 className="font-demi text-2xl leading-6 text-indigoGray-90 lg:text-4xl lg:leading-[43.2px]">
                 {title}
               </h2>
 
@@ -208,10 +216,12 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
             {isBadgeMinted && (
               <motion.div
-                initial={{
-                  backgroundColor: '#6366F1',
-                  boxShadow: '0px 0px 20px #4D50FF',
-                }}
+                initial={
+                  !isBadgeMinted && {
+                    backgroundColor: '#6366F1',
+                    boxShadow: '0px 0px 20px #4D50FF',
+                  }
+                }
                 animate={{
                   backgroundColor: '#fff',
                   boxShadow: '0px 0px 0px #fff',
@@ -221,7 +231,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               >
                 <div className="space-y-[2px]">
                   <motion.p
-                    initial={{ color: '#F8F9FC' }}
+                    initial={!isBadgeMinted && { color: '#F8F9FC' }}
                     animate={{
                       color: '#110F2A',
                       transition: { duration: 1.5, delay: 0.5 },
@@ -231,7 +241,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     Badge minted
                   </motion.p>
                   <motion.p
-                    initial={{ color: '#E0E7FF' }}
+                    initial={!isBadgeMinted && { color: '#E0E7FF' }}
                     animate={{
                       color: '#646B8B',
                       transition: { duration: 1.5, delay: 0.5 },
@@ -244,7 +254,12 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
                 <div className="flex space-x-2">
                   <motion.div
-                    initial={{ backgroundColor: '#F8F9FC', color: '#2081E2' }}
+                    initial={
+                      !isBadgeMinted && {
+                        backgroundColor: '#F8F9FC',
+                        color: '#2081E2',
+                      }
+                    }
                     animate={{
                       color: '#F8F9FC',
                       backgroundColor: '#2081E2',
@@ -260,8 +275,10 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     />
                   </motion.div>
 
-                  <motion.p
-                    initial={{ color: '#F8F9FC' }}
+                  <motion.a
+                    href="https://testnets.opensea.io/collection/mazury"
+                    target="_blank"
+                    initial={!isBadgeMinted && { color: '#F8F9FC' }}
                     animate={{
                       color: '#2081E2',
                       transition: { duration: 1.5, delay: 0.5 },
@@ -269,7 +286,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     className="text-indigoGray-5"
                   >
                     See on Opensea
-                  </motion.p>
+                  </motion.a>
                 </div>
               </motion.div>
             )}
@@ -302,38 +319,48 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </div>
             </div>
 
-            <div className="hidden space-x-6 lg:flex ">
-              {
+            <div className="hidden justify-between space-x-6 lg:flex">
+              <div>
+                {/* <button className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm">
+                  <div className="flex">
+                    <Image src={`/icons/eye-open.svg`} height={16} width={16} />
+                  </div>
+
+                  <span className="sr-only"></span>
+                </button> */}
+              </div>
+
+              <div className="flex space-x-3">
                 <button
                   type="button"
-                  className="flex shrink-0 cursor-pointer items-center space-x-2"
+                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
                   onClick={() => handleSearch(slug)}
                 >
                   <div className="flex">
                     <Image
-                      src={`/icons/search-violet.svg`}
+                      src={`/icons/search-black.svg`}
                       height={16}
                       width={16}
                     />
                   </div>
 
-                  <span className="font-inter text-sm font-bold leading-6 text-violet-600">
-                    {`Search using ${variant}`}
+                  <span className="font-inter text-sm font-semibold leading-[21px] text-indigoGray-90">
+                    {`Search`}
                   </span>
                 </button>
-              }
 
-              {variant == 'badge' && !isBadgeMinted && (
-                <button
-                  type="button"
-                  className="ml-auto flex max-h-[36px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6"
-                  onClick={() => handleSteps('initialise')}
-                >
-                  <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
-                    Mint NFT
-                  </span>
-                </button>
-              )}
+                {variant === 'badge' && !isBadgeMinted && (
+                  <button
+                    type="button"
+                    className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6 shadow-sm"
+                    onClick={() => handleSteps('initialise')}
+                  >
+                    <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
+                      Mint NFT
+                    </span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -346,11 +373,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex h-[609px] flex-col px-6 pb-6 sm:h-[728px] lg:h-full lg:p-6 "
+      className="flex h-[609px] flex-col px-6 pb-6 sm:h-[728px] lg:h-full lg:w-full lg:p-0 "
     >
       <div>
         <Button
-          className="m-0 !p-0"
+          className="m-0 !p-0 lg:hidden"
           variant="tertiary"
           onClick={() => handleSteps('idle')}
         >
@@ -360,16 +387,16 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       </div>
 
       <ScrollLock>
-        <div className="flex grow flex-col lg:flex-row">
-          <div className="flex grow items-center justify-center">
+        <div className="flex grow flex-col lg:flex-row lg:items-center">
+          <div className="flex grow items-center justify-center lg:max-w-[45%]">
             <img
               src={image}
-              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[156px] lg:w-[110px] lg:px-[15px] lg:pt-[30px]"
+              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
               alt={title + ' badge'}
             />
           </div>
 
-          <div className="max-w-[330px] space-y-6">
+          <div className="max-w-[530px] space-y-6 lg:grow">
             <div className="space-y-2">
               <div>
                 <h2 className="font-demi text-3xl text-indigoGray-90">
@@ -394,7 +421,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               <Button
                 variant="primary"
                 size="large"
-                className="w-full bg-violet-600"
+                className="w-full !bg-violet-600"
                 onClick={() => handleInitialiseMint(id)}
               >
                 Mint NFT
@@ -411,11 +438,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex h-[450px] flex-col space-y-6 px-6 pb-6 sm:h-[728px] lg:h-full lg:space-y-0 lg:p-6"
+      className="flex h-[450px] flex-col space-y-6 px-6 pb-6 sm:h-[728px] lg:ml-auto lg:mr-auto lg:h-full lg:w-[80%] lg:space-y-0 lg:p-6"
     >
       <div>
         <Button
-          className="m-0 !p-0"
+          className="m-0 !p-0 lg:hidden"
           variant="tertiary"
           onClick={() => handleSteps('idle')}
         >
@@ -478,6 +505,21 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div className="flex shrink-0 grow items-center justify-center lg:py-4">
             <Spinner />
           </div>
+
+          <div className="flex justify-center">
+            {transactionId && (
+              <a
+                href={`https://mumbai.polygonscan.com/tx/${transactionId}`}
+                className="flex items-center space-x-2"
+                target="_blank"
+              >
+                <SVG src={`/icons/external-link.svg`} height={16} width={16} />
+                <span className="font-sans text-sm font-semibold text-indigo-700">
+                  Track progress on polygonscan
+                </span>
+              </a>
+            )}
+          </div>
         </div>
       </ScrollLock>
     </motion.div>
@@ -492,15 +534,39 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   return (
     <div
-      className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
+      className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
       // onClick={() => isMobile && handleCloseModal()}
     >
       <Toaster />
+
+      <motion.div
+        {...fadeAnimation}
+        animate={{ opacity: 0.5 }}
+        className="inset-0 hidden h-full w-full lg:absolute lg:flex lg:bg-indigoGray-90"
+      />
+
+      <div className="hidden w-[75px] shrink-0 lg:block" />
+
       <motion.div
         {...animatedValue}
-        className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:rounded-xl lg:border lg:p-0"
+        className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
       >
-        <AnimatePresence>{steps[currentStep]}</AnimatePresence>
+        <div className="hidden lg:block">
+          <div className="space-x-2">
+            <Button
+              className="m-0 !p-0 !outline-none"
+              variant="tertiary"
+              onClick={handleCloseModal}
+            >
+              <Image src="/icons/arrow-left.svg" height={24} width={24} />
+              Back to credentials overview
+            </Button>
+          </div>
+        </div>
+
+        <div className="lg:grow">
+          <AnimatePresence>{steps[currentStep]}</AnimatePresence>
+        </div>
       </motion.div>
     </div>
   );

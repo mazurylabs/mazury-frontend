@@ -98,7 +98,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   };
 
   const handleOpenBadgeDetail = (badge: BadgeType) => {
-    if (!isMobile) return;
+    // if (!isMobile) return;
     setShowBadgeDetails(badge);
   };
 
@@ -217,7 +217,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
             className={`z-[-1] hidden lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:block lg:h-[215.5px] lg:w-[502.23px] badge-${badge.id}`}
           />
 
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {hoveredBadge?.id === badge.id && (
               <Portal container=".detail-container">
                 <BadgeDetail
@@ -236,7 +236,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                 />
               </Portal>
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
 
           <div className="flex items-center space-x-3">
             <div className="flex shrink-0">
@@ -371,7 +371,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
             className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end lg:flex lg:items-center lg:justify-center"
           >
             <AnimatePresence>
-              {showBadgeDetails && isMobile && (
+              {showBadgeDetails && (
                 <BadgeDetail
                   handleCloseModal={() => setShowBadgeDetails(null)}
                   isMobile={isMobile}
