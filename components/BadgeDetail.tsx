@@ -12,7 +12,7 @@ import { fadeAnimation, trayAnimation } from 'utils';
 import { Spinner } from './Spinner';
 import { getMessageToBeSigned, mintBadge } from 'utils/api';
 import contractInterface from 'utils/abi.json';
-import Link from 'next/link';
+import { useClickOutside } from 'hooks';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -81,6 +81,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   const [{ data: accountData }] = useAccount();
   const [_, signMessage] = useSignMessage();
   const router = useRouter();
+  const containerRef = React.useRef(null!);
 
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
@@ -93,6 +94,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       (variant === 'badge' ? 'badges=' : 'poap=') + encodeURIComponent(badge);
 
     router.push(`/search?${queryParam}`);
+  };
+
+  const handleClose = () => {
+    if (currentStep === 'signing' || currentStep === 'submitting') return;
+    handleCloseModal();
   };
 
   const handleSteps = (step: Steps) => setCurrentStep(step);
@@ -144,6 +150,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   }, [canBeMinted]);
 
   useContractEvent(contractConfig, 'Mint', handleMinting);
+  useClickOutside(containerRef, handleClose);
 
   const idle = (
     <motion.div
@@ -468,13 +475,13 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           </div>
 
           <div className="flex space-x-4">
-            <Button
+            {/* <Button
               variant="secondary"
               className="grow"
               onClick={() => handleSteps('idle')}
             >
               SKIP
-            </Button>
+            </Button> */}
             <Button variant="primary" className="grow">
               RETRY
             </Button>
@@ -550,6 +557,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       <div className="hidden w-[75px] shrink-0 lg:block" />
 
       <motion.div
+        ref={containerRef}
         {...animatedValue}
         className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
       >
@@ -558,7 +566,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             <Button
               className="m-0 !p-0 !outline-none"
               variant="tertiary"
-              onClick={handleCloseModal}
+              onClick={handleClose}
             >
               <Image src="/icons/arrow-left.svg" height={24} width={24} />
               Back to credentials overview
@@ -566,7 +574,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           </div>
         </div>
 
-        <div className="lg:grow">
+        <div className="lg:flex lg:grow lg:items-center">
           <AnimatePresence>{steps[currentStep]}</AnimatePresence>
         </div>
       </motion.div>
