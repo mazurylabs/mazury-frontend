@@ -8,7 +8,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { useSignMessage, useAccount, useContractEvent } from 'wagmi';
 
 import { Button } from './Button';
-import { fadeAnimation, trayAnimation } from 'utils';
+import { fadeAnimation, trayAnimation, truncateString } from 'utils';
 import { Spinner } from './Spinner';
 import { getMessageToBeSigned, mintBadge } from 'utils/api';
 import contractInterface from 'utils/abi.json';
@@ -135,7 +135,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   };
 
   const handleMinting = (event: any) => {
-    console.log(event);
     setIsBadgeMinted(true);
     setCurrentStep('idle');
   };
@@ -159,23 +158,29 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       exit={{ opacity: 0 }}
       className="flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0 "
     >
-      <div className="lg:hidden">
+      <div>
         <Button
-          className="m-0 !p-0"
+          className="m-0 !p-0 lg:hidden"
           variant="tertiary"
-          onClick={handleCloseModal}
+          onClick={() => handleSteps('idle')}
         >
           <span className="sr-only">Close Modal</span>
-          <Image src="/icons/x.svg" height={24} width={24} />
+          <SVG src="/icons/x.svg" height={24} width={24} />
         </Button>
       </div>
 
       <ScrollLock>
         <div className="flex grow flex-col lg:flex-row lg:items-center">
-          <div className="flex grow items-center justify-center lg:max-w-[45%]">
+          <div
+            className={`flex grow items-center justify-center lg:max-w-[45%] `}
+          >
             <img
               src={image}
-              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
+              className={` ${
+                variant === 'poap'
+                  ? 'h-[100px] w-[100px] rounded-full'
+                  : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
+              }`}
               alt={title + ' badge'}
             />
           </div>
@@ -185,9 +190,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               isBadgeMinted ? '40px' : '90px'
             }]`}
           >
-            <div className="space-y-2">
+            <div className="space-y-2 lg:max-w-[400px]">
               <h2 className="font-demi text-2xl leading-6 text-indigoGray-90 lg:text-4xl lg:leading-[43.2px]">
-                {title}
+                {truncateString(title, 19)}
               </h2>
 
               <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
@@ -199,17 +204,12 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
                 >
                   <div className="flex" role="presentation">
-                    <Image
-                      height={16}
-                      width={16}
-                      src={`/icons/trophy.svg`}
-                      alt="badge type"
-                    />
+                    <SVG height={16} width={16} src={`/icons/trophy.svg`} />
                   </div>
                   <p
                     className={`font-inter text-xs font-bold text-emerald-900`}
                   >
-                    Badge earned
+                    {variant === 'badge' ? 'Badge' : 'Poap'} earned
                   </p>
                 </div>
 
@@ -236,28 +236,30 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 }}
                 className="font-inter flex items-center justify-between rounded-lg py-1 px-2 text-xs"
               >
-                <div className="space-y-[2px]">
-                  <motion.p
-                    initial={!isBadgeMinted && { color: '#F8F9FC' }}
-                    animate={{
-                      color: '#110F2A',
-                      transition: { duration: 1.5, delay: 0.5 },
-                    }}
-                    className="text-sm text-indigoGray-5"
-                  >
-                    Badge minted
-                  </motion.p>
-                  <motion.p
-                    initial={!isBadgeMinted && { color: '#E0E7FF' }}
-                    animate={{
-                      color: '#646B8B',
-                      transition: { duration: 1.5, delay: 0.5 },
-                    }}
-                    className="font-normal text-indigo-100"
-                  >
-                    {new Date().toDateString()}
-                  </motion.p>
-                </div>
+                {variant === 'badge' && (
+                  <div className="space-y-[2px]">
+                    <motion.p
+                      initial={!isBadgeMinted && { color: '#F8F9FC' }}
+                      animate={{
+                        color: '#110F2A',
+                        transition: { duration: 1.5, delay: 0.5 },
+                      }}
+                      className="text-sm text-indigoGray-5"
+                    >
+                      You minted this badge
+                    </motion.p>
+                    <motion.p
+                      initial={!isBadgeMinted && { color: '#E0E7FF' }}
+                      animate={{
+                        color: '#646B8B',
+                        transition: { duration: 1.5, delay: 0.5 },
+                      }}
+                      className="font-normal text-indigo-100"
+                    >
+                      {new Date().toDateString()}
+                    </motion.p>
+                  </div>
+                )}
 
                 <div className="flex space-x-2">
                   <motion.div
@@ -284,7 +286,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
                   <motion.a
                     rel="noreferrer"
-                    href="https://testnets.opensea.io/collection/mazury"
+                    href={
+                      variant === 'badge'
+                        ? 'https://testnets.opensea.io/collection/mazury'
+                        : 'https://poap.gallery/event/44608'
+                    }
                     target="_blank"
                     initial={!isBadgeMinted && { color: '#F8F9FC' }}
                     animate={{
@@ -293,14 +299,14 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     }}
                     className="text-indigoGray-5"
                   >
-                    See on Opensea
+                    {variant === 'badge' ? 'See on Opensea' : 'See on Poap'}
                   </motion.a>
                 </div>
               </motion.div>
             )}
 
             <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
-              {!isBadgeMinted && (
+              {!isBadgeMinted && variant === 'badge' && (
                 <div>
                   <BadgeDetailButton
                     label="Mint NFT"
@@ -345,7 +351,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   onClick={() => handleSearch(slug)}
                 >
                   <div className="flex">
-                    <Image
+                    <SVG
                       src={`/icons/search-black.svg`}
                       height={16}
                       width={16}
@@ -390,18 +396,26 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           onClick={() => handleSteps('idle')}
         >
           <span className="sr-only">Close Modal</span>
-          <Image src="/icons/arrow-left.svg" height={24} width={24} />
+          <SVG src="/icons/arrow-left.svg" height={24} width={24} />
         </Button>
       </div>
 
       <ScrollLock>
         <div className="flex grow flex-col lg:flex-row lg:items-center">
           <div className="flex grow items-center justify-center lg:max-w-[45%]">
-            <img
-              src={image}
-              className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
-              alt={title + ' badge'}
-            />
+            <div className="relative">
+              <img
+                src={image}
+                className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
+                alt={title + ' badge'}
+              />
+
+              {variant === 'badge' && (
+                <div className="absolute bottom-0 right-0 h-[117px] w-[117px] translate-x-[30%] translate-y-[20%]">
+                  <SVG src="/badges/polygon.svg" height={117} width={117} />
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="max-w-[530px] space-y-6 lg:grow">
