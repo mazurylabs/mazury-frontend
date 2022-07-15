@@ -97,7 +97,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   };
 
   const handleClose = () => {
-    if (currentStep === 'signing' || currentStep === 'submitting') return;
+    if (currentStep === 'submitting') return;
     handleCloseModal();
   };
 
@@ -178,7 +178,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               src={image}
               className={` ${
                 variant === 'poap'
-                  ? 'h-[100px] w-[100px] rounded-full'
+                  ? 'h-[230px] w-[230px] rounded-full'
                   : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
               }`}
               alt={title + ' badge'}
@@ -192,7 +192,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           >
             <div className="space-y-2 lg:max-w-[400px]">
               <h2 className="font-demi text-2xl leading-6 text-indigoGray-90 lg:text-4xl lg:leading-[43.2px]">
-                {truncateString(title, 19)}
+                {title}
               </h2>
 
               <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
@@ -576,19 +576,21 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
         className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
       >
         <div className="hidden lg:block">
-          <div className="space-x-2">
-            <Button
-              className="m-0 !p-0 !outline-none"
-              variant="tertiary"
-              onClick={handleClose}
-            >
-              <Image src="/icons/arrow-left.svg" height={24} width={24} />
-              Back to credentials overview
-            </Button>
-          </div>
+          {currentStep !== 'submitting' && (
+            <div className="space-x-2">
+              <Button
+                className="m-0 !p-0 !outline-none"
+                variant="tertiary"
+                onClick={handleClose}
+              >
+                <Image src="/icons/arrow-left.svg" height={24} width={24} />
+                Back to credentials overview
+              </Button>
+            </div>
+          )}
         </div>
 
-        <div className="lg:flex lg:grow lg:items-center">
+        <div className="lg:flex lg:grow lg:items-center lg:items-center lg:justify-center">
           <AnimatePresence>{steps[currentStep]}</AnimatePresence>
         </div>
       </motion.div>

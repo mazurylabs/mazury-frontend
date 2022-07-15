@@ -66,6 +66,12 @@ export const BadgePreview: React.FC<Props> = ({
               people have this badge
             </span>
           )}
+
+          {issuer === 'mazury' && !canBeMinted && (
+            <span className="text-xs font-medium text-indigoGray-80">
+              {'Minted'}
+            </span>
+          )}
         </div>
       </div>
 
