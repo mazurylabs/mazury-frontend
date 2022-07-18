@@ -95,19 +95,22 @@ const Profile: React.FC<Props> = ({ address }) => {
   const { activity, error: activityError } = useActivity(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
+
   const {
     badges,
     handleFetchMore,
-    count: badgesCount,
+    // count: badgesCount,
     hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
+
+  console.log(badgeIssuer);
+
+  const { count: poapCount } = useBadges(eth_address, 'mazury');
+  const { count: badgeCount } = useBadges(eth_address, 'poap');
+
+  const credentialsCount = badgeCount || 0 + (poapCount || 0);
+
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  // const {
-  //   posts,
-  //   error: postsError,
-  //   count: postsCount,
-  // } = useMirrorPosts(eth_address);
-  // const posts = [];
 
   const { posts } = usePosts(eth_address);
 
@@ -510,7 +513,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(badgesCount)}
+                      {getMetricDisplayValue(badgeCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Badges
@@ -559,7 +562,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       className="font-serif font-bold"
                     >
-                      {getMetricDisplayValue(badgesCount)}
+                      {getMetricDisplayValue(credentialsCount)}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                       Badges
@@ -795,7 +798,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         heading={title}
                         imgSrc={image}
                         totalCount={totalBadgeCounts[badge_type.id]}
-                        badgeCount={badgesCount}
+                        badgeCount={badgeCount}
                         slug={slug}
                         issuer={issuer.name}
                         id={id}
