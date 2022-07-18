@@ -6,6 +6,7 @@ import ScrollLock from 'react-scrolllock';
 import { useRouter } from 'next/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useSignMessage, useAccount, useContractEvent } from 'wagmi';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 import { Button } from './Button';
 import { fadeAnimation, trayAnimation, truncateString } from 'utils';
@@ -85,6 +86,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
+  const [isNewlyMinted, setIsNewlyMinted] = React.useState(false);
   const [transactionId, setTransactionId] = React.useState('');
 
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
@@ -136,6 +138,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   const handleMinting = (event: any) => {
     setIsBadgeMinted(true);
+    setIsNewlyMinted(true);
     setCurrentStep('idle');
   };
 
@@ -156,8 +159,16 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0 "
+      className="relative flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
     >
+      {isNewlyMinted && (
+        <Player
+          autoplay
+          src="https://assets1.lottiefiles.com/packages/lf20_o5oeyvbk.json"
+          className="absolute top-[50%] left-[50%] z-[-1] h-[150%] w-[150%] translate-x-[-50%] translate-y-[-50%]"
+        />
+      )}
+
       <div>
         <Button
           className="m-0 !p-0 lg:hidden"
@@ -224,7 +235,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             {isBadgeMinted && (
               <motion.div
                 initial={
-                  !isBadgeMinted && {
+                  isNewlyMinted && {
                     backgroundColor: '#6366F1',
                     boxShadow: '0px 0px 20px #4D50FF',
                   }
@@ -239,7 +250,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 {variant === 'badge' && (
                   <div className="space-y-[2px]">
                     <motion.p
-                      initial={!isBadgeMinted && { color: '#F8F9FC' }}
+                      initial={isNewlyMinted && { color: '#F8F9FC' }}
                       animate={{
                         color: '#110F2A',
                         transition: { duration: 1.5, delay: 0.5 },
@@ -249,7 +260,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                       You minted this badge
                     </motion.p>
                     <motion.p
-                      initial={!isBadgeMinted && { color: '#E0E7FF' }}
+                      initial={isNewlyMinted && { color: '#E0E7FF' }}
                       animate={{
                         color: '#646B8B',
                         transition: { duration: 1.5, delay: 0.5 },
@@ -264,7 +275,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 <div className="flex space-x-2">
                   <motion.div
                     initial={
-                      !isBadgeMinted && {
+                      isNewlyMinted && {
                         backgroundColor: '#F8F9FC',
                         color: '#2081E2',
                       }
@@ -292,7 +303,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                         : 'https://poap.gallery/event/44608'
                     }
                     target="_blank"
-                    initial={!isBadgeMinted && { color: '#F8F9FC' }}
+                    initial={isNewlyMinted && { color: '#F8F9FC' }}
                     animate={{
                       color: '#2081E2',
                       transition: { duration: 1.5, delay: 0.5 },
