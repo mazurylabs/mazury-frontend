@@ -14,6 +14,7 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.4.7",
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/react-dom": "^18.0.4",
