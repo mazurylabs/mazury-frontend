@@ -763,7 +763,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   ref={badgesRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
-                  Badges
+                  Credentials
                 </h3>
                 <div className="flex gap-[24px]">
                   <Pill
@@ -783,7 +783,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
+              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 2xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
                     const { badge_type, id, minted, owner } = badge;
