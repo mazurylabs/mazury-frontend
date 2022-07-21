@@ -38,6 +38,36 @@ export const getMessageToBeSigned: (
   }
 };
 
+export const mintBadge: (
+  signature: string,
+  badgeId: string
+) => Promise<APIResponse<{ transaction_id: string }>> = async (
+  signature,
+  badgeId
+) => {
+  try {
+    const res = await api.patch(
+      `/badges/${badgeId}/mintnft/`,
+      {},
+      {
+        headers: {
+          'ETH-AUTH': signature,
+        },
+      }
+    );
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
 export const verifyEmail: (
   address: string,
   signature: string
