@@ -173,7 +173,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
         <Button
           className="m-0 !p-0 lg:hidden"
           variant="tertiary"
-          onClick={() => handleSteps('idle')}
+          onClick={handleClose}
         >
           <span className="sr-only">Close Modal</span>
           <SVG src="/icons/x.svg" height={24} width={24} />
