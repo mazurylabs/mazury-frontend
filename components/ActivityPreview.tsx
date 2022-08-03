@@ -106,7 +106,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/message-circle coloured.svg"
+                src="/icons/referral black.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
@@ -178,7 +178,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/message-circle coloured.svg"
+                src="/icons/referral black.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
