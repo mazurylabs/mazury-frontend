@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { userSlice } from 'selectors';
 import { useConnect } from 'wagmi';
 
 // Redirects to '/' if the user has not signed in
 export const useProtectedRoute = () => {
   const router = useRouter();
-  const [{ data: connectData, loading: connectLoading }] = useConnect();
+  const { isAuthenticated } = useSelector(userSlice);
 
   useEffect(() => {
-    if (!connectLoading && !connectData.connected) {
+    if (!isAuthenticated) {
       router.push('/');
     }
-  }, [connectData, connectLoading, router]);
+  }, [isAuthenticated, router]);
 };
