@@ -1,6 +1,6 @@
+import { axios } from '@/lib/axios';
 import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { api } from 'utils';
 import type { ListResponse, Badge, BadgeIssuer } from '../types';
 
 export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
@@ -22,7 +22,7 @@ export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
   useEffect(() => {
     const fetchMoreBadges = async () => {
       if (fetchMore && nextEndpoint) {
-        const { data } = await api.get(nextEndpoint);
+        const { data } = await axios.get(nextEndpoint);
 
         if (data?.results.length !== 0) {
           setBadges((badges) => badges.concat(data?.results));

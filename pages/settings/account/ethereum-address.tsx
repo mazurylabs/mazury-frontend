@@ -6,28 +6,28 @@ import { useAccount } from 'wagmi';
 import { Button, SettingsLayout } from 'components';
 import { getProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type AddressArray = Record<'username' | 'address', string>[];
 
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
 
-  const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
+  const { profile } = useSelector(userSlice);
   const [addresses, setAddresses] = useState<AddressArray>([]);
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (accountData?.address) {
-      getProfile(accountData?.address).then(({ data }) => {
-        let dat = {
-          username: data?.username as string,
-          address: data?.eth_address as string,
-        };
+    if (profile) {
+      let data = {
+        username: profile?.username as string,
+        address: profile?.eth_address as string,
+      };
 
-        setAddresses([dat]);
-      });
+      setAddresses([data]);
     }
-  }, [accountData?.address]);
+  }, [profile]);
 
   return (
     <SettingsLayout

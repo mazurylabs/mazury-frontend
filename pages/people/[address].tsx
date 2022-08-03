@@ -101,6 +101,12 @@ const Profile: React.FC<Props> = ({ address }) => {
     count: badgesCount,
     hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
+
+  const { count: poapCount } = useBadges(eth_address, 'mazury');
+  const { count: badgeCount } = useBadges(eth_address, 'poap');
+
+  const credentialsCount = badgeCount || 0 + (poapCount || 0);
+
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
   // const {
   //   posts,

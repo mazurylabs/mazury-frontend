@@ -1,13 +1,16 @@
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { SocialButton } from 'components';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { colors } from 'utils';
-import { isOnboarded } from 'utils/api';
-import { Connector, useAccount, useConnect } from 'wagmi';
+
+import { Connector, useConnect } from 'wagmi';
+import { SignInModal } from './SignInModal';
+import { setAddress } from '@/slices/user';
 
 export const SignIn = () => {
   const [{ data }, connect] = useConnect();
-  const router = useRouter();
+  const dispatch = useDispatch();
+  const [showSignInModal, setShowSigninModal] = React.useState(false);
 
   const metamaskConnector = data.connectors.find(
     (connector) => connector.id === 'injected'
@@ -16,31 +19,32 @@ export const SignIn = () => {
     (connector) => connector.id === 'walletConnect'
   );
 
-  const showErrorPopup = () =>
+  const showErrorPopup = () => {
     alert(
       'There was an error while trying to connect your wallet. Please try again later.'
     );
+  };
+
+  const handleCloseSignInModal = () => setShowSigninModal(false);
 
   const handleConnect = async (connector: Connector | undefined) => {
     if (!connector) {
       return showErrorPopup();
     }
     const res = await connect(connector);
+
     if (!res || res.error) {
       return showErrorPopup();
     }
 
-    const address = res.data.account;
-    if (!address) {
-      return showErrorPopup();
-    }
+    setShowSigninModal(true);
 
-    // check if user is onboarded
-    const { data: onboarded } = await isOnboarded(address);
-    if (!onboarded) {
-      router.push('/onboarding');
+    const address = res.data.account;
+
+    if (address) {
+      dispatch(setAddress(address));
     } else {
-      router.push(`/people/${address}`);
+      showErrorPopup();
     }
   };
 
@@ -107,6 +111,8 @@ export const SignIn = () => {
           Metamask
         </a>
       </p>
+
+      {showSignInModal && <SignInModal onClose={handleCloseSignInModal} />}
     </div>
   );
 };

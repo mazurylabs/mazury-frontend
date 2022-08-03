@@ -1,6 +1,6 @@
+import { axios } from 'lib/axios';
 import * as React from 'react';
 
-import { api } from 'utils';
 import { Post } from 'types';
 
 export const usePosts = (address?: string) => {
@@ -12,9 +12,7 @@ export const usePosts = (address?: string) => {
   React.useEffect(() => {
     const getMirrorPost = async () => {
       try {
-        const { data } = await api.get(
-          `${baseUrl}writing/mirror/${address || ''}`
-        );
+        const { data } = await axios.get(`/writing/mirror/${address || ''}`);
         setMirror(data);
       } catch (error) {
         console.log(error);
@@ -27,7 +25,7 @@ export const usePosts = (address?: string) => {
   React.useEffect(() => {
     const getGmPost = async () => {
       try {
-        const { data } = await api.get(`${baseUrl}writing/gm/${address || ''}`);
+        const { data } = await axios.get(`/writing/gm/${address || ''}`);
         setGm(data);
       } catch (error) {
         console.log(error);

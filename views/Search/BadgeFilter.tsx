@@ -20,13 +20,8 @@ import {
   FilterType,
   ValueOf,
 } from 'types';
-import {
-  api,
-  commify,
-  trayAnimation,
-  fadeAnimation,
-  truncateString,
-} from 'utils';
+import { commify, trayAnimation, fadeAnimation, truncateString } from 'utils';
+import { axios } from 'lib/axios';
 
 interface BadgeFilterProps {
   selectedBadges: string[];
@@ -85,7 +80,7 @@ export const BadgeFilter = ({
       const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
       const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
 
-      const result = await api.get(
+      const result = await axios.get(
         nextValue ? searchEndpoint : badgeTypesEndpoint
       );
 
@@ -109,7 +104,7 @@ export const BadgeFilter = ({
         let next =
           cursor || searchTerm ? cursor : nextBadgeType?.split('.com/')[1];
 
-        const result = await api.get(next);
+        const result = await axios.get(next);
 
         const newCursor = result.data.next?.split('.com/')[1];
 

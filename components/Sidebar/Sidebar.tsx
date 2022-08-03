@@ -1,17 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, ReactNode, useContext, useState } from 'react';
-import { HomeIcon, SearchIcon } from 'components';
+import * as React from 'react';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
-import { colors } from 'utils';
-import { SlidersIcon } from 'components/Icons';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
 import Image from 'next/image';
-import { SignIn } from 'views/SignIn';
-import { useProfile } from 'hooks';
-import { getMessageToBeSigned, verifyEmail } from 'utils/api';
-import { WalletRequestModal } from 'components/WalletRequestModal';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { userSlice } from '@/selectors';
+import { logout } from '@/slices/user';
+import { SignIn } from '@/views/SignIn';
+import { colors } from '@/utils';
+import { verifyEmail } from '@/utils/api';
+import { WalletRequestModal } from '@/components/WalletRequestModal';
+import { SlidersIcon } from '@/components/Icons';
+import { HomeIcon, SearchIcon } from '@/components';
+import { useAccount } from 'wagmi';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -20,28 +23,24 @@ const iconColors = {
 
 type Steps = 'idle' | 'active' | 'error';
 
-export const Sidebar: FC = () => {
-  const [currentStep, setCurrentStep] = useState<Steps>('idle');
-  const { isOpen, signInOpen, setSignInOpen } = useContext(SidebarContext);
+export const Sidebar: React.FC = () => {
+  const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [_, disconnect] = useAccount();
   const { pathname } = router;
-  const [{ data: accountData }, disconnect] = useAccount();
-  const { profile } = useProfile(accountData?.address);
-  const [_, signMessage] = useSignMessage();
-
-  const isSignedIn = !!accountData;
+  const { profile, address, isAuthenticated } = useSelector(userSlice);
+  const { isOpen, signInOpen, setSignInOpen } =
+    React.useContext(SidebarContext);
 
   const openSignIn = () => setSignInOpen(true);
   const closeSignIn = () => setSignInOpen(false);
 
-  const logout = () => disconnect();
-
   const handleEmailVerification = async () => {
     setCurrentStep('active');
-    const signature = await handleRequestSignature();
 
-    if (signature && accountData?.address) {
-      const { error } = await verifyEmail(accountData?.address, signature);
+    if (address) {
+      const { error } = await verifyEmail(address);
       if (!error) {
         setCurrentStep('idle');
       } else {
@@ -50,30 +49,9 @@ export const Sidebar: FC = () => {
     }
   };
 
-  const handleRequestSignature = async () => {
-    if (!accountData?.address) {
-      alert('Please connect your wallet first');
-      return;
-    }
-
-    const { data: messageToBeSigned, error: messageSignError } =
-      await getMessageToBeSigned(accountData?.address);
-
-    if (!messageToBeSigned || messageSignError) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await signMessage({
-      message: messageToBeSigned,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
+  const handleLogOut = () => {
+    disconnect();
+    dispatch(logout());
   };
 
   return (
@@ -106,7 +84,7 @@ export const Sidebar: FC = () => {
               className="my-8 justify-start hover:cursor-pointer"
               onClick={closeSignIn}
             />
-            {isOpen && <SignIn />}
+            {true && <SignIn />}
           </div>
         ) : (
           <>
@@ -149,7 +127,7 @@ export const Sidebar: FC = () => {
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
               {isOpen &&
-                isSignedIn &&
+                isAuthenticated &&
                 profile?.email &&
                 !profile?.email_verified && (
                   <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
@@ -179,11 +157,11 @@ export const Sidebar: FC = () => {
 
               <Divider />
 
-              {isSignedIn ? (
+              {isAuthenticated ? (
                 <>
                   {/* // Profile button */}
                   <SidebarItem
-                    href={accountData ? `/people/${accountData?.address}` : '/'}
+                    href={`/people/${address}`}
                     label="Profile"
                     icon={
                       <img
@@ -215,7 +193,7 @@ export const Sidebar: FC = () => {
                 </a>
               )}
 
-              {isSignedIn && (
+              {isAuthenticated && (
                 <SidebarItem
                   href="/settings"
                   label="Settings"
@@ -234,9 +212,9 @@ export const Sidebar: FC = () => {
                 />
               )}
 
-              {isSignedIn && (
+              {isAuthenticated && (
                 <a
-                  onClick={logout}
+                  onClick={handleLogOut}
                   className={`mt-4 flex h-[40px] hover:cursor-pointer ${
                     isOpen && 'w-full'
                   } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
@@ -266,14 +244,14 @@ export const Sidebar: FC = () => {
 interface SidebarItemProps {
   label: string;
   // Expecting icon to be a ReactNode since we want it to be an SVG wrapped w/ JSX that should accept color as a prop
-  icon: ReactNode;
+  icon: React.ReactNode;
   href: string;
   isOpen: boolean;
   className?: string;
   active?: boolean;
 }
 
-const SidebarItem: FC<SidebarItemProps> = ({
+const SidebarItem: React.FC<SidebarItemProps> = ({
   label,
   icon,
   href,
@@ -309,6 +287,6 @@ interface DividerProps {
   className?: string;
 }
 
-const Divider: FC<DividerProps> = ({ className }) => {
+const Divider: React.FC<DividerProps> = ({ className }) => {
   return <hr className={`border border-indigoGray-20 ${className}`} />;
 };
