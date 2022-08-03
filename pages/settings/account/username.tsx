@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
+import { updateProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
@@ -44,7 +43,7 @@ const UsernamePage: NextPage = () => {
   };
 
   const onSubmit = async (user: User) => {
-    setCurrentStep('active');
+    // setCurrentStep('active');
     await handleRequestSignature(user);
   };
 
