@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
@@ -19,6 +19,12 @@ const EmailPage: NextPage = () => {
   const [accountEmail, setAccountEmail] = useState('');
   const [email, setEmail] = useState('');
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (profile) {
+      setEmail(profile?.email);
+    }
+  }, [profile]);
 
   const onEmailChange = (value: string) => {
     setEmail(value);
