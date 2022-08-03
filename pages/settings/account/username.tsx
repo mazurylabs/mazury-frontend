@@ -4,6 +4,8 @@ import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { getMessageToBeSigned, getProfile, updateProfile } from 'utils/api';
 import { useAccount, useSignMessage } from 'wagmi';
 import { useProtectedRoute } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type Steps = 'idle' | 'active' | 'error';
 
@@ -17,22 +19,20 @@ const UsernamePage: NextPage = () => {
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
-  const [_, signMessage] = useSignMessage();
-  const [{ data: accountData }] = useAccount({ fetchEns: true });
+
+  const { profile, address } = useSelector(userSlice);
+  // const [{ data: accountData }] = useAccount({ fetchEns: true });
   const [username, setUsername] = useState('');
   const [full_name, setFullname] = useState('');
   const [disabled, setDisabled] = useState(true);
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (accountData?.address) {
-      getProfile(accountData?.address).then(({ data }) => {
-        setFullname(data?.full_name as string);
-        setUsername(data?.username as string);
-        console.log(data);
-      });
+    if (profile) {
+      setFullname(profile?.full_name as string);
+      setUsername(profile?.username as string);
     }
-  }, [accountData?.address]);
+  }, [profile]);
 
   const onUsernameChange = (value: string) => {
     setUsername(value);
@@ -49,30 +49,13 @@ const UsernamePage: NextPage = () => {
   };
 
   const handleRequestSignature = async (user: User) => {
-    if (!accountData?.address) {
+    if (!address) {
       return alert('Please connect your wallet first');
     }
 
-    const { data: messageToBeSigned, error: messageSignError } =
-      await getMessageToBeSigned(accountData?.address);
-
-    if (!messageToBeSigned || messageSignError) {
-      return alert(
-        'Couldnt get the message to be signed. Please try again later.'
-      );
-    }
-
-    const { data: signature, error: signatureError } = await signMessage({
-      message: messageToBeSigned,
-    });
-
-    if (!signature || signatureError) {
-      return alert('Error signing message');
-    }
-
     const { error: updateProfileError, data } = await updateProfile(
-      accountData?.address,
-      signature,
+      address,
+      '',
       user
     );
 

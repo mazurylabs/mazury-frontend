@@ -1,22 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
-import { useAccount, useSignMessage } from 'wagmi';
-import {
-  Button,
-  Input,
-  Modal,
-  SettingsLayout,
-  Spinner,
-  WalletRequestModal,
-} from 'components';
-import {
-  getMessageToBeSigned,
-  getProfile,
-  updateProfile,
-  verifyEmail,
-} from 'utils/api';
+import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
+import { updateProfile, verifyEmail } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
+import { useSelector } from 'react-redux';
+
+import { userSlice } from '@/selectors';
 
 type Steps = 'idle' | 'active' | 'error';
 
@@ -25,23 +15,10 @@ const EmailPage: NextPage = () => {
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
-  const [_, signMessage] = useSignMessage();
-  const [{ data: accountData }] = useAccount();
+  const { profile, address } = useSelector(userSlice);
   const [accountEmail, setAccountEmail] = useState('');
   const [email, setEmail] = useState('');
-  const [emailVerified, setEmailVerified] = useState(false);
   const [disabled, setDisabled] = useState(true);
-
-  // Prefill form with exisiting email
-  useEffect(() => {
-    if (accountData?.address) {
-      getProfile(accountData?.address).then((res) => {
-        setEmail(res.data?.email as string);
-        setAccountEmail(res.data?.email as string);
-        setEmailVerified(res.data?.email_verified as boolean);
-      });
-    }
-  }, [accountData?.address]);
 
   const onEmailChange = (value: string) => {
     setEmail(value);
@@ -49,16 +26,15 @@ const EmailPage: NextPage = () => {
   };
 
   const onSubmit = async (email: string) => {
-    setCurrentStep('active');
+    // setCurrentStep('active');
     await handleRetry(email);
   };
 
   const handleEmailVerification = async () => {
     setCurrentStep('active');
-    const signature = await handleRequestSignature();
 
-    if (signature && accountData?.address) {
-      const { error } = await verifyEmail(accountData?.address, signature);
+    if (address) {
+      const { error } = await verifyEmail(address);
       if (!error) {
         setCurrentStep('idle');
       } else {
@@ -67,43 +43,15 @@ const EmailPage: NextPage = () => {
     }
   };
 
-  const handleRequestSignature = async () => {
-    if (!accountData?.address) {
-      alert('Please connect your wallet first');
-      return;
-    }
-
-    const { data: messageToBeSigned, error: messageSignError } =
-      await getMessageToBeSigned(accountData?.address);
-
-    if (!messageToBeSigned || messageSignError) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await signMessage({
-      message: messageToBeSigned,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
-  };
-
   const handleRetry = async (email: string) => {
-    if (accountData?.address) {
-      const signature = await handleRequestSignature();
-
+    if (address) {
       const formData = {
         email,
       };
 
       const { error: updateProfileError, data } = await updateProfile(
-        accountData?.address,
-        signature as string,
+        address,
+        '',
         formData
       );
 
@@ -132,7 +80,7 @@ const EmailPage: NextPage = () => {
             <h2>Email</h2>
           </div>
 
-          {accountEmail && !emailVerified && (
+          {accountEmail && !profile?.email_verified && (
             <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
               <div>
                 <h3 className="font-bold">Confirmation</h3>

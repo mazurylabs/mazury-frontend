@@ -48,8 +48,8 @@ const GithubPage: NextPage = () => {
     window.open(githubPopupLink, '_blank');
   };
 
-  const disconnectGithub = async (signature: string) => {
-    const { error } = await updateProfile(user.address, signature, {
+  const disconnectGithub = async () => {
+    const { error } = await updateProfile(user.address, '', {
       github: '',
     });
 
@@ -62,29 +62,8 @@ const GithubPage: NextPage = () => {
     });
   };
 
-  const getSignature = async (funct: any) => {
-    const { data, error } = await getMessageToBeSigned(user.address!);
-
-    if (!data || error) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await funct({
-      message: data,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
-  };
-
   const handleDisconnectGithub = async (messageSigner: any = signMessage) => {
-    const signature = await getSignature(messageSigner);
-    disconnectGithub(signature);
+    disconnectGithub();
   };
 
   return (

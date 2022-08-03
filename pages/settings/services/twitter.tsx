@@ -1,16 +1,10 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAccount, useSignMessage } from 'wagmi';
 
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import {
-  getMessageToBeSigned,
-  getProfile,
-  updateProfile,
-  verifyTweet,
-} from 'utils/api';
+import { getProfile, updateProfile, verifyTweet } from 'utils/api';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { useProtectedRoute } from 'hooks';
 
@@ -55,8 +49,8 @@ const TwitterPage: NextPage = () => {
     setCurrentStep('active');
   };
 
-  const disconnectTwitter = async (signature: string) => {
-    const { error } = await updateProfile(user.address, signature, {
+  const disconnectTwitter = async () => {
+    const { error } = await updateProfile(user.address, '', {
       twitter: '',
     });
 
@@ -69,15 +63,8 @@ const TwitterPage: NextPage = () => {
     });
   };
 
-  const submitForVerification = async (signature: string) => {
-    if (!signature) {
-      return alert('Error signing message');
-    }
-
-    const { data, error } = await verifyTweet(
-      url as string,
-      signature as string
-    );
+  const submitForVerification = async () => {
+    const { data, error } = await verifyTweet(url as string);
 
     if (error) {
       setCurrentStep('error');
@@ -89,34 +76,12 @@ const TwitterPage: NextPage = () => {
     }
   };
 
-  const getSignature = async (messageSigner: any) => {
-    const { data, error } = await getMessageToBeSigned(user.address!);
-
-    if (!data || error) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await messageSigner({
-      message: data,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
-  };
-
   const handleConnectTwitter = async (messageSigner: any = signMessage) => {
-    const signature = await getSignature(messageSigner);
-    submitForVerification(signature);
+    submitForVerification();
   };
 
   const handleDisconnectTwitter = async (messageSigner: any = signMessage) => {
-    const signature = await getSignature(messageSigner);
-    disconnectTwitter(signature);
+    disconnectTwitter();
   };
 
   const ActiveStep = () => {
