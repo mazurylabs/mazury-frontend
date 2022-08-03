@@ -450,7 +450,7 @@ const HistorySection: VFC = () => {
     <div className="flex flex-col items-start">
       <div className="flex">
         <Image
-          src="/icons/history-alt.svg"
+          src="/icons/previous.svg"
           width="16px"
           height="16px"
           alt="History icon"

@@ -44,10 +44,10 @@ const getClassName = (color: ColorName = 'black', active: boolean = false) => {
 };
 
 const labelToIconName = {
-  Activity: 'coffee',
+  Activity: 'activity',
   Badges: 'award',
-  Referrals: 'message-circle',
-  Writing: 'edit',
+  Referrals: 'referral',
+  Writing: 'writing',
   DAOs: 'zap',
   Account: 'user',
   Services: 'cloud',
@@ -68,8 +68,8 @@ export const Pill: React.FC<PillProps> = ({
     >
       {isNav && (
         <Image
-          src={`/icons/${labelToIconName[label as Labels]} ${
-            active ? 'coloured' : 'black'
+          src={`/icons/${labelToIconName[label as Labels]}-${
+            active ? 'colored' : 'black'
           }.svg`}
           width={'16px'}
           height={'16px'}

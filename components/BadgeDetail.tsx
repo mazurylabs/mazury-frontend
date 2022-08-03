@@ -177,7 +177,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <div>
                     <BadgeDetailButton
                       label="Mint NFT (Coming soon)"
-                      icon="jackhammer"
+                      icon="mint"
                       handleClick={() => {}}
                       disabled={true}
                     />
@@ -194,7 +194,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <div>
                     <BadgeDetailButton
                       label="Hide on my profile"
-                      icon="eye-slash"
+                      icon="hide"
                       handleClick={() => {}}
                     />
                   </div>
