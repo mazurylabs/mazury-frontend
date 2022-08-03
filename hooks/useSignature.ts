@@ -14,7 +14,7 @@ export const useSignature = (address: string) => {
     );
 
     const { data: signature, error: signatureError } = await signMessage({
-      message,
+      message: message as any,
     });
 
     if (!signature || signatureError) {

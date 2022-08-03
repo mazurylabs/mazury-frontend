@@ -18,8 +18,8 @@ import { Pill } from './Pill';
 import { Toggle } from './Toggle';
 import { BadgeDetail } from './BadgeDetail';
 import { BadgeType } from '../types';
-import { api } from 'utils';
 import { Portal } from './Portal';
+import { axios } from 'lib/axios';
 
 const skeletonArray = new Array(5).fill(true);
 
@@ -139,7 +139,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
       const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
       const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
 
-      const result = await api.get(
+      const result = await axios.get(
         nextValue ? searchEndpoint : badgeTypesEndpoint
       );
 
@@ -169,7 +169,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
         let next =
           refresh || searchTerm ? refresh : nextBadgeType?.split('.com/')[1];
 
-        const result = await api.get(next);
+        const result = await axios.get(next);
 
         const nextRefreshLink = result.data.next?.split('.com/')[1];
 
