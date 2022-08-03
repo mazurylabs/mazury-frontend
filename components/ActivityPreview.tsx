@@ -52,7 +52,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/thumbs-up.svg"
+                src="/icons/award-pink.svg"
                 width="16px"
                 height="16px"
                 alt="Badge icon"
@@ -106,7 +106,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/referral black.svg"
+                src="/icons/referral-colored.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
@@ -178,7 +178,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/referral black.svg"
+                src="/icons/referral-colored.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
@@ -239,7 +239,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/fire.svg"
+                src="/icons/fire-indigo.svg"
                 width="16px"
                 height="16px"
                 alt="Event icon"

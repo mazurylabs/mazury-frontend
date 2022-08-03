@@ -68,8 +68,8 @@ export const Pill: React.FC<PillProps> = ({
     >
       {isNav && (
         <Image
-          src={`/icons/${labelToIconName[label as Labels]} ${
-            active ? 'coloured' : 'black'
+          src={`/icons/${labelToIconName[label as Labels]}-${
+            active ? 'colored' : 'black'
           }.svg`}
           width={'16px'}
           height={'16px'}
