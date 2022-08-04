@@ -37,7 +37,7 @@ export const Sidebar: React.FC = () => {
   const closeSignIn = () => setSignInOpen(false);
 
   const handleEmailVerification = async () => {
-    setCurrentStep('active');
+    // setCurrentStep('active');
 
     if (address) {
       const { error } = await verifyEmail(address);
