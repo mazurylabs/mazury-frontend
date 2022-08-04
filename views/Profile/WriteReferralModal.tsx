@@ -90,7 +90,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
       alert('Please connect your wallet first.');
       return setStatus('error');
     }
-    setStatus('signing');
+    // setStatus('signing');
 
     const skills = tags.map((tag) => tag.value);
     const { error } = await createReferral(
@@ -206,7 +206,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
           </>
         )}
 
-        {status === 'signing' && (
+        {/* {status === 'signing' && (
           <div className="flex flex-col">
             <h3 className="font-demi text-3xl text-indigoGray-90">
               Sign with wallet
@@ -228,7 +228,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
               </Button>
             </div>
           </div>
-        )}
+        )} */}
 
         {status === 'success' && (
           <div className="flex flex-col">
