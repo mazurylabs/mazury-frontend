@@ -1,32 +1,18 @@
+import { userSlice } from '@/selectors';
 import { Button, Input, Modal, Spinner } from 'components';
 import { TwitterModalContext } from 'contexts';
 import Image from 'next/image';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { getMessageToBeSigned, verifyTweet } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
 
 interface ContentComponentProps {
   onButtonClick?: () => void;
 }
 
 const PasteTweetStep: FC<ContentComponentProps> = () => {
-  const [{ data: accountData }] = useAccount();
-  const { goToNextStep, setMessageToBeSigned, tweetURL, setTweetURL } =
+  const { goToNextStep, tweetURL, setTweetURL } =
     useContext(TwitterModalContext);
-
-  const address = accountData?.address;
-
-  const proceedToSigning = async () => {
-    const { data: messageToBeSigned, error: messageToBeSignedError } =
-      await getMessageToBeSigned(address!);
-    if (messageToBeSignedError || !messageToBeSigned) {
-      return alert(
-        'Couldnt get the message to be signed. Please try again later.'
-      );
-    }
-    setMessageToBeSigned(messageToBeSigned);
-    goToNextStep();
-  };
 
   return (
     <>
@@ -47,8 +33,8 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
 
       <div className="mt-4 flex w-full justify-around gap-4">
         <Button variant="secondary">SKIP</Button>
-        <Button onClick={proceedToSigning} variant="primary">
-          RETRY
+        <Button onClick={goToNextStep} variant="primary">
+          Continue
         </Button>
       </div>
     </>
@@ -56,21 +42,11 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
 };
 
 const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
-  const {
-    goToNextStep,
-    messageToBeSigned,
-    signature,
-    setSignature,
-    tweetURL,
-    setCurrentStep,
-  } = useContext(TwitterModalContext);
-  const [_, signMessage] = useSignMessage();
+  const { goToNextStep, tweetURL, setCurrentStep } =
+    useContext(TwitterModalContext);
 
   const submitForVerification = useCallback(async () => {
-    if (!signature) {
-      return alert('Error signing message');
-    }
-    const { data, error } = await verifyTweet(tweetURL as string);
+    const { error } = await verifyTweet(tweetURL as string);
 
     if (error) {
       // In case of an error go to the next step i.e. the error screen
@@ -79,23 +55,11 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
       // In case of success skip the next screen
       setCurrentStep((currentStep) => currentStep + 2);
     }
-  }, [signature, goToNextStep, tweetURL, setCurrentStep]);
+  }, [goToNextStep, tweetURL, setCurrentStep]);
 
   const requestSignature = useCallback(async () => {
-    if (!messageToBeSigned) {
-      return alert(
-        'Couldnt get the message to be signed. Please try again later.'
-      );
-    }
-    const { data: signature, error: signatureError } = await signMessage!({
-      message: messageToBeSigned as string,
-    });
-    if (!signature || signatureError) {
-      return alert('Error signing message');
-    }
-    setSignature(signature);
     submitForVerification();
-  }, [messageToBeSigned, signMessage, setSignature, submitForVerification]);
+  }, [submitForVerification]);
 
   useEffect(() => {
     requestSignature();

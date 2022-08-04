@@ -1,17 +1,11 @@
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useAccount, useSignMessage } from 'wagmi';
 
-import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import {
-  getMessageToBeSigned,
-  getProfile,
-  updateProfile,
-  verifyTweet,
-} from 'utils/api';
-import { getTwitterConnectionPopupLink } from 'utils';
+import { Button, SettingsLayout } from 'components';
+import { updateProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type User = Record<'github' | 'address', string>;
 type Steps = 'idle' | 'success';
@@ -20,8 +14,7 @@ const GithubPage: NextPage = () => {
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
-  const [{ data: accountData }] = useAccount();
-  const [_, signMessage] = useSignMessage();
+  const { address, profile } = useSelector(userSlice);
 
   const [user, setUser] = useState<User>({
     github: '',
@@ -30,17 +23,15 @@ const GithubPage: NextPage = () => {
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (accountData?.address && !user.address) {
-      getProfile(accountData?.address).then(({ data }) => {
-        setUser({
-          address: data?.eth_address as string,
-          github: data?.github as string,
-        });
+    if (address && !user.address) {
+      setUser({
+        address: profile?.eth_address as string,
+        github: profile?.github as string,
       });
 
       localStorage.removeItem('gh-route');
     }
-  }, [accountData?.address, user.address]);
+  }, [address, user.address, profile?.eth_address, profile?.github]);
 
   const handleVerifyGithub = async () => {
     const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
@@ -62,7 +53,7 @@ const GithubPage: NextPage = () => {
     });
   };
 
-  const handleDisconnectGithub = async (messageSigner: any = signMessage) => {
+  const handleDisconnectGithub = async () => {
     disconnectGithub();
   };
 

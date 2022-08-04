@@ -20,7 +20,6 @@ const UsernamePage: NextPage = () => {
   const [isNewChange, setIsNewChange] = useState(false);
 
   const { profile, address } = useSelector(userSlice);
-  // const [{ data: accountData }] = useAccount({ fetchEns: true });
   const [username, setUsername] = useState('');
   const [full_name, setFullname] = useState('');
   const [disabled, setDisabled] = useState(true);

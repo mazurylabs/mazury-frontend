@@ -189,19 +189,11 @@ export const createReferral: (
   authorAddress
 ) => {
   try {
-    const res = await axios.post(
-      '/referrals/',
-      {
-        receiver: receiverAddress,
-        content,
-        skills,
-      },
-      {
-        headers: {
-          'ETH-AUTH': authorSignature,
-        },
-      }
-    );
+    const res = await axios.post('/referrals/', {
+      receiver: receiverAddress,
+      content,
+      skills,
+    });
     // Revalidate queries
     mutate?.(`/referrals?receiver=${receiverAddress}`);
     mutate?.(`/activity?user=${receiverAddress}`);
@@ -243,25 +235,16 @@ export const verifyTweet: (tweetURL: string) => Promise<APIResponse> = async (
 };
 
 export const connectGithub: (
-  githubCode: string,
-  signature: string
-) => Promise<APIResponse> = async (githubCode, signature) => {
+  githubCode: string
+) => Promise<APIResponse> = async (githubCode) => {
   try {
-    if (!githubCode || !signature) {
+    if (!githubCode) {
       return {
         data: null,
-        error: new Error('Missing githubCode or signature'),
+        error: new Error('Missing'),
       };
     }
-    const res = await axios.post(
-      `/auth/github?github_code=${githubCode}`,
-      {},
-      {
-        headers: {
-          'ETH-AUTH': signature,
-        },
-      }
-    );
+    const res = await axios.post(`/auth/github?github_code=${githubCode}`, {});
     return {
       data: res.data,
       error: null,

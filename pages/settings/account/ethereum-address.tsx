@@ -1,10 +1,7 @@
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useAccount } from 'wagmi';
 
 import { Button, SettingsLayout } from 'components';
-import { getProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';

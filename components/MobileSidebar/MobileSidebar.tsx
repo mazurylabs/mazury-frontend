@@ -1,8 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { useProfile } from 'hooks';
+import { userSlice } from '@/selectors';
+import { logout } from '@/slices/user';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useAccount } from 'wagmi';
 
 interface MobileSidebarProps {
@@ -10,13 +13,19 @@ interface MobileSidebarProps {
   // TODO: Implement active state
 }
 
-export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
-  const [{ data: accountData }, disconnect] = useAccount();
-  const { profile } = useProfile(accountData?.address);
+export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
+  const [_, disconnect] = useAccount();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { address, profile, isAuthenticated } = useSelector(userSlice);
 
-  const isSignedIn = !!accountData;
+  // const isSignedIn = !!accountData;
 
-  const logout = () => disconnect();
+  const handleLogOut = () => {
+    disconnect();
+    dispatch(logout());
+    router.push('/');
+  };
 
   return (
     <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden">
@@ -44,9 +53,9 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({ children }) => {
             </a>
           </Link>
 
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <>
-              <Link href={`/people/${accountData?.address}`} passHref>
+              <Link href={`/people/${address}`} passHref>
                 <a>
                   <img
                     src={profile?.avatar || '/profile-active.svg'}
