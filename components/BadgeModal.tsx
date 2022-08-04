@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
-import { useAccount } from 'wagmi';
 import debounce from 'lodash.debounce';
 import { truncateString } from 'utils';
 
@@ -18,8 +17,10 @@ import { Pill } from './Pill';
 import { Toggle } from './Toggle';
 import { BadgeDetail } from './BadgeDetail';
 import { BadgeType } from '../types';
-import { api } from 'utils';
 import { Portal } from './Portal';
+import { axios } from 'lib/axios';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 const skeletonArray = new Array(5).fill(true);
 
@@ -55,7 +56,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const intersectionRef = useRef(null!);
   const [badgeIssuer, setBadgeIssuer] = useState<'mazury' | 'poap'>('mazury');
   const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
-  const [{ data: accountData }] = useAccount();
+  const { address } = useSelector(userSlice);
   const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
   const [refresh, setRefresh] = useState('');
   const inputRef = useRef<HTMLInputElement>(null!);
@@ -75,9 +76,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const [showBadgeDetails, setShowBadgeDetails] = useState<BadgeType | null>(
     null
   );
-  const { badges, count: badgesCount } = useBadges(
-    accountData?.address as string
-  );
+  const { badges, count: badgesCount } = useBadges(address as string);
   const [currentModalStep, setCurrentModalStep] =
     useState<BadgeModalState>('idle');
 
@@ -139,7 +138,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
       const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
       const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
 
-      const result = await api.get(
+      const result = await axios.get(
         nextValue ? searchEndpoint : badgeTypesEndpoint
       );
 
@@ -169,7 +168,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
         let next =
           refresh || searchTerm ? refresh : nextBadgeType?.split('.com/')[1];
 
-        const result = await api.get(next);
+        const result = await axios.get(next);
 
         const nextRefreshLink = result.data.next?.split('.com/')[1];
 

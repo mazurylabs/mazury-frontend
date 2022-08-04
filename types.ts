@@ -260,3 +260,9 @@ export interface FilterState {
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export type AuthVerifyResponse = {
+  access_token: string;
+  refresh: string;
+  success: boolean;
+};

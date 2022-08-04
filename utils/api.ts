@@ -1,14 +1,39 @@
-import { AxiosError } from 'axios';
+import { SiweMessage } from 'siwe';
+
 import { OnboardingFormDataType } from 'contexts';
 import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
-import { api } from '.';
+import { axios } from '@/lib/axios';
 
 export const getProfile: (
   address: string
 ) => Promise<APIResponse<Profile>> = async (address: string) => {
   try {
-    const res = await api.get(`/profiles/${address}`);
+    const res = await axios.get(`/profiles/${address}`);
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export const getBadges: (
+  address: string,
+  issuer: string
+) => Promise<APIResponse<Profile>> = async (
+  address: string,
+  issuer: string
+) => {
+  try {
+    const res = await axios.get(
+      `badges/?owner=${address}&issuer=${issuer}&limit=4`
+    );
+
     return {
       data: res.data,
       error: null,
@@ -25,7 +50,7 @@ export const getMessageToBeSigned: (
   address: string
 ) => Promise<APIResponse<string | null>> = async (address) => {
   try {
-    const res = await api.get(`/auth/message?address=${address}`);
+    const res = await axios.get(`/auth/message?address=${address}`);
     return {
       data: res.data,
       error: null,
@@ -38,19 +63,41 @@ export const getMessageToBeSigned: (
   }
 };
 
-export const verifyEmail: (
-  address: string,
-  signature: string
-) => Promise<APIResponse<string | null>> = async (address, signature) => {
+export const mintBadge: (
+  signature: string,
+  badgeId: string
+) => Promise<APIResponse<{ transaction_id: string }>> = async (
+  signature,
+  badgeId
+) => {
   try {
-    const res = await api.patch(
-      `/profiles/${address}/send_verification_email/`,
+    const res = await axios.patch(
+      `/badges/${badgeId}/mintnft/`,
       {},
       {
         headers: {
           'ETH-AUTH': signature,
         },
       }
+    );
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export const verifyEmail = async (address: string) => {
+  try {
+    const res = await axios.patch(
+      `/profiles/${address}/send_verification_email/`,
+      {}
     );
 
     return {
@@ -95,11 +142,7 @@ export const updateProfile: (
     }
     // @ts-expect-error passing in a boolean to formdata
     formData.append('onboarded', true);
-    const res = await api.patch(`/profiles/${address}/`, formData, {
-      headers: {
-        'ETH-AUTH': signature,
-      },
-    });
+    const res = await axios.patch(`/profiles/${address}/`, formData);
     return {
       data,
       error: null,
@@ -117,7 +160,7 @@ export const getActvity: (
   address?: string
 ) => Promise<APIResponse<ListResponse<Activity>>> = async (address) => {
   try {
-    const res = await api.get(`/activity?user=${address}`);
+    const res = await axios.get(`/activity?user=${address}`);
     return {
       data: res.data,
       error: null,
@@ -146,19 +189,11 @@ export const createReferral: (
   authorAddress
 ) => {
   try {
-    const res = await api.post(
-      '/referrals/',
-      {
-        receiver: receiverAddress,
-        content,
-        skills,
-      },
-      {
-        headers: {
-          'ETH-AUTH': authorSignature,
-        },
-      }
-    );
+    const res = await axios.post('/referrals/', {
+      receiver: receiverAddress,
+      content,
+      skills,
+    });
     // Revalidate queries
     mutate?.(`/referrals?receiver=${receiverAddress}`);
     mutate?.(`/activity?user=${receiverAddress}`);
@@ -176,26 +211,17 @@ export const createReferral: (
   }
 };
 
-export const verifyTweet: (
-  tweetURL: string,
-  signature: string
-) => Promise<APIResponse> = async (tweetURL, signature) => {
+export const verifyTweet: (tweetURL: string) => Promise<APIResponse> = async (
+  tweetURL
+) => {
   try {
-    if (!tweetURL || !signature) {
+    if (!tweetURL) {
       return {
         data: null,
         error: new Error('Missing tweetURL or signature'),
       };
     }
-    const res = await api.post(
-      `/auth/twitter?tweet_url=${tweetURL}`,
-      {},
-      {
-        headers: {
-          'ETH-AUTH': signature,
-        },
-      }
-    );
+    const res = await axios.post(`/auth/twitter?tweet_url=${tweetURL}`, {});
     return {
       data: res.data,
       error: null,
@@ -209,25 +235,16 @@ export const verifyTweet: (
 };
 
 export const connectGithub: (
-  githubCode: string,
-  signature: string
-) => Promise<APIResponse> = async (githubCode, signature) => {
+  githubCode: string
+) => Promise<APIResponse> = async (githubCode) => {
   try {
-    if (!githubCode || !signature) {
+    if (!githubCode) {
       return {
         data: null,
-        error: new Error('Missing githubCode or signature'),
+        error: new Error('Missing'),
       };
     }
-    const res = await api.post(
-      `/auth/github?github_code=${githubCode}`,
-      {},
-      {
-        headers: {
-          'ETH-AUTH': signature,
-        },
-      }
-    );
+    const res = await axios.post(`/auth/github?github_code=${githubCode}`, {});
     return {
       data: res.data,
       error: null,
@@ -268,7 +285,7 @@ export const isValid: (
   } | null>
 > = async (field, value) => {
   try {
-    const res = await api.post(`/profiles/validate?type=${field}`, {
+    const res = await axios.post(`/profiles/validate?type=${field}`, {
       value,
     });
     return {
@@ -280,5 +297,70 @@ export const isValid: (
       data: null,
       error: error.response?.data,
     };
+  }
+};
+
+export const getNonce = async (address: string) => {
+  try {
+    const res = await axios.get(`/auth/siwe/nonce?user=${address}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createSiweMessage = async (
+  address: string,
+  statement: string = 'Sign in with Ethereum to the app.'
+): Promise<string> => {
+  try {
+    const domain = window.location.host;
+    const origin = window.location.origin;
+    const { nonce } = await getNonce(address);
+
+    const message = new SiweMessage({
+      domain,
+      address,
+      statement,
+      uri: origin,
+      version: '1',
+      chainId: 1,
+      nonce,
+    });
+
+    return message.prepareMessage();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getTokens = async (
+  message?: string,
+  signature?: string,
+  user?: string
+) => {
+  try {
+    const res = await axios.post(`auth/siwe/verify`, {
+      message,
+      user,
+      signature,
+    });
+
+    return res.data;
+  } catch (error) {
+    // throw error;
+    console.log('verifyerror', error);
+  }
+};
+
+export const refreshToken = async (refreshToken: string) => {
+  try {
+    const res = await axios.post(`/auth/token/refresh`, {
+      refresh: refreshToken,
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
   }
 };

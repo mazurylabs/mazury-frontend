@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useAccount } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 
@@ -22,6 +21,8 @@ import {
   useProfileSuggestions,
 } from 'hooks';
 import { commify, returnTruncatedIfEthAddress } from 'utils';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
 
@@ -66,9 +67,9 @@ const Home: NextPage = () => {
   const isMobile = useMobile();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [{ data: accountData }] = useAccount();
-  const { activity } = useActivity(accountData?.address as string, apiParams);
-  const { profiles } = useProfileSuggestions(accountData?.address, apiParams);
+  const { address } = useSelector(userSlice);
+  const { activity } = useActivity(address as string, apiParams);
+  const { profiles } = useProfileSuggestions(address as string, apiParams);
   const [currentSearchState, setCurrentSearchState] =
     useState<SearchState>('idle');
 
@@ -411,7 +412,7 @@ const Home: NextPage = () => {
 
                 <div className="mt-3 ">
                   <ul className="space-y-6">
-                    {!accountData?.address ? (
+                    {!address ? (
                       <p className="text-lg text-indigoGray-60">
                         No recent activity to show. Use the searchbox to find
                         your friend and give them a referral to spy on them

@@ -1,11 +1,11 @@
+import { userSlice } from '@/selectors';
 import { OnboardingLayout } from 'components';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import { useSelector } from 'react-redux';
 
 const FinishPage: NextPage = () => {
-  const [{ data: accountData }] = useAccount();
-  const address = accountData?.address;
+  const { address } = useSelector(userSlice);
   const router = useRouter();
 
   return (

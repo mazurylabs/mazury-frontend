@@ -1,10 +1,10 @@
+import { userSlice } from '@/selectors';
 import { Button } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useProfile } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, useContext, useEffect } from 'react';
-import { useAccount, useConnect } from 'wagmi';
+import { useSelector } from 'react-redux';
 import { OnboardingLayoutProps } from './OnboardingLayout.types';
 
 const onboardingRoutes = [
@@ -28,9 +28,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   overrideOnClick = false,
 }) => {
   const router = useRouter();
-  const [{ data: connectData, loading: connectLoading }] = useConnect();
-  const [{ data: accountData }] = useAccount();
-  const { profile: profileData } = useProfile(accountData?.address as string);
+  const { address, profile, loading } = useSelector(userSlice);
   const {
     setFormData,
     fetched,
@@ -66,8 +64,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   };
 
   useEffect(() => {
-    // console.log({ twitter: profileData?.twitter });
-    if (profileData && !fetched) {
+    if (profile && !fetched) {
       const {
         bio,
         username,
@@ -87,7 +84,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         twitter,
         github,
         full_name,
-      } = profileData;
+      } = profile;
       setFormData({
         bio,
         username,
@@ -108,16 +105,16 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
         github,
         full_name,
       });
-      if (profileData.twitter) {
+      if (profile.twitter) {
         setTwitterConnected(true);
       }
-      if (profileData.github) {
+      if (profile.github) {
         setGithubConnected(true);
       }
       setFetched(true);
     }
   }, [
-    profileData,
+    profile,
     setFormData,
     fetched,
     setFetched,
@@ -125,11 +122,11 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
     setGithubConnected,
   ]);
 
-  if (connectLoading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!connectData?.connected) {
+  if (!address) {
     return <div>Please connect your wallet first</div>;
   }
 

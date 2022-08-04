@@ -1,13 +1,14 @@
 import SVG from 'react-inlinesvg';
-import { useAccount } from 'wagmi';
 
 import { useProfileSuggestions } from 'hooks';
 
 import { Talent } from './Talent';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 export const EmptyState = () => {
-  const [{ data: accountData }] = useAccount();
-  const { profiles } = useProfileSuggestions(accountData?.address, {
+  const { address } = useSelector(userSlice);
+  const { profiles } = useProfileSuggestions(address as string, {
     isNetwork: true,
     limit: 3,
   });

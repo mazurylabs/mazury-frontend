@@ -17,8 +17,9 @@ import { EmptyState } from './EmptyState';
 import { SearchResults } from './SearchResults';
 
 import { FilterState, FilterType, Profile, ValueOf } from 'types';
-import { api, commify, fadeAnimation } from 'utils';
+import { commify, fadeAnimation } from 'utils';
 import { useIntersection } from 'hooks';
+import { axios } from 'lib/axios';
 
 const filters = ['Badges', 'Roles', 'Referred skills'];
 
@@ -97,7 +98,7 @@ export const ResultState = () => {
           queryPath.replace('?', '/profiles?')
         );
 
-        const result = await api.get(decodedPath);
+        const result = await axios.get(decodedPath);
         let nextCursor = result.data.next?.split('.com/')[1];
 
         if (result.data?.results?.length !== 0) {
@@ -186,7 +187,7 @@ export const ResultState = () => {
   React.useEffect(() => {
     const fetchMore = async () => {
       try {
-        const result = await api.get(cursor);
+        const result = await axios.get(cursor);
 
         const newCursor = result.data.next?.split('.com/')[1];
 
