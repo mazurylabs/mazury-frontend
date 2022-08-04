@@ -71,7 +71,7 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
       return alert('Error signing message');
     }
     const { data, error } = await verifyTweet(tweetURL as string);
-    console.log({ data, error });
+
     if (error) {
       // In case of an error go to the next step i.e. the error screen
       goToNextStep();

@@ -63,7 +63,6 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
         storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
         storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
 
-        onClose();
         await handleUser();
       }
     } catch (error) {
@@ -77,6 +76,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
         const { data } = await getProfile(address);
 
         if (data) {
+          onClose();
           dispatch(login(data));
 
           if (!data.onboarded) {

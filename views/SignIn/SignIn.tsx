@@ -6,11 +6,13 @@ import { colors } from 'utils';
 import { Connector, useConnect } from 'wagmi';
 import { SignInModal } from './SignInModal';
 import { setAddress } from '@/slices/user';
+import { SidebarContext } from '@/contexts';
 
 export const SignIn = () => {
   const [{ data }, connect] = useConnect();
   const dispatch = useDispatch();
   const [showSignInModal, setShowSigninModal] = React.useState(false);
+  const { setSignInOpen } = React.useContext(SidebarContext);
 
   const metamaskConnector = data.connectors.find(
     (connector) => connector.id === 'injected'
@@ -25,7 +27,10 @@ export const SignIn = () => {
     );
   };
 
-  const handleCloseSignInModal = () => setShowSigninModal(false);
+  const handleCloseSignInModal = () => {
+    setShowSigninModal(false);
+    setSignInOpen(false);
+  };
 
   const handleConnect = async (connector: Connector | undefined) => {
     if (!connector) {
@@ -49,7 +54,7 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col overflow-hidden py-6 lg:w-[300px]">
       <h1 className="font-serif text-xl font-bold text-indigoGray-90">
         Choose your method
       </h1>

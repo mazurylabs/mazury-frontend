@@ -34,7 +34,6 @@ export const getBadges: (
       `badges/?owner=${address}&issuer=${issuer}&limit=4`
     );
 
-    console.log(res);
     return {
       data: res.data,
       error: null,

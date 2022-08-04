@@ -3,8 +3,8 @@ import Link from 'next/link';
 import * as React from 'react';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
+import SVG from 'react-inlinesvg';
 
 import { userSlice } from '@/selectors';
 import { logout } from '@/slices/user';
@@ -56,35 +56,21 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      <Image
-        src="/new-logo.svg"
-        height="32px"
-        width="32px"
-        alt="Mazury logo"
-        className={`${
-          isOpen ? 'ml-4' : 'mx-auto'
-        } rounded-full hover:cursor-pointer`}
-        onClick={() => router.push('/')}
-      />
-
-      <Divider className="mx-3 mt-8" />
-
       <menu
-        className={`mt-12 flex flex-col text-xl font-bold ${
-          isOpen ? 'items-start' : 'items-center'
-        } h-[100%] ${!signInOpen && 'px-3'}`}
+        className={`flex min-w-[200px] flex-col text-xl font-bold ${
+          isOpen ? 'justify-center' : 'items-center'
+        } grow`}
       >
         {signInOpen ? (
-          <div className="flex flex-col">
-            <img
-              alt="Go back icon"
-              src="/icons/arrow-left.svg"
-              height="24px"
-              width="24px"
-              className="my-8 justify-start hover:cursor-pointer"
-              onClick={closeSignIn}
-            />
-            {true && <SignIn />}
+          <div className="flex flex-col" onClick={closeSignIn}>
+            <button
+              type="button"
+              className="justify-start hover:cursor-pointer"
+              aria-label="back"
+            >
+              <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+            </button>
+            <SignIn />
           </div>
         ) : (
           <>
@@ -155,7 +141,7 @@ export const Sidebar: React.FC = () => {
                   </div>
                 )}
 
-              <Divider />
+              <hr className={`my-8 w-full border border-indigoGray-20`} />
 
               {isAuthenticated ? (
                 <>
@@ -177,20 +163,18 @@ export const Sidebar: React.FC = () => {
                 </>
               ) : (
                 // Sign in button
-                <a
+                <button
+                  type="button"
                   onClick={openSignIn}
-                  className={`mt-8 flex h-[40px] hover:cursor-pointer ${
+                  className={`flex h-[40px] hover:cursor-pointer ${
                     isOpen && 'w-full'
                   } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
                 >
-                  <img
-                    width="16px"
-                    height="16px"
-                    src="/icons/login.svg"
-                    alt="Sign in icon"
-                  />{' '}
-                  {isOpen && <span>Sign in</span>}
-                </a>
+                  <SVG width="16px" height="16px" src="/icons/login.svg" />{' '}
+                  {isOpen && (
+                    <span className="w-[fit-content] shrink-0">Sign in</span>
+                  )}
+                </button>
               )}
 
               {isAuthenticated && (
@@ -213,7 +197,8 @@ export const Sidebar: React.FC = () => {
               )}
 
               {isAuthenticated && (
-                <a
+                <button
+                  type="button"
                   onClick={handleLogOut}
                   className={`mt-4 flex h-[40px] hover:cursor-pointer ${
                     isOpen && 'w-full'
@@ -225,8 +210,10 @@ export const Sidebar: React.FC = () => {
                     src="/icons/sign-out.svg"
                     alt="Sign out icon"
                   />{' '}
-                  {isOpen && <span>Sign out</span>}
-                </a>
+                  {isOpen && (
+                    <span className="w-[fit-content] shrink-0">Sign out</span>
+                  )}
+                </button>
               )}
             </div>
           </>
@@ -271,22 +258,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
       >
-        <span>{icon}</span> {isOpen && label}
+        <span className="shrink-0">{icon}</span> {isOpen && label}
       </a>
     </Link>
   );
-};
-
-// ==================================
-
-/*
- * Divider component
- */
-
-interface DividerProps {
-  className?: string;
-}
-
-const Divider: React.FC<DividerProps> = ({ className }) => {
-  return <hr className={`border border-indigoGray-20 ${className}`} />;
 };
