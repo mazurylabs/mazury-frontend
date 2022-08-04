@@ -52,6 +52,7 @@ export const Sidebar: React.FC = () => {
   const handleLogOut = () => {
     disconnect();
     dispatch(logout());
+    router.push('/');
   };
 
   return (
@@ -62,11 +63,12 @@ export const Sidebar: React.FC = () => {
         } grow`}
       >
         {signInOpen ? (
-          <div className="flex flex-col" onClick={closeSignIn}>
+          <div className="flex flex-col">
             <button
               type="button"
               className="justify-start hover:cursor-pointer"
               aria-label="back"
+              onClick={closeSignIn}
             >
               <SVG src="/icons/arrow-left.svg" height={24} width={24} />
             </button>

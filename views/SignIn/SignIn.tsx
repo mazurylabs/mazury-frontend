@@ -6,13 +6,11 @@ import { colors } from 'utils';
 import { Connector, useConnect } from 'wagmi';
 import { SignInModal } from './SignInModal';
 import { setAddress } from '@/slices/user';
-import { SidebarContext } from '@/contexts';
 
 export const SignIn = () => {
   const [{ data }, connect] = useConnect();
   const dispatch = useDispatch();
   const [showSignInModal, setShowSigninModal] = React.useState(false);
-  const { setSignInOpen } = React.useContext(SidebarContext);
 
   const metamaskConnector = data.connectors.find(
     (connector) => connector.id === 'injected'
@@ -29,7 +27,6 @@ export const SignIn = () => {
 
   const handleCloseSignInModal = () => {
     setShowSigninModal(false);
-    setSignInOpen(false);
   };
 
   const handleConnect = async (connector: Connector | undefined) => {
