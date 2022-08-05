@@ -5,15 +5,17 @@ import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 import { useRouter } from 'next/router';
 import { Toaster, toast } from 'react-hot-toast';
-import { useSignMessage, useAccount, useContractEvent } from 'wagmi';
+import { useContractEvent } from 'wagmi';
 import { Player } from '@lottiefiles/react-lottie-player';
 
 import { Button } from './Button';
-import { fadeAnimation, trayAnimation, truncateString } from 'utils';
+import { fadeAnimation, trayAnimation } from 'utils';
 import { Spinner } from './Spinner';
-import { getMessageToBeSigned, mintBadge } from 'utils/api';
+import { mintBadge } from 'utils/api';
 import contractInterface from 'utils/abi.json';
 import { useClickOutside } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -37,7 +39,7 @@ interface BadgeDetailButtonProp {
   disabled?: boolean;
 }
 
-type Steps = 'idle' | 'initialise' | 'signing' | 'submitting';
+type Steps = 'idle' | 'initialise' | 'submitting';
 
 const BadgeDetailButton = ({
   icon,
@@ -79,8 +81,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   id,
   canBeMinted,
 }) => {
-  const [{ data: accountData }] = useAccount();
-  const [_, signMessage] = useSignMessage();
+  const { address } = useSelector(userSlice);
   const router = useRouter();
   const containerRef = React.useRef(null!);
 
@@ -105,31 +106,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   const handleSteps = (step: Steps) => setCurrentStep(step);
 
-  const handleRequestSignature = async () => {
-    try {
-      const { data: messageToBeSigned } = await getMessageToBeSigned(
-        accountData?.address as string
-      );
-
-      const { data: signature } = await signMessage({
-        message: messageToBeSigned as string,
-      });
-
-      return signature;
-    } catch (error: any) {
-      return toast.error(error.message || 'Failed to get signature');
-    }
-  };
-
   const handleInitialiseMint = async (badgeId: string) => {
     try {
-      handleSteps('signing');
-      const signature = await handleRequestSignature();
-      if (signature) {
-        handleSteps('submitting');
-        const { data } = await mintBadge(signature as string, badgeId);
-        if (data) setTransactionId(data?.transaction_id);
-      }
+      handleSteps('submitting');
+      const { data } = await mintBadge(badgeId);
+      if (data) setTransactionId(data?.transaction_id);
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong');
       handleSteps('initialise');
@@ -466,56 +447,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     </motion.div>
   );
 
-  const signing = (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="flex h-[450px] flex-col space-y-6 px-6 pb-6 sm:h-[728px] lg:ml-auto lg:mr-auto lg:h-full lg:w-[80%] lg:space-y-0 lg:p-6"
-    >
-      <div>
-        <Button
-          className="m-0 !p-0 lg:hidden"
-          variant="tertiary"
-          onClick={() => handleSteps('idle')}
-        >
-          <span className="sr-only">Close Modal</span>
-          <Image src="/icons/arrow-left.svg" height={24} width={24} />
-        </Button>
-      </div>
-
-      <ScrollLock>
-        <div className="flex grow flex-col">
-          <div className="space-y-2">
-            <h2 className="font-demi text-3xl text-indigoGray-90">
-              Sign with wallet
-            </h2>
-            <p className="font-sm font-sans font-medium leading-[21px] text-indigoGray-60">
-              Before we finish we need you to sign this with your wallet
-            </p>
-          </div>
-
-          <div className="flex shrink-0 grow items-center justify-center lg:py-4">
-            <Spinner />
-          </div>
-
-          <div className="flex space-x-4">
-            {/* <Button
-              variant="secondary"
-              className="grow"
-              onClick={() => handleSteps('idle')}
-            >
-              SKIP
-            </Button> */}
-            <Button variant="primary" className="grow">
-              RETRY
-            </Button>
-          </div>
-        </div>
-      </ScrollLock>
-    </motion.div>
-  );
-
   const submitting = (
     <motion.div
       initial={{ opacity: 0 }}
@@ -562,7 +493,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   const steps: Record<Steps, JSX.Element> = {
     idle,
     initialise,
-    signing: signing,
     submitting,
   };
 
