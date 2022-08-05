@@ -70,6 +70,7 @@ export interface Badge {
   badge_type: BadgeType;
   created_at: string;
   updated_at: string;
+  minted: boolean;
 }
 
 export type MappedSkills<T> = {
@@ -260,3 +261,9 @@ export interface FilterState {
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export type AuthVerifyResponse = {
+  access_token: string;
+  refresh: string;
+  success: boolean;
+};

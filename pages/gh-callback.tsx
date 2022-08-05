@@ -1,37 +1,22 @@
+import { userSlice } from '@/selectors';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { connectGithub, getMessageToBeSigned } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useSelector } from 'react-redux';
+import { connectGithub } from 'utils/api';
 
 const Page: NextPage = () => {
   const router = useRouter();
   const githubCode = router.query.code as string;
-  const [{ data: accountData }] = useAccount();
-  const userAddress = accountData?.address;
-  const [_, signMessage] = useSignMessage();
+  const { address } = useSelector(userSlice);
 
   useEffect(() => {
     (async () => {
-      if (!userAddress) {
+      if (!address) {
         return;
       }
       if (githubCode) {
-        const { data: messageToBeSigned } = await getMessageToBeSigned(
-          userAddress
-        );
-        if (!messageToBeSigned) {
-          return alert(
-            'Couldnt get the message to be signed. Please try again later.'
-          );
-        }
-        const { data: signature, error: signatureError } = await signMessage({
-          message: messageToBeSigned,
-        });
-        if (!signature || signatureError) {
-          return alert('Error signing message');
-        }
-        const { data, error } = await connectGithub(githubCode, signature);
+        const { data, error } = await connectGithub(githubCode);
         if (error) {
           return alert('Error connecting to Github');
         }
@@ -45,7 +30,7 @@ const Page: NextPage = () => {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [githubCode, userAddress]);
+  }, [githubCode, address]);
 
   if (!githubCode) {
     return <div>No code</div>;

@@ -1,14 +1,15 @@
+import { userSlice } from '@/selectors';
 import { Input, OnboardingLayout, SocialButton } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useDebounce, useIsOnboarded } from 'hooks';
+import { useDebounce } from 'hooks';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { getTwitterConnectionPopupLink } from 'utils';
-import { getMessageToBeSigned, isValid, updateProfile } from 'utils/api';
+import { isValid, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
-import { useAccount, useSignMessage } from 'wagmi';
 
 const SocialsPage: NextPage = () => {
   const {
@@ -22,20 +23,16 @@ const SocialsPage: NextPage = () => {
     valid,
     setValid,
   } = useContext(OnboardingContext);
-  const [_, signMessage] = useSignMessage();
-  const [{ data: accountData }] = useAccount();
   const [twitterModalOpen, setTwitterModalOpen] = useState(false);
   const debouncedEmail = useDebounce(formData.email);
-  const { onboarded } = useIsOnboarded(accountData?.address as string);
-
-  const ethAddress = accountData?.address;
+  const { address, profile } = useSelector(userSlice);
   const canContinue = valid.email;
 
   const onTwitterClick = async () => {
-    if (!ethAddress) {
+    if (!address) {
       return alert('Please connect your wallet first');
     }
-    const twitterPopupLink = getTwitterConnectionPopupLink(ethAddress);
+    const twitterPopupLink = getTwitterConnectionPopupLink(address);
     if (!twitterConnected) {
       window.open(twitterPopupLink, '_blank');
       setTwitterModalOpen(true);
@@ -61,7 +58,7 @@ const SocialsPage: NextPage = () => {
   );
 
   useEffect(() => {
-    if (accountData?.address && !onboarded) {
+    if (address && !profile?.onboarded) {
       // don't check for validity if the user has already been onboarded.
       checkIfValid('email');
     }
@@ -80,26 +77,10 @@ const SocialsPage: NextPage = () => {
     if (!formData.eth_address) {
       return alert('Please connect your wallet first');
     }
-    const { data: messageToBeSigned, error: messageSignError } =
-      await getMessageToBeSigned(formData.eth_address);
-
-    if (!messageToBeSigned || messageSignError) {
-      return alert(
-        'Couldnt get the message to be signed. Please try again later.'
-      );
-    }
-
-    const { data: signature, error: signatureError } = await signMessage({
-      message: messageToBeSigned,
-    });
-
-    if (!signature || signatureError) {
-      return alert('Error signing message');
-    }
 
     const { error: updateProfileError } = await updateProfile(
       formData.eth_address,
-      signature,
+      '',
       formData,
       avatarFile
     );

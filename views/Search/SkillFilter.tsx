@@ -8,7 +8,8 @@ import { Checkbox } from 'components';
 
 import { useScreenWidth, useIntersection } from 'hooks';
 import { FilterState, FilterType, ValueOf } from 'types';
-import { api, fadeAnimation, trayAnimation } from 'utils';
+import { fadeAnimation, trayAnimation } from 'utils';
+import { axios } from 'lib/axios';
 
 interface SkillFilterProps {
   selectedSkills: string[];
@@ -58,7 +59,7 @@ export const SkillFilter = ({
     debounce(async (query) => {
       const searchEndpoint = `/search/skills/?query=${query}`;
 
-      const result = await api.get(searchEndpoint);
+      const result = await axios.get(searchEndpoint);
       const nextCursor = result.data.next?.split('.com/')[1];
 
       if (cursor !== nextCursor) {
@@ -75,7 +76,7 @@ export const SkillFilter = ({
         initialMount.current === true;
         let endpoint = cursor || searchTerm ? cursor : 'search/skills/?query';
 
-        const result = await api.get(endpoint);
+        const result = await axios.get(endpoint);
 
         const nextCursor = result.data.next?.split('.com/')[1];
 

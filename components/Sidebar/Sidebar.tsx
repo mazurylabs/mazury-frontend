@@ -1,17 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { FC, ReactNode, useContext, useState } from 'react';
-import { HomeIcon, SearchIcon } from 'components';
+import * as React from 'react';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
-import { colors } from 'utils';
-import { SlidersIcon } from 'components/Icons';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
-import Image from 'next/image';
-import { SignIn } from 'views/SignIn';
-import { useProfile } from 'hooks';
-import { getMessageToBeSigned, verifyEmail } from 'utils/api';
-import { WalletRequestModal } from 'components/WalletRequestModal';
+import { useDispatch, useSelector } from 'react-redux';
+import SVG from 'react-inlinesvg';
+
+import { userSlice } from '@/selectors';
+import { logout } from '@/slices/user';
+import { SignIn } from '@/views/SignIn';
+import { colors } from '@/utils';
+import { verifyEmail } from '@/utils/api';
+import { WalletRequestModal } from '@/components/WalletRequestModal';
+import { SlidersIcon } from '@/components/Icons';
+import { HomeIcon, SearchIcon } from '@/components';
+import { useAccount } from 'wagmi';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -20,28 +23,24 @@ const iconColors = {
 
 type Steps = 'idle' | 'active' | 'error';
 
-export const Sidebar: FC = () => {
-  const [currentStep, setCurrentStep] = useState<Steps>('idle');
-  const { isOpen, signInOpen, setSignInOpen } = useContext(SidebarContext);
+export const Sidebar: React.FC = () => {
+  const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [_, disconnect] = useAccount();
   const { pathname } = router;
-  const [{ data: accountData }, disconnect] = useAccount();
-  const { profile } = useProfile(accountData?.address);
-  const [_, signMessage] = useSignMessage();
-
-  const isSignedIn = !!accountData;
+  const { profile, address, isAuthenticated } = useSelector(userSlice);
+  const { isOpen, signInOpen, setSignInOpen } =
+    React.useContext(SidebarContext);
 
   const openSignIn = () => setSignInOpen(true);
   const closeSignIn = () => setSignInOpen(false);
 
-  const logout = () => disconnect();
-
   const handleEmailVerification = async () => {
-    setCurrentStep('active');
-    const signature = await handleRequestSignature();
+    // setCurrentStep('active');
 
-    if (signature && accountData?.address) {
-      const { error } = await verifyEmail(accountData?.address, signature);
+    if (address) {
+      const { error } = await verifyEmail(address);
       if (!error) {
         setCurrentStep('idle');
       } else {
@@ -50,63 +49,30 @@ export const Sidebar: FC = () => {
     }
   };
 
-  const handleRequestSignature = async () => {
-    if (!accountData?.address) {
-      alert('Please connect your wallet first');
-      return;
-    }
-
-    const { data: messageToBeSigned, error: messageSignError } =
-      await getMessageToBeSigned(accountData?.address);
-
-    if (!messageToBeSigned || messageSignError) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await signMessage({
-      message: messageToBeSigned,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
+  const handleLogOut = () => {
+    disconnect();
+    dispatch(logout());
+    router.push('/');
   };
 
   return (
     <>
-      <Image
-        src="/new-logo.svg"
-        height="32px"
-        width="32px"
-        alt="Mazury logo"
-        className={`${
-          isOpen ? 'ml-4' : 'mx-auto'
-        } rounded-full hover:cursor-pointer`}
-        onClick={() => router.push('/')}
-      />
-
-      <Divider className="mx-3 mt-8" />
-
       <menu
-        className={`mt-12 flex flex-col text-xl font-bold ${
-          isOpen ? 'items-start' : 'items-center'
-        } h-[100%] ${!signInOpen && 'px-3'}`}
+        className={`flex min-w-[200px] flex-col text-xl font-bold ${
+          isOpen ? 'justify-center' : 'items-center'
+        } grow`}
       >
         {signInOpen ? (
           <div className="flex flex-col">
-            <img
-              alt="Go back icon"
-              src="/icons/arrow-left.svg"
-              height="24px"
-              width="24px"
-              className="my-8 justify-start hover:cursor-pointer"
+            <button
+              type="button"
+              className="justify-start hover:cursor-pointer"
+              aria-label="back"
               onClick={closeSignIn}
-            />
-            {isOpen && <SignIn />}
+            >
+              <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+            </button>
+            <SignIn />
           </div>
         ) : (
           <>
@@ -149,7 +115,7 @@ export const Sidebar: FC = () => {
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
               {isOpen &&
-                isSignedIn &&
+                isAuthenticated &&
                 profile?.email &&
                 !profile?.email_verified && (
                   <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
@@ -177,13 +143,13 @@ export const Sidebar: FC = () => {
                   </div>
                 )}
 
-              <Divider />
+              <hr className={`my-8 w-full border border-indigoGray-20`} />
 
-              {isSignedIn ? (
+              {isAuthenticated ? (
                 <>
                   {/* // Profile button */}
                   <SidebarItem
-                    href={accountData ? `/people/${accountData?.address}` : '/'}
+                    href={`/people/${address}`}
                     label="Profile"
                     icon={
                       <img
@@ -199,23 +165,21 @@ export const Sidebar: FC = () => {
                 </>
               ) : (
                 // Sign in button
-                <a
+                <button
+                  type="button"
                   onClick={openSignIn}
-                  className={`mt-8 flex h-[40px] hover:cursor-pointer ${
+                  className={`flex h-[40px] hover:cursor-pointer ${
                     isOpen && 'w-full'
                   } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
                 >
-                  <img
-                    width="16px"
-                    height="16px"
-                    src="/icons/login.svg"
-                    alt="Sign in icon"
-                  />{' '}
-                  {isOpen && <span>Sign in</span>}
-                </a>
+                  <SVG width="16px" height="16px" src="/icons/login.svg" />{' '}
+                  {isOpen && (
+                    <span className="w-[fit-content] shrink-0">Sign in</span>
+                  )}
+                </button>
               )}
 
-              {isSignedIn && (
+              {isAuthenticated && (
                 <SidebarItem
                   href="/settings"
                   label="Settings"
@@ -234,9 +198,10 @@ export const Sidebar: FC = () => {
                 />
               )}
 
-              {isSignedIn && (
-                <a
-                  onClick={logout}
+              {isAuthenticated && (
+                <button
+                  type="button"
+                  onClick={handleLogOut}
                   className={`mt-4 flex h-[40px] hover:cursor-pointer ${
                     isOpen && 'w-full'
                   } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
@@ -247,8 +212,10 @@ export const Sidebar: FC = () => {
                     src="/icons/sign-out.svg"
                     alt="Sign out icon"
                   />{' '}
-                  {isOpen && <span>Sign out</span>}
-                </a>
+                  {isOpen && (
+                    <span className="w-[fit-content] shrink-0">Sign out</span>
+                  )}
+                </button>
               )}
             </div>
           </>
@@ -266,14 +233,14 @@ export const Sidebar: FC = () => {
 interface SidebarItemProps {
   label: string;
   // Expecting icon to be a ReactNode since we want it to be an SVG wrapped w/ JSX that should accept color as a prop
-  icon: ReactNode;
+  icon: React.ReactNode;
   href: string;
   isOpen: boolean;
   className?: string;
   active?: boolean;
 }
 
-const SidebarItem: FC<SidebarItemProps> = ({
+const SidebarItem: React.FC<SidebarItemProps> = ({
   label,
   icon,
   href,
@@ -293,22 +260,8 @@ const SidebarItem: FC<SidebarItemProps> = ({
           'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
       >
-        <span>{icon}</span> {isOpen && label}
+        <span className="shrink-0">{icon}</span> {isOpen && label}
       </a>
     </Link>
   );
-};
-
-// ==================================
-
-/*
- * Divider component
- */
-
-interface DividerProps {
-  className?: string;
-}
-
-const Divider: FC<DividerProps> = ({ className }) => {
-  return <hr className={`border border-indigoGray-20 ${className}`} />;
 };

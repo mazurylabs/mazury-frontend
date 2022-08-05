@@ -1,16 +1,17 @@
+import { userSlice } from '@/selectors';
 import { Avatar, Button, InfoBox, Input, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
 import { useDebounce, useProfileSearch, useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   getMonthAndYear,
   getSkillsFromProfile,
   getSkillSlugsFromReferral,
   returnTruncatedIfEthAddress,
 } from 'utils';
-import { useAccount } from 'wagmi';
 
 interface PersonProps {
   date?: string;
@@ -58,8 +59,8 @@ const Person: FC<PersonProps> = ({
 
 const ReferPage: NextPage = () => {
   const router = useRouter();
-  const [{ data: accountData }] = useAccount();
-  const { referrals } = useReferrals(accountData?.address as string);
+  const { address } = useSelector(userSlice);
+  const { referrals } = useReferrals(address as string);
   const { setReferralReceiver } = useContext(OnboardingContext);
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebounce(searchQuery);

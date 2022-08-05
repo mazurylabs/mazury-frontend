@@ -1,3 +1,4 @@
+import { userSlice } from '@/selectors';
 import { Avatar, OnboardingLayout } from 'components';
 import { Tags, ITagItem } from 'components';
 import { OnboardingContext } from 'contexts';
@@ -5,6 +6,7 @@ import { useReferralCount, useReferrals } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useSWRConfig } from 'swr';
 import { Referral } from 'types';
 import {
@@ -15,7 +17,6 @@ import {
   toCapitalizedWord,
 } from 'utils';
 import { createReferral, getMessageToBeSigned } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
 
 const defaultTags: ITagItem[] = [];
 
@@ -37,16 +38,13 @@ const WritePage: NextPage = () => {
     receiverAddress as string
   );
 
-  const [{ data: accountData }] = useAccount();
-  const authorAddress = accountData?.address;
-
-  const [_, signMessage] = useSignMessage();
+  const { address } = useSelector(userSlice);
 
   // All th referrals received by the user
-  const { referrals } = useReferrals(authorAddress as string);
+  const { referrals } = useReferrals(address as string);
   // All the referrals authored by the user
   const { referrals: authoredReferrals } = useReferrals(
-    authorAddress as string,
+    address as string,
     true
   );
 
@@ -56,13 +54,13 @@ const WritePage: NextPage = () => {
       const foundExistingReferral = hasAlreadyReferredReceiver(
         authoredReferrals,
         receiverAddress as string,
-        authorAddress as string
+        address as string
       );
       if (foundExistingReferral) {
         setExistingReferral(foundExistingReferral);
       }
     }
-  }, [authoredReferrals, receiverAddress, authorAddress]);
+  }, [authoredReferrals, receiverAddress, address]);
 
   useEffect(() => {
     // If a referral already exists, set the content and tags
@@ -95,31 +93,18 @@ const WritePage: NextPage = () => {
       router.push('/onboarding/refer');
       return;
     }
-    if (!authorAddress) {
+    if (!address) {
       return alert('Please connect your wallet first.');
     }
-    const { data: messageToBeSigned } = await getMessageToBeSigned(
-      authorAddress
-    );
-    if (!messageToBeSigned) {
-      return alert(
-        "Please try again later. (Couldn't get the message to be signed.)"
-      );
-    }
-    const { data: signature } = await signMessage({
-      message: messageToBeSigned,
-    });
-    if (!signature) {
-      return alert("Please try again later. (Couldn't get the signed message)");
-    }
+
     const skills = tags.map((tag) => tag.value);
     const { error } = await createReferral(
       receiverAddress,
       content,
       skills,
-      signature,
+      '',
       mutate,
-      authorAddress
+      address
     );
     if (error) {
       return alert(error);

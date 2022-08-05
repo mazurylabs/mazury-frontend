@@ -47,11 +47,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
-import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
 import toast, { Toaster } from 'react-hot-toast';
 import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 interface Props {
   address: string;
@@ -80,7 +81,7 @@ const roleFieldToLabel: MappedRoles<string> = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
-  const [{ data: accountData }] = useAccount();
+  const accountData = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address || '';
@@ -95,19 +96,20 @@ const Profile: React.FC<Props> = ({ address }) => {
   const { activity, error: activityError } = useActivity(eth_address);
   const { referrals: authoredReferrals, error: authoredReferralsError } =
     useReferrals(eth_address, true);
+
   const {
     badges,
     handleFetchMore,
-    count: badgesCount,
+    // count: badgesCount,
     hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
+
+  const { count: poapCount } = useBadges(eth_address, 'mazury');
+  const { count: badgeCount } = useBadges(eth_address, 'poap');
+
+  const credentialsCount = badgeCount || 0 + (poapCount || 0);
+
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-  // const {
-  //   posts,
-  //   error: postsError,
-  //   count: postsCount,
-  // } = useMirrorPosts(eth_address);
-  // const posts = [];
 
   const { posts } = usePosts(eth_address);
 
@@ -510,7 +512,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(badgesCount)}
+                      {getMetricDisplayValue(badgeCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Badges
@@ -559,7 +561,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       className="font-serif font-bold"
                     >
-                      {getMetricDisplayValue(badgesCount)}
+                      {getMetricDisplayValue(credentialsCount)}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                       Badges
@@ -760,7 +762,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   ref={badgesRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
-                  Badges
+                  Credentials
                 </h3>
                 <div className="flex gap-[24px]">
                   <Pill
@@ -780,10 +782,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 xl:w-10/12">
+              <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 2xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
-                    const { badge_type, id } = badge;
+                    const { badge_type, id, minted, owner } = badge;
+
                     const { image, description, title, issuer, slug } =
                       badge_type;
 
@@ -794,9 +797,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                         heading={title}
                         imgSrc={image}
                         totalCount={totalBadgeCounts[badge_type.id]}
-                        badgeCount={badgesCount}
+                        badgeCount={badgeCount}
                         slug={slug}
                         issuer={issuer.name}
+                        id={id}
+                        canBeMinted={address === owner.eth_address && !minted}
                       />
                     );
                   })
