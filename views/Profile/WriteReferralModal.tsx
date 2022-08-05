@@ -1,3 +1,4 @@
+import { userSlice } from '@/selectors';
 import {
   Avatar,
   Button,
@@ -10,10 +11,10 @@ import {
 import { useReferralCount } from 'hooks';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { PersonBasicDetails, Referral } from 'types';
 import { colors, toCamelCase, toCapitalizedWord } from 'utils';
 import { createReferral, getMessageToBeSigned } from 'utils/api';
-import { useAccount, useSignMessage } from 'wagmi';
 
 interface WriteReferralModalProps {
   isOpen: boolean;
@@ -40,15 +41,13 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
   const [content, setContent] = useState(existingReferral?.content || '');
   const [status, setStatus] = useState<IStatus>('writing');
 
-  const [{ data: accountData }] = useAccount();
+  const accountData = useSelector(userSlice);
   const { referralCount: receiverReferralCount } = useReferralCount(
     receiver.eth_address
   );
 
   const authorAddress = accountData?.address;
   const receiverAddress = receiver.eth_address;
-
-  const [_, signMessage] = useSignMessage();
 
   useEffect(() => {
     // Close the modal after 2 seconds if the referral was successfully published
@@ -91,27 +90,14 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
       alert('Please connect your wallet first.');
       return setStatus('error');
     }
-    setStatus('signing');
-    const { data: messageToBeSigned } = await getMessageToBeSigned(
-      authorAddress
-    );
-    if (!messageToBeSigned) {
-      alert("Please try again later. (Couldn't get the message to be signed.)");
-      return setStatus('error');
-    }
-    const { data: signature } = await signMessage({
-      message: messageToBeSigned,
-    });
-    if (!signature) {
-      alert("Please try again later. (Couldn't get the signed message)");
-      return setStatus('error');
-    }
+    // setStatus('signing');
+
     const skills = tags.map((tag) => tag.value);
     const { error } = await createReferral(
       receiverAddress,
       content,
       skills,
-      signature
+      ''
     );
     if (error) {
       alert(error);
@@ -220,7 +206,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
           </>
         )}
 
-        {status === 'signing' && (
+        {/* {status === 'signing' && (
           <div className="flex flex-col">
             <h3 className="font-demi text-3xl text-indigoGray-90">
               Sign with wallet
@@ -242,7 +228,7 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
               </Button>
             </div>
           </div>
-        )}
+        )} */}
 
         {status === 'success' && (
           <div className="flex flex-col">

@@ -47,11 +47,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
-import { useAccount } from 'wagmi';
 import { useMirrorPosts } from 'hooks/useMirrorPosts';
 import toast, { Toaster } from 'react-hot-toast';
 import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 interface Props {
   address: string;
@@ -80,7 +81,7 @@ const roleFieldToLabel: MappedRoles<string> = {
 
 const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
-  const [{ data: accountData }] = useAccount();
+  const accountData = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
   const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address || '';
@@ -102,8 +103,6 @@ const Profile: React.FC<Props> = ({ address }) => {
     // count: badgesCount,
     hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
-
-  console.log(badgeIssuer);
 
   const { count: poapCount } = useBadges(eth_address, 'mazury');
   const { count: badgeCount } = useBadges(eth_address, 'poap');
