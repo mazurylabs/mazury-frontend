@@ -111,7 +111,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
                 height="16px"
                 alt="Referral icon"
               />
-              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+              <span className="ml-1 text-xs font-bold uppercase text-emerald-700">
                 Referral
               </span>
             </div>
@@ -183,7 +183,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
                 height="16px"
                 alt="Referral icon"
               />
-              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+              <span className="ml-1 text-xs font-bold uppercase text-emerald-700">
                 Referral
               </span>
             </div>
