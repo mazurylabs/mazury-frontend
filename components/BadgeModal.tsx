@@ -93,10 +93,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const handleResetModal = () => {
     handleCloseModal();
     setCurrentModalStep('idle');
+    setHoveredbadge(null);
   };
 
   const handleOpenBadgeDetail = (badge: BadgeType) => {
-    if (!isMobile) return;
+    // if (!isMobile) return;
     setShowBadgeDetails(badge);
   };
 
@@ -154,7 +155,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
   useEffect(() => {
     if (showUserBadges) {
-      const userBadges = badges?.map((badge) => badge.badge_type);
+      const userBadges = badges?.map((badge) => {
+        return badge.badge_type;
+      });
       setBadgesInView(userBadges);
     } else {
       setBadgesInView(badgeTypes);
@@ -202,15 +205,18 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
         <li
           key={index}
           className="relative flex items-center justify-between lg:h-[77px] lg:max-h-[98px] lg:min-w-[43.8%]"
-          onClick={() => handleOpenBadgeDetail(badge)}
-          onMouseEnter={(event) => handleShowDetailsOnHover(event, badge)}
-          onMouseLeave={() => setHoveredbadge(null)}
+          onClick={(event) => {
+            handleOpenBadgeDetail(badge);
+            handleShowDetailsOnHover(event, badge);
+          }}
+          // onMouseEnter={(event) => handleShowDetailsOnHover(event, badge)}
+          // onMouseLeave={() => setHoveredbadge(null)}
         >
           <div
             className={`z-[-1] hidden lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:block lg:h-[215.5px] lg:w-[502.23px] badge-${badge.id}`}
           />
 
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {hoveredBadge?.id === badge.id && (
               <Portal container=".detail-container">
                 <BadgeDetail
@@ -224,10 +230,12 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   image={hoveredBadge.image}
                   slug={hoveredBadge.slug}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
+                  id={hoveredBadge.id}
+                  canBeMinted={false}
                 />
               </Portal>
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
 
           <div className="flex items-center space-x-3">
             <div className="flex shrink-0">
@@ -362,7 +370,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
             className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end lg:flex lg:items-center lg:justify-center"
           >
             <AnimatePresence>
-              {showBadgeDetails && isMobile && (
+              {showBadgeDetails && (
                 <BadgeDetail
                   handleCloseModal={() => setShowBadgeDetails(null)}
                   isMobile={isMobile}
@@ -374,6 +382,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   image={showBadgeDetails.image}
                   variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
                   slug={showBadgeDetails.slug}
+                  id={showBadgeDetails.id}
+                  canBeMinted={false}
                 />
               )}
 

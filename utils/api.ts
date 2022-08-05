@@ -64,22 +64,10 @@ export const getMessageToBeSigned: (
 };
 
 export const mintBadge: (
-  signature: string,
   badgeId: string
-) => Promise<APIResponse<{ transaction_id: string }>> = async (
-  signature,
-  badgeId
-) => {
+) => Promise<APIResponse<{ transaction_id: string }>> = async (badgeId) => {
   try {
-    const res = await axios.patch(
-      `/badges/${badgeId}/mintnft/`,
-      {},
-      {
-        headers: {
-          'ETH-AUTH': signature,
-        },
-      }
-    );
+    const res = await axios.patch(`/badges/${badgeId}/mintnft/`, {});
 
     return {
       data: res.data,
