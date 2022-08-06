@@ -280,7 +280,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     rel="noreferrer"
                     href={
                       variant === 'badge'
-                        ? 'https://testnets.opensea.io/collection/mazury'
+                        ? 'https://testnets.opensea.io/collection/mazury-v3'
                         : 'https://poap.gallery/event/44608'
                     }
                     target="_blank"
