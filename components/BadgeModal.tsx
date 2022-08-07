@@ -270,7 +270,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     <Image
                       height={16}
                       width={16}
-                      src={`/icons/${false ? 'eye-slash.svg' : 'trophy.svg'}`}
+                      src={`/icons/${false ? 'hide.svg' : 'trophy.svg'}`}
                       alt="badge type"
                     />
                   </div>

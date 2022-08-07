@@ -52,7 +52,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/thumbs-up.svg"
+                src="/icons/award-pink.svg"
                 width="16px"
                 height="16px"
                 alt="Badge icon"
@@ -106,12 +106,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/message-circle coloured.svg"
+                src="/icons/referral-colored.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
               />
-              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+              <span className="ml-1 text-xs font-bold uppercase text-emerald-700">
                 Referral
               </span>
             </div>
@@ -178,12 +178,12 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/message-circle coloured.svg"
+                src="/icons/referral-colored.svg"
                 width="16px"
                 height="16px"
                 alt="Referral icon"
               />
-              <span className="ml-1 text-xs font-bold uppercase text-teal-500">
+              <span className="ml-1 text-xs font-bold uppercase text-emerald-700">
                 Referral
               </span>
             </div>
@@ -239,7 +239,7 @@ export const ActivityPreview: React.FC<ActivityPreviewProps> = ({
           <div className="flex items-center">
             <div className="flex items-center">
               <Image
-                src="/icons/fire.svg"
+                src="/icons/fire-indigo.svg"
                 width="16px"
                 height="16px"
                 alt="Event icon"
