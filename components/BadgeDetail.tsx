@@ -368,13 +368,21 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
             <div className="hidden justify-between space-x-6 lg:flex">
               <div>
-                {/* <button className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm">
+                <button
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  onClick={handleGoToTwitter}
+                >
                   <div className="flex">
-                    <Image src={`/icons/eye-open.svg`} height={16} width={16} />
+                    <SVG
+                      src={`/icons/twitter.svg`}
+                      height={16}
+                      width={16}
+                      className="text-[#000]"
+                    />
                   </div>
 
-                  <span className="sr-only"></span>
-                </button> */}
+                  <span className="sr-only">Share on Twitter</span>
+                </button>
               </div>
 
               <div className="flex space-x-3">
