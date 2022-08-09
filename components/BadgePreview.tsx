@@ -64,7 +64,8 @@ export const BadgePreview: React.FC<Props> = ({
                 displayType="text"
                 thousandSeparator
               />{' '}
-              people have this
+              {totalCount > 1 ? 'people' : 'person'}{' '}
+              {totalCount > 1 ? 'have' : 'has'} this
             </span>
           )}
 
@@ -95,7 +96,7 @@ export const BadgePreview: React.FC<Props> = ({
             videoUrl=""
             isBadgeHidden={false}
             image={imgSrc}
-            badgeCount={badgeCount}
+            badgeCount={totalCount}
             variant={issuer === 'mazury' ? 'badge' : 'poap'}
             slug={slug}
             id={id}
