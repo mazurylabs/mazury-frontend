@@ -37,6 +37,7 @@ interface BadgeDetailButtonProp {
   label: string;
   handleClick: () => void;
   disabled?: boolean;
+  iconStyle?: string;
 }
 
 type Steps = 'idle' | 'initialise' | 'submitting';
@@ -46,6 +47,7 @@ const BadgeDetailButton = ({
   handleClick,
   label,
   disabled = false,
+  iconStyle,
 }: BadgeDetailButtonProp) => {
   return (
     <Button
@@ -54,7 +56,12 @@ const BadgeDetailButton = ({
       onClick={handleClick}
     >
       <div className="flex">
-        <Image src={`/icons/${icon}.svg`} height={24} width={24} />
+        <SVG
+          src={`/icons/${icon}.svg`}
+          height={24}
+          width={24}
+          className={iconStyle}
+        />
       </div>
       <span
         className={`font-inter text-base font-semibold leading-6 text-indigoGray-${
@@ -81,10 +88,10 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   id,
   canBeMinted,
 }) => {
-  const { address } = useSelector(userSlice);
   const router = useRouter();
   const containerRef = React.useRef(null!);
 
+  const { address } = useSelector(userSlice);
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
   const [isNewlyMinted, setIsNewlyMinted] = React.useState(false);
@@ -121,6 +128,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     setIsBadgeMinted(true);
     setIsNewlyMinted(true);
     setCurrentStep('idle');
+  };
+
+  const handleGoToTwitter = () => {
+    const twitterLink = `https://twitter.com/intent/tweet?text=Just%20minted%20a%20new%20badge%20on%20@mazuryxyz!%20Check%20out%20my%20profile%20at%20mzry.me/${address}`;
+    window.open(twitterLink, '_blank');
   };
 
   const contractConfig = {
@@ -297,6 +309,24 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </motion.div>
             )}
 
+            {isNewlyMinted && (
+              <div>
+                <Button
+                  variant="primary"
+                  className="font-inter flex w-full items-center justify-center space-x-2 bg-blue-600 text-sm font-semibold"
+                  onClick={handleGoToTwitter}
+                >
+                  <SVG
+                    src="/icons/twitter.svg"
+                    height={16}
+                    width={16}
+                    className="text-white"
+                  />
+                  <span>Share on Twitter</span>
+                </Button>
+              </div>
+            )}
+
             <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
               {!isBadgeMinted && variant === 'badge' && (
                 <div>
@@ -323,17 +353,36 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   handleClick={() => {}}
                 />
               </div>
+
+              {isBadgeMinted && (
+                <div>
+                  <BadgeDetailButton
+                    label="Share on Twitter"
+                    icon="twitter"
+                    handleClick={handleGoToTwitter}
+                    iconStyle="text-[#000]"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="hidden justify-between space-x-6 lg:flex">
               <div>
-                {/* <button className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm">
+                <button
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  onClick={handleGoToTwitter}
+                >
                   <div className="flex">
-                    <Image src={`/icons/eye-open.svg`} height={16} width={16} />
+                    <SVG
+                      src={`/icons/twitter.svg`}
+                      height={16}
+                      width={16}
+                      className="text-[#000]"
+                    />
                   </div>
 
-                  <span className="sr-only"></span>
-                </button> */}
+                  <span className="sr-only">Share on Twitter</span>
+                </button>
               </div>
 
               <div className="flex space-x-3">
