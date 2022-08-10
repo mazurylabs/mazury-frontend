@@ -12,5 +12,7 @@ const fetcher = async (url: string) => {
 };
 
 export const SwrProvider: React.FC = ({ children }) => (
-  <SWRConfig value={{ fetcher }}>{children}</SWRConfig>
+  <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
+    {children}
+  </SWRConfig>
 );

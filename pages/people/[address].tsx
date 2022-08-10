@@ -82,8 +82,9 @@ const roleFieldToLabel: MappedRoles<string> = {
 const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
   const accountData = useSelector(userSlice);
+  const { profile, error } = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
-  const { profile, error } = useProfile(address);
+  // const { profile, error } = useProfile(address);
   const eth_address = profile?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
