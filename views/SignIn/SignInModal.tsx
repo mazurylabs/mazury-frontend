@@ -82,7 +82,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           if (!data.onboarded) {
             router.push('/onboarding');
           } else {
-            router.push(`/people/${address}`);
+            router.push(`/`);
           }
         }
       }
