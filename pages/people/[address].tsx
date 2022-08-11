@@ -801,7 +801,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                         slug={slug}
                         issuer={issuer.name}
                         id={id}
-                        canBeMinted={address === owner.eth_address && !minted}
+                        canBeMinted={
+                          eth_address === owner.eth_address && !minted
+                        }
                       />
                     );
                   })
