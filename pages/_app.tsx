@@ -11,6 +11,7 @@ import { getProfile } from '@/utils/api';
 import storage from '@/utils/storage';
 import { REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
+import { AnnouncementModal } from '@/components/Announcement';
 
 const App = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -55,6 +56,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         <title>Mazury</title>
         <link rel="icon" href="/new-logo.svg" />
       </NextHead>
+
+      <AnnouncementModal />
 
       <Authenticator />
     </AppProvider>
