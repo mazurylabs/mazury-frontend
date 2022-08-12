@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="301" height="300" fill="none">
+    <circle cx="151" cy="150" r="150" fill="#F1F3F9" />
+    <g filter="url(#a)">
+        <circle cx="151.8" cy="150" r="108.2" fill="#F8F9FC" />
+    </g>
+    <path fill="#110F2A" d="M69.2 147.2h-.6v-.5A1.7 1.7 0 0 0 67 145h-5.5a1.7 1.7 0 0 0-1.7 1.7v6.6a1.7 1.7 0 0 0 1.7 1.7h7.8a1.7 1.7 0 0 0 1.6-1.7V149a1.7 1.7 0 0 0-1.6-1.7Zm-7.8-1.1h5.5a.6.6 0 0 1 .6.6v.5h-6.1a.6.6 0 0 1-.6-.5.6.6 0 0 1 .6-.6Zm8.3 3.3h-.5a1.7 1.7 0 1 0 0 3.4h.5v.5a.6.6 0 0 1-.5.6h-7.8a.6.6 0 0 1-.6-.6v-5h8.4a.6.6 0 0 1 .5.6v.5Z" />
+    <g clip-path="url(#b)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M235.6 144.8c-.6.3-.8 1-.4 1.6a4.7 4.7 0 0 0-2.6 2.6 5 5 0 0 0 0 3.5 3.3 3.3 0 0 0 0 3c.3.4.8.6 1.2.6h9a.6.6 0 1 0 0-1h-4l.1-1.2v-.1l4.3-2.5c.2 0 .2-.4 0-.7 0-.2-.4-.4-.6-.2l-4 2.2a3.3 3.3 0 0 0-5.2-1.2 4 4 0 0 1 .3-2l.8-1.3c.4-.3.8-.6 1.2-.7l1.3 2c.3.6 1 .8 1.5.5l.3-.2.4.8c.1.1.3.2.4 0l.5-.2c.2-.1.2-.3.1-.4l-.4-.8.3-.1c.5-.4.7-1 .4-1.6l-1.8-3c-.3-.6-1-.8-1.5-.5l-1.6 1Zm2 10.2c-.6 0-3-.7-3.7-2.5a2.2 2.2 0 0 1 3.6 2.5Z" clip-rule="evenodd" />
+    </g>
+    <g clip-path="url(#c)">
+        <path fill="#110F2A" d="M152.3 280.3a.4.4 0 0 0-.5.4.4.4 0 0 0 0 .3l.2.1c.6.3 1 .6 1 1 0 .6-1 1.3-2.5 1.3s-2.5-.7-2.5-1.3c0-.4.4-.7 1-1a.4.4 0 0 0 .2-.5.4.4 0 0 0-.5-.3c-1 .4-1.5 1-1.5 1.8 0 1.2 1.4 2.1 3.3 2.1s3.3-1 3.3-2c0-.8-.5-1.5-1.5-1.9Zm-2.2-1.2v3a.4.4 0 0 0 .8 0v-3a1.7 1.7 0 1 0-.8 0Z" />
+    </g>
+    <g clip-path="url(#d)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M85.8 256c0-.2.2-.3.4-.3a1.7 1.7 0 0 1 1.6 1.7v1.2h2a1.3 1.3 0 0 1 1.2 1v.5l-.6 3.7a1.3 1.3 0 0 1-1.2 1.1h-6a1.3 1.3 0 0 1-1.2-1.3v-2.9a1.3 1.3 0 0 1 1.2-1.2h1l1.6-3.5Zm-.9 8h4.3a.4.4 0 0 0 .4-.3l.6-3.7a.4.4 0 0 0-.4-.5h-2.4a.4.4 0 0 1-.4-.4v-1.7a.8.8 0 0 0-.6-.8L85 260v4Z" clip-rule="evenodd" />
+    </g>
+    <g clip-path="url(#e)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M37.9 211.4c.4-.2.9 0 1 .4L40 214c.2.4 0 .8-.3 1l-.6.4-.4.8-.1.2-2.6 1.8c-.3.2-.9.2-1.3 0l-3.3-2.5h-.1l-.7-.5a.8.8 0 0 1-.3-1l1-2.2c.3-.4.8-.6 1.1-.4l.7.4 1.1-.5h.6l2.4.3.7-.4Zm-2.3 1-1-.1-1.2.5-1.2 2.5 3 2.2h.4l2-1.5-1-.9-.2.3c-.6.6-1.6.7-2.2 0l-.8-.5a.4.4 0 0 1 0-.7l2.2-1.8Zm2.3 1.8.4.9-.2.2-1.1-1a.4.4 0 0 0-.6 0l-.6.5c-.3.3-.8.3-1 0l-.4-.2 1.9-1.7.8-.2.8 1.5Z" clip-rule="evenodd" />
+    </g>
+    <g fill="#110F2A" clip-path="url(#f)">
+        <path d="M146.7 228.7c0-.3.3-.6.6-.6h2.8a.6.6 0 1 1 0 1.1h-2.8a.6.6 0 0 1-.6-.5Zm1.2 2.8a.6.6 0 0 0 0 1h1a.6.6 0 0 0 0-1h-1Zm3.9 5.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" />
+        <path fill-rule="evenodd" d="M145.6 231.5c0-1 .8-1.7 1.7-1.7h9c.8 0 1.6.8 1.6 1.7v6.1c0 1-.8 1.7-1.7 1.7h-8.9c-1 0-1.7-.8-1.7-1.7v-6.1Zm1.7-.6c-.3 0-.6.3-.6.6v6.1c0 .3.3.6.6.6h3.9c3-1 4.6-3 5.6-5.8v-1c0-.2-.3-.5-.6-.5h-8.9Z" clip-rule="evenodd" />
+    </g>
+    <path fill="#110F2A" d="M20.6 145.8a2 2 0 1 0 0 4.2 2 2 0 0 0 0-4.2Zm-1.7 5a2 2 0 0 0-2.1 2.1v.9a.4.4 0 1 0 .8 0v-.9a1.3 1.3 0 0 1 1.3-1.2h3.3a1.3 1.3 0 0 1 1.3 1.2v.9a.4.4 0 1 0 .8 0v-.9a2 2 0 0 0-2-2h-3.4Z" />
+    <g clip-path="url(#g)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M34.1 87a.4.4 0 0 0 .6.5l2.2-.8.4-.2 5.5-5.6a1.5 1.5 0 1 0-2-2l-5.6 5.5a1 1 0 0 0-.2.4L34 87Zm3.7-2.3 4.4-4.4a.6.6 0 0 0-.9-.8L36 84.7c.6.4 1.2.3 1.8 0Z" clip-rule="evenodd" />
+    </g>
+    <path fill="#110F2A" stroke="#110F2A" stroke-width=".8" d="M84 39.3a2.5 2.5 0 1 1 5 0v5h-5v-5Z" />
+    <g clip-path="url(#h)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M148 18.9v-.6c0-.6.5-1 1-1h3c.5 0 1 .4 1 1v.6h.8c.7 0 1.3.6 1.3 1.2v4c0 .7-.6 1.3-1.3 1.3h-6.6c-.7 0-1.3-.6-1.3-1.3v-4c0-.6.6-1.2 1.3-1.2h.8Zm1-.8h3s.2 0 .2.2v.6h-3.4v-.6c0-.2.1-.2.2-.2Zm-2.3 3.3v2.7c0 .2.2.4.5.4h3.4a5.8 5.8 0 0 0 3.3-3.1h-7.2Z" clip-rule="evenodd" />
+    </g>
+    <g clip-path="url(#i)">
+        <path fill="#110F2A" stroke="#110F2A" stroke-width=".8" d="m212.7 40.3.2.5-.2-.5Zm1.9 1.3h-.3a2 2 0 0 0 .5 0h-.2Zm1.7-.9.2-.4-.1.4h-.1Zm-2.1 2.5h1.2a.8.8 0 0 1 .9.9v.8h-3.4v-.8a.8.8 0 0 1 .8-.9h.5Z" />
+    </g>
+    <g fill-rule="evenodd" clip-path="url(#j)" clip-rule="evenodd">
+        <path fill="#A0A0A0" d="M262.8 79.4c0-.2-.2-.4-.5-.3l-6.7.7c-.2 0-.3.2-.3.4l.7 6.7c0 .2.2.4.4.4l6.7-.7c.3 0 .4-.3.4-.5l-.7-6.7Zm-3.6 1.5c-.1 0-.2 0-.2.2v3s0 .2.2.2.2-.1.2-.2v-.2h.1l.1.2a.7.7 0 0 0 .6.2 1 1 0 0 0 1-.6l.1-.7-.1-.7a1 1 0 0 0-1-.6h-.4l-.2.2-.1.2v-1l-.3-.2Zm.3 2.6v-1l.3-.3.3-.1.4.1.2.3.1.5v.5l-.3.3-.4.1-.3-.1a.7.7 0 0 1-.3-.3Z" />
+        <path fill="#110F2A" d="M256.7 79c-.2 0-.4.2-.4.4V86c0 .2.2.4.4.4h6.8c.2 0 .4-.2.4-.4v-6.7c0-.2-.2-.4-.4-.4h-6.8Zm2.3 1.9v3.4h.4v-.4l.2.2a.7.7 0 0 0 .6.2 1 1 0 0 0 1-.6l.1-.7-.1-.7a1 1 0 0 0-1-.6h-.4l-.2.2-.1.2V81h-.5Zm.5 2.6v-1l.3-.3h.7l.2.3.1.5v.5l-.3.3-.4.1-.3-.1a.7.7 0 0 1-.3-.3Z" />
+    </g>
+    <g clip-path="url(#k)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M278.4 150c-.5 0-.9.4-.9.8h-.4a1.3 1.3 0 0 0-1.3 1.3v5.8a1.3 1.3 0 0 0 1.3 1.3h5a1.3 1.3 0 0 0 1.3-1.3v-5.8a1.3 1.3 0 0 0-1.3-1.3h-.4c0-.4-.4-.8-.8-.8h-2.5Zm-.9 1.7c0 .4.4.8.9.8h2.5c.4 0 .8-.4.8-.8h.4a.4.4 0 0 1 .4.4v5.8a.4.4 0 0 1-.4.5h-5a.4.4 0 0 1-.4-.5v-5.8a.4.4 0 0 1 .4-.4h.4Z" clip-rule="evenodd" />
+    </g>
+    <g fill="#110F2A" clip-path="url(#l)">
+        <path d="M261.7 214.3c.2 0 .3 0 .3.3l.2 2.6c0 .2 0 .4-.3.4a.4.4 0 0 1-.4-.3l-.2-2.7c0-.2.2-.3.4-.3Zm2.4 0c.2 0 .4.1.4.3l-.2 2.7c0 .2-.2.3-.4.3a.3.3 0 0 1-.3-.4l.2-2.6c0-.2.1-.4.3-.3Zm-.9.3c0-.2-.1-.3-.3-.3-.2 0-.4.1-.4.3v2.6c0 .2.2.4.4.4s.3-.2.3-.4v-2.6Z" />
+        <path fill-rule="evenodd" d="M261 212.5v-1.2c0-.6.5-1.1 1.2-1.1h1.4c.6 0 1.2.5 1.2 1.1v1.2h1.5c.2 0 .4.2.4.3 0 .2-.2.4-.4.4h-.3l-.3 4.8c0 .8-.7 1.4-1.5 1.4h-2.6c-.8 0-1.4-.7-1.5-1.4l-.4-4.8h-.2a.4.4 0 0 1-.4-.4c0-.1.2-.3.4-.3h1.5Zm1.2-1.6h1.4c.3 0 .5.2.5.4v1.2h-2.4v-1.2c0-.2.2-.4.5-.4Zm-1.7 2.3.3 4.7c0 .4.4.8.8.8h2.6c.4 0 .7-.4.8-.8l.3-4.7h-4.8Z" clip-rule="evenodd" />
+    </g>
+    <g clip-path="url(#m)">
+        <path fill="#110F2A" d="m214 262.6-.7.7a1 1 0 1 1-1.5-1.4l2-2a1 1 0 0 1 1.3 0 .4.4 0 0 0 .7 0 .4.4 0 0 0 0-.5l-.1-.1a1.9 1.9 0 0 0-2.6 0l-1.9 2a1.9 1.9 0 0 0 2.7 2.6l.7-.7v-.3a.4.4 0 0 0-.3-.4l-.3.1Zm4.5-6a1.9 1.9 0 0 0-2.7 0l-.7.8a.4.4 0 0 0 0 .6.4.4 0 0 0 .6 0l.7-.7a1 1 0 1 1 1.5 1.4l-2 2a1 1 0 0 1-1.3 0h-.1a.4.4 0 0 0-.6 0 .4.4 0 0 0 0 .5l.1.1a1.9 1.9 0 0 0 2.6 0l1.9-2a1.9 1.9 0 0 0 0-2.6Z" />
+    </g>
+    <g filter="url(#n)">
+        <circle cx="151.8" cy="150" r="63.1" fill="#fff" />
+    </g>
+    <g fill="#110F2A" clip-path="url(#o)">
+        <path d="M146.2 177.6c.4 0 .7-.3.7-.8v-2.2c0-.5-.3-.8-.6-.8H143c-.4 0-.7.7-.4 1.1a5.9 5.9 0 0 0 3.5 2.7Zm2.8-3.8h11.2c.6 0 1 .7.6 1.2l-1.2 2c-.2.3-.7.4-1 .3a2.8 2.8 0 1 0-1.4 5.4c.3 0 .6.3.6.7 0 .4-.3.7-.6.7h-8.3a.7.7 0 0 1-.7-.8c0-.4.3-.7.7-.8a2.4 2.4 0 0 0 0-4.6c-.3-.1-.7-.4-.7-.9v-2.4c0-.5.4-.8.8-.8Z" />
+    </g>
+    <g fill="#110F2A" clip-path="url(#p)">
+        <path fill-rule="evenodd" d="M145.6 62.4c0-1 .8-1.7 1.7-1.7h9c.8 0 1.6.8 1.6 1.7v9c0 .8-.8 1.6-1.7 1.6h-8.9c-1 0-1.7-.8-1.7-1.7v-8.9Zm1.7-.6c-.3 0-.6.3-.6.6v9c0 .2.3.5.6.5h9c.2 0 .5-.3.5-.6v-8.9c0-.3-.3-.6-.6-.6h-8.9Z" clip-rule="evenodd" />
+        <path fill-rule="evenodd" d="M154.1 64c.2 0 .4.2.5.4l1 2.3h1.2a.6.6 0 1 1 0 1.2h-1.6a.6.6 0 0 1-.5-.4L154 66l-1.8 3.4a.6.6 0 0 1-1 .1l-1.7-2.6-.7.9-.4.2h-1.7a.6.6 0 1 1 0-1.2h1.4l1-1.2a.6.6 0 0 1 1 0l1.6 2.5 1.9-3.6c0-.2.3-.3.5-.3Z" clip-rule="evenodd" />
+        <path d="M148.8 72.1c2.9-.8 7.6-2.5 8.4-5.2l.5 4.1-1.4 1.7c-2-.1-8.3-.3-7.5-.6Z" />
+    </g>
+    <path fill="#110F2A" d="M93.2 89.4a.6.6 0 0 0-.4 1c.8.4 1.3.9 1.3 1.4 0 .8-1.4 1.7-3.3 1.7-2 0-3.4-1-3.4-1.7 0-.5.5-1 1.3-1.3a.6.6 0 1 0-.4-1c-1.2.4-2 1.3-2 2.3 0 1.5 2 2.8 4.5 2.8s4.4-1.3 4.4-2.8c0-1-.8-1.9-2-2.4Zm-3-1.6v4a.6.6 0 1 0 1.1 0v-4a2.2 2.2 0 1 0-1.1 0Z" />
+    <g fill="#110F2A" clip-path="url(#q)">
+        <path d="M215.8 209.6a2 2 0 0 0-1.8-1.1c-1.3 0-2.2 1-2.2 2.2 0 .4 0 .8.2 1.1l.9.1a3 3 0 0 0 2.2-1c.3-.3.6-.8.7-1.3Z" />
+        <path fill-rule="evenodd" d="M212.8 205.8a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8Zm-4.1 2.9a4 4 0 1 1 8.1 0 4 4 0 0 1-8.1 0Z" clip-rule="evenodd" />
+        <path fill-rule="evenodd" d="M211.1 211.6c.3 0 .5.4.5.7l-.9 3.4 1.8-1c.1-.2.4-.2.6 0l1.7 1-.8-3.4a.6.6 0 1 1 1.1-.3l1.2 4.7a.6.6 0 0 1-.9.7l-2.6-1.6-2.7 1.6a.6.6 0 0 1-.9-.7l1.2-4.7c0-.3.4-.5.7-.4Z" clip-rule="evenodd" />
+    </g>
+    <g fill="#110F2A" clip-path="url(#r)">
+        <path d="M88.8 209Z" />
+        <path fill-rule="evenodd" d="M94.2 208.8h.1a5 5 0 0 1-2 8.4h-.4a5 5 0 0 1-2.4-2.3l.1 1.4v.2a.6.6 0 0 1-.5.6H89a5 5 0 0 1-1-8.8l.2-.2a4 4 0 0 0 1.3-2.7.6.6 0 0 1 .3-.5.6.6 0 0 1 .6 0 4.9 4.9 0 0 1 2.3 5.1c.4-.3.6-.6.8-1a.6.6 0 0 1 .8-.2Zm-3.5 6a3.9 3.9 0 0 1-.6-1.8.6.6 0 0 0-.6-.4.6.6 0 0 0-.5.2 5 5 0 0 0-.6 2.7 3.9 3.9 0 0 1 .2-6.3l.2-.2a5 5 0 0 0 1.6-2.6 3.8 3.8 0 0 1 .8 4.5.6.6 0 0 0 .6.8c.9-.3 1.6-.8 2.2-1.5a3.9 3.9 0 0 1 .2 4c0-.5-.3-1-.6-1.4l-.5.1c-.4.6-1.6 1.6-2.4 1.9Z" clip-rule="evenodd" />
+    </g>
+    <g clip-path="url(#s)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M207.2 82.9h.1l8 2c.3 0 .5.2.5.4l.7 3.2c.2-.1.4 0 .6.1l1.6 1.7c.2.2.2.5 0 .8l-3.9 3.9c-.2.2-.5.2-.8 0l-1.6-1.7a.6.6 0 0 1-.2-.6L209 92a.6.6 0 0 1-.4-.5l-2-8a.6.6 0 0 1 .6-.7Zm3.5 4.8-2.5-2.5 1.4 5.8 3.5.7 2.4-2.3-.7-3.6-5.8-1.4 2.5 2.5.7-.1a1.7 1.7 0 1 1-1.5 1Zm1.1.4a.6.6 0 0 0 .4.9.6.6 0 1 0-.4-1Zm4.7 1.8-2.5 2.6a15 15 0 0 0 2.5-1.3 22.4 22.4 0 0 1 1-.5l-.8-1-.2.2Z" clip-rule="evenodd" />
+    </g>
+    <path fill="#110F2A" fill-rule="evenodd" d="M152.2 112.5a.8.8 0 0 0-1 0l-7 5.3-.2.6v9.1c0 .6.2 1.2.7 1.6.4.5 1 .7 1.6.7h10.8c.6 0 1.2-.2 1.7-.7.4-.4.6-1 .6-1.6v-9c0-.3 0-.6-.3-.7l-7-5.3Zm-6.6 15v-8.7l6.1-4.7 6.2 4.7a13 13 0 0 1-9.1 9.4h-2.5c-.2 0-.4 0-.5-.2a.7.7 0 0 1-.2-.5Zm-23.8 13.8a7.7 7.7 0 1 0 5 13.7l3.4 3.5a.8.8 0 1 0 1.1-1.1l-3.5-3.5a7.7 7.7 0 0 0-6-12.6Zm-6.1 7.7a6.1 6.1 0 1 1 8.5 5.7 5 5 0 0 0-8.4-4.8l-.1-.9Z" clip-rule="evenodd" />
+    <g clip-path="url(#t)">
+        <path fill="#110F2A" fill-rule="evenodd" d="M181.3 141.4a.7.7 0 0 0-1.2 0l-.9 1.3c-.2.3-.6.4-.9.2l-1.4-.7c-.5-.2-1 .1-1 .6l-.2 1.6c0 .4-.3.6-.6.7h-1.6c-.5.1-.8.6-.6 1.1l.7 1.4c.2.3 0 .7-.2 1l-1.4.8c-.4.3-.4 1 0 1.2l1.4.9c.3.2.4.6.2.9l-.7 1.4c-.2.5 0 1 .6 1l1.6.1c.3 0 .6.3.6.7l.2 1.6c0 .5.5.8 1 .6l1.4-.7c.3-.2.7 0 1 .2l.8 1.3c.3.5.9.5 1.2 0l.9-1.3c.2-.3.5-.4.9-.2l1.4.7c.4.2 1-.1 1-.6l.1-1.6c0-.4.3-.6.7-.7h1.6c.5-.1.8-.6.6-1.1l-.7-1.4c-.2-.3-.1-.7.2-1l1.3-.8c.4-.3.4-1 0-1.2l-1.3-.9a.7.7 0 0 1-.2-.9l.7-1.4c.2-.5-.1-1-.6-1l-1.6-.1a.7.7 0 0 1-.7-.7v-1.6c-.1-.5-.7-.8-1.1-.6l-1.4.7c-.4.2-.7 0-1-.2l-.8-1.3Zm3.6 6.8a.8.8 0 0 0-1-1.1l-4.3 4.2-2-2.1a.8.8 0 1 0-1.2 1l2.7 2.7c.3.3.8.3 1 0l4.8-4.7Z" clip-rule="evenodd" />
+    </g>
+    <defs>
+        <clipPath id="b">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(231.1 143.3)" />
+        </clipPath>
+        <clipPath id="c">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(145.5 275)" />
+        </clipPath>
+        <clipPath id="d">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(81.6 255.3)" />
+        </clipPath>
+        <clipPath id="e">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(30.2 209.8)" />
+        </clipPath>
+        <clipPath id="f">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(145 226.5)" />
+        </clipPath>
+        <clipPath id="g">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(33.5 78.1)" />
+        </clipPath>
+        <clipPath id="h">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(145.5 16.4)" />
+        </clipPath>
+        <clipPath id="i">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(209.4 36)" />
+        </clipPath>
+        <clipPath id="j">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(254.5 78.1)" />
+        </clipPath>
+        <clipPath id="k">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(274.6 149.6)" />
+        </clipPath>
+        <clipPath id="l">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(257.9 209.8)" />
+        </clipPath>
+        <clipPath id="m">
+            <path fill="#fff" d="M0 0h10v10H0z" transform="translate(209.8 255.3)" />
+        </clipPath>
+        <clipPath id="o">
+            <path fill="#fff" d="M0 0h19v19H0z" transform="translate(142.2 169.4)" />
+        </clipPath>
+        <clipPath id="p">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(145 60.2)" />
+        </clipPath>
+        <clipPath id="q">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(206 204.3)" />
+        </clipPath>
+        <clipPath id="r">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(84 204.3)" />
+        </clipPath>
+        <clipPath id="s">
+            <path fill="#fff" d="M0 0h13.4v13.4H0z" transform="translate(206 82.3)" />
+        </clipPath>
+        <clipPath id="t">
+            <path fill="#fff" d="M0 0h19v19H0z" transform="translate(171.2 140.5)" />
+        </clipPath>
+        <filter id="a" width="254.4" height="254.4" x="24.5" y="22.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+            <feMorphology in="SourceAlpha" operator="dilate" radius="4" result="effect1_dropShadow_943_1117" />
+            <feOffset />
+            <feGaussianBlur stdDeviation="7.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix values="0 0 0 0 0.632 0 0 0 0 0.543125 0 0 0 0 0.9875 0 0 0 0.25 0" />
+            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_943_1117" />
+            <feBlend in="SourceGraphic" in2="effect1_dropShadow_943_1117" result="shape" />
+        </filter>
+        <filter id="n" width="164.2" height="164.2" x="69.7" y="67.9" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+            <feMorphology in="SourceAlpha" operator="dilate" radius="4" result="effect1_dropShadow_943_1117" />
+            <feOffset />
+            <feGaussianBlur stdDeviation="7.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix values="0 0 0 0 0.925288 0 0 0 0 0.543125 0 0 0 0 0.9875 0 0 0 0.25 0" />
+            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_943_1117" />
+            <feBlend in="SourceGraphic" in2="effect1_dropShadow_943_1117" result="shape" />
+        </filter>
+    </defs>
+</svg>
