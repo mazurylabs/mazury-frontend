@@ -6,7 +6,6 @@ import { Mint, Icons, Intro, Badges, Sign, Twitter } from './steps';
 
 import storage from '@/utils/storage';
 import { IS_NEW_USER } from '@/config';
-import { StepIndicator } from './StepIndicator';
 
 export const AnnouncementModal = () => {
   const [toggleModal, setToggleModal] = React.useState<boolean>(
