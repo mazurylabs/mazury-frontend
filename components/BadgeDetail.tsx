@@ -31,6 +31,7 @@ interface BadgeDetailProps {
   variant: 'badge' | 'poap';
   id: string;
   canBeMinted: boolean;
+  mintedAt?: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -88,6 +89,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   slug,
   id,
   canBeMinted,
+  mintedAt,
 }) => {
   const router = useRouter();
   const containerRef = React.useRef(null!);
@@ -265,7 +267,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                       }}
                       className="font-normal text-indigo-100"
                     >
-                      {new Date().toDateString()}
+                      {mintedAt}
                     </motion.p>
                   </div>
                 )}

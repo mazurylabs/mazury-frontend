@@ -71,6 +71,7 @@ export interface Badge {
   created_at: string;
   updated_at: string;
   minted: boolean;
+  minted_at: string;
 }
 
 export type MappedSkills<T> = {
