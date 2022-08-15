@@ -58,7 +58,7 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
 
 const isDev = process.env.NODE_ENV;
 const providerEndpoint = isDev
-  ? process.env.NEXT_PUBLIC_INFURA_URL
+  ? process.env.NEXT_PUBLIC_POLYGON_MUMBAI_URL
   : process.env.NEXT_PUBLIC_POLYGON_URL;
 
 const provider = new providers.JsonRpcProvider(providerEndpoint);
