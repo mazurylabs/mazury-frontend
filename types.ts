@@ -16,7 +16,7 @@ export interface Color {
 
 export type ProfileSection =
   | 'Activity'
-  | 'Badges'
+  | 'Credentials'
   | 'Referrals'
   | 'Writing'
   | 'DAOs';
@@ -246,7 +246,7 @@ export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 export type BadgeIssuer = 'mazury' | 'poap';
 
 export type FilterType =
-  | 'Badges'
+  | 'Credentials'
   | 'Roles'
   | 'Referred skills'
   | 'Number of referrals'

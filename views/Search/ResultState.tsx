@@ -21,7 +21,7 @@ import { commify, fadeAnimation } from 'utils';
 import { useIntersection } from 'hooks';
 import { axios } from 'lib/axios';
 
-const filters = ['Badges', 'Roles', 'Referred skills'];
+const filters = ['Credentials', 'Roles', 'Referred skills'];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
@@ -163,7 +163,7 @@ export const ResultState = () => {
         isContactable={filter.contactable}
       />
     ),
-    Badges: (
+    Credentials: (
       <BadgeFilter
         handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}

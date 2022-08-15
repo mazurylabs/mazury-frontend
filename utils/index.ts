@@ -183,7 +183,7 @@ export const getSkillsFromProfile = (profile: Partial<Profile>) => {
 
 export const sectionToColor: { [key in ProfileSection]: ColorName } = {
   Activity: 'indigo',
-  Badges: 'fuchsia',
+  Credentials: 'fuchsia',
   Referrals: 'emerald',
   Writing: 'amber',
   DAOs: 'purple',

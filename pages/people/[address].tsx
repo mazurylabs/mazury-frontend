@@ -63,7 +63,7 @@ interface PageProps extends Props {}
 
 const profileSections: ProfileSection[] = [
   'Activity',
-  'Badges',
+  'Credentials',
   'Referrals',
   'Writing',
   'DAOs',
@@ -165,7 +165,7 @@ const Profile: React.FC<Props> = ({ address }) => {
       case 'Activity':
         ref = activityRef || altActivityRef;
         break;
-      case 'Badges':
+      case 'Credentials':
         ref = badgesRef;
         break;
       case 'Referrals':
@@ -515,7 +515,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       {getMetricDisplayValue(badgeCount)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
-                      Badges
+                      Credentials
                     </span>
                   </div>
 
@@ -564,7 +564,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       {getMetricDisplayValue(credentialsCount)}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
-                      Badges
+                      Credentials
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-0">
@@ -680,7 +680,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               }
               return (
                 <Pill
-                  className="mx-auto w-[150px] justify-start"
+                  className="mx-auto w-[170px] justify-start"
                   key={sectionName}
                   isNav
                   label={sectionName}
@@ -810,7 +810,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 ) : (
                   <p className="text-lg text-indigoGray-60">
                     {badges?.length === 0
-                      ? 'No recent badges to show'
+                      ? 'No recent credentials to show'
                       : 'Loading...'}
                   </p>
                 )}

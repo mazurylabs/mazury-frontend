@@ -190,7 +190,7 @@ const Home: NextPage = () => {
 
       <div className="pt-8 lg:mr-12 lg:pt-0">
         <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
-          <h2>BADGE SEARCH SUGGESTIONS</h2>
+          <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
 
         <div className="font-inter px-2 font-medium">
