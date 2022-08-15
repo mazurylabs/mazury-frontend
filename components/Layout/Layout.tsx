@@ -3,6 +3,8 @@ import { FC, useState } from 'react';
 import { SidebarContext } from 'contexts';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
+import Link from 'next/link';
+import SVG from 'react-inlinesvg';
 
 interface LayoutProps {
   sidebarContent?: React.ReactNode;
@@ -24,6 +26,17 @@ export const Layout: FC<LayoutProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
 
+  const variants = {
+    open: {
+      width: 'fit-content',
+      transition: { duration: 0.1, ease: [0.01, 0.03, 0.04, 1] },
+    },
+    closed: {
+      width: 75,
+      transition: { duration: 0.1, ease: [0.01, 0.03, 0.04, 1] },
+    },
+  };
+
   return (
     <div
       className="flex min-h-screen w-full flex-col"
@@ -33,16 +46,20 @@ export const Layout: FC<LayoutProps> = ({
         value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
       >
         <motion.aside
-          className={`fixed top-0 z-30 hidden h-screen w-[75px] flex-col bg-white py-10 ${
-            isOpen && 'px-5'
-          } shadow-inner lg:flex`}
-          whileHover={{
-            width: signInOpen ? '300px' : '200px',
-          }}
+          variants={variants}
+          animate={isOpen ? 'open' : 'closed'}
+          className={`fixed top-0 z-30 !hidden h-screen flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
           onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
+          onMouseLeave={() => !signInOpen && setIsOpen(false)}
           role="menu"
         >
+          <Link href="/">
+            <a className="cursor-pointer">
+              <SVG src="/new-logo.svg" height="32px" width="32px" />
+            </a>
+          </Link>
+
+          <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
           {sidebarContent}
         </motion.aside>
       </SidebarContext.Provider>

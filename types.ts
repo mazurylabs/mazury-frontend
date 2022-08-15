@@ -16,7 +16,7 @@ export interface Color {
 
 export type ProfileSection =
   | 'Activity'
-  | 'Badges'
+  | 'Credentials'
   | 'Referrals'
   | 'Writing'
   | 'DAOs';
@@ -70,6 +70,8 @@ export interface Badge {
   badge_type: BadgeType;
   created_at: string;
   updated_at: string;
+  minted: boolean;
+  minted_at: string;
 }
 
 export type MappedSkills<T> = {
@@ -245,7 +247,7 @@ export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 export type BadgeIssuer = 'mazury' | 'poap';
 
 export type FilterType =
-  | 'Badges'
+  | 'Credentials'
   | 'Roles'
   | 'Referred skills'
   | 'Number of referrals'
@@ -260,3 +262,9 @@ export interface FilterState {
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export type AuthVerifyResponse = {
+  access_token: string;
+  refresh: string;
+  success: boolean;
+};

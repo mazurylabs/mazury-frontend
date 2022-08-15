@@ -1,10 +1,22 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import * as React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import SVG from 'react-inlinesvg';
 import Image from 'next/image';
 import ScrollLock from 'react-scrolllock';
 import { useRouter } from 'next/router';
+import { Toaster, toast } from 'react-hot-toast';
+import { useContractEvent } from 'wagmi';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 import { Button } from './Button';
+import { fadeAnimation, trayAnimation } from 'utils';
+import { Spinner } from './Spinner';
+import { mintBadge } from 'utils/api';
+import contractInterface from 'utils/abi.json';
+import { useClickOutside } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
+import { isDev } from '@/config';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -17,6 +29,9 @@ interface BadgeDetailProps {
   image: string;
   slug: string;
   variant: 'badge' | 'poap';
+  id: string;
+  canBeMinted: boolean;
+  mintedAt?: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -24,37 +39,17 @@ interface BadgeDetailButtonProp {
   label: string;
   handleClick: () => void;
   disabled?: boolean;
+  iconStyle?: string;
 }
 
-const trayAnimation = {
-  initial: { y: '100%' },
-  animate: {
-    y: 0,
-    transition: { duration: 0.4, ease: [0.36, 0.66, 0.04, 1] },
-  },
-  exit: {
-    y: '100%',
-    transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] },
-  },
-};
-
-const fadeAnimation = {
-  initial: { opacity: 0, y: 0 },
-  animate: {
-    opacity: 1,
-    transition: { duration: 0.3, ease: 'easeIn' },
-  },
-  exit: {
-    opacity: 0,
-    transition: { duration: 0.3, ease: 'easeIn' },
-  },
-};
+type Steps = 'idle' | 'initialise' | 'submitting';
 
 const BadgeDetailButton = ({
   icon,
   handleClick,
   label,
   disabled = false,
+  iconStyle,
 }: BadgeDetailButtonProp) => {
   return (
     <Button
@@ -63,7 +58,12 @@ const BadgeDetailButton = ({
       onClick={handleClick}
     >
       <div className="flex">
-        <Image src={`/icons/${icon}.svg`} height={24} width={24} />
+        <SVG
+          src={`/icons/${icon}.svg`}
+          height={24}
+          width={24}
+          className={iconStyle}
+        />
       </div>
       <span
         className={`font-inter text-base font-semibold leading-6 text-indigoGray-${
@@ -87,8 +87,19 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   image,
   variant,
   slug,
+  id,
+  canBeMinted,
+  mintedAt,
 }) => {
   const router = useRouter();
+  const containerRef = React.useRef(null!);
+
+  const { address } = useSelector(userSlice);
+  const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
+  const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
+  const [isNewlyMinted, setIsNewlyMinted] = React.useState(false);
+  const [transactionId, setTransactionId] = React.useState('');
+
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
   const handleSearch = (badge: string) => {
@@ -98,150 +109,488 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     router.push(`/search?${queryParam}`);
   };
 
-  return (
-    <div
-      className="fixed bottom-0 left-0 z-10 flex h-full w-full items-end lg:absolute lg:bottom-[40px] lg:ml-[-24px] lg:h-fit lg:w-[502.23px]"
-      // onClick={() => isMobile && handleCloseModal()}
+  const handleClose = () => {
+    if (currentStep === 'submitting') return;
+    handleCloseModal();
+  };
+
+  const handleSteps = (step: Steps) => setCurrentStep(step);
+
+  const handleInitialiseMint = async (badgeId: string) => {
+    try {
+      handleSteps('submitting');
+      const { data } = await mintBadge(badgeId);
+      if (data) setTransactionId(data?.transaction_id);
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrong');
+      handleSteps('initialise');
+    }
+  };
+
+  const handleMinting = (event: any) => {
+    setIsBadgeMinted(true);
+    setIsNewlyMinted(true);
+    setCurrentStep('idle');
+  };
+
+  const handleGoToTwitter = () => {
+    const twitterLink = `https://twitter.com/intent/tweet?text=Just%20minted%20a%20new%20badge%20on%20@mazuryxyz!%20Check%20out%20my%20profile%20at%20mzry.me/${address}`;
+    window.open(twitterLink, '_blank');
+  };
+
+  const addressOrName = isDev
+    ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
+    : '0x2a44dd7ff860a93cb8f31c3b4104ba8a7d1c0b64';
+
+  const contractConfig = {
+    addressOrName,
+    contractInterface,
+  };
+
+  React.useEffect(() => {
+    setIsBadgeMinted(!canBeMinted);
+  }, [canBeMinted]);
+
+  useContractEvent(contractConfig, 'Mint', handleMinting);
+  useClickOutside(containerRef, handleClose);
+
+  const idle = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
     >
-      <motion.div
-        {...animatedValue}
-        className="z-10 h-[80%] w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl md:h-[97%]  lg:h-fit lg:rounded-xl lg:border lg:p-0"
-      >
-        <div className="flex h-full flex-col px-6 pb-6 lg:p-0 ">
-          <div className="lg:hidden">
-            <Button
-              className="m-0 !p-0"
-              variant="tertiary"
-              onClick={handleCloseModal}
-            >
-              <span className="sr-only">Close Modal</span>
-              <Image src="/icons/x.svg" height={24} width={24} />
-            </Button>
+      {isNewlyMinted && (
+        <Player
+          autoplay
+          src="https://assets1.lottiefiles.com/packages/lf20_o5oeyvbk.json"
+          className="absolute top-[50%] left-[50%] z-[-1] h-[150%] w-[150%] translate-x-[-50%] translate-y-[-50%]"
+        />
+      )}
+
+      <div>
+        <Button
+          className="m-0 !p-0 lg:hidden"
+          variant="tertiary"
+          onClick={handleClose}
+        >
+          <span className="sr-only">Close Modal</span>
+          <SVG src="/icons/x.svg" height={24} width={24} />
+        </Button>
+      </div>
+
+      <ScrollLock>
+        <div className="flex grow flex-col lg:flex-row lg:items-center">
+          <div
+            className={`flex grow items-center justify-center lg:max-w-[45%] `}
+          >
+            <img
+              src={image}
+              className={` ${
+                variant === 'poap'
+                  ? 'h-[230px] w-[230px] rounded-full'
+                  : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
+              }`}
+              alt={title + ' badge'}
+            />
           </div>
 
-          <ScrollLock>
-            <div className="flex grow flex-col lg:flex-row lg:pt-6 lg:pr-4 lg:pb-4">
-              <div className="flex grow items-center justify-center">
-                {/* <video
-                  autoPlay={true}
-                  loop={true}
-                  className="leading-0 flex w-[220px] !border-transparent md:w-[245px] lg:w-[123px]"
+          <div
+            className={`space-y-[25.5px] lg:grow lg:space-y-[${
+              isBadgeMinted ? '40px' : '90px'
+            }]`}
+          >
+            <div className="space-y-2 lg:max-w-[400px]">
+              <h2 className="font-demi text-2xl leading-6 text-indigoGray-90 lg:text-4xl lg:leading-[43.2px]">
+                {title}
+              </h2>
+
+              <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
+                {description}
+              </p>
+
+              <div className="flex max-h-7 items-center space-x-2">
+                <div
+                  className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
                 >
-                  <source src={videoUrl} type="video/mp4" />
-                </video> */}
-                <img
-                  src={image}
-                  className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[156px] lg:w-[110px] lg:px-[15px] lg:pt-[30px]"
-                  alt={title + ' badge'}
-                />
-              </div>
-
-              <div className="space-y-[25.5px]">
-                <div className="space-y-2 lg:mb-[48.5px]">
-                  <h2 className="font-demi text-2xl leading-6 text-indigoGray-90">
-                    {title}
-                  </h2>
-
-                  <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
-                    {description}
-                  </p>
-
-                  <div className="flex max-h-7 items-center space-x-2">
-                    <div
-                      className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
-                    >
-                      <div className="flex" role="presentation">
-                        <Image
-                          height={16}
-                          width={16}
-                          src={`/icons/trophy.svg`}
-                          alt="badge type"
-                        />
-                      </div>
-                      <p
-                        className={`font-inter text-xs font-bold text-emerald-900`}
-                      >
-                        Badge earned
-                      </p>
-                    </div>
-
-                    <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
-
-                    <div className="font-inter text-xs font-medium text-indigoGray-60">
-                      <p>{badgeCount} people</p>
-                    </div>
+                  <div className="flex" role="presentation">
+                    <SVG height={16} width={16} src={`/icons/trophy.svg`} />
                   </div>
-                </div>
-
-                <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
-                  <div>
-                    <BadgeDetailButton
-                      label="Mint NFT (Coming soon)"
-                      icon="jackhammer"
-                      handleClick={() => {}}
-                      disabled={true}
-                    />
-                  </div>
-
-                  <div>
-                    <BadgeDetailButton
-                      label={`Search using ${variant}`}
-                      icon="search-black"
-                      handleClick={() => handleSearch(slug)}
-                    />
-                  </div>
-
-                  <div>
-                    <BadgeDetailButton
-                      label="Hide on my profile"
-                      icon="eye-slash"
-                      handleClick={() => {}}
-                    />
-                  </div>
-                </div>
-
-                <div className="hidden space-x-6 lg:flex ">
-                  <button
-                    type="button"
-                    className="flex shrink-0 items-center space-x-2"
-                    onClick={() => handleSearch(slug)}
+                  <p
+                    className={`font-inter text-xs font-bold text-emerald-900`}
                   >
-                    <div className="flex">
-                      <Image
-                        src={`/icons/search-violet.svg`}
-                        height={16}
-                        width={16}
-                      />
-                    </div>
+                    {variant === 'badge' ? 'Badge' : 'Poap'} earned
+                  </p>
+                </div>
 
-                    <span className="font-inter text-sm font-bold leading-6 text-violet-600">
-                      {`Search using ${variant}`}
-                    </span>
-                  </button>
+                <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
-                  {variant == 'badge' && (
-                    <button
-                      type="button"
-                      disabled
-                      className="flex max-h-[36px] shrink-0 items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6"
-                    >
-                      <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
-                        Mint NFT (coming soon)
-                      </span>
-
-                      {/* <div className="flex border-l border-violet-500 pl-2">
-                        <Image
-                          src={`/icons/arrow-down.svg`}
-                          height={16}
-                          width={16}
-                        />
-                      </div> */}
-                    </button>
-                  )}
+                <div className="font-inter text-xs font-medium text-indigoGray-60">
+                  <p>{badgeCount} people</p>
                 </div>
               </div>
             </div>
-          </ScrollLock>
+
+            {isBadgeMinted && (
+              <motion.div
+                initial={
+                  isNewlyMinted && {
+                    backgroundColor: '#6366F1',
+                    boxShadow: '0px 0px 20px #4D50FF',
+                  }
+                }
+                animate={{
+                  backgroundColor: '#fff',
+                  boxShadow: '0px 0px 0px #fff',
+                  transition: { duration: 1.5, delay: 0.5 },
+                }}
+                className="font-inter flex items-center justify-between rounded-lg py-1 px-2 text-xs"
+              >
+                {variant === 'badge' && (
+                  <div className="space-y-[2px]">
+                    <motion.p
+                      initial={isNewlyMinted && { color: '#F8F9FC' }}
+                      animate={{
+                        color: '#110F2A',
+                        transition: { duration: 1.5, delay: 0.5 },
+                      }}
+                      className="text-sm text-indigoGray-5"
+                    >
+                      You minted this badge
+                    </motion.p>
+                    <motion.p
+                      initial={isNewlyMinted && { color: '#E0E7FF' }}
+                      animate={{
+                        color: '#646B8B',
+                        transition: { duration: 1.5, delay: 0.5 },
+                      }}
+                      className="font-normal text-indigo-100"
+                    >
+                      {mintedAt}
+                    </motion.p>
+                  </div>
+                )}
+
+                <div className="flex space-x-2">
+                  <motion.div
+                    initial={
+                      isNewlyMinted && {
+                        backgroundColor: '#F8F9FC',
+                        color: '#2081E2',
+                      }
+                    }
+                    animate={{
+                      color: '#F8F9FC',
+                      backgroundColor: '#2081E2',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="relative h-4 w-4 rounded-full"
+                  >
+                    <SVG
+                      src={`/icons/open-sea.svg`}
+                      height={9}
+                      width={10}
+                      className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                    />
+                  </motion.div>
+
+                  <motion.a
+                    rel="noreferrer"
+                    href={
+                      variant === 'badge'
+                        ? isDev
+                          ? 'https://testnets.opensea.io/collection/mazury-v3'
+                          : 'https://opensea.io/collection/mazury'
+                        : 'https://poap.gallery/event/44608'
+                    }
+                    target="_blank"
+                    initial={isNewlyMinted && { color: '#F8F9FC' }}
+                    animate={{
+                      color: '#2081E2',
+                      transition: { duration: 1.5, delay: 0.5 },
+                    }}
+                    className="text-indigoGray-5"
+                  >
+                    {variant === 'badge' ? 'See on Opensea' : 'See on Poap'}
+                  </motion.a>
+                </div>
+              </motion.div>
+            )}
+
+            {isNewlyMinted && (
+              <div>
+                <Button
+                  variant="primary"
+                  className="font-inter flex w-full items-center justify-center space-x-2 bg-blue-600 text-sm font-semibold"
+                  onClick={handleGoToTwitter}
+                >
+                  <SVG
+                    src="/icons/twitter.svg"
+                    height={16}
+                    width={16}
+                    className="text-white"
+                  />
+                  <span>Share on Twitter</span>
+                </Button>
+              </div>
+            )}
+
+            <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
+              {!isBadgeMinted && variant === 'badge' && (
+                <div>
+                  <BadgeDetailButton
+                    label="Mint NFT"
+                    icon="jackhammer"
+                    handleClick={() => handleSteps('initialise')}
+                  />
+                </div>
+              )}
+
+              <div>
+                <BadgeDetailButton
+                  label={`Search using ${variant}`}
+                  icon="search-black"
+                  handleClick={() => handleSearch(slug)}
+                />
+              </div>
+
+              <div>
+                <BadgeDetailButton
+                  label="Hide on my profile"
+                  icon="eye-slash"
+                  handleClick={() => {}}
+                />
+              </div>
+
+              {isBadgeMinted && (
+                <div>
+                  <BadgeDetailButton
+                    label="Share on Twitter"
+                    icon="twitter"
+                    handleClick={handleGoToTwitter}
+                    iconStyle="text-[#000]"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="hidden justify-between space-x-6 lg:flex">
+              <div>
+                <button
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  onClick={handleGoToTwitter}
+                >
+                  <div className="flex">
+                    <SVG
+                      src={`/icons/twitter.svg`}
+                      height={16}
+                      width={16}
+                      className="text-[#000]"
+                    />
+                  </div>
+
+                  <span className="sr-only">Share on Twitter</span>
+                </button>
+              </div>
+
+              <div className="flex space-x-3">
+                <button
+                  type="button"
+                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  onClick={() => handleSearch(slug)}
+                >
+                  <div className="flex">
+                    <SVG
+                      src={`/icons/search-black.svg`}
+                      height={16}
+                      width={16}
+                    />
+                  </div>
+
+                  <span className="font-inter text-sm font-semibold leading-[21px] text-indigoGray-90">
+                    {`Search`}
+                  </span>
+                </button>
+
+                {variant === 'badge' && !isBadgeMinted && (
+                  <button
+                    type="button"
+                    className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6 shadow-sm"
+                    onClick={() => handleSteps('initialise')}
+                  >
+                    <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
+                      Mint NFT
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ScrollLock>
+    </motion.div>
+  );
+
+  const initialise = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex h-[609px] flex-col px-6 pb-6 sm:h-[728px] lg:h-full lg:w-full lg:p-0 "
+    >
+      <div>
+        <Button
+          className="m-0 !p-0 lg:hidden"
+          variant="tertiary"
+          onClick={() => handleSteps('idle')}
+        >
+          <span className="sr-only">Close Modal</span>
+          <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+        </Button>
+      </div>
+
+      <ScrollLock>
+        <div className="flex grow flex-col lg:flex-row lg:items-center">
+          <div className="flex grow items-center justify-center lg:max-w-[45%]">
+            <div className="relative">
+              <img
+                src={image}
+                className="h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]"
+                alt={title + ' badge'}
+              />
+
+              {variant === 'badge' && (
+                <div className="absolute bottom-0 right-0 h-[117px] w-[117px] translate-x-[30%] translate-y-[20%]">
+                  <SVG src="/badges/polygon.svg" height={117} width={117} />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="max-w-[530px] space-y-6 lg:grow">
+            <div className="space-y-2">
+              <div>
+                <h2 className="font-demi text-3xl text-indigoGray-90">
+                  Mint on Polygon
+                </h2>
+              </div>
+
+              <div className="font-inter space-y-2 text-sm font-medium leading-[21px] text-indigoGray-60">
+                <p>
+                  We use Polygon to mint your favourite badges without affecting
+                  the enviornment while also taking the gas fees on us.
+                </p>
+
+                <p>
+                  Your NFT is soul-bound, meaning nobody can take it.{' '}
+                  <span className="font-bold">It‘s proof of your work!</span>
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <Button
+                variant="primary"
+                size="large"
+                className="w-full !bg-violet-600"
+                onClick={() => handleInitialiseMint(id)}
+              >
+                Mint NFT
+              </Button>
+            </div>
+          </div>
+        </div>
+      </ScrollLock>
+    </motion.div>
+  );
+
+  const submitting = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex h-[450px] flex-col space-y-6 px-6 pb-6 sm:h-[728px] lg:h-full lg:p-6"
+    >
+      <ScrollLock>
+        <div className="mt-6 flex grow flex-col">
+          <div className="space-y-2">
+            <h2 className="font-demi text-3xl text-indigoGray-90">
+              Submitting on the chain
+            </h2>
+            <p className="font-sm font-sans font-medium leading-[21px] text-indigoGray-60">
+              We are waiting for executing the transaction on Polygon. Please
+              wait until it is finished.
+            </p>
+          </div>
+
+          <div className="flex shrink-0 grow items-center justify-center lg:py-4">
+            <Spinner />
+          </div>
+
+          <div className="flex justify-center">
+            {transactionId && (
+              <a
+                rel="noreferrer"
+                href={`https://mumbai.polygonscan.com/tx/${transactionId}`}
+                className="flex items-center space-x-2"
+                target="_blank"
+              >
+                <SVG src={`/icons/external-link.svg`} height={16} width={16} />
+                <span className="font-sans text-sm font-semibold text-indigo-700">
+                  Track progress on polygonscan
+                </span>
+              </a>
+            )}
+          </div>
+        </div>
+      </ScrollLock>
+    </motion.div>
+  );
+
+  const steps: Record<Steps, JSX.Element> = {
+    idle,
+    initialise,
+    submitting,
+  };
+
+  return (
+    <div
+      className="fixed bottom-0 left-0 z-10 z-[10000] flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
+      // onClick={() => isMobile && handleCloseModal()}
+    >
+      <Toaster />
+
+      <motion.div
+        {...fadeAnimation}
+        animate={{ opacity: 0.5 }}
+        className="inset-0 hidden h-full w-full lg:absolute lg:flex lg:bg-indigoGray-90"
+      />
+
+      <div className="hidden w-[75px] shrink-0 lg:block" />
+
+      <motion.div
+        ref={containerRef}
+        {...animatedValue}
+        className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
+      >
+        <div className="hidden lg:block">
+          {currentStep !== 'submitting' && (
+            <div className="space-x-2">
+              <Button
+                className="m-0 !p-0 !outline-none"
+                variant="tertiary"
+                onClick={handleClose}
+              >
+                <Image src="/icons/arrow-left.svg" height={24} width={24} />
+                Back to credentials overview
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div className="lg:flex lg:grow lg:items-center lg:items-center lg:justify-center">
+          <AnimatePresence>{steps[currentStep]}</AnimatePresence>
         </div>
       </motion.div>
     </div>

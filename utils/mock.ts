@@ -27,6 +27,8 @@ export const mockProfile: Profile = {
       },
       created_at: '2021-11-28T21:16:23.817772Z',
       updated_at: '2021-11-28T21:16:23.817784Z',
+      minted: false,
+      minted_at: '',
     },
   ],
   referred_by: [],

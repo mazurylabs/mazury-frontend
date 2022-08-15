@@ -7,8 +7,7 @@ import { FC } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 import { Role } from 'types';
-import { getMessageToBeSigned, updateProfile } from 'utils/api';
-import { useSignMessage } from 'wagmi';
+import { updateProfile } from 'utils/api';
 
 type Steps = 'active' | 'idle' | 'error';
 
@@ -26,7 +25,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const { mutate } = useSWRConfig();
   const { profile } = useProfile(address);
   const [formData, setFormData] = useState(profile);
-  const [_, signMessage] = useSignMessage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileUrl, setFileUrl] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
@@ -64,20 +62,10 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      setWalletRequestStep('active');
       if (!formData) {
         return toast.error('Something went wrong.');
       }
-      const { data: messageToBeSigned } = await getMessageToBeSigned(address);
-      if (!messageToBeSigned) {
-        return toast.error('Failed to get message to be signed');
-      }
-      const { data: signature } = await signMessage({
-        message: messageToBeSigned,
-      });
-      if (!signature) {
-        return toast.error('Failed to sign message');
-      }
+
       const formDataToBeSent: OnboardingFormDataType = {
         website: formData.website,
         bio: formData.bio,
@@ -91,7 +79,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
       };
       const { data, error } = await updateProfile(
         address,
-        signature,
+        '',
         formDataToBeSent,
         file,
         shouldRemoveAvi
@@ -196,19 +184,19 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             <form className="mt-6 flex flex-col gap-6">
               <Input
                 label="Full name (optional)"
-                placeholder="Your full name"
+                placeholder="Vitalik Buterin"
                 value={formData.full_name}
                 onChange={(val) => setFormData({ ...formData, full_name: val })}
               />
               <Input
-                label="Website (optional)"
-                placeholder="Your website"
+                label="Website URL"
+                placeholder="https://vitalik.ca/"
                 value={formData.website}
                 onChange={(val) => setFormData({ ...formData, website: val })}
               />
               <Input
-                label="Bio (optional)"
-                placeholder="Your bio"
+                label="Bio"
+                placeholder="Founder of ethereum"
                 value={formData.bio}
                 onChange={(val) => setFormData({ ...formData, bio: val })}
               />

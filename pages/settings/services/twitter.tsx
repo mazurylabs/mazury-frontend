@@ -1,18 +1,13 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useAccount, useSignMessage } from 'wagmi';
 
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import {
-  getMessageToBeSigned,
-  getProfile,
-  updateProfile,
-  verifyTweet,
-} from 'utils/api';
+import { getProfile, updateProfile, verifyTweet } from 'utils/api';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { useProtectedRoute } from 'hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type User = Record<'twitter' | 'address', string>;
 type Steps = 'idle' | 'active' | 'loading' | 'error' | 'success';
@@ -21,8 +16,7 @@ const TwitterPage: NextPage = () => {
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
-  const [{ data: accountData }] = useAccount();
-  const [_, signMessage] = useSignMessage();
+  const { address, profile } = useSelector(userSlice);
 
   const [url, setUrl] = useState('');
   const [user, setUser] = useState<User>({
@@ -32,15 +26,13 @@ const TwitterPage: NextPage = () => {
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (accountData?.address && !user.address) {
-      getProfile(accountData?.address).then(({ data }) => {
-        setUser({
-          address: data?.eth_address as string,
-          twitter: data?.twitter as string,
-        });
+    if (address && !user.address) {
+      setUser({
+        address: profile?.eth_address as string,
+        twitter: profile?.twitter as string,
       });
     }
-  }, [accountData?.address, user.address]);
+  }, [address, user.address, profile?.eth_address, profile?.twitter]);
 
   const handleSkip = () => {
     setCurrentStep('idle');
@@ -55,8 +47,8 @@ const TwitterPage: NextPage = () => {
     setCurrentStep('active');
   };
 
-  const disconnectTwitter = async (signature: string) => {
-    const { error } = await updateProfile(user.address, signature, {
+  const disconnectTwitter = async () => {
+    const { error } = await updateProfile(user.address, '', {
       twitter: '',
     });
 
@@ -69,15 +61,8 @@ const TwitterPage: NextPage = () => {
     });
   };
 
-  const submitForVerification = async (signature: string) => {
-    if (!signature) {
-      return alert('Error signing message');
-    }
-
-    const { data, error } = await verifyTweet(
-      url as string,
-      signature as string
-    );
+  const submitForVerification = async () => {
+    const { data, error } = await verifyTweet(url as string);
 
     if (error) {
       setCurrentStep('error');
@@ -89,39 +74,15 @@ const TwitterPage: NextPage = () => {
     }
   };
 
-  const getSignature = async (messageSigner: any) => {
-    const { data, error } = await getMessageToBeSigned(user.address!);
-
-    if (!data || error) {
-      alert('Couldnt get the message to be signed. Please try again later.');
-      return;
-    }
-
-    const { data: signature, error: signatureError } = await messageSigner({
-      message: data,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return signature;
+  const handleConnectTwitter = async () => {
+    submitForVerification();
   };
 
-  const handleConnectTwitter = async (messageSigner: any = signMessage) => {
-    const signature = await getSignature(messageSigner);
-    submitForVerification(signature);
-  };
-
-  const handleDisconnectTwitter = async (messageSigner: any = signMessage) => {
-    const signature = await getSignature(messageSigner);
-    disconnectTwitter(signature);
+  const handleDisconnectTwitter = async () => {
+    disconnectTwitter();
   };
 
   const ActiveStep = () => {
-    const [_, signMessage] = useSignMessage();
-
     useEffect(() => {
       if (url) {
         setCurrentStep('loading');
@@ -149,10 +110,7 @@ const TwitterPage: NextPage = () => {
           <Button variant="secondary" onClick={handleSkip}>
             SKIP
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => handleConnectTwitter(signMessage)}
-          >
+          <Button variant="primary" onClick={() => handleConnectTwitter()}>
             RETRY
           </Button>
         </div>
@@ -181,10 +139,8 @@ const TwitterPage: NextPage = () => {
   };
 
   const WalletSigningStep = () => {
-    const [_, signMessage] = useSignMessage();
-
     useEffect(() => {
-      handleConnectTwitter(signMessage);
+      handleConnectTwitter();
       // we only want to run this once
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -206,10 +162,7 @@ const TwitterPage: NextPage = () => {
           <Button variant="secondary" onClick={handleSkip}>
             SKIP
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => handleConnectTwitter(signMessage)}
-          >
+          <Button variant="primary" onClick={() => handleConnectTwitter()}>
             RETRY
           </Button>
         </div>

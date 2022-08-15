@@ -1,81 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import 'styles/globals.css';
+import * as React from 'react';
 import type { AppProps } from 'next/app';
-import { providers } from 'ethers';
 import NextHead from 'next/head';
-import { Connector, Provider, chain, defaultChains } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { SWRConfig } from 'swr';
-import axios from 'axios';
-import { OnboardingContext, OnboardingFormDataType } from 'contexts';
-import { PersonBasicDetails } from 'types';
-import PlausibleProvider from 'next-plausible';
 
-// Pick chains
-const chains = defaultChains;
-const defaultChain = chain.mainnet;
+import 'styles/globals.css';
 
-// Set up connectors
-type ConnectorsConfig = { chainId?: number };
-const connectors = ({ chainId }: ConnectorsConfig) => {
-  return [
-    new InjectedConnector({ chains }),
-    new WalletConnectConnector({
-      chains,
-      options: {
-        qrcode: true,
-      },
-    }),
-  ];
-};
-
-// Set up providers
-type ProviderConfig = { chainId?: number; connector?: Connector };
-const isChainSupported = (chainId?: number) =>
-  chains.some((x) => x.id === chainId);
-
-const provider = new providers.JsonRpcProvider(
-  process.env.NEXT_PUBLIC_INFURA_URL
-);
-
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
-
-const fetcher = async (url: string) => {
-  try {
-    const res = await axios.get(url);
-    return res.data;
-  } catch (err: any) {
-    throw err;
-  }
-};
+import { AppProvider } from '@/providers';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
+import { getProfile } from '@/utils/api';
+import storage from '@/utils/storage';
+import { REFRESH_TOKEN_KEY } from '@/config';
+import { login, logout } from '@/slices/user';
+import { AnnouncementModal } from '@/components/Announcement';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const [onboardingFormData, setOnboardingFormData] =
-    useState<OnboardingFormDataType>({
-      username: '',
-      role_community_manager: false,
-      role_creator: false,
-      role_investor: false,
-      role_developer: false,
-      role_designer: false,
-      role_researcher: false,
-      role_trader: false,
-      open_to_opportunities: false,
-      full_name: '',
-    });
-  const [fetchedProfile, setFetchedProfile] = useState(false);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [referralReceiver, setReferralReceiver] =
-    useState<PersonBasicDetails>();
-  const [twitterConnected, setTwitterConnected] = useState(false);
-  const [githubConnected, setGithubConnected] = useState(false);
-  const [valid, setValid] = useState({
-    username: true,
-    email: true,
-  });
-
-  useEffect(() => {
+  React.useEffect(() => {
     console.log(`                                                   
  ____   _____  _____  _   _   ____  _   _ 
  |    \ (____ |(___  )| | | | / ___)| | | |
@@ -85,38 +24,43 @@ const App = ({ Component, pageProps }: AppProps) => {
   `);
   }, []);
 
-  return (
-    <SWRConfig value={{ fetcher }}>
-      <PlausibleProvider domain="app.mazury.xyz">
-        <Provider autoConnect connectors={connectors} provider={provider}>
-          <OnboardingContext.Provider
-            value={{
-              formData: onboardingFormData,
-              setFormData: setOnboardingFormData,
-              fetched: fetchedProfile,
-              setFetched: setFetchedProfile,
-              avatarFile,
-              setAvatarFile,
-              referralReceiver,
-              setReferralReceiver,
-              twitterConnected,
-              setTwitterConnected,
-              githubConnected,
-              setGithubConnected,
-              valid,
-              setValid,
-            }}
-          >
-            <NextHead>
-              <title>Mazury</title>
-              <link rel="icon" href="/new-logo.svg" />
-            </NextHead>
+  const Authenticator = () => {
+    const dispatch = useDispatch();
+    const { address } = useSelector(userSlice);
+    const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
+    const isRefreshTokenExpired = storage.isTokenExpired(refreshToken);
 
-            <Component {...pageProps} />
-          </OnboardingContext.Provider>
-        </Provider>
-      </PlausibleProvider>
-    </SWRConfig>
+    const handleProfile = React.useCallback(async () => {
+      if (isRefreshTokenExpired) {
+        return dispatch(logout());
+      }
+
+      if (address) {
+        const { data } = await getProfile(address || '');
+        if (data) {
+          dispatch(login(data));
+        }
+      }
+    }, [address, isRefreshTokenExpired, dispatch]);
+
+    React.useEffect(() => {
+      handleProfile();
+    }, [handleProfile]);
+
+    return <Component {...pageProps} />;
+  };
+
+  return (
+    <AppProvider>
+      <NextHead>
+        <title>Mazury</title>
+        <link rel="icon" href="/new-logo.svg" />
+      </NextHead>
+
+      <AnnouncementModal />
+
+      <Authenticator />
+    </AppProvider>
   );
 };
 

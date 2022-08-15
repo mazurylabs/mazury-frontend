@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-type Sections = 'activity' | 'badges' | 'referrals' | 'writing';
-const sectionsOrder = ['activity', 'badges', 'referrals', 'writing'];
+type Sections = 'activity' | 'credentials' | 'referrals' | 'writing';
+const sectionsOrder = ['activity', 'credentials', 'referrals', 'writing'];
 
 export const useIntersection = (
   element: HTMLElement | null,
@@ -60,7 +60,7 @@ export const useActiveProfileSection = () => {
     } else if (altActivityIsVisible) {
       setActiveSection('activity');
     } else if (badgesIsVisible) {
-      setActiveSection('badges');
+      setActiveSection('credentials');
     } else if (referralsIsVisible) {
       setActiveSection('referrals');
     } else if (writingIsVisible) {

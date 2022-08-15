@@ -15,3 +15,4 @@ export { useProfileSuggestions } from './useProfileSuggestions';
 export * from './useSearch';
 export { useProtectedRoute } from './useProtectedRoute';
 export { usePosts } from './usePosts';
+export { useSignature } from './useSignature';

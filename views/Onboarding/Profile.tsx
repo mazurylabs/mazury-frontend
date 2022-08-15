@@ -1,6 +1,7 @@
+import { userSlice } from '@/selectors';
 import { Button, Input, OnboardingLayout } from 'components';
 import { OnboardingContext } from 'contexts';
-import { useDebounce, useIsOnboarded } from 'hooks';
+import { useDebounce } from 'hooks';
 import Image from 'next/image';
 import {
   FC,
@@ -10,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useSelector } from 'react-redux';
 import { isValid } from 'utils/api';
 import { useAccount } from 'wagmi';
 
@@ -22,6 +24,7 @@ export const ProfileView: FC = () => {
     valid,
     setValid,
   } = useContext(OnboardingContext);
+  const { address, profile } = useSelector(userSlice);
   const [{ data: accountData }] = useAccount({
     fetchEns: true,
   });
@@ -29,7 +32,6 @@ export const ProfileView: FC = () => {
   const [fileUrl, setFileUrl] = useState<string>();
   const debouncedUsername = useDebounce(formData.username);
   const canContinue = valid.username;
-  const { onboarded } = useIsOnboarded(accountData?.address as string);
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
@@ -50,7 +52,7 @@ export const ProfileView: FC = () => {
       const { data, error } = await isValid(field, formData[field]!);
       if (error) {
         // @ts-ignore error has the field value
-        if (error.value === accountData?.address) {
+        if (error.value === address) {
           setValid((valid) => ({ ...valid, [field]: true }));
         } else {
           setValid((valid) => ({ ...valid, [field]: false }));
@@ -59,11 +61,11 @@ export const ProfileView: FC = () => {
         setValid((valid) => ({ ...valid, [field]: true }));
       }
     },
-    [formData, setValid, accountData]
+    [formData, setValid, address]
   );
 
   useEffect(() => {
-    if (accountData?.address && !onboarded) {
+    if (address && !profile?.onboarded) {
       // don't check for validity if the user has already been onboarded.
       checkIfValid('username');
     }

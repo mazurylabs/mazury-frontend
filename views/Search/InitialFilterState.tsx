@@ -14,7 +14,7 @@ interface Props {
   isContactable: boolean;
 }
 
-const filters: FilterType[] = ['Badges', 'Roles', 'Referred skills'];
+const filters: FilterType[] = ['Credentials', 'Roles', 'Referred skills'];
 
 export const InitialFilterState = ({
   handleFilterNavigation,
