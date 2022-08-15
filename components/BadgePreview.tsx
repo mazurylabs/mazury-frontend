@@ -47,7 +47,8 @@ export const BadgePreview: React.FC<Props> = ({
           className={
             `${
               issuer === 'poap' ? 'h-[42px]' : 'h-[65px]'
-            } max-w-[42px] text-xs` + (issuer === 'poap' ? 'rounded-full' : '')
+            } max-w-[42px] text-xs` +
+            (issuer === 'poap' ? 'overflow-hidden rounded-full' : '')
           }
           alt={`${heading} badge`}
         />
