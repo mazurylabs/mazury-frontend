@@ -785,7 +785,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 2xl:w-10/12">
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
-                    const { badge_type, id, minted, owner } = badge;
+                    const { badge_type, id, minted, owner, minted_at } = badge;
 
                     const { image, description, title, issuer, slug } =
                       badge_type;
@@ -803,6 +803,11 @@ const Profile: React.FC<Props> = ({ address }) => {
                         id={id}
                         canBeMinted={
                           eth_address === owner.eth_address && !minted
+                        }
+                        mintedAt={
+                          minted_at
+                            ? new Date(minted_at).toDateString()
+                            : 'Date unknown'
                         }
                       />
                     );

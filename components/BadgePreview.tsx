@@ -17,6 +17,7 @@ interface Props {
   issuer: string;
   id: string;
   canBeMinted: boolean;
+  mintedAt: string;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const BadgePreview: React.FC<Props> = ({
   issuer,
   id,
   canBeMinted,
+  mintedAt,
 }) => {
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
@@ -103,6 +105,7 @@ export const BadgePreview: React.FC<Props> = ({
             slug={slug}
             id={id}
             canBeMinted={canBeMinted}
+            mintedAt={mintedAt}
           />
         )}
       </AnimatePresence>
