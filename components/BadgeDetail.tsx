@@ -135,8 +135,14 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     window.open(twitterLink, '_blank');
   };
 
+  const isDev = process.env.NODE_ENV;
+
+  const addressOrName = isDev
+    ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
+    : '0x2a44dd7ff860a93cb8f31c3b4104ba8a7d1c0b64';
+
   const contractConfig = {
-    addressOrName: '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b',
+    addressOrName,
     contractInterface,
   };
 
