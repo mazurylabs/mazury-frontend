@@ -184,19 +184,19 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             <form className="mt-6 flex flex-col gap-6">
               <Input
                 label="Full name (optional)"
-                placeholder="Your full name"
+                placeholder="Vitalik Buterin"
                 value={formData.full_name}
                 onChange={(val) => setFormData({ ...formData, full_name: val })}
               />
               <Input
-                label="Website (optional)"
-                placeholder="Your website"
+                label="Website URL"
+                placeholder="https://vitalik.ca/"
                 value={formData.website}
                 onChange={(val) => setFormData({ ...formData, website: val })}
               />
               <Input
-                label="Bio (optional)"
-                placeholder="Your bio"
+                label="Bio"
+                placeholder="Founder of ethereum"
                 value={formData.bio}
                 onChange={(val) => setFormData({ ...formData, bio: val })}
               />
