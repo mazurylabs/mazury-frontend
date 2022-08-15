@@ -532,7 +532,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             {transactionId && (
               <a
                 rel="noreferrer"
-                href={`https://mumbai.polygonscan.com/tx/${transactionId}`}
+                href={`https://polygonscan.com/tx/${transactionId}`}
                 className="flex items-center space-x-2"
                 target="_blank"
               >
