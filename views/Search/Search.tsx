@@ -323,7 +323,7 @@ export const Search: FC<SearchProps> = ({}) => {
 
                 <div className="pt-8 lg:mr-12 lg:pt-0">
                   <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
-                    <h2>BADGE SEARCH SUGGESTIONS</h2>
+                    <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
                   </div>
 
                   <div className="font-inter px-2 font-medium">
@@ -463,7 +463,9 @@ const HistorySection: VFC = () => {
         <HistorySectionItem>Full-stack developer</HistorySectionItem>
       </div>
       <HR className="mt-10 w-full" />
-      <SectionHeading className="mt-8">Badge search suggestions</SectionHeading>
+      <SectionHeading className="mt-8">
+        Credential search suggestions
+      </SectionHeading>
       <div className="mt-3 flex flex-col gap-4">
         <Badge name="Early Mazury adopter" imgSrc="/waves.png" />
         <Badge name="Early Mazury adopter" imgSrc="/waves.png" />

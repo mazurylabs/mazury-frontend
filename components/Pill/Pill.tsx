@@ -45,7 +45,7 @@ const getClassName = (color: ColorName = 'black', active: boolean = false) => {
 
 const labelToIconName = {
   Activity: 'activity',
-  Badges: 'award',
+  Credentials: 'award',
   Referrals: 'referral',
   Writing: 'writing',
   DAOs: 'zap',
