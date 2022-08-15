@@ -12,6 +12,7 @@ import { Connector, Provider, chain, defaultChains } from 'wagmi';
 import { providers } from 'ethers';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { isDev } from '@/config';
 
 // const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
 //   infuraProvider(),
@@ -56,9 +57,11 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
 //   connectors,
 // });
 
-const provider = new providers.JsonRpcProvider(
-  process.env.NEXT_PUBLIC_INFURA_URL
-);
+const providerEndpoint = isDev
+  ? process.env.NEXT_PUBLIC_POLYGON_MUMBAI_URL
+  : process.env.NEXT_PUBLIC_POLYGON_URL;
+
+const provider = new providers.JsonRpcProvider(providerEndpoint);
 
 // autoConnect
 

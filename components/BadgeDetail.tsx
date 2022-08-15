@@ -16,6 +16,7 @@ import contractInterface from 'utils/abi.json';
 import { useClickOutside } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { isDev } from '@/config';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -135,8 +136,12 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     window.open(twitterLink, '_blank');
   };
 
+  const addressOrName = isDev
+    ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
+    : '0x2a44dd7ff860a93cb8f31c3b4104ba8a7d1c0b64';
+
   const contractConfig = {
-    addressOrName: '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b',
+    addressOrName,
     contractInterface,
   };
 
@@ -292,7 +297,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     rel="noreferrer"
                     href={
                       variant === 'badge'
-                        ? 'https://testnets.opensea.io/collection/mazury-v3'
+                        ? isDev
+                          ? 'https://testnets.opensea.io/collection/mazury-v3'
+                          : 'https://opensea.io/collection/mazury'
                         : 'https://poap.gallery/event/44608'
                     }
                     target="_blank"
