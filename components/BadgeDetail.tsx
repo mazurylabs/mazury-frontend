@@ -16,6 +16,7 @@ import contractInterface from 'utils/abi.json';
 import { useClickOutside } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { isDev } from '@/config';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -134,8 +135,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     const twitterLink = `https://twitter.com/intent/tweet?text=Just%20minted%20a%20new%20badge%20on%20@mazuryxyz!%20Check%20out%20my%20profile%20at%20mzry.me/${address}`;
     window.open(twitterLink, '_blank');
   };
-
-  const isDev = process.env.NODE_ENV;
 
   const addressOrName = isDev
     ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
