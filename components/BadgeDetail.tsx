@@ -9,7 +9,11 @@ import { useContractEvent } from 'wagmi';
 import { Player } from '@lottiefiles/react-lottie-player';
 
 import { Button } from './Button';
-import { fadeAnimation, trayAnimation } from 'utils';
+import {
+  fadeAnimation,
+  returnTruncatedIfEthAddress,
+  trayAnimation,
+} from 'utils';
 import { Spinner } from './Spinner';
 import { mintBadge } from 'utils/api';
 import contractInterface from 'utils/abi.json';
@@ -32,6 +36,7 @@ interface BadgeDetailProps {
   id: string;
   canBeMinted: boolean;
   mintedAt?: string;
+  owner: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -90,15 +95,21 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   id,
   canBeMinted,
   mintedAt,
+  owner,
 }) => {
   const router = useRouter();
   const containerRef = React.useRef(null!);
 
   const { address } = useSelector(userSlice);
+
+  const isOwnProfile = router?.query?.address === address;
+
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const [isBadgeMinted, setIsBadgeMinted] = React.useState(false);
   const [isNewlyMinted, setIsNewlyMinted] = React.useState(false);
   const [transactionId, setTransactionId] = React.useState('');
+
+  const mintedDate = isNewlyMinted ? new Date().toDateString() : mintedAt;
 
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
@@ -257,7 +268,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                       }}
                       className="text-sm text-indigoGray-5"
                     >
-                      You minted this badge
+                      {returnTruncatedIfEthAddress(owner)} minted this badge
                     </motion.p>
                     <motion.p
                       initial={isNewlyMinted && { color: '#E0E7FF' }}
@@ -267,7 +278,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                       }}
                       className="font-normal text-indigo-100"
                     >
-                      {mintedAt}
+                      {mintedDate}
                     </motion.p>
                   </div>
                 )}
@@ -376,23 +387,25 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             </div>
 
             <div className="hidden justify-between space-x-6 lg:flex">
-              <div>
-                <button
-                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
-                  onClick={handleGoToTwitter}
-                >
-                  <div className="flex">
-                    <SVG
-                      src={`/icons/twitter.svg`}
-                      height={16}
-                      width={16}
-                      className="text-[#000]"
-                    />
-                  </div>
+              {isOwnProfile && (
+                <div>
+                  <button
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                    onClick={handleGoToTwitter}
+                  >
+                    <div className="flex">
+                      <SVG
+                        src={`/icons/twitter.svg`}
+                        height={16}
+                        width={16}
+                        className="text-[#000]"
+                      />
+                    </div>
 
-                  <span className="sr-only">Share on Twitter</span>
-                </button>
-              </div>
+                    <span className="sr-only">Share on Twitter</span>
+                  </button>
+                </div>
+              )}
 
               <div className="flex space-x-3">
                 <button
@@ -413,12 +426,13 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   </span>
                 </button>
 
-                {variant === 'badge' && !isBadgeMinted && (
+                {variant === 'badge' && !isBadgeMinted && isOwnProfile && (
                   <button
                     type="button"
-                    className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-6 rounded-lg bg-violet-600 p-[10px] px-6 shadow-sm"
+                    className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-2 rounded-lg bg-violet-600 p-[10px] px-6 text-white shadow-sm"
                     onClick={() => handleSteps('initialise')}
                   >
+                    <SVG src={`/icons/mint.svg`} height={16} width={16} />
                     <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
                       Mint NFT
                     </span>
@@ -532,7 +546,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             {transactionId && (
               <a
                 rel="noreferrer"
-                href={`https://mumbai.polygonscan.com/tx/${transactionId}`}
+                href={`https://${
+                  isDev ? 'mumbai.' : ''
+                }polygonscan.com/tx/${transactionId}`}
                 className="flex items-center space-x-2"
                 target="_blank"
               >
@@ -583,7 +599,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 onClick={handleClose}
               >
                 <Image src="/icons/arrow-left.svg" height={24} width={24} />
-                Back to credentials overview
+                Go back
               </Button>
             </div>
           )}
