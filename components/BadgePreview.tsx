@@ -18,6 +18,7 @@ interface Props {
   id: string;
   canBeMinted: boolean;
   mintedAt: string;
+  owner: string;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -31,6 +32,7 @@ export const BadgePreview: React.FC<Props> = ({
   id,
   canBeMinted,
   mintedAt,
+  owner,
 }) => {
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
@@ -104,6 +106,7 @@ export const BadgePreview: React.FC<Props> = ({
             variant={issuer === 'mazury' ? 'badge' : 'poap'}
             slug={slug}
             id={id}
+            owner={owner}
             canBeMinted={canBeMinted}
             mintedAt={mintedAt}
           />

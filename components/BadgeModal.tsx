@@ -384,6 +384,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   slug={showBadgeDetails.slug}
                   id={showBadgeDetails.id}
                   canBeMinted={false}
+                  owner="You"
                 />
               )}
 
