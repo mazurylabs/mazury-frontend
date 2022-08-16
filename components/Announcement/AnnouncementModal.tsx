@@ -26,6 +26,7 @@ export const AnnouncementModal = () => {
   );
 
   const handleClose = () => {
+    localStorage.clear();
     setToggleModal(false);
     storage.setToken('true', IS_NEW_USER);
   };
