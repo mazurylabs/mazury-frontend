@@ -22,7 +22,7 @@ interface SignInModalProps {
 export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { address } = useSelector(userSlice);
+  const { address, profile } = useSelector(userSlice);
   const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
 

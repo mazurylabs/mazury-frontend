@@ -12,6 +12,7 @@ import storage from '@/utils/storage';
 import { REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
+import { clearWagmiStorage } from '@/utils';
 
 const App = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -44,6 +45,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     }, [address, isRefreshTokenExpired, dispatch]);
 
     React.useEffect(() => {
+      clearWagmiStorage();
       handleProfile();
     }, [handleProfile]);
 
