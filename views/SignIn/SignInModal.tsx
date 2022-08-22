@@ -19,24 +19,12 @@ interface SignInModalProps {
   onClose: () => void;
 }
 
-const wagmiSetupKeys = [
-  'wagmi.wallet',
-  '-walletlink:https://www.walletlink.org:session:id',
-  ' -walletlink:https://www.walletlink.org:session:secret',
-  '-walletlink:https://www.walletlink.org:session:linked',
-  '-walletlink:https://www.walletlink.org:IsStandaloneSigning',
-];
-
 export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile } = useSelector(userSlice);
   const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
-
-  const clearWagmiStorage = () => {
-    wagmiSetupKeys.forEach((key) => localStorage.removeItem(key));
-  };
 
   const handleAuthCredentials = async () => {
     if (!address) {
@@ -74,8 +62,6 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
 
         storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
         storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
-
-        clearWagmiStorage();
 
         await handleUser();
       }

@@ -253,3 +253,16 @@ export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
 
   return { badges: validBadges, remainder: remainder < 1 ? 0 : remainder };
 };
+
+const wagmiSetupKeys = [
+  'wagmi.wallet',
+  'walletconnect',
+  '-walletlink:https://www.walletlink.org:session:id',
+  '-walletlink:https://www.walletlink.org:session:secret',
+  '-walletlink:https://www.walletlink.org:session:linked',
+  '-walletlink:https://www.walletlink.org:IsStandaloneSigning',
+];
+
+export const clearWagmiStorage = () => {
+  wagmiSetupKeys.forEach((key) => localStorage.removeItem(key));
+};
