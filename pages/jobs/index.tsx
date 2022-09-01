@@ -234,13 +234,16 @@ const Jobs = () => {
 
         <div className="grow space-y-3 overflow-y-hidden pb-2">
           {dummyjobs.map((job, index) => (
-            <div className="relative w-full">
-              <div
-                key={index}
-                className="flex items-center space-x-3 rounded-2xl border border-violet-300 bg-white px-[14px] py-4"
-              >
+            <div className="relative w-full" key={index}>
+              <div className="flex items-center space-x-3 rounded-2xl border border-violet-300 bg-white px-[14px] py-4">
                 <div className="flex">
-                  <Image height={40} width={40} src={job.logo} layout="fixed" />
+                  <Image
+                    height={40}
+                    width={40}
+                    src={job.logo}
+                    layout="fixed"
+                    alt={job.company}
+                  />
                 </div>
                 <div className="flex grow items-center">
                   <div className="grow">
