@@ -13,6 +13,7 @@ import { REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
+import { FixedLaunch, Receiver } from '@relaycc/receiver';
 
 const App = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -60,7 +61,11 @@ const App = ({ Component, pageProps }: AppProps) => {
       </NextHead>
 
       <AnnouncementModal />
-
+      <div className="hidden lg:block">
+        <Receiver>
+          <FixedLaunch peerAddress="0x8fa41b45831db3c204eff1aa619534fa566cbe3e" />
+        </Receiver>
+      </div>
       <Authenticator />
     </AppProvider>
   );
