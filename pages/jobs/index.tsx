@@ -112,7 +112,9 @@ const Jobs = () => {
             </div>
             <div className="flex items-center space-x-14">
               <button type="button" className="flex items-center space-x-2">
-                <SVG height={16} width={16} src="/icons/link.svg" />
+                <div className="h-4 w-4">
+                  <SVG height={16} width={16} src="/icons/link.svg" />
+                </div>
                 <span className="font-sans text-sm font-semibold text-teal-600">
                   Copy profile
                 </span>
@@ -128,7 +130,10 @@ const Jobs = () => {
                 type="button"
                 className="hidden items-center space-x-2 rounded-lg bg-teal-600 p-2 text-white lg:flex"
               >
-                <SVG height={16} width={16} src="/icons/plus-white.svg" />
+                <div className="h-4 w-4">
+                  <SVG height={16} width={16} src="/icons/plus-white.svg" />
+                </div>
+
                 <span>Publish job post</span>
               </button>
             </div>
@@ -162,7 +167,9 @@ const Jobs = () => {
 
           <div className="mb-6 flex items-center space-x-5 lg:space-x-[33px]">
             <form className="flex grow items-center rounded-lg bg-indigoGray-5 py-2 px-3">
-              <SVG height={24} width={24} src={`/icons/search-black.svg`} />
+              <div className="h-6 w-6">
+                <SVG height={24} width={24} src={`/icons/search-black.svg`} />
+              </div>
 
               <div className="font-inter ml-4 grow text-base font-medium">
                 <input
@@ -178,7 +185,11 @@ const Jobs = () => {
             </form>
 
             <div className="flex items-center space-x-12">
-              <button type="button" aria-label="filter" className="lg:hidden">
+              <button
+                type="button"
+                aria-label="filter"
+                className="h-4 w-4 lg:hidden"
+              >
                 <SVG height={16} width={16} src={`/icons/filter.svg`} />
               </button>
 
@@ -189,7 +200,9 @@ const Jobs = () => {
                 <span className="font-sans text-sm font-semibold text-indigoGray-90">
                   Organisation
                 </span>
-                <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                <div className="h-4 w-4">
+                  <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                </div>
               </button>
 
               <button
@@ -199,7 +212,9 @@ const Jobs = () => {
                 <span className="font-sans text-sm font-semibold text-indigoGray-90">
                   Location
                 </span>
-                <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                <div className="h-4 w-4">
+                  <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                </div>
               </button>
 
               <button
@@ -209,7 +224,9 @@ const Jobs = () => {
                 <span className="font-sans text-sm font-semibold text-indigoGray-90">
                   Date of publication
                 </span>
-                <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                <div className="h-4 w-4">
+                  <SVG height={16} width={16} src={`/icons/angle-down.svg`} />
+                </div>
               </button>
             </div>
           </div>
@@ -219,7 +236,10 @@ const Jobs = () => {
               type="button"
               className="flex max-w-[50%] grow items-center justify-center space-x-2 rounded-lg bg-teal-600 py-2 text-white"
             >
-              <SVG height={16} width={16} src="/icons/plus-white.svg" />
+              <div className="h-4 w-4">
+                <SVG height={16} width={16} src="/icons/plus-white.svg" />
+              </div>
+
               <span>Publish job post</span>
             </button>
 
@@ -236,7 +256,7 @@ const Jobs = () => {
           {dummyjobs.map((job, index) => (
             <div className="relative w-full" key={index}>
               <div className="flex items-center space-x-3 rounded-2xl border border-violet-300 bg-white px-[14px] py-4">
-                <div className="flex">
+                <div className="flex h-10 w-10">
                   <Image
                     height={40}
                     width={40}
@@ -258,14 +278,23 @@ const Jobs = () => {
                       </p>
 
                       <div className="flex items-center space-x-1">
-                        <SVG height={16} width={16} src="/icons/location.svg" />
+                        <div className="h-4 w-4">
+                          <SVG
+                            height={16}
+                            width={16}
+                            src="/icons/location.svg"
+                          />
+                        </div>
+
                         <p className="font-sans text-xs font-medium text-indigoGray-40">
                           {job.location}
                         </p>
                       </div>
 
                       <div className="flex items-center space-x-1">
-                        <SVG height={16} width={16} src="/icons/time.svg" />
+                        <div className="h-4 w-4">
+                          <SVG height={16} width={16} src="/icons/time.svg" />
+                        </div>
                         <p className="font-sans text-xs font-medium text-indigoGray-40">
                           {job.date}
                         </p>
