@@ -18,18 +18,17 @@ import { SearchResults } from './SearchResults';
 
 import { FilterState, FilterType, Profile, ValueOf } from 'types';
 import { commify, fadeAnimation } from 'utils';
-import { useIntersection } from 'hooks';
 import { axios } from 'lib/axios';
+import { useIntersect } from '@/hooks/useIntersect';
 
 const filters = ['Credentials', 'Roles', 'Referred skills'];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
 export const ResultState = () => {
-  // const initialMount = React.useRef('');
   const [cursor, setCursor] = React.useState('');
-  const loadMoreRef = React.useRef(null!);
-  const shouldFetchMore = useIntersection(loadMoreRef.current, '50px');
+  const { ref, entry } = useIntersect({ rootMargin: '50px' });
+  const shouldFetchMore = entry?.isIntersecting;
   const router = useRouter();
   const [resultCount, setResultCount] = React.useState(0);
   const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
@@ -128,7 +127,7 @@ export const ResultState = () => {
   const resultStates = {
     loading: <LoadingState />,
     empty: <EmptyState />,
-    result: <SearchResults result={searchResults} ref={loadMoreRef} />,
+    result: <SearchResults result={searchResults} ref={ref} />,
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
