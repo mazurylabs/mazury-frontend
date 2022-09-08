@@ -26,37 +26,27 @@ const JobApplyModal = () => {
 
       <div className="pt-2">
         <form className="space-y-3">
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
-            >
-              E-mail <span className="text-indigoGray-30">(Required)</span>
-            </label>
-            <input
-              type="text"
-              id="email"
-              className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
-            />
-            {/* <Input
-              id="username"
-              label="Username"
-              placeholder="Insert username"
-              className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
-            /> */}
-          </div>
+          <Input
+            id="username"
+            label={
+              <div className="mb-0.5 flex gap-1 font-sans text-sm font-light">
+                Username <span className="text-indigoGray-30">(Required)</span>
+              </div>
+            }
+            className="h-[45px] w-full rounded-lg !border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
+          />
 
           <div className="z-0">
             <label
               htmlFor="file"
-              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
+              className="mb-0.5 flex gap-1 font-sans text-sm font-light"
             >
               Resume <span className="text-indigoGray-30">(Required)</span>
             </label>
             <div className="relative flex h-full w-full items-center">
               <input
                 id="file"
-                className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
+                className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90 hover:border-indigoGray-40 focus:border-indigoGray-50"
               />
               <button className="absolute right-4 text-xs font-medium text-violet-700">
                 Upload file
@@ -64,17 +54,15 @@ const JobApplyModal = () => {
             </div>
           </div>
 
-          <div className="mb-3">
-            <label
-              htmlFor="website"
-              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
-            >
-              Website <span className="text-indigoGray-30">(Required)</span>
-            </label>
-            <input
-              type="text"
+          <div>
+            <Input
               id="website"
-              className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
+              label={
+                <div className="mb-0.5 flex gap-1 font-sans text-sm font-light">
+                  Website <span className="text-indigoGray-30">(Required)</span>
+                </div>
+              }
+              className="h-[45px] w-full rounded-lg !border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
             />
             <span className="mb-3 flex flex-row items-center gap-[5px] font-sans text-xs font-normal text-indigoGray-40">
               <SVG src="/icons/alert.svg" height={12} width={12} />
@@ -110,7 +98,7 @@ const JobApplyModal = () => {
             match!
           </p>
           <Link href="#">
-            <span className="mb-1 font-sans text-xs font-semibold text-indigo-600">
+            <span className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
               Send us a message
             </span>
           </Link>
@@ -127,7 +115,7 @@ const JobApplyModal = () => {
             name="message"
             id="message"
             placeholder="Hi, I wanted to apply because..."
-            className="h-[227px] w-full resize-none rounded-lg border border-indigoGray-20 pl-4 pt-[12.75px] font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
+            className="h-[227px] w-full resize-none rounded-lg border border-indigoGray-20 pl-4 pt-[12.75px] font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90 hover:border-indigoGray-40 focus:border-indigoGray-50"
           ></textarea>
         </div>
 
