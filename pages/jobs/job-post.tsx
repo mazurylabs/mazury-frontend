@@ -45,12 +45,12 @@ const JobPost = () => {
 
       <div className="flex items-center">
         <SVG src="/icons/openpeeps.svg" width={32} height={32} />
-        <p className="ml-3 mr-6 text-sm font-medium uppercase text-indigoGray-90">
+        <p className="ml-3 mr-6 font-sans text-sm font-medium uppercase text-indigoGray-90">
           MARCOMM
         </p>
         <div className="flex items-center">
           <SVG src="/icons/Time.svg" width={16} height={16} />
-          <span className="ml-1 font-medium capitalize text-indigoGray-40">
+          <span className="ml-1 font-sans font-medium capitalize text-indigoGray-40">
             today
           </span>
         </div>
@@ -60,53 +60,55 @@ const JobPost = () => {
 
       <section className="grid-row-6 mt-6 mb-4 grid  gap-4 lg:grid lg:max-w-2xl lg:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             Company name
           </label>
-          <p className="text-sm font-medium uppercase text-indigoGray-90">
+          <p className="font-sans text-sm font-medium uppercase text-indigoGray-90">
             MARCOMM
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             E-mail
           </label>
-          <p className="text-sm font-medium lowercase text-indigoGray-90">
+          <p className="font-sans text-sm font-medium lowercase text-indigoGray-90">
             recruit@marcomm.xyz
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             Location
           </label>
-          <p className="text-sm font-medium capitalize text-indigoGray-90">
+          <p className="font-sans text-sm font-medium capitalize text-indigoGray-90">
             Remote
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             Deadline
           </label>
-          <p className="text-sm font-medium text-indigoGray-90">22/10/2022</p>
+          <p className="font-sans text-sm font-medium text-indigoGray-90">
+            22/10/2022
+          </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             Salary
           </label>
-          <p className="text-sm font-medium text-indigoGray-90">
+          <p className="font-sans text-sm font-medium text-indigoGray-90">
             $40k-70k yearly + benefits
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-indigoGray-40">
+          <label className="font-sans text-sm font-medium text-indigoGray-40">
             Published
           </label>
-          <p className="text-sm font-medium uppercase text-indigoGray-90">
+          <p className="font-sans text-sm font-medium uppercase text-indigoGray-90">
             22/10/2022
           </p>
         </div>
@@ -118,15 +120,15 @@ const JobPost = () => {
             <div className="h-[12px] w-[12px] rounded-full">
               <div className="h-[100%] w-[100%] rounded-full border-2 border-green-600" />
             </div>
-            <p className="flex flex-row  text-xs font-medium text-green-600">
+            <p className="flex flex-row  font-sans text-xs font-medium text-green-600">
               6 / 9
             </p>
-            <p className="text-sm font-medium text-indigoGray-40">
+            <p className="font-sans text-sm font-medium text-indigoGray-40">
               Stand-out credentials
             </p>
           </div>
 
-          <p className="text-sm font-normal text-indigoGray-40">
+          <p className="font-sans text-sm font-normal text-indigoGray-40">
             The more you have, the merrier! These were chosen to help users
             stand out from the crowd that applies to the job post
           </p>
@@ -134,7 +136,7 @@ const JobPost = () => {
       </section>
 
       <section className="flex flex-col gap-2">
-        <div className="grid auto-cols-auto gap-2 lg:flex lg:max-w-md lg:flex-row lg:flex-wrap">
+        <div className="flex flex-row flex-wrap gap-2 lg:max-w-md">
           <div className="flex h-12 w-[max-content] flex-row gap-3 rounded border border-green-200 bg-green-50 py-1 px-4">
             <Image
               src="/badges/d_doa.png"
@@ -143,8 +145,10 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-xs text-green-700">Aave voter</p>
-              <p className="text-xs text-gray-400">You have this!</p>
+              <p className="font-sans text-xs font-semibold text-green-700">
+                Aave voter
+              </p>
+              <p className="font-sans text-xs text-gray-400">You have this!</p>
             </div>
           </div>
           <div className="flex h-12 w-[max-content] flex-row gap-3 rounded border border-green-200 bg-green-50 py-1 px-4">
@@ -155,7 +159,9 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-xs text-green-700">Aave voter</p>
+              <p className="font-sans text-xs font-semibold text-green-700">
+                Aave voter
+              </p>
               <p className="text-xs text-gray-400">You have this!</p>
             </div>
           </div>
@@ -167,7 +173,9 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-gray-90 text-xs">Aave voter</p>
+              <p className="text-gray-90 font-sans text-xs font-semibold">
+                Aave voter
+              </p>
             </div>
           </div>
 
@@ -179,7 +187,9 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-gray-90 text-xs">Aave voter</p>
+              <p className="text-gray-90 font-sans text-xs font-semibold">
+                Aave voter
+              </p>
             </div>
           </div>
           <div className="border-grayn-20 flex h-12 w-[max-content] flex-row gap-3 rounded border bg-transparent py-1 px-4">
@@ -190,7 +200,9 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-gray-90 text-xs">Aave voter</p>
+              <p className="text-gray-90 font-sans text-xs font-semibold">
+                Aave voter
+              </p>
             </div>
           </div>
           <div className="border-grayn-20 flex h-12 w-[max-content] flex-row gap-3 rounded border bg-transparent py-1 px-4">
@@ -201,7 +213,9 @@ const JobPost = () => {
               alt="Badge icon"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-gray-90 text-xs">Aave voter</p>
+              <p className="text-gray-90 font-sans text-xs font-semibold">
+                Aave voter
+              </p>
             </div>
           </div>
         </div>
@@ -209,14 +223,14 @@ const JobPost = () => {
       </section>
 
       <section className="mt-4 mb-10">
-        <h3 className="mb-2 text-sm font-medium text-indigoGray-40">
+        <h3 className="mb-2 font-sans text-sm font-medium text-indigoGray-40">
           Description
         </h3>
 
-        <h3 className="text-sm font-bold text-indigoGray-90">
+        <h3 className="font-sans text-sm font-bold text-indigoGray-90">
           What is Praava Health?
         </h3>
-        <p className="mb-4 text-sm font-light text-indigoGray-90">
+        <p className="mb-4 font-sans text-sm font-light text-indigoGray-90">
           Praava Health is building Bangladesh’s fastest growing consumer
           healthcare brand. We are raising the bar with a brick-and-click
           healthcare platform that combines digital tools with meaningful
@@ -242,10 +256,10 @@ const JobPost = () => {
           healthcare to a new market.
         </p>
 
-        <h3 className="text-sm font-bold text-indigoGray-90">
+        <h3 className="font-sans text-sm font-bold text-indigoGray-90">
           Why Bangladesh is the Next Asian Tiger
         </h3>
-        <p className="mb-4 text-sm font-light text-indigoGray-90">
+        <p className="mb-4 font-sans text-sm font-light text-indigoGray-90">
           Nearly 170 million people live in Bangladesh, making it one of the
           world’s most populous countries and densely populated markets.
           Bangladesh is also one of the fastest growing economies in the world
@@ -259,11 +273,11 @@ const JobPost = () => {
           for the Strategic Review and the Council on Foreign Relations.
         </p>
 
-        <p className="mb-4 text-sm font-medium text-indigoGray-90">
+        <p className="mb-4 font-sans text-sm font-medium text-indigoGray-90">
           What will you be doing? <br /> Key Job Responsibility:
         </p>
 
-        <ol className="flex list-inside list-decimal flex-col gap-4">
+        <ol className="flex list-inside list-decimal flex-col gap-4 font-sans">
           <li>
             Familiarize with the doctors' practices and specialties; develop and
             maintain potential Doctors' database within assigned territory{' '}
@@ -285,29 +299,31 @@ const JobPost = () => {
           </li>
         </ol>
 
-        <h3 className="my-6">
+        <h3 className="my-6 font-sans">
           What are we looking for? <br /> Minimum Academic Qualification:
         </h3>
 
-        <p className="mb-6">Graduation Minimum Years of Experience: 2 years</p>
+        <p className="mb-6 font-sans">
+          Graduation Minimum Years of Experience: 2 years
+        </p>
 
-        <p>Why work at Praava Health?</p>
-        <p>
+        <p className="font-sans">Why work at Praava Health?</p>
+        <p className="font-sans">
           Make the world a better place: Every member of our team believes in
           her/his capacity to contribute to systemic change in healthcare in
           Bangladesh.
         </p>
-        <p>
+        <p className="font-sans">
           Be at the forefront of redesigning healthcare delivery: Praava has an
           incredible platform for impact, including through incorporation of
           value-based concepts that align our incentives with our Patients’ for
           a healthier future for our communities and our country.
         </p>
-        <p>
+        <p className="font-sans">
           Improve healthcare and health through evidence: We are investing in
           constantly evaluating the effectiveness and impact of our work.
         </p>
-        <p>
+        <p className="font-sans">
           Revolutionize healthcare through the concept of patient-centric care:
           Praava’s core values ensure that Patients are treated with empathy,
           respect and dignity. We are committed to creating an unparalleled
@@ -319,7 +335,7 @@ const JobPost = () => {
           you can help us to expand this. The team is energetic, amiable, and
           helpful, and truly embodies a work family.
         </p>
-        <p>
+        <p className="font-sans">
           Be part of a rapidly scaling organization: By harnessing technology,
           data, and creative alternative financing models, Praava Health expects
           to offer world class health care to tens of millions of Bangladeshis.
@@ -332,7 +348,7 @@ const JobPost = () => {
 
         <button
           type="button"
-          className="mt-10 h-11 w-full rounded-lg bg-indigoGray-90 text-sm text-indigoGray-5 lg:hidden"
+          className="mt-10 h-11 w-full rounded-lg bg-indigoGray-90 font-sans text-sm text-indigoGray-5 lg:hidden"
           onClick={() => handleApplyMobile('application')}
         >
           Apply for this job
@@ -350,7 +366,7 @@ const JobPost = () => {
 
   const Application = (
     <div>
-      <div className="sticky top-0 z-10 mt-9 bg-white">
+      <div className="sticky top-0 z-10 bg-white pt-9">
         <div className="mb-3 px-4 lg:mb-4">
           <button
             aria-label="go back"
@@ -361,10 +377,10 @@ const JobPost = () => {
           </button>
         </div>
 
-        <h3 className="mb-2 px-4 text-sm font-medium text-indigoGray-40">
+        <h3 className="mb-2 px-4 font-sans text-sm font-medium text-indigoGray-40">
           NFT x DeFi Content Writer
         </h3>
-        <h2 className="px-4 text-xl font-normal text-indigoGray-90">
+        <h2 className="px-4 font-sans text-xl font-normal text-indigoGray-90">
           Apply to job post
         </h2>
 
@@ -374,11 +390,11 @@ const JobPost = () => {
       </div>
 
       <div className="px-4 pt-2">
-        <form>
-          <div className="mb-3">
+        <form className="space-y-3">
+          <div>
             <label
               htmlFor="email"
-              className="mb-0.5 flex gap-1 text-sm font-light text-indigoGray-40"
+              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
             >
               E-mail <span className="text-indigoGray-30">(Required)</span>
             </label>
@@ -389,10 +405,10 @@ const JobPost = () => {
             />
           </div>
 
-          <div className="z-0 mb-3">
+          <div className="z-0">
             <label
               htmlFor="file"
-              className="mb-0.5 flex gap-1 text-sm font-light text-indigoGray-40"
+              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
             >
               Resume <span className="text-indigoGray-30">(Required)</span>
             </label>
@@ -407,26 +423,19 @@ const JobPost = () => {
             </div>
           </div>
 
-          <div className="mb-3">
-            <Input
-              id="email"
-              placeholder="Insert e-mail"
-              label="Email"
-              // value={email}
-              // onChange={onEmailChange}
-            />
+          <div>
             <label
               htmlFor="website"
-              className="mb-0.5 flex gap-1 text-sm font-light text-indigoGray-40"
+              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
             >
               Website <span className="text-indigoGray-30">(Required)</span>
             </label>
             <input
               type="text"
               id="website"
-              className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 text-sm font-normal text-indigoGray-90 caret-indigoGray-90"
+              className="h-[45px] w-full rounded-lg border border-indigoGray-20 pl-4 text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
             />
-            <span className="mb-3 flex flex-row items-center gap-[5px] text-xs font-normal text-indigoGray-40">
+            <span className="mb-3 flex flex-row items-center gap-[5px] font-sans text-xs font-normal text-indigoGray-40">
               <SVG src="/icons/alert.svg" height={12} width={12} />
               Own website, Twitter, discord or any other
             </span>
@@ -434,7 +443,7 @@ const JobPost = () => {
         </form>
 
         <div>
-          <h4 className="text-medium text-sm text-indigoGray-40">
+          <h4 className="text-medium font-sans text-sm font-medium text-indigoGray-40">
             Mazury profile
           </h4>
           <div className="my-1 flex flex-row items-center gap-3">
@@ -444,23 +453,23 @@ const JobPost = () => {
               height="40px"
               alt="user profile avatar"
             />
-            <h4 className="text-bold text-sm lowercase text-indigoGray-90">
+            <h4 className="text-bold font-serif text-sm lowercase text-indigoGray-90">
               tranqui
             </h4>
           </div>
-          <p className="text-xs font-normal lowercase text-indigoGray-50">
+          <p className="font-sans text-xs font-normal lowercase text-indigoGray-50">
             We will send your Mazury profile along with the application!
           </p>
         </div>
 
         <div className="my-3 rounded-md bg-indigo-50 py-3 px-3">
-          <p className="text-left text-xs font-medium text-indigo-900">
+          <p className="text-left font-sans text-xs font-medium text-indigo-900">
             It’s rare to have all the stand-out credentials. You can apply
             anyway and if you want us to help with your profile, use talent
             match!
           </p>
           <Link href="#">
-            <span className="mb-1 text-xs font-semibold text-indigo-600">
+            <span className="mb-1 font-sans text-xs font-semibold text-indigo-600">
               Send us a message
             </span>
           </Link>
@@ -469,7 +478,7 @@ const JobPost = () => {
         <div className="mb-3">
           <label
             htmlFor="message"
-            className="mb-0.5 flex gap-1 text-sm font-light text-indigoGray-40"
+            className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
           >
             Message
           </label>
@@ -477,7 +486,7 @@ const JobPost = () => {
             name="message"
             id="message"
             placeholder="Hi, I wanted to apply because..."
-            className="h-[227px] w-full resize-none rounded-lg border border-indigoGray-20 pl-4 pt-[12.75px] text-sm font-normal text-indigoGray-90 caret-indigoGray-90"
+            className="h-[227px] w-full resize-none rounded-lg border border-indigoGray-20 pl-4 pt-[12.75px] font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
           ></textarea>
         </div>
 
@@ -491,7 +500,7 @@ const JobPost = () => {
 
         <div className="bottom-18 z-1 sticky w-full bg-white pb-4">
           <Link href="#">
-            <button className="h-11 w-full rounded-lg bg-indigoGray-90 text-sm text-indigoGray-5 lg:hidden">
+            <button className="h-11 w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 lg:hidden">
               Send application
             </button>
           </Link>
