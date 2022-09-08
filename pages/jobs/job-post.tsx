@@ -456,7 +456,7 @@ const JobPost = () => {
           </p>
         </div>
 
-        <div className="my-3 rounded-md bg-indigo-50 py-3 px-3">
+        <div className="rounded-md bg-indigo-50 py-3 px-3">
           <p className="text-left font-sans text-xs font-medium text-indigo-900">
             It’s rare to have all the stand-out credentials. You can apply
             anyway and if you want us to help with your profile, use talent
@@ -469,7 +469,7 @@ const JobPost = () => {
           </Link>
         </div>
 
-        <div className="mb-3">
+        <div>
           <label
             htmlFor="message"
             className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
