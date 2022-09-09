@@ -39,7 +39,7 @@ const JobApplyModal = () => {
           <div className="z-0">
             <label
               htmlFor="file"
-              className="mb-0.5 flex gap-1 font-sans text-sm font-light"
+              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
             >
               Resume <span className="text-indigoGray-30">(Required)</span>
             </label>
