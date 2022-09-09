@@ -16,7 +16,7 @@ import { Button } from './Button';
 import { Pill } from './Pill';
 import { Toggle } from './Toggle';
 import { BadgeDetail } from './BadgeDetail';
-import { BadgeType } from '../types';
+import { BadgeIssuer, BadgeType } from '../types';
 import { Portal } from './Portal';
 import { axios } from 'lib/axios';
 import { useSelector } from 'react-redux';
@@ -54,7 +54,7 @@ interface BadgeModalProps {
 
 export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const intersectionRef = useRef(null!);
-  const [badgeIssuer, setBadgeIssuer] = useState<'mazury' | 'poap'>('mazury');
+  const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
   const { address } = useSelector(userSlice);
   const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
@@ -113,7 +113,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
     setHoveredbadge(badge);
   };
 
-  const handleBadgeIssuer = (issuer: 'mazury' | 'poap') => {
+  const handleBadgeIssuer = (issuer: BadgeIssuer) => {
     setRefresh('');
     setBadgesInView([]);
     setBadgeIssuer(issuer);
@@ -468,6 +468,28 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                   color="fuchsia"
                                   className="h-fit w-fit"
                                   onClick={() => handleBadgeIssuer('poap')}
+                                />
+
+                                <Pill
+                                  label="Gitpoap"
+                                  active={badgeIssuer === 'gitpoap'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0"
+                                  onClick={() => handleBadgeIssuer('gitpoap')}
+                                />
+                                <Pill
+                                  label="101"
+                                  active={badgeIssuer === '101'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0"
+                                  onClick={() => handleBadgeIssuer('101')}
+                                />
+                                <Pill
+                                  label="Kudos"
+                                  active={badgeIssuer === 'kudos'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0"
+                                  onClick={() => handleBadgeIssuer('kudos')}
                                 />
                               </div>
                             )}

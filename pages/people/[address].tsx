@@ -764,20 +764,48 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Credentials
                 </h3>
-                <div className="flex gap-[24px]">
+                <div className="flex w-full space-x-6 overflow-x-auto">
                   <Pill
                     label="Mazury badges"
                     color="fuchsia"
-                    className="h-fit w-fit md:ml-8"
+                    className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'mazury'}
                     onClick={() => setBadgeIssuer('mazury')}
                   />
                   <Pill
                     label="POAPs"
                     color="fuchsia"
-                    className="h-fit w-fit"
+                    className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'poap'}
                     onClick={() => setBadgeIssuer('poap')}
+                  />
+                  <Pill
+                    label="Buildspace"
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0"
+                    active={badgeIssuer === 'buildspace'}
+                    onClick={() => setBadgeIssuer('buildspace')}
+                  />
+                  <Pill
+                    label="GitPoap"
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0 md:ml-8"
+                    active={badgeIssuer === 'gitpoap'}
+                    onClick={() => setBadgeIssuer('gitpoap')}
+                  />
+                  <Pill
+                    label="101"
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0"
+                    active={badgeIssuer === '101'}
+                    onClick={() => setBadgeIssuer('101')}
+                  />
+                  <Pill
+                    label="Kudos"
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0"
+                    active={badgeIssuer === 'kudos'}
+                    onClick={() => setBadgeIssuer('kudos')}
                   />
                 </div>
               </div>
@@ -822,7 +850,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 )}
               </div>
 
-              {badges && hasMoreData && (
+              {badges?.length !== 0 && hasMoreData && (
                 <div className="xl:w-10/12">
                   <Button
                     onClick={handleFetchMore}

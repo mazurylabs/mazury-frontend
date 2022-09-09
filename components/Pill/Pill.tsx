@@ -6,7 +6,7 @@ import { PillProps } from './Pill.types';
 const getClassName = (color: ColorName = 'black', active: boolean = false) => {
   const baseString = `${
     !active && 'text-black'
-  } text-sm py-2 px-4 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
+  } text-sm py-1 px-2 flex items-center gap-4 rounded-lg bg-none hover:cursor-pointer transition-colors duration-400 ${
     active ? 'font-bold' : 'font-medium'
   }`;
 

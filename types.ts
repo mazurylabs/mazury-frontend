@@ -244,7 +244,13 @@ export interface Post {
 
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
-export type BadgeIssuer = 'mazury' | 'poap';
+export type BadgeIssuer =
+  | 'mazury'
+  | 'poap'
+  | 'buildspace'
+  | 'gitpoap'
+  | 'kudos'
+  | '101';
 
 export type FilterType =
   | 'Credentials'
