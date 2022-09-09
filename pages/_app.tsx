@@ -13,6 +13,7 @@ import { REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
+import FeedbackFishButton from '@/components/FeedbackFishButton';
 
 const App = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -62,6 +63,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <AnnouncementModal />
 
       <Authenticator />
+      <FeedbackFishButton />
     </AppProvider>
   );
 };
