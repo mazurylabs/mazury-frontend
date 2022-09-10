@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import debounce from 'lodash.debounce';
 
 import { useClickOutside, useMobile } from 'hooks';
 
@@ -42,8 +41,11 @@ const SearchPage: NextPage = () => {
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setUIState('result');
-    setIsFocused(false);
+    router.push(
+      { pathname: '/search', query: { ...router.query, query: searchTerm } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const handleKeydown = (event: React.KeyboardEvent) => {
@@ -61,23 +63,8 @@ const SearchPage: NextPage = () => {
     }
   }
 
-  const handleChangeDebounced = React.useCallback(
-    debounce(async (nextValue) => {
-      router.push(
-        { pathname: '/search', query: { ...router.query, query: nextValue } },
-        undefined,
-        { shallow: true }
-      );
-    }, 1000),
-    [router]
-  );
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-
-    const query = event.target.value;
-
-    handleChangeDebounced(query);
   };
 
   React.useEffect(() => {
