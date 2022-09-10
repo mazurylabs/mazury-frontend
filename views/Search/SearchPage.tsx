@@ -68,7 +68,7 @@ const SearchPage: NextPage = () => {
         undefined,
         { shallow: true }
       );
-    }, 350),
+    }, 1000),
     [router]
   );
 
