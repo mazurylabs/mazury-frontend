@@ -3,6 +3,7 @@ import SVG from 'react-inlinesvg';
 
 import { Layout, Pill } from 'components';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type JobViews = 'founders' | 'positions';
 
@@ -254,56 +255,71 @@ const Jobs = () => {
 
         <div className="grow space-y-3 overflow-y-hidden pb-2">
           {dummyjobs.map((job, index) => (
-            <div className="relative w-full" key={index}>
-              <div className="flex items-center space-x-3 rounded-2xl border border-violet-300 bg-white px-[14px] py-4">
-                <div className="flex h-10 w-10">
-                  <Image
-                    height={40}
-                    width={40}
-                    src={job.logo}
-                    layout="fixed"
-                    alt={job.company}
-                  />
-                </div>
-                <div className="flex grow items-center">
-                  <div className="grow">
-                    <div>
-                      <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                        {job.title}
-                      </p>
-                    </div>
-                    <div className="flex space-x-4">
-                      <p className="font-sans text-xs font-medium text-teal-600">
-                        {job.company}
-                      </p>
-
-                      <div className="flex items-center space-x-1">
-                        <div className="h-4 w-4">
-                          <SVG
-                            height={16}
-                            width={16}
-                            src="/icons/location.svg"
-                          />
-                        </div>
-
-                        <p className="font-sans text-xs font-medium text-indigoGray-40">
-                          {job.location}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center space-x-1">
-                        <div className="h-4 w-4">
-                          <SVG height={16} width={16} src="/icons/time.svg" />
-                        </div>
-                        <p className="font-sans text-xs font-medium text-indigoGray-40">
-                          {job.date}
-                        </p>
-                      </div>
-                    </div>
+            <Link href={`/jobs/${index}`}>
+              <a className="relative block w-full" key={index}>
+                <div className="flex items-center space-x-3 rounded-2xl border border-violet-300 bg-white px-[14px] py-4">
+                  <div className="flex h-10 w-10">
+                    <Image
+                      height={40}
+                      width={40}
+                      src={job.logo}
+                      layout="fixed"
+                      alt={job.company}
+                    />
                   </div>
+                  <div className="flex grow items-center">
+                    <div className="grow">
+                      <div>
+                        <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                          {job.title}
+                        </p>
+                      </div>
+                      <div className="flex space-x-4">
+                        <p className="font-sans text-xs font-medium text-teal-600">
+                          {job.company}
+                        </p>
 
+                        <div className="flex items-center space-x-1">
+                          <div className="h-4 w-4">
+                            <SVG
+                              height={16}
+                              width={16}
+                              src="/icons/location.svg"
+                            />
+                          </div>
+
+                          <p className="font-sans text-xs font-medium text-indigoGray-40">
+                            {job.location}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center space-x-1">
+                          <div className="h-4 w-4">
+                            <SVG height={16} width={16} src="/icons/time.svg" />
+                          </div>
+                          <p className="font-sans text-xs font-medium text-indigoGray-40">
+                            {job.date}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {job.highlighted && (
+                      <div className="hidden lg:block">
+                        <Pill
+                          color="purple"
+                          label="Highlighted"
+                          className="max-h-[22px] py-2 pl-3 pr-4 !text-xs"
+                          active
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="relative top-[-2.5px] z-[-1] flex w-full justify-end pr-5">
                   {job.highlighted && (
-                    <div className="hidden lg:block">
+                    <div className="lg:hidden">
                       <Pill
                         color="purple"
                         label="Highlighted"
@@ -313,21 +329,8 @@ const Jobs = () => {
                     </div>
                   )}
                 </div>
-              </div>
-
-              <div className="relative top-[-2.5px] z-[-1] flex w-full justify-end pr-5">
-                {job.highlighted && (
-                  <div className="lg:hidden">
-                    <Pill
-                      color="purple"
-                      label="Highlighted"
-                      className="max-h-[22px] py-2 pl-3 pr-4 !text-xs"
-                      active
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+              </a>
+            </Link>
           ))}
         </div>
       </div>
