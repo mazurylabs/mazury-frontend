@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal renders correctly and close functionality works properly 1`] = `
+<div
+  class="ReactModalPortal"
+>
+  <div
+    class="ReactModal__Overlay bg-black-900 bg-opacity-50 h-screen w-screen fixed top-0 left-0 z-20"
+  >
+    <div
+      aria-modal="true"
+      class="ReactModal__Content absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white bg-opacity-100 py-4 px-6 shadow-xl outline-none undefined"
+      role="dialog"
+      tabindex="-1"
+    >
+      <h1>
+        Modal
+      </h1>
+    </div>
+  </div>
+</div>
+`;

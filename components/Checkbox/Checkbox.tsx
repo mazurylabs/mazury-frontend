@@ -23,7 +23,7 @@ export const Checkbox: FC<CheckboxProps> = ({
       <button
         type="button"
         onClick={onVisibleCheckboxClick}
-        className="h-6 h-4 hover:cursor-pointer"
+        className="h-6 hover:cursor-pointer"
       >
         <SVG
           src={`/icons/checkbox-${checked ? 'checked' : 'unchecked'}.svg`}
@@ -32,7 +32,7 @@ export const Checkbox: FC<CheckboxProps> = ({
         />
       </button>
 
-      <label htmlFor={id} className="text-base font-medium text-indigoGray-70">
+      <label htmlFor={id} className="text-sm font-medium text-indigoGray-90">
         {label}
       </label>
       <input
