@@ -97,11 +97,10 @@ const JobApplyModal = () => {
             anyway and if you want us to help with your profile, use talent
             match!
           </p>
-          <Link href="#">
-            <span className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
-              Send us a message
-            </span>
-          </Link>
+
+          <button className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
+            Send us a message
+          </button>
         </div>
 
         <div className="mb-3">
@@ -127,11 +126,9 @@ const JobApplyModal = () => {
           setChecked={setValue}
         />
 
-        <Link href="#">
-          <button className="mb-[26px] h-[45px] w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 transition-shadow hover:shadow-lg">
-            Send application
-          </button>
-        </Link>
+        <button className="mb-[26px] h-[45px] w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 transition-shadow hover:shadow-lg">
+          Send application
+        </button>
       </div>
     </main>
   );

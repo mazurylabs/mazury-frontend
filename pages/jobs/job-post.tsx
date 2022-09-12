@@ -231,7 +231,7 @@ const JobPost = () => {
           What is Praava Health?
         </h3>
         <p className="mb-4 font-sans text-sm font-light text-indigoGray-90">
-          Praava Health is building Bangladesh’s fastest growing consumer
+          {`Praava Health is building Bangladesh’s fastest growing consumer
           healthcare brand. We are raising the bar with a brick-and-click
           healthcare platform that combines digital tools with meaningful
           doctor-Patient relationships, quality diagnostics, and pharmacy
@@ -253,14 +253,14 @@ const JobPost = () => {
           collaborative team that is inspired to build the best healthcare
           company in Bangladesh. We seek interns who are excited to help us to
           build, design, and communicate a new brand and a new concept of
-          healthcare to a new market.
+          healthcare to a new market.`}
         </p>
 
         <h3 className="font-sans text-sm font-bold text-indigoGray-90">
           Why Bangladesh is the Next Asian Tiger
         </h3>
         <p className="mb-4 font-sans text-sm font-light text-indigoGray-90">
-          Nearly 170 million people live in Bangladesh, making it one of the
+          {`Nearly 170 million people live in Bangladesh, making it one of the
           world’s most populous countries and densely populated markets.
           Bangladesh is also one of the fastest growing economies in the world
           and has been dubbed the next Asian tiger by the World Economic Forum,
@@ -270,7 +270,7 @@ const JobPost = () => {
           expenditures increase disproportionately. Middle class families demand
           and can pay for higher quality services. To learn more about
           Bangladesh’s healthcare system, check out pieces penned by the founder
-          for the Strategic Review and the Council on Foreign Relations.
+          for the Strategic Review and the Council on Foreign Relations.`}
         </p>
 
         <p className="mb-4 font-sans text-sm font-medium text-indigoGray-90">
@@ -279,8 +279,8 @@ const JobPost = () => {
 
         <ol className="flex list-inside list-decimal flex-col gap-4 font-sans">
           <li>
-            Familiarize with the doctors' practices and specialties; develop and
-            maintain potential Doctors' database within assigned territory{' '}
+            {`Familiarize with the doctors' practices and specialties; develop and
+            maintain potential Doctors' database within assigned territory`}
           </li>
           <li>
             Build and maintain relationships with medical professionals in
@@ -462,11 +462,10 @@ const JobPost = () => {
             anyway and if you want us to help with your profile, use talent
             match!
           </p>
-          <Link href="#">
-            <span className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
-              Send us a message
-            </span>
-          </Link>
+
+          <button className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
+            Send us a message
+          </button>
         </div>
 
         <div>
@@ -493,11 +492,9 @@ const JobPost = () => {
         />
 
         <div className="bottom-18 z-1 sticky w-full bg-white pb-4">
-          <Link href="#">
-            <button className="h-11 w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 lg:hidden">
-              Send application
-            </button>
-          </Link>
+          <button className="h-11 w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 lg:hidden">
+            Send application
+          </button>
         </div>
       </div>
     </div>
