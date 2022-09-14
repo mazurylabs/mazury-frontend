@@ -164,6 +164,15 @@ const Jobs = () => {
             >
               Recruiters and founders
             </button>
+
+            <Link href="/jobs/manage-post">
+              <button
+                type="button"
+                className="shrink-0 rounded-lg px-3 py-1 font-sans text-sm font-medium text-indigoGray-90"
+              >
+                Your job posts
+              </button>
+            </Link>
           </div>
 
           <div className="mb-6 flex items-center space-x-5 lg:space-x-[33px]">
