@@ -231,7 +231,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <p
                     className={`font-inter text-xs font-bold text-emerald-900`}
                   >
-                    {variant === 'badge' ? 'Badge' : 'Poap'} earned
+                    Credential Verified
                   </p>
                 </div>
 
