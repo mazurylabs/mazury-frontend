@@ -17,13 +17,31 @@ import { EmptyState } from './EmptyState';
 import { SearchResults } from './SearchResults';
 
 import { FilterState, FilterType, Profile, ValueOf } from 'types';
-import { commify, fadeAnimation } from 'utils';
+import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
 const filters = ['Credentials', 'Roles', 'Referred skills'];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
+
+const FilterTag: React.FC<{ label: string; handleClose: () => void }> = ({
+  label,
+  handleClose,
+}) => {
+  if (!label) return null;
+
+  return (
+    <div className="flex shrink-0 space-x-2 rounded border border-indigoGray-20 px-4 py-1">
+      <button type="button" onClick={handleClose}>
+        <SVG height={16} width={16} src="/icons/x.svg" />
+      </button>
+      <span className="font-sans text-sm font-bold text-indigoGray-90">
+        {toCapitalizedWord(label)}
+      </span>
+    </div>
+  );
+};
 
 export const ResultState = () => {
   const [cursor, setCursor] = React.useState('');
@@ -171,14 +189,6 @@ export const ResultState = () => {
     ),
   };
 
-  // React.useEffect(() => {
-  //   const decodedPath = fo(router.asPath);
-  //   if (initialMount.current !== decodedPath) {
-  //     handleSearch();
-  //     initialMount.current = decodedPath;
-  //   }
-  // }, [router.asPath]);
-
   React.useEffect(() => {
     handleSearch(router.asPath);
   }, [handleSearch, router.query]);
@@ -244,33 +254,6 @@ export const ResultState = () => {
           <SVG src="/icons/filter.svg" height={16} width={16} />
           <span>FILTERS</span>
         </button>
-
-        {/* <div>
-          <ul>
-            {filter.role && (
-              <li>
-                <button type="button" onClick={() => handleFilter('role', '')}>
-                  <SVG height={16} width={16} src="/icons/x.svg" />
-                </button>
-                <span>{filter.role}</span>
-              </li>
-            )}
-
-            <>
-              {filter.badges.map((badge, index) => (
-                <li key={index + badge}>{badge}</li>
-              ))}
-            </>
-
-            <>
-              {filter.skills.map((skill, index) => (
-                <li key={index + skill}>{skill}</li>
-              ))}
-            </>
-
-            {filter.contactable && <li>{filter.contactable}</li>}
-          </ul>
-        </div> */}
 
         <div className="ml-auto">
           <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
@@ -350,6 +333,56 @@ export const ResultState = () => {
           />
           <span>Contactable</span>
         </div>
+      </div>
+
+      <div className="mt-[25.5px]">
+        <ul className="flex flex-wrap gap-2">
+          {filter.role && (
+            <li>
+              <FilterTag
+                label={filter.role}
+                handleClose={() => handleFilter('role', '')}
+              />
+            </li>
+          )}
+
+          <>
+            {filter.badges.map((badge, index) => {
+              const updatedBadges = filter.badges.filter(
+                (item) => item !== badge
+              );
+              return (
+                <li>
+                  <FilterTag
+                    key={index + badge}
+                    label={badge}
+                    handleClose={() => handleFilter('badges', updatedBadges)}
+                  />
+                </li>
+              );
+            })}
+          </>
+
+          <>
+            {filter.skills.map((skill, index) => {
+              const updatedSkills = filter.skills.filter(
+                (item) => item !== skill
+              );
+
+              return (
+                <li>
+                  <FilterTag
+                    key={index + skill}
+                    label={skill}
+                    handleClose={() => handleFilter('skills', updatedSkills)}
+                  />
+                </li>
+              );
+            })}
+          </>
+
+          {/* {filter.contactable && <li>{filter.contactable}</li>} */}
+        </ul>
       </div>
 
       <div className="flex grow flex-col">{resultStates[currentStep]}</div>
