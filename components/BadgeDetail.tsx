@@ -32,7 +32,7 @@ interface BadgeDetailProps {
   badgeCount?: number;
   image: string;
   slug: string;
-  variant: 'badge' | 'poap';
+  variant: string;
   id: string;
   canBeMinted: boolean;
   mintedAt?: string;
@@ -115,7 +115,8 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   const handleSearch = (badge: string) => {
     const queryParam =
-      (variant === 'badge' ? 'badges=' : 'poap=') + encodeURIComponent(badge);
+      (variant === 'badge' ? 'badges=' : `${variant}=`) +
+      encodeURIComponent(badge);
 
     router.push(`/search?${queryParam}`);
   };

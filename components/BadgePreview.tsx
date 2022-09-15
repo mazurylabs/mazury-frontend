@@ -103,7 +103,7 @@ export const BadgePreview: React.FC<Props> = ({
             isBadgeHidden={false}
             image={imgSrc}
             badgeCount={totalCount}
-            variant={issuer === 'mazury' ? 'badge' : 'poap'}
+            variant={issuer === 'mazury' ? 'badge' : issuer}
             slug={slug}
             id={id}
             owner={owner}
