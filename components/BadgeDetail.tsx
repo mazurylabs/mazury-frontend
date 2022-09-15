@@ -200,7 +200,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             <img
               src={image}
               className={` ${
-                variant === 'poap'
+                variant !== 'badge'
                   ? 'h-[230px] w-[230px] rounded-full'
                   : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
               }`}

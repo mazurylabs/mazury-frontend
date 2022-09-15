@@ -50,9 +50,9 @@ export const BadgePreview: React.FC<Props> = ({
           src={imgSrc || '/default-avi.png'}
           className={
             `${
-              issuer === 'poap' ? 'h-[42px]' : 'h-[65px]'
+              issuer !== 'mazury' ? 'h-[42px]' : 'h-[65px]'
             } max-w-[42px] text-xs` +
-            (issuer === 'poap' ? 'overflow-hidden rounded-full' : '')
+            (issuer !== 'mazury' ? 'overflow-hidden rounded-full' : '')
           }
           alt={`${heading} badge`}
         />
