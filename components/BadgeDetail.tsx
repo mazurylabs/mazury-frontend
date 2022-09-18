@@ -232,7 +232,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <p
                     className={`font-inter text-xs font-bold text-emerald-900`}
                   >
-                    Credential Verified
+                    Credential verified
                   </p>
                 </div>
 
