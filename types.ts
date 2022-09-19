@@ -274,3 +274,14 @@ export type AuthVerifyResponse = {
   refresh: string;
   success: boolean;
 };
+
+export type CredentialCount = {
+  total: number;
+  mazury: number;
+  poap: number;
+  buildspace: number;
+  kudos: number;
+  gitpoap: number;
+  '101': number;
+  sismo: number;
+};
