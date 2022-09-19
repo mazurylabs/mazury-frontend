@@ -37,7 +37,7 @@ const FilterTag: React.FC<{ label: string; handleClose: () => void }> = ({
         <SVG height={16} width={16} src="/icons/x.svg" />
       </button>
       <span className="font-sans text-sm font-bold text-indigoGray-90">
-        {toCapitalizedWord(label)}
+        {label}
       </span>
     </div>
   );
