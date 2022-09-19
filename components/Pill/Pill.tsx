@@ -77,7 +77,7 @@ export const Pill: React.FC<PillProps> = ({
         />
       )}
 
-      {label.toUpperCase()}
+      {typeof label === 'string' ? label.toUpperCase() : label}
     </button>
   );
 };
