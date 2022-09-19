@@ -42,6 +42,7 @@ import {
   useMobile,
   useActivity,
   usePosts,
+  useCredentialCount,
 } from 'hooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -104,10 +105,10 @@ const Profile: React.FC<Props> = ({ address }) => {
     hasMoreData,
   } = useBadges(eth_address, badgeIssuer);
 
+  const { credentialCount } = useCredentialCount(eth_address);
+
   const { count: poapCount } = useBadges(eth_address, 'mazury');
   const { count: badgeCount } = useBadges(eth_address, 'poap');
-
-  const credentialsCount = badgeCount || 0 + (poapCount || 0);
 
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
 
@@ -512,8 +513,9 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(badgeCount)}
+                      {getMetricDisplayValue(credentialCount?.total)}
                     </span>
+
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
                       Credentials
                     </span>
@@ -561,7 +563,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       className="font-serif font-bold"
                     >
-                      {getMetricDisplayValue(credentialsCount)}
+                      {getMetricDisplayValue(credentialCount?.total)}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                       Credentials
@@ -766,42 +768,120 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </h3>
                 <div className="flex w-full space-x-6 overflow-x-auto">
                   <Pill
-                    label="Mazury badges"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>Mazury badges </span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'mazury'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.mazury)}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'mazury'}
                     onClick={() => setBadgeIssuer('mazury')}
                   />
                   <Pill
-                    label="POAPs"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span> POAPs</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'poap'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.poap)}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'poap'}
                     onClick={() => setBadgeIssuer('poap')}
                   />
                   <Pill
-                    label="Buildspace"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>Buildspace</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'buildspace'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.buildspace)}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'buildspace'}
                     onClick={() => setBadgeIssuer('buildspace')}
                   />
                   <Pill
-                    label="GitPoap"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>GitPoap</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'gitpoap'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.gitpoap)}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'gitpoap'}
                     onClick={() => setBadgeIssuer('gitpoap')}
                   />
                   <Pill
-                    label="101"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>101</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === '101'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.[101])}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === '101'}
                     onClick={() => setBadgeIssuer('101')}
                   />
                   <Pill
-                    label="Kudos"
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>Kudos</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === '101'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.kudos)}
+                        </span>
+                      </div>
+                    }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'kudos'}
