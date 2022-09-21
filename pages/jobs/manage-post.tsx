@@ -5,7 +5,7 @@ import SVG from 'react-inlinesvg';
 
 import { Checkbox, Input, Layout } from 'components';
 import { SideModal } from '@/components/SideModal';
-import JobApplyModal from '@/components/JobApplyModal';
+import SeeApplicationsModal from '@/components/SeeApplicationsModal';
 
 type JobView = 'description' | 'application';
 
@@ -439,15 +439,15 @@ const ManagePost = () => {
         isOpen={isJobSidebarOpen}
         onClose={() => setIsJobSidebarOpen(false)}
       >
-        <JobApplyModal />
+        <SeeApplicationsModal />
       </SideModal>
     </div>
   );
 
   const Application = (
-    <div>
+    <div className="px-4">
       <div className="sticky top-0 z-10 bg-white pt-9">
-        <div className="mb-3 px-4 lg:mb-4">
+        <div className="mb-3 lg:mb-4">
           <button
             aria-label="go back"
             type="button"
@@ -457,126 +457,141 @@ const ManagePost = () => {
           </button>
         </div>
 
-        <h3 className="mb-2 px-4 font-sans text-sm font-medium text-indigoGray-40">
+        <h3 className="mb-2 font-sans text-sm font-medium text-indigoGray-40">
           NFT x DeFi Content Writer
         </h3>
-        <h2 className="px-4 font-sans text-xl font-normal text-indigoGray-90">
-          Apply to job post
+        <h2 className="font-sans text-xl font-normal text-indigoGray-90">
+          Applications
         </h2>
-
-        {isVisible && (
-          <div className="border-b-2 border-solid border-indigoGray-20 pt-4" />
-        )}
       </div>
 
-      <div className="px-4 pt-2">
-        <form className="space-y-3">
-          <Input
-            id="username"
-            label={
-              <div className="mb-0.5 flex gap-1 font-sans text-sm font-light">
-                Username <span className="text-indigoGray-30">(Required)</span>
-              </div>
-            }
-            className="h-[45px] w-full rounded-lg !border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
-          />
+      <section className="mt-6">
+        <h4 className="mb-3.5 font-sans text-sm font-medium text-indigoGray-40">
+          Applications with all recommended badges
+        </h4>
 
-          <div className="z-0">
-            <label
-              htmlFor="file"
-              className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
-            >
-              Resume <span className="text-indigoGray-30">(Required)</span>
-            </label>
-            <div className="relative flex h-full w-full items-center">
-              <input
-                id="file"
-                className="h-[45px] w-full rounded-lg !border border-indigoGray-20 pl-4 text-sm font-normal text-indigoGray-90 caret-indigoGray-90 hover:border-indigoGray-40 focus:border-indigoGray-50"
+        <div className="grid grid-flow-row gap-[28px]">
+          <div className="flex justify-between">
+            <div className="my-1 flex flex-row items-center gap-3">
+              <Image
+                src="/Avatar.png"
+                width="40px"
+                height="40px"
+                alt="user profile avatar"
+                className="rounded-full"
               />
-              <button className="absolute right-4 text-xs font-medium text-violet-700">
-                Upload file
-              </button>
+              <div>
+                <h4 className="text-bold font-serif text-sm font-medium lowercase text-indigoGray-90">
+                  tranqui
+                </h4>
+
+                <div className="flex flex-row items-center gap-2">
+                  <div className="h-[12px] w-[12px] rounded-full">
+                    <div className="h-[100%] w-[100%] rounded-full border-[1.33px] border-green-600" />
+                  </div>
+                  <p className="flex flex-row  font-sans text-xs font-medium text-green-600">
+                    9 / 9
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center">
+              <div className="mr-3 h-[22px] w-[70px] rounded-md bg-blue-50">
+                <p className="grid place-items-center text-center font-sans text-xs font-medium capitalize text-blue-700">
+                  Unread
+                </p>
+              </div>
+
+              <p className=" text-center font-sans text-xs font-medium text-indigoGray-40">
+                21/10/2022 <br />
+                13:40 CET
+              </p>
             </div>
           </div>
 
-          <div>
-            <Input
-              id="website"
-              label={
-                <div className="mb-0.5 flex gap-1 font-sans text-sm font-light">
-                  Website <span className="text-indigoGray-30">(Required)</span>
+          <div className="flex justify-between">
+            <div className="my-1 flex flex-row items-center gap-3">
+              <Image
+                src="/avatar-3.png"
+                width="40px"
+                height="40px"
+                alt="user profile avatar"
+                className="rounded-full"
+              />
+
+              <div>
+                <h4 className="text-bold font-serif text-sm font-medium lowercase text-indigoGray-90">
+                  sebastian
+                </h4>
+
+                <div className="flex flex-row items-center gap-2">
+                  <div className="h-[12px] w-[12px] rounded-full">
+                    <div className="h-[100%] w-[100%] rounded-full border-[1.33px] border-green-600" />
+                  </div>
+                  <p className="flex flex-row  font-sans text-xs font-medium text-green-600">
+                    9 / 9
+                  </p>
                 </div>
-              }
-              className="h-[45px] w-full rounded-lg !border border-indigoGray-20 pl-4 font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90"
-            />
-            <span className="mb-3 flex flex-row items-center gap-[5px] font-sans text-xs font-normal text-indigoGray-40">
-              <SVG src="/icons/alert.svg" height={12} width={12} />
-              Own website, Twitter, discord or any other
-            </span>
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center">
+              <p className=" text-center font-sans text-xs font-medium text-indigoGray-40">
+                21/10/2022 <br />
+                13:40 CET
+              </p>
+            </div>
           </div>
-        </form>
+        </div>
 
-        <div>
-          <h4 className="text-medium font-sans text-sm font-medium text-indigoGray-40">
-            Mazury profile
-          </h4>
-          <div className="my-1 flex flex-row items-center gap-3">
-            <Image
-              src="/Avatar.png"
-              width="40px"
-              height="40px"
-              alt="user profile avatar"
-            />
-            <h4 className="text-bold font-serif text-sm lowercase text-indigoGray-90">
-              tranqui
-            </h4>
+        <div className="my-8 border border-solid border-indigoGray-20" />
+
+        <h4 className="mb-3.5 font-sans text-sm font-medium text-indigoGray-40">
+          Applications without all recommended badges
+        </h4>
+
+        <div className="grid grid-flow-row gap-[28px]">
+          <div className="flex justify-between">
+            <div className="my-1 flex flex-row items-center gap-3">
+              <Image
+                src="/avatar-4.png"
+                width="40px"
+                height="40px"
+                alt="user profile avatar"
+                className="rounded-full"
+              />
+              <div>
+                <h4 className="text-bold font-serif text-sm font-medium lowercase text-indigoGray-90">
+                  nazeeh
+                </h4>
+
+                <div className="flex flex-row items-center gap-2">
+                  <div className="h-[12px] w-[12px] rounded-full">
+                    <div className="h-[100%] w-[100%] rounded-full border-[1.33px] border-green-600" />
+                  </div>
+                  <p className="flex flex-row  font-sans text-xs font-medium text-green-600">
+                    9 / 9
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center">
+              <div className="mr-3 h-[22px] w-[70px] rounded-md bg-blue-50">
+                <p className="grid place-items-center text-center font-sans text-xs font-medium capitalize text-blue-700">
+                  Unread
+                </p>
+              </div>
+
+              <p className=" text-center font-sans text-xs font-medium text-indigoGray-40">
+                21/10/2022 <br />
+                13:40 CET
+              </p>
+            </div>
           </div>
-          <p className="font-sans text-xs font-normal lowercase text-indigoGray-50">
-            We will send your Mazury profile along with the application!
-          </p>
         </div>
-
-        <div className="rounded-md bg-indigo-50 py-3 px-3">
-          <p className="text-left font-sans text-xs font-medium text-indigo-900">
-            It’s rare to have all the stand-out credentials. You can apply
-            anyway and if you want us to help with your profile, use talent
-            match!
-          </p>
-
-          <button className="mb-1 cursor-pointer font-sans text-xs font-semibold text-indigo-600">
-            Send us a message
-          </button>
-        </div>
-
-        <div>
-          <label
-            htmlFor="message"
-            className="mb-0.5 flex gap-1 font-sans text-sm font-light text-indigoGray-40"
-          >
-            Message
-          </label>
-          <textarea
-            name="message"
-            id="message"
-            placeholder="Hi, I wanted to apply because..."
-            className="h-[227px] w-full resize-none rounded-lg border border-indigoGray-20 pl-4 pt-[12.75px] font-sans text-sm font-medium text-indigoGray-90 caret-indigoGray-90 hover:border-indigoGray-40 focus:border-indigoGray-50"
-          ></textarea>
-        </div>
-
-        <Checkbox
-          label="Save my data for future applications"
-          id="open-to-new-checkbox"
-          outerClassName="mt-[13.5px] mb-[67.5px]"
-          checked={value}
-          setChecked={setValue}
-        />
-
-        <div className="bottom-18 z-1 sticky w-full bg-white pb-4">
-          <button className="h-11 w-full rounded-lg bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 lg:hidden">
-            See the applications
-          </button>
-        </div>
-      </div>
+      </section>
     </div>
   );
 

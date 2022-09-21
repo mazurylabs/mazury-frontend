@@ -446,6 +446,7 @@ const JobPost = () => {
               width="40px"
               height="40px"
               alt="user profile avatar"
+              className="rounded-full"
             />
             <h4 className="text-bold font-serif text-sm lowercase text-indigoGray-90">
               tranqui

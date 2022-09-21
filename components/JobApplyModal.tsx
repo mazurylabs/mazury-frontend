@@ -81,6 +81,7 @@ const JobApplyModal = () => {
               width="40px"
               height="40px"
               alt="user profile avatar"
+              className="rounded-full"
             />
             <h4 className="text-bold font-serif text-sm font-medium lowercase text-indigoGray-90">
               tranqui
