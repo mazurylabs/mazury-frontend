@@ -117,10 +117,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   }, []);
 
   useEffect(() => {
-    let routeCredential = router?.query?.credential?.split('#');
+    let routeCredential = (router?.query?.credential as string)?.split('#');
 
     if (routeCredential && routeCredential?.length !== 0) {
-      setBadgeIssuer(routeCredential[0]);
+      setBadgeIssuer(routeCredential[0] as BadgeIssuer);
       getBadgeFromRoute(routeCredential[1]);
     }
   }, [getBadgeFromRoute]);

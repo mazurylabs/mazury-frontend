@@ -43,7 +43,9 @@ export const BadgePreview: React.FC<Props> = ({
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
 
-  const selectedCredential = router?.query?.credential?.split('#')[1];
+  const selectedCredential = (router?.query?.credential as string)?.split(
+    '#'
+  )[1];
 
   React.useEffect(() => {
     if (selectedCredential === id || routeId) setShowBadgeDetails(true);
