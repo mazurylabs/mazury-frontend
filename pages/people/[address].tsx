@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from 'next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Pill,
@@ -14,6 +14,7 @@ import {
   PenIcon,
 } from 'components';
 import {
+  Badge,
   BadgeIssuer,
   MappedRoles,
   ProfileSection,
@@ -54,6 +55,7 @@ import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { getBadgeById } from '@/utils/api';
 
 interface Props {
   address: string;
@@ -88,6 +90,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const eth_address = profile?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
+  const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
 
   const {
     referrals,
@@ -106,6 +109,21 @@ const Profile: React.FC<Props> = ({ address }) => {
   } = useBadges(eth_address, badgeIssuer);
 
   const { credentialCount } = useCredentialCount(eth_address);
+
+  const getBadgeFromRoute = useCallback(async (id: string) => {
+    if (badges.find((badge) => badge.id === id)) return;
+    const badge = await getBadgeById(id);
+    setSharedCredential(badge.data);
+  }, []);
+
+  useEffect(() => {
+    let routeCredential = router?.query?.credential?.split('#');
+
+    if (routeCredential && routeCredential?.length !== 0) {
+      setBadgeIssuer(routeCredential[0]);
+      getBadgeFromRoute(routeCredential[1]);
+    }
+  }, [getBadgeFromRoute]);
 
   const { count: poapCount } = useBadges(eth_address, 'mazury');
   const { count: badgeCount } = useBadges(eth_address, 'poap');
@@ -162,6 +180,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
     let ref;
+
     switch (section) {
       case 'Activity':
         ref = activityRef || altActivityRef;
@@ -217,6 +236,10 @@ const Profile: React.FC<Props> = ({ address }) => {
     toast.success('Copied to clipboard!');
   };
 
+  const handleCredential = (credential: BadgeIssuer) => {
+    setBadgeIssuer(credential);
+  };
+
   useEffect(() => {
     if (currActiveSection) {
       setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
@@ -246,6 +269,17 @@ const Profile: React.FC<Props> = ({ address }) => {
       }
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
+
+  // useEffect(() => {
+  //   let sectionId = window.location.hash;
+  //   let element = document?.querySelector(sectionId);
+  //   if (element) {
+  //     window?.scrollTo({
+  //       top: element.getBoundingClientRect().top,
+  //       behavior: 'smooth',
+  //     });
+  //   }
+  // }, []);
 
   const writeReferralButtonText = existingReferral
     ? 'Edit referral'
@@ -700,7 +734,7 @@ const Profile: React.FC<Props> = ({ address }) => {
           <div className="pb-4">
             <div>
               <h3
-                id="activity"
+                id="Activity"
                 ref={activityRef}
                 className="hidden font-serif text-3xl font-bold text-indigoGray-90 md:block"
               >
@@ -760,7 +794,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div className="mt-16">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
-                  id="badges"
+                  id="Credentials"
                   ref={badgesRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
@@ -785,7 +819,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     color="fuchsia"
                     className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'mazury'}
-                    onClick={() => setBadgeIssuer('mazury')}
+                    onClick={() => handleCredential('mazury')}
                   />
                   <Pill
                     label={
@@ -805,7 +839,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'poap'}
-                    onClick={() => setBadgeIssuer('poap')}
+                    onClick={() => handleCredential('poap')}
                   />
                   <Pill
                     label={
@@ -845,7 +879,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     color="fuchsia"
                     className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'gitpoap'}
-                    onClick={() => setBadgeIssuer('gitpoap')}
+                    onClick={() => handleCredential('gitpoap')}
                   />
                   <Pill
                     label={
@@ -865,7 +899,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === '101'}
-                    onClick={() => setBadgeIssuer('101')}
+                    onClick={() => handleCredential('101')}
                   />
                   <Pill
                     label={
@@ -885,12 +919,49 @@ const Profile: React.FC<Props> = ({ address }) => {
                     color="fuchsia"
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'kudos'}
-                    onClick={() => setBadgeIssuer('kudos')}
+                    onClick={() => handleCredential('kudos')}
                   />
                 </div>
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-12 lg:grid-cols-2 2xl:w-10/12">
+                {sharedCredential &&
+                  !badges?.find(
+                    (badge) => badge.id === sharedCredential.id
+                  ) && (
+                    <BadgePreview
+                      routeId={sharedCredential?.id}
+                      description={
+                        sharedCredential?.badge_type.description as string
+                      }
+                      heading={sharedCredential?.badge_type.title as string}
+                      imgSrc={sharedCredential?.badge_type.image as string}
+                      totalCount={
+                        totalBadgeCounts[
+                          sharedCredential?.badge_type.id as string
+                        ]
+                      }
+                      badgeCount={badgeCount}
+                      slug={sharedCredential?.badge_type.slug as string}
+                      issuer={
+                        sharedCredential?.badge_type.issuer.name as string
+                      }
+                      id={sharedCredential?.id as string}
+                      owner={sharedCredential?.owner.username as string}
+                      canBeMinted={
+                        eth_address === sharedCredential?.owner.eth_address &&
+                        !sharedCredential?.minted
+                      }
+                      mintedAt={
+                        sharedCredential?.minted_at
+                          ? new Date(
+                              sharedCredential?.minted_at as string
+                            ).toDateString()
+                          : 'Date unknown'
+                      }
+                    />
+                  )}
+
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
                     const { badge_type, id, minted, owner, minted_at } = badge;
@@ -949,7 +1020,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
                 <div className="flex">
                   <h3
-                    id="referrals"
+                    id="Referrals"
                     ref={referralsRef}
                     className="font-serif text-3xl font-bold text-indigoGray-90"
                   >
@@ -1039,7 +1110,7 @@ const Profile: React.FC<Props> = ({ address }) => {
             <div>
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
-                  id="writing"
+                  id="Writing"
                   ref={writingRef}
                   className="font-serif text-3xl font-bold text-indigoGray-90"
                 >
