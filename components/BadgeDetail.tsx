@@ -375,14 +375,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 />
               </div>
 
-              <div>
-                <BadgeDetailButton
-                  label="Hide on my profile"
-                  icon="eye-slash"
-                  handleClick={() => {}}
-                />
-              </div>
-
               {isBadgeMinted && (
                 <div>
                   <BadgeDetailButton
