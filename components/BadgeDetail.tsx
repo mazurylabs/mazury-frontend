@@ -195,7 +195,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div
             className={`flex grow items-center justify-center lg:max-w-[45%] `}
           >
-            {image.slice(-4) == '.mp4' ? (
+            {image?.slice(-4) == '.mp4' ? (
               <video
                 src={image}
                 className={'h-[230px] w-[230px]'}

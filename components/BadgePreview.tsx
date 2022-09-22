@@ -75,7 +75,7 @@ export const BadgePreview: React.FC<Props> = ({
         onClick={() => handleToggleModal(id)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        {imgSrc.slice(-4) == '.mp4' ? (
+        {imgSrc?.slice(-4) == '.mp4' ? (
           <video
             src={imgSrc}
             className={'max-w-[42px] text-xs'}
