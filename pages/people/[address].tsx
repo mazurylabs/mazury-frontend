@@ -824,7 +824,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
-                        <span> POAPs</span>
+                        <span> POAP</span>
                         <span
                           className={`font-sans text-sm font-medium ${
                             badgeIssuer === 'poap'
@@ -864,7 +864,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
-                        <span>GitPoap</span>
+                        <span>GitPOAP</span>
                         <span
                           className={`font-sans text-sm font-medium ${
                             badgeIssuer === 'gitpoap'

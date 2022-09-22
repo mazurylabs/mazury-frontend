@@ -463,7 +463,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                   onClick={() => handleBadgeIssuer('mazury')}
                                 />
                                 <Pill
-                                  label="POAPs"
+                                  label="POAP"
                                   active={badgeIssuer === 'poap'}
                                   color="fuchsia"
                                   className="h-fit w-fit"
@@ -471,7 +471,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                 />
 
                                 <Pill
-                                  label="Gitpoap"
+                                  label="GitPOAP"
                                   active={badgeIssuer === 'gitpoap'}
                                   color="fuchsia"
                                   className="h-fit w-fit shrink-0"

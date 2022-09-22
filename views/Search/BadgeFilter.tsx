@@ -179,14 +179,14 @@ export const BadgeFilter = ({
             onClick={() => handleBadgeIssuer('mazury')}
           />
           <Pill
-            label="POAPs"
+            label="POAP"
             active={badgeIssuer === 'poap'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
             onClick={() => handleBadgeIssuer('poap')}
           />
           <Pill
-            label="Gitpoap"
+            label="GitPOAP"
             active={badgeIssuer === 'gitpoap'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
