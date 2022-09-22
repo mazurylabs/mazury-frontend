@@ -1,4 +1,6 @@
-import { Avatar } from '.';
+import * as React from 'react';
+import { useRouter } from 'next/router';
+
 import NumberFormat from 'react-number-format';
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
@@ -6,6 +8,7 @@ import { BadgeDetail } from './BadgeDetail';
 import { useMobile } from 'hooks';
 import SVG from 'react-inlinesvg';
 import { Pill } from 'components';
+import { getBadgeById } from '@/utils/api';
 
 interface Props {
   imgSrc: string;
@@ -19,6 +22,7 @@ interface Props {
   canBeMinted: boolean;
   mintedAt: string;
   owner: string;
+  routeId?: string;
 }
 
 export const BadgePreview: React.FC<Props> = ({
@@ -33,26 +37,49 @@ export const BadgePreview: React.FC<Props> = ({
   canBeMinted,
   mintedAt,
   owner,
+  routeId,
 }) => {
+  const router = useRouter();
   const isMobile = useMobile();
   const [showBadgeDetails, setShowBadgeDetails] = useState(false);
+
+  const selectedCredential = (router?.query?.credential as string)?.split(
+    '#'
+  )[1];
+
+  React.useEffect(() => {
+    if (selectedCredential === id || routeId) setShowBadgeDetails(true);
+  }, [selectedCredential, id]);
+
+  const handleToggleModal = async (id?: string) => {
+    router.push(
+      {
+        pathname: router.asPath.split('?')[0],
+        ...(id ? { query: { credential: `${issuer}#${id}` } } : {}),
+      },
+      undefined,
+      { shallow: true }
+    );
+
+    if (id) {
+      setShowBadgeDetails(true);
+    }
+  };
 
   return (
     <>
       <div
         className="relative flex cursor-pointer items-center rounded-2xl border border-indigoGray-10 p-4 hover:border-indigoGray-20 hover:shadow-lg"
-        onClick={() => {
-          setShowBadgeDetails(true);
-        }}
+        onClick={() => handleToggleModal(id)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgSrc || '/default-avi.png'}
           className={
             `${
-              issuer === 'poap' ? 'h-[42px]' : 'h-[65px]'
+              issuer !== 'mazury' ? 'h-[42px]' : 'h-[65px]'
             } max-w-[42px] text-xs` +
-            (issuer === 'poap' ? 'overflow-hidden rounded-full' : '')
+            (issuer !== 'mazury' ? 'overflow-hidden rounded-full' : '')
           }
           alt={`${heading} badge`}
         />
@@ -93,9 +120,7 @@ export const BadgePreview: React.FC<Props> = ({
       <AnimatePresence>
         {showBadgeDetails && (
           <BadgeDetail
-            handleCloseModal={() => {
-              setShowBadgeDetails(false);
-            }}
+            handleCloseModal={handleToggleModal}
             isMobile={isMobile}
             title={heading}
             description={description}
@@ -103,7 +128,7 @@ export const BadgePreview: React.FC<Props> = ({
             isBadgeHidden={false}
             image={imgSrc}
             badgeCount={totalCount}
-            variant={issuer === 'mazury' ? 'badge' : 'poap'}
+            variant={issuer === 'mazury' ? 'badge' : issuer}
             slug={slug}
             id={id}
             owner={owner}

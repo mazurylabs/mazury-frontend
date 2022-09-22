@@ -1,7 +1,14 @@
 import { SiweMessage } from 'siwe';
 
 import { OnboardingFormDataType } from 'contexts';
-import { Activity, APIResponse, ListResponse, Profile, Referral } from 'types';
+import {
+  Activity,
+  APIResponse,
+  Badge,
+  ListResponse,
+  Profile,
+  Referral,
+} from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
 import { axios } from '@/lib/axios';
 
@@ -33,6 +40,24 @@ export const getBadges: (
     const res = await axios.get(
       `badges/?owner=${address}&issuer=${issuer}&limit=4`
     );
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export const getBadgeById: (id: string) => Promise<APIResponse<Badge>> = async (
+  id
+) => {
+  try {
+    const res = await axios.get(`badges/${id}`);
 
     return {
       data: res.data,

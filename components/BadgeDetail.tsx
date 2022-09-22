@@ -32,7 +32,7 @@ interface BadgeDetailProps {
   badgeCount?: number;
   image: string;
   slug: string;
-  variant: 'badge' | 'poap';
+  variant: string;
   id: string;
   canBeMinted: boolean;
   mintedAt?: string;
@@ -198,7 +198,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             <img
               src={image}
               className={` ${
-                variant === 'poap'
+                variant !== 'badge'
                   ? 'h-[230px] w-[230px] rounded-full'
                   : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
               }`}
@@ -230,7 +230,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <p
                     className={`font-inter text-xs font-bold text-emerald-900`}
                   >
-                    {variant === 'badge' ? 'Badge' : 'Poap'} earned
+                    Credential verified
                   </p>
                 </div>
 

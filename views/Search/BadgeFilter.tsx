@@ -53,7 +53,7 @@ export const BadgeFilter = ({
   const variants =
     screenWidth > 768 ? {} : screenWidth <= 640 ? trayAnimation : fadeAnimation;
 
-  const handleBadgeIssuer = (issuer: 'mazury' | 'poap') => {
+  const handleBadgeIssuer = (issuer: BadgeIssuer) => {
     setCursor('');
     setSearchTerm('');
     setBadges([]);
@@ -159,7 +159,7 @@ export const BadgeFilter = ({
           <div className="grow font-sans text-base font-medium">
             <input
               type="text"
-              placeholder="Badge name"
+              placeholder="Credential name"
               aria-label="Search"
               className="h-full w-full bg-transparent"
               value={searchTerm}
@@ -169,21 +169,51 @@ export const BadgeFilter = ({
         </form>
       </div>
 
-      <div className="mt-6 flex space-x-[24px]">
-        <Pill
-          label="Mazury badges"
-          active={badgeIssuer === 'mazury'}
-          color="fuchsia"
-          className="h-fit w-fit"
-          onClick={() => handleBadgeIssuer('mazury')}
-        />
-        <Pill
-          label="POAPs"
-          active={badgeIssuer === 'poap'}
-          color="fuchsia"
-          className="h-fit w-fit"
-          onClick={() => handleBadgeIssuer('poap')}
-        />
+      <div className="mt-6 h-fit min-h-[31px] w-full overflow-x-scroll">
+        <div className="flex h-fit w-[450px] space-x-[24px]">
+          <Pill
+            label="Mazury badges"
+            active={badgeIssuer === 'mazury'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('mazury')}
+          />
+          <Pill
+            label="POAPs"
+            active={badgeIssuer === 'poap'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('poap')}
+          />
+          <Pill
+            label="Gitpoap"
+            active={badgeIssuer === 'gitpoap'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('gitpoap')}
+          />
+          <Pill
+            label="Sismo"
+            active={badgeIssuer === 'sismo'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('sismo')}
+          />
+          <Pill
+            label="101"
+            active={badgeIssuer === '101'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('101')}
+          />
+          <Pill
+            label="Kudos"
+            active={badgeIssuer === 'kudos'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('kudos')}
+          />
+        </div>
       </div>
 
       <ScrollLock>
