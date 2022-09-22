@@ -193,6 +193,13 @@ export const BadgeFilter = ({
             onClick={() => handleBadgeIssuer('gitpoap')}
           />
           <Pill
+            label="Sismo"
+            active={badgeIssuer === 'sismo'}
+            color="fuchsia"
+            className="h-fit w-fit shrink-0"
+            onClick={() => handleBadgeIssuer('sismo')}
+          />
+          <Pill
             label="101"
             active={badgeIssuer === '101'}
             color="fuchsia"

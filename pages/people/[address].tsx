@@ -884,6 +884,26 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
+                        <span>Sismo</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'sismo'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.sismo)}
+                        </span>
+                      </div>
+                    }
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0 md:ml-8"
+                    active={badgeIssuer === 'sismo'}
+                    onClick={() => handleCredential('sismo')}
+                  />
+                  <Pill
+                    label={
+                      <div className="flex items-center space-x-2">
                         <span>101</span>
                         <span
                           className={`font-sans text-sm font-medium ${
