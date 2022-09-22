@@ -957,9 +957,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       heading={sharedCredential?.badge_type.title as string}
                       imgSrc={sharedCredential?.badge_type.image as string}
                       totalCount={
-                        totalBadgeCounts[
-                          sharedCredential?.badge_type.id as string
-                        ]
+                        sharedCredential?.badge_type.total_supply as number
                       }
                       badgeCount={badgeCount}
                       slug={sharedCredential?.badge_type.slug as string}
@@ -986,8 +984,14 @@ const Profile: React.FC<Props> = ({ address }) => {
                   badges.map((badge) => {
                     const { badge_type, id, minted, owner, minted_at } = badge;
 
-                    const { image, description, title, issuer, slug } =
-                      badge_type;
+                    const {
+                      image,
+                      description,
+                      title,
+                      total_supply,
+                      issuer,
+                      slug,
+                    } = badge_type;
 
                     return (
                       <BadgePreview
@@ -995,7 +999,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         description={description}
                         heading={title}
                         imgSrc={image}
-                        totalCount={totalBadgeCounts[badge_type.id]}
+                        totalCount={total_supply as number} // TODO: i dont know why "as number" makes ts happy but im gonna leave it —— feel free to change this code
                         badgeCount={badgeCount}
                         slug={slug}
                         issuer={issuer.name}
