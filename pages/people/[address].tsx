@@ -844,26 +844,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
-                        <span>Buildspace</span>
-                        <span
-                          className={`font-sans text-sm font-medium ${
-                            badgeIssuer === 'buildspace'
-                              ? 'fuchsia-300'
-                              : 'text-indigoGray-40'
-                          }`}
-                        >
-                          {getMetricDisplayValue(credentialCount?.buildspace)}
-                        </span>
-                      </div>
-                    }
-                    color="fuchsia"
-                    className="h-fit w-fit shrink-0"
-                    active={badgeIssuer === 'buildspace'}
-                    onClick={() => setBadgeIssuer('buildspace')}
-                  />
-                  <Pill
-                    label={
-                      <div className="flex items-center space-x-2">
                         <span>GitPOAP</span>
                         <span
                           className={`font-sans text-sm font-medium ${
@@ -880,6 +860,26 @@ const Profile: React.FC<Props> = ({ address }) => {
                     className="h-fit w-fit shrink-0 md:ml-8"
                     active={badgeIssuer === 'gitpoap'}
                     onClick={() => handleCredential('gitpoap')}
+                  />
+                  <Pill
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>Buildspace</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'buildspace'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.buildspace)}
+                        </span>
+                      </div>
+                    }
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0"
+                    active={badgeIssuer === 'buildspace'}
+                    onClick={() => setBadgeIssuer('buildspace')}
                   />
                   <Pill
                     label={

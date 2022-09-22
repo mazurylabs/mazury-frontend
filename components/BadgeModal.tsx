@@ -469,13 +469,21 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                   className="h-fit w-fit"
                                   onClick={() => handleBadgeIssuer('poap')}
                                 />
-
                                 <Pill
                                   label="GitPOAP"
                                   active={badgeIssuer === 'gitpoap'}
                                   color="fuchsia"
                                   className="h-fit w-fit shrink-0"
                                   onClick={() => handleBadgeIssuer('gitpoap')}
+                                />
+                                <Pill
+                                  label="Buildspace"
+                                  active={badgeIssuer === 'buildspace'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0"
+                                  onClick={() =>
+                                    handleBadgeIssuer('buildspace')
+                                  }
                                 />
                                 <Pill
                                   label="Sismo"
