@@ -75,16 +75,26 @@ export const BadgePreview: React.FC<Props> = ({
         onClick={() => handleToggleModal(id)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imgSrc || '/default-avi.png'}
-          className={
-            `${
-              issuer !== 'mazury' ? 'h-[42px]' : 'h-[65px]'
-            } max-w-[42px] text-xs` +
-            (issuer !== 'mazury' ? 'overflow-hidden rounded-full' : '')
-          }
-          alt={`${heading} badge`}
-        />
+        {imgSrc.slice(-4) == '.mp4' ? (
+          <video
+            src={imgSrc}
+            className={'max-w-[42px] text-xs'}
+            autoPlay
+            loop
+            muted
+          />
+        ) : (
+          <img
+            src={imgSrc || '/default-avi.png'}
+            className={
+              `${
+                issuer !== 'mazury' ? 'h-[42px]' : 'h-[65px]'
+              } max-w-[42px] text-xs` +
+              (issuer !== 'mazury' ? 'overflow-hidden rounded-full' : '')
+            }
+            alt={`${heading} badge`}
+          />
+        )}
         <div className="ml-6 flex flex-col space-y-2">
           <h5 className="font-demi font-serif text-xl font-semibold  font-bold leading-6 text-indigoGray-90">
             {heading}

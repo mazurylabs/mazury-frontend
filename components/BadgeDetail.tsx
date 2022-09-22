@@ -195,15 +195,25 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div
             className={`flex grow items-center justify-center lg:max-w-[45%] `}
           >
-            <img
-              src={image}
-              className={` ${
-                variant !== 'badge'
-                  ? 'h-[230px] w-[230px] rounded-full'
-                  : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
-              }`}
-              alt={title + ' badge'}
-            />
+            {image.slice(-4) == '.mp4' ? (
+              <video
+                src={image}
+                className={'h-[230px] w-[230px]'}
+                autoPlay
+                loop
+                muted
+              />
+            ) : (
+              <img
+                src={image}
+                className={` ${
+                  variant !== 'badge'
+                    ? 'h-[230px] w-[230px] rounded-full'
+                    : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
+                }`}
+                alt={title + ' badge'}
+              />
+            )}
           </div>
 
           <div
