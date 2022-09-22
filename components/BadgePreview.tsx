@@ -10,6 +10,8 @@ import SVG from 'react-inlinesvg';
 import { Pill } from 'components';
 import { getBadgeById } from '@/utils/api';
 
+import { truncateString } from 'utils';
+
 interface Props {
   imgSrc: string;
   heading: string;
@@ -87,9 +89,11 @@ export const BadgePreview: React.FC<Props> = ({
           <h5 className="font-demi font-serif text-xl font-semibold  font-bold leading-6 text-indigoGray-90">
             {heading}
           </h5>
-          {/* <p className="text-sm font-medium text-indigoGray-80">
-            {truncateString(description, 100)}
-          </p> */}
+          {
+            <p className="text-sm font-medium text-indigoGray-80">
+              {truncateString(description, 100)}
+            </p>
+          }
           {totalCount && (
             <span className="font-inter text-xs font-medium leading-[14.4px] text-indigoGray-50">
               <NumberFormat
