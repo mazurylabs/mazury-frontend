@@ -114,9 +114,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
   const handleSearch = (badge: string) => {
-    const queryParam =
-      (variant === 'badge' ? 'badges=' : `${variant}=`) +
-      encodeURIComponent(badge);
+    const queryParam = 'badges=' + encodeURIComponent(badge);
 
     router.push(`/search?${queryParam}`);
   };
