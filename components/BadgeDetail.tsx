@@ -227,7 +227,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
                 >
                   <div className="flex" role="presentation">
-                    <SVG height={16} width={16} src={`/icons/trophy.svg`} />
+                    <SVG height={16} width={16} src={`/icons/minted.svg`} />
                   </div>
                   <p
                     className={`font-inter text-xs font-bold text-emerald-900`}
