@@ -454,38 +454,37 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                 </form>
                               </div>
                             ) : (
-                              <div className="flex space-x-[24px]">
+                              <div className="flex flex-wrap lg:space-x-6">
                                 <Pill
-                                  label="Mazury badges"
+                                  label={<span>Mazury badges </span>}
                                   active={badgeIssuer === 'mazury'}
                                   color="fuchsia"
-                                  className="h-fit w-fit"
+                                  className="h-fit w-fit shrink-0"
                                   onClick={() => handleBadgeIssuer('mazury')}
                                 />
                                 <Pill
-                                  label="POAPs"
+                                  label={<span>POAPs</span>}
                                   active={badgeIssuer === 'poap'}
                                   color="fuchsia"
-                                  className="h-fit w-fit"
+                                  className="h-fit w-fit shrink-0"
                                   onClick={() => handleBadgeIssuer('poap')}
                                 />
-
                                 <Pill
-                                  label="Gitpoap"
+                                  label={<span>GitPOAP</span>}
                                   active={badgeIssuer === 'gitpoap'}
                                   color="fuchsia"
                                   className="h-fit w-fit shrink-0"
                                   onClick={() => handleBadgeIssuer('gitpoap')}
                                 />
                                 <Pill
-                                  label="101"
+                                  label={<span>101</span>}
                                   active={badgeIssuer === '101'}
                                   color="fuchsia"
                                   className="h-fit w-fit shrink-0"
                                   onClick={() => handleBadgeIssuer('101')}
                                 />
                                 <Pill
-                                  label="Kudos"
+                                  label={<span>Kudos</span>}
                                   active={badgeIssuer === 'kudos'}
                                   color="fuchsia"
                                   className="h-fit w-fit shrink-0"

@@ -169,38 +169,41 @@ export const BadgeFilter = ({
         </form>
       </div>
 
-      <div className="mt-6 h-fit min-h-[31px] w-full overflow-x-scroll">
-        <div className="flex h-fit w-[450px] space-x-[24px]">
+      <div className="mt-6 h-fit w-full space-y-2">
+        <div className="flex h-fit w-fit space-x-[24px]">
           <Pill
-            label="Mazury badges"
+            label={<span>Mazury badges </span>}
             active={badgeIssuer === 'mazury'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
             onClick={() => handleBadgeIssuer('mazury')}
           />
           <Pill
-            label="POAPs"
+            label={<span>POAPs</span>}
             active={badgeIssuer === 'poap'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
             onClick={() => handleBadgeIssuer('poap')}
           />
           <Pill
-            label="Gitpoap"
+            label={<span>GitPOAP</span>}
             active={badgeIssuer === 'gitpoap'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
             onClick={() => handleBadgeIssuer('gitpoap')}
           />
           <Pill
-            label="101"
+            label={<span>101</span>}
             active={badgeIssuer === '101'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
             onClick={() => handleBadgeIssuer('101')}
           />
+        </div>
+
+        <div className="flex h-fit w-fit space-x-[24px]">
           <Pill
-            label="Kudos"
+            label={<span>Kudos</span>}
             active={badgeIssuer === 'kudos'}
             color="fuchsia"
             className="h-fit w-fit shrink-0"
@@ -211,7 +214,7 @@ export const BadgeFilter = ({
 
       <ScrollLock>
         <div className="flex overflow-y-auto">
-          <ul className="mt-7 grow space-y-8 overflow-x-hidden">
+          <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
             {badges?.map((badge, index) => (
               <li className="flex space-x-4" key={badge.id}>
                 <Checkbox

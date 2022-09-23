@@ -800,7 +800,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Credentials
                 </h3>
-                <div className="flex w-full space-x-6 overflow-x-auto">
+                <div className="flex w-full flex-wrap lg:space-x-6">
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
@@ -817,7 +817,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0 md:ml-8"
+                    className="h-fit w-fit shrink-0 lg:ml-8"
                     active={badgeIssuer === 'mazury'}
                     onClick={() => handleCredential('mazury')}
                   />
