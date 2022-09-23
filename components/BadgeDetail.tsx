@@ -169,7 +169,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
+      className="relative flex h-full flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
     >
       {isNewlyMinted && (
         <Player
