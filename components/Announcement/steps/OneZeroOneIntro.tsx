@@ -10,7 +10,12 @@ export const OneZeroOneIntro = () => {
         </h1>
         <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
           Learn from online courses and receive NFT certificates! Learn more at{' '}
-          <a target="_blank" href="https://101.xyz/" className="underline">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://101.xyz/"
+            className="underline"
+          >
             101.xyz
           </a>
         </p>

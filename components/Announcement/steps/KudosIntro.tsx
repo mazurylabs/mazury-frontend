@@ -12,6 +12,7 @@ export const KudosIntro = () => {
           Capture community contributions with NFT kudos. Learn more at{' '}
           <a
             target="_blank"
+            rel="noreferrer"
             href="https://mintkudos.xyz/"
             className="underline"
           >

@@ -13,6 +13,7 @@ export const BuildspaceIntro = () => {
           web3. GTFOL and learn more at{' '}
           <a
             target="_blank"
+            rel="noreferrer"
             href="https://buildspace.so/"
             className="underline"
           >

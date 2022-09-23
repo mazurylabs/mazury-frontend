@@ -10,7 +10,12 @@ export const GitPOAPIntro = () => {
         </h1>
         <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
           Collect poaps for your open source contributions! Learn more at{' '}
-          <a target="_blank" href="https://gitpoap.io" className="underline">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://gitpoap.io"
+            className="underline"
+          >
             gitpoap.io
           </a>
         </p>

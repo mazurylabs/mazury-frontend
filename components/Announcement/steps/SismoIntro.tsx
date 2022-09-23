@@ -10,7 +10,12 @@ export const SismoIntro = () => {
         </h1>
         <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
           Mint badges for your web3 achievements in a private. Learn more at{' '}
-          <a target="_blank" href="https://sismo.io/" className="underline">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://sismo.io/"
+            className="underline"
+          >
             sismo.io
           </a>
         </p>
