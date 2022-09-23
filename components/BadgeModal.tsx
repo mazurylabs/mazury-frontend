@@ -255,7 +255,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                 <p className="font-demi text-lg font-normal leading-5 text-indigoGray-90">
                   {truncateString(badge.title, 25)}
                 </p>
-                <p className="font-inter text-sm font-medium text-indigoGray-60 line-clamp-2">
+                <p className="font-sans text-sm font-medium text-indigoGray-60 line-clamp-2">
                   {truncateString(badge.description, 36)}
                 </p>
               </div>
@@ -275,7 +275,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     />
                   </div>
                   <p
-                    className={`font-inter text-xs font-bold ${
+                    className={`font-sans text-xs font-bold ${
                       false ? 'text-indigoGray-90' : 'text-emerald-900'
                     }`}
                   >
@@ -285,7 +285,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                 <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
-                <div className="font-inter text-xs font-medium text-indigoGray-60">
+                <div className="font-sans text-xs font-medium text-indigoGray-60">
                   <p>
                     {badgesCount}{' '}
                     {(badgesCount as number) < 2 ? 'person' : 'people'}
@@ -346,7 +346,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   );
 
   const empty = (
-    <div className="font-inter mt-3 px-6 text-sm font-medium text-indigoGray-90 lg:min-h-[19.6rem] lg:px-10">
+    <div className="mt-3 px-6 font-sans text-sm font-medium text-indigoGray-90 lg:min-h-[19.6rem] lg:px-10">
       <p>No suggestions found</p>
     </div>
   );
@@ -435,7 +435,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                     />
                                   </div>
 
-                                  <div className="font-inter ml-[10px] mr-10 grow  text-base font-medium">
+                                  <div className="ml-[10px] mr-10 grow font-sans  text-base font-medium">
                                     <input
                                       ref={inputRef}
                                       type="text"
@@ -522,7 +522,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                           onToggle={handleToggleShowBadges}
                         />
 
-                        <div className="font-inter text-base text-indigoGray-70">
+                        <div className="font-sans text-base text-indigoGray-70">
                           <p>Show only your badges</p>
                         </div>
                       </div>

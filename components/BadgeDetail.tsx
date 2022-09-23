@@ -71,7 +71,7 @@ const BadgeDetailButton = ({
         />
       </div>
       <span
-        className={`font-inter text-base font-semibold leading-6 text-indigoGray-${
+        className={`font-sans text-base font-semibold leading-6 text-indigoGray-${
           disabled ? 40 : 90
         }`}
       >
@@ -218,7 +218,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 {title}
               </h2>
 
-              <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
+              <p className="font-sans text-sm text-indigoGray-60 line-clamp-2">
                 {description}
               </p>
 
@@ -229,16 +229,14 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <div className="flex" role="presentation">
                     <SVG height={16} width={16} src={`/icons/trophy.svg`} />
                   </div>
-                  <p
-                    className={`font-inter text-xs font-bold text-emerald-900`}
-                  >
+                  <p className={`font-sans text-xs font-bold text-emerald-900`}>
                     Credential verified
                   </p>
                 </div>
 
                 <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
-                <div className="font-inter text-xs font-medium text-indigoGray-60">
+                <div className="font-sans text-xs font-medium text-indigoGray-60">
                   <p>{badgeCount} people</p>
                 </div>
               </div>
@@ -257,7 +255,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   boxShadow: '0px 0px 0px #fff',
                   transition: { duration: 1.5, delay: 0.5 },
                 }}
-                className="font-inter flex items-center justify-between rounded-lg py-1 px-2 text-xs"
+                className="flex items-center justify-between rounded-lg py-1 px-2 font-sans text-xs"
               >
                 {variant === 'badge' && (
                   <div className="space-y-[2px]">
@@ -334,7 +332,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               <div>
                 <Button
                   variant="primary"
-                  className="font-inter flex w-full items-center justify-center space-x-2 bg-blue-600 text-sm font-semibold"
+                  className="flex w-full items-center justify-center space-x-2 bg-blue-600 font-sans text-sm font-semibold"
                   onClick={handleGoToTwitter}
                 >
                   <SVG
@@ -422,7 +420,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     />
                   </div>
 
-                  <span className="font-inter text-sm font-semibold leading-[21px] text-indigoGray-90">
+                  <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                     {`Search`}
                   </span>
                 </button>
@@ -434,7 +432,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     onClick={() => handleSteps('initialise')}
                   >
                     <SVG src={`/icons/mint.svg`} height={16} width={16} />
-                    <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
+                    <span className="font-sans text-xs font-bold leading-6 text-indigoGray-5">
                       Mint NFT
                     </span>
                   </button>
@@ -491,7 +489,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 </h2>
               </div>
 
-              <div className="font-inter space-y-2 text-sm font-medium leading-[21px] text-indigoGray-60">
+              <div className="space-y-2 font-sans text-sm font-medium leading-[21px] text-indigoGray-60">
                 <p>
                   We use Polygon to mint your favourite badges without affecting
                   the enviornment while also taking the gas fees on us.

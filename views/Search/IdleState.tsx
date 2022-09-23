@@ -56,7 +56,7 @@ export const IdleState = () => {
           <h2>KEYWORD SUGGESTIONS</h2>
         </div>
 
-        <ul className="font-inter font-medium">
+        <ul className="font-sans font-medium">
           {keywordSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -96,7 +96,7 @@ export const IdleState = () => {
           <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
 
-        <div className="font-inter px-2 font-medium">
+        <div className="px-2 font-sans font-medium">
           <ul className="mb-4">
             {badgeSuggestions.map((badge, index) => (
               <li

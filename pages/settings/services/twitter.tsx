@@ -216,7 +216,7 @@ const TwitterPage: NextPage = () => {
             <div className="flex grow flex-col">
               <div className="grow md:mb-8 md:grow-0">
                 <div>
-                  <p className="font-inter text-sm font-medium leading-[18px] text-indigoGray-60">
+                  <p className="font-sans text-sm font-medium leading-[18px] text-indigoGray-60">
                     {user.twitter ? (
                       <>
                         You are logged in as{' '}

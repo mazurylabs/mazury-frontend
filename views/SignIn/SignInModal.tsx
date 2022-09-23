@@ -124,7 +124,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           Remember me
         </Button>
 
-        <p className="font-inter text-xs font-medium font-semibold text-indigoGray-40">
+        <p className="font-sans text-xs font-medium font-semibold text-indigoGray-40">
           Signing is an authentication method and doesn't authorize us to access
           your funds or control your identity
         </p>
