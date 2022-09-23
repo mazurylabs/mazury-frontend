@@ -14,7 +14,7 @@ export const EmptyState = () => {
   });
 
   return (
-    <div className="font-inter mt-3 flex grow flex-col pb-6 text-sm font-medium text-indigoGray-90">
+    <div className="mt-3 flex grow flex-col pb-6 font-sans text-sm font-medium text-indigoGray-90">
       <div className="flex grow flex-col items-center justify-between pt-[80px] pb-8">
         <div className="space-y-[2px] text-center">
           <h3 className="indigoGray-80 font-sans text-lg font-bold leading-[27px]">
@@ -27,7 +27,7 @@ export const EmptyState = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-[10px]">
-          <p className="font-inter text-base font-bold leading-6 text-pink-600">
+          <p className="font-sans text-base font-bold leading-6 text-pink-600">
             or explore our spotlight!
           </p>
 

@@ -4,5 +4,5 @@ export const ADDRESSOR_NAME =
 export const ACCESS_TOKEN_KEY = 'access_token';
 export const REFRESH_TOKEN_KEY = 'refresh_token';
 export const APP_STORAGE_PREFIX = 'mazury_';
-export const IS_NEW_USER = 'isNewUser';
+export const IS_NEW_USER = 'isNewUserCredentials'; // isNewUser used for previous release
 export const isDev = process.env.NODE_ENV === 'development';

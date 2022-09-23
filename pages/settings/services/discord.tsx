@@ -17,7 +17,7 @@ const DiscordPage: NextPage = () => {
             <div className="flex grow flex-col">
               <div className="grow md:mb-8 md:grow-0">
                 <div>
-                  <p className="font-inter text-sm font-medium leading-[18px] text-indigoGray-60">
+                  <p className="font-sans text-sm font-medium leading-[18px] text-indigoGray-60">
                     You can connect your Discord account and have it show up as
                     one of your contacts. This way someone can reach you faster.
                   </p>

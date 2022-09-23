@@ -97,7 +97,7 @@ const SearchPage: NextPage = () => {
               <SVG height={24} width={24} src={`/icons/search-black.svg`} />
             </div>
 
-            <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
+            <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
               <input
                 ref={inputRef}
                 type="text"

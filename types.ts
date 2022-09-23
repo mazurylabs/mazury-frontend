@@ -244,7 +244,14 @@ export interface Post {
 
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
-export type BadgeIssuer = 'mazury' | 'poap';
+export type BadgeIssuer =
+  | 'mazury'
+  | 'poap'
+  | 'buildspace'
+  | 'gitpoap'
+  | 'sismo'
+  | 'kudos'
+  | '101';
 
 export type FilterType =
   | 'Credentials'
@@ -267,4 +274,15 @@ export type AuthVerifyResponse = {
   access_token: string;
   refresh: string;
   success: boolean;
+};
+
+export type CredentialCount = {
+  total: number;
+  mazury: number;
+  poap: number;
+  buildspace: number;
+  kudos: number;
+  gitpoap: number;
+  '101': number;
+  sismo: number;
 };

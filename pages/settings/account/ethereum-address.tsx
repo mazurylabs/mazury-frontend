@@ -42,7 +42,7 @@ const EthAddressPage: NextPage = () => {
                     key={data.username + index}
                     className="mb-8 flex items-center md:justify-between"
                   >
-                    <div className="font-inter mr-10 max-w-[83%] shrink md:max-w-full">
+                    <div className="mr-10 max-w-[83%] shrink font-sans md:max-w-full">
                       <p className="font-bold">{data.username}</p>
                       <p className=" break-words text-xs font-medium leading-[18px] text-black-700">
                         {data.address}
