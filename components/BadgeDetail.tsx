@@ -51,7 +51,7 @@ interface BadgeDetailButtonProp {
 type Steps = 'idle' | 'initialise' | 'submitting';
 
 const credentialClass: Record<BadgeIssuer, string> = {
-  '101': 'h-[230px] w-[230px] rounded-full mb-4',
+  '101': 'h-[230px] w-[230px] rounded bg-gray-100 mb-4',
   buildspace: 'h-[230px] w-[230px] rounded mb-4',
   gitpoap: 'h-[230px] w-[230px] rounded-full mb-4',
   kudos: 'h-[230px] w-[230px] rounded mb-4',

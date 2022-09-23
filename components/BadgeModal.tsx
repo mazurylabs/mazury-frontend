@@ -380,7 +380,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   isBadgeHidden={false}
                   badgeCount={badgesCount}
                   image={showBadgeDetails.image}
-                  variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
+                  variant={badgeIssuer}
                   slug={showBadgeDetails.slug}
                   id={showBadgeDetails.id}
                   canBeMinted={false}
