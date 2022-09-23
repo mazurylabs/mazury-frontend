@@ -800,7 +800,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Credentials
                 </h3>
-                <div className="flex w-full flex-wrap lg:space-x-6">
+                <div className="flex w-full flex-wrap">
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
@@ -817,7 +817,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0 lg:ml-8"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'mazury'}
                     onClick={() => handleCredential('mazury')}
                   />
@@ -837,7 +837,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'poap'}
                     onClick={() => handleCredential('poap')}
                   />
@@ -857,7 +857,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0 md:ml-8"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'gitpoap'}
                     onClick={() => handleCredential('gitpoap')}
                   />
@@ -877,7 +877,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'buildspace'}
                     onClick={() => setBadgeIssuer('buildspace')}
                   />
@@ -897,7 +897,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0 md:ml-8"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'sismo'}
                     onClick={() => handleCredential('sismo')}
                   />
@@ -917,7 +917,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === '101'}
                     onClick={() => handleCredential('101')}
                   />
@@ -937,7 +937,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                     }
                     color="fuchsia"
-                    className="h-fit w-fit shrink-0"
+                    className="h-fit w-fit shrink-0 lg:ml-6"
                     active={badgeIssuer === 'kudos'}
                     onClick={() => handleCredential('kudos')}
                   />
