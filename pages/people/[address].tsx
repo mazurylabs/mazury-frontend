@@ -824,7 +824,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
-                        <span> POAPs</span>
+                        <span> POAP</span>
                         <span
                           className={`font-sans text-sm font-medium ${
                             badgeIssuer === 'poap'
@@ -840,6 +840,26 @@ const Profile: React.FC<Props> = ({ address }) => {
                     className="h-fit w-fit shrink-0"
                     active={badgeIssuer === 'poap'}
                     onClick={() => handleCredential('poap')}
+                  />
+                  <Pill
+                    label={
+                      <div className="flex items-center space-x-2">
+                        <span>GitPOAP</span>
+                        <span
+                          className={`font-sans text-sm font-medium ${
+                            badgeIssuer === 'gitpoap'
+                              ? 'fuchsia-300'
+                              : 'text-indigoGray-40'
+                          }`}
+                        >
+                          {getMetricDisplayValue(credentialCount?.gitpoap)}
+                        </span>
+                      </div>
+                    }
+                    color="fuchsia"
+                    className="h-fit w-fit shrink-0 md:ml-8"
+                    active={badgeIssuer === 'gitpoap'}
+                    onClick={() => handleCredential('gitpoap')}
                   />
                   <Pill
                     label={
@@ -864,22 +884,22 @@ const Profile: React.FC<Props> = ({ address }) => {
                   <Pill
                     label={
                       <div className="flex items-center space-x-2">
-                        <span>GitPoap</span>
+                        <span>Sismo</span>
                         <span
                           className={`font-sans text-sm font-medium ${
-                            badgeIssuer === 'gitpoap'
+                            badgeIssuer === 'sismo'
                               ? 'fuchsia-300'
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.gitpoap)}
+                          {getMetricDisplayValue(credentialCount?.sismo)}
                         </span>
                       </div>
                     }
                     color="fuchsia"
                     className="h-fit w-fit shrink-0 md:ml-8"
-                    active={badgeIssuer === 'gitpoap'}
-                    onClick={() => handleCredential('gitpoap')}
+                    active={badgeIssuer === 'sismo'}
+                    onClick={() => handleCredential('sismo')}
                   />
                   <Pill
                     label={
@@ -937,9 +957,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       heading={sharedCredential?.badge_type.title as string}
                       imgSrc={sharedCredential?.badge_type.image as string}
                       totalCount={
-                        totalBadgeCounts[
-                          sharedCredential?.badge_type.id as string
-                        ]
+                        sharedCredential?.badge_type.total_supply as number
                       }
                       badgeCount={badgeCount}
                       slug={sharedCredential?.badge_type.slug as string}
@@ -966,8 +984,14 @@ const Profile: React.FC<Props> = ({ address }) => {
                   badges.map((badge) => {
                     const { badge_type, id, minted, owner, minted_at } = badge;
 
-                    const { image, description, title, issuer, slug } =
-                      badge_type;
+                    const {
+                      image,
+                      description,
+                      title,
+                      total_supply,
+                      issuer,
+                      slug,
+                    } = badge_type;
 
                     return (
                       <BadgePreview
@@ -975,7 +999,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         description={description}
                         heading={title}
                         imgSrc={image}
-                        totalCount={totalBadgeCounts[badge_type.id]}
+                        totalCount={total_supply as number} // TODO: i dont know why "as number" makes ts happy but im gonna leave it —— feel free to change this code
                         badgeCount={badgeCount}
                         slug={slug}
                         issuer={issuer.name}

@@ -417,7 +417,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                       <div className="flex justify-between">
                         <div className="grow lg:flex lg:items-center">
-                          <div className="font-demi text-4xl font-normal text-indigoGray-90">
+                          <div className="shrink-0 font-demi text-4xl font-normal text-indigoGray-90">
                             <h1>All badges</h1>
                           </div>
 
@@ -454,33 +454,49 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                 </form>
                               </div>
                             ) : (
-                              <div className="flex flex-wrap lg:space-x-6">
+                              <div className="flex flex-wrap lg:max-w-[80%]">
                                 <Pill
                                   label={<span>Mazury badges </span>}
                                   active={badgeIssuer === 'mazury'}
                                   color="fuchsia"
-                                  className="h-fit w-fit shrink-0"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('mazury')}
                                 />
                                 <Pill
                                   label={<span>POAPs</span>}
                                   active={badgeIssuer === 'poap'}
                                   color="fuchsia"
-                                  className="h-fit w-fit shrink-0"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('poap')}
                                 />
                                 <Pill
                                   label={<span>GitPOAP</span>}
                                   active={badgeIssuer === 'gitpoap'}
                                   color="fuchsia"
-                                  className="h-fit w-fit shrink-0"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('gitpoap')}
                                 />
                                 <Pill
-                                  label={<span>101</span>}
+                                  label={<span>Buildspace</span>}
+                                  active={badgeIssuer === 'buildspace'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() =>
+                                    handleBadgeIssuer('buildspace')
+                                  }
+                                />
+                                <Pill
+                                  label={<span>Sismo</span>}
+                                  active={badgeIssuer === 'sismo'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() => handleBadgeIssuer('sismo')}
+                                />
+                                <Pill
+                                  label="101"
                                   active={badgeIssuer === '101'}
                                   color="fuchsia"
-                                  className="h-fit w-fit shrink-0"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('101')}
                                 />
                                 <Pill
@@ -497,7 +513,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                         <>
                           {!isSearchOpen && (
-                            <div className="flex h-[39px] items-center self-end lg:h-[54px] lg:self-start">
+                            <div className="flex h-[39px] shrink-0 items-center self-end lg:h-[54px] lg:self-start">
                               <Button
                                 className="m-0 !p-0"
                                 variant="tertiary"

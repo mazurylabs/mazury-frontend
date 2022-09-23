@@ -249,6 +249,7 @@ export type BadgeIssuer =
   | 'poap'
   | 'buildspace'
   | 'gitpoap'
+  | 'sismo'
   | 'kudos'
   | '101';
 

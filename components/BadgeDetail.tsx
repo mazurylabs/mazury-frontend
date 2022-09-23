@@ -114,9 +114,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
   const handleSearch = (badge: string) => {
-    const queryParam =
-      (variant === 'badge' ? 'badges=' : `${variant}=`) +
-      encodeURIComponent(badge);
+    const queryParam = 'badges=' + encodeURIComponent(badge);
 
     router.push(`/search?${queryParam}`);
   };
@@ -197,15 +195,25 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div
             className={`flex grow items-center justify-center lg:max-w-[45%] `}
           >
-            <img
-              src={image}
-              className={` ${
-                variant !== 'badge'
-                  ? 'h-[230px] w-[230px] rounded-full'
-                  : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
-              }`}
-              alt={title + ' badge'}
-            />
+            {image?.slice(-4) == '.mp4' ? (
+              <video
+                src={image}
+                className={'h-[230px] w-[230px]'}
+                autoPlay
+                loop
+                muted
+              />
+            ) : (
+              <img
+                src={image}
+                className={` ${
+                  variant !== 'badge'
+                    ? 'h-[230px] w-[230px] rounded-full'
+                    : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
+                }`}
+                alt={title + ' badge'}
+              />
+            )}
           </div>
 
           <div
@@ -227,7 +235,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
                 >
                   <div className="flex" role="presentation">
-                    <SVG height={16} width={16} src={`/icons/trophy.svg`} />
+                    <SVG height={16} width={16} src={`/icons/minted.svg`} />
                   </div>
                   <p className={`font-sans text-xs font-bold text-emerald-900`}>
                     Credential verified
@@ -362,14 +370,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   label={`Search using ${variant}`}
                   icon="search-black"
                   handleClick={() => handleSearch(slug)}
-                />
-              </div>
-
-              <div>
-                <BadgeDetailButton
-                  label="Hide on my profile"
-                  icon="eye-slash"
-                  handleClick={() => {}}
                 />
               </div>
 

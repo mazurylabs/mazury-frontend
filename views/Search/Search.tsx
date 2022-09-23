@@ -601,7 +601,7 @@ const BadgesFilterView: FCWithClassName = ({ className }) => {
         />
         <Pill
           color="fuchsia"
-          label="POAPs"
+          label="POAP"
           className="ml-6"
           onClick={() => setIssuer('poap')}
           active={issuer === 'poap'}
