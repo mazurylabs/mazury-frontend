@@ -2,7 +2,14 @@ import * as React from 'react';
 import { AnimatePresence } from 'framer-motion';
 
 import { ModalContainer } from './ModalContainer';
-import { Mint, Icons, Intro, Badges, Sign, Twitter } from './steps';
+import {
+  CredentialsIntro,
+  GitPOAPIntro,
+  BuildspaceIntro,
+  SismoIntro,
+  OneZeroOneIntro,
+  KudosIntro,
+} from './steps';
 
 import storage from '@/utils/storage';
 import { IS_NEW_USER } from '@/config';
@@ -15,12 +22,12 @@ export const AnnouncementModal = () => {
 
   const steps = React.useMemo(
     () => [
-      <Intro key={'step-0'} />,
-      <Mint key={'step-1'} />,
-      <Sign key={'step-2'} />,
-      <Icons key={'step-3'} />,
-      <Badges key={'step-4'} />,
-      <Twitter key={'step-5'} />,
+      <CredentialsIntro key={'step-0'} />,
+      <GitPOAPIntro key={'step-1'} />,
+      <BuildspaceIntro key={'step-2'} />,
+      <SismoIntro key={'step-3'} />,
+      <OneZeroOneIntro key={'step-4'} />,
+      <KudosIntro key={'step-5'} />,
     ],
     []
   );
