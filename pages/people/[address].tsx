@@ -162,9 +162,9 @@ const Profile: React.FC<Props> = ({ address }) => {
     setActiveSection(section);
     let ref;
     switch (section) {
-      case 'Activity':
-        ref = activityRef || altActivityRef;
-        break;
+      // case 'Activity':
+      //   ref = activityRef || altActivityRef;
+      //   break;
       case 'Credentials':
         ref = badgesRef;
         break;
@@ -178,7 +178,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         ref = writingRef;
         break;
       default:
-        ref = activityRef;
+        ref = badgesRef;
     }
     if (ref && ref.current) {
       let offsetTop = 390;
@@ -696,7 +696,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         }
         innerRightContent={
           <div className="pb-4">
-            <div>
+            {/* <div>
               <h3
                 id="activity"
                 ref={activityRef}
@@ -733,7 +733,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   </Button>
                 </div>
               )}
-            </div>
+            </div> */}
 
             <HR />
 
@@ -752,8 +752,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                 <HR />
               </div>
             )} */}
-
-            {referrals && referrals?.length <= 0 && <HR className="mt-0" />}
 
             <div className="mt-16">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
