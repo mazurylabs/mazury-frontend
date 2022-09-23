@@ -10,7 +10,7 @@ export const CredentialsIntro = () => {
         </h1>
         <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
           We added 5 new integrations to make your profile stand out even more.
-          Let's learn more about them!
+          Let&apos;s learn more about them!
         </p>
       </div>
 
