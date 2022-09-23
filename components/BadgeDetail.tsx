@@ -21,6 +21,7 @@ import { useClickOutside } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { isDev } from '@/config';
+import { BadgeIssuer } from '@/types';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -32,7 +33,7 @@ interface BadgeDetailProps {
   badgeCount?: number;
   image: string;
   slug: string;
-  variant: string;
+  variant: BadgeIssuer;
   id: string;
   canBeMinted: boolean;
   mintedAt?: string;
@@ -48,6 +49,17 @@ interface BadgeDetailButtonProp {
 }
 
 type Steps = 'idle' | 'initialise' | 'submitting';
+
+const credentialClass: Record<BadgeIssuer, string> = {
+  '101': 'h-[230px] w-[230px] rounded-full',
+  buildspace: 'h-[230px] w-[230px] rounded-full',
+  gitpoap: 'h-[230px] w-[230px] rounded-full',
+  kudos: 'h-[230px] w-[230px] rounded-full',
+  mazury:
+    'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]',
+  poap: 'h-[230px] w-[230px] rounded-full',
+  sismo: 'h-[230px] w-[230px] rounded-full',
+};
 
 const BadgeDetailButton = ({
   icon,
@@ -206,11 +218,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             ) : (
               <img
                 src={image}
-                className={` ${
-                  variant !== 'badge'
-                    ? 'h-[230px] w-[230px] rounded-full'
-                    : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
-                }`}
+                className={credentialClass[variant]}
                 alt={title + ' badge'}
               />
             )}
@@ -265,7 +273,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 }}
                 className="flex items-center justify-between rounded-lg py-1 px-2 font-sans text-xs"
               >
-                {variant === 'badge' && (
+                {variant === 'mazury' && (
                   <div className="space-y-[2px]">
                     <motion.p
                       initial={isNewlyMinted && { color: '#F8F9FC' }}
@@ -316,7 +324,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <motion.a
                     rel="noreferrer"
                     href={
-                      variant === 'badge'
+                      variant === 'mazury'
                         ? isDev
                           ? 'https://testnets.opensea.io/collection/mazury-v3'
                           : 'https://opensea.io/collection/mazury'
@@ -330,7 +338,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     }}
                     className="text-indigoGray-5"
                   >
-                    {variant === 'badge' ? 'See on Opensea' : 'See on Poap'}
+                    {variant === 'mazury' ? 'See on Opensea' : 'See on Poap'}
                   </motion.a>
                 </div>
               </motion.div>
@@ -355,7 +363,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             )}
 
             <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
-              {!isBadgeMinted && variant === 'badge' && (
+              {!isBadgeMinted && variant === 'mazury' && (
                 <div>
                   <BadgeDetailButton
                     label="Mint NFT"
@@ -367,7 +375,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
               <div>
                 <BadgeDetailButton
-                  label={`Search using ${variant}`}
+                  label={`Search using ${
+                    variant === 'mazury' ? 'badge' : variant
+                  }`}
                   icon="search-black"
                   handleClick={() => handleSearch(slug)}
                 />
@@ -425,7 +435,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   </span>
                 </button>
 
-                {variant === 'badge' && !isBadgeMinted && isOwnProfile && (
+                {variant === 'mazury' && !isBadgeMinted && isOwnProfile && (
                   <button
                     type="button"
                     className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-2 rounded-lg bg-violet-600 p-[10px] px-6 text-white shadow-sm"
@@ -473,7 +483,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 alt={title + ' badge'}
               />
 
-              {variant === 'badge' && (
+              {variant === 'mazury' && (
                 <div className="absolute bottom-0 right-0 h-[117px] w-[117px] translate-x-[30%] translate-y-[20%]">
                   <SVG src="/badges/polygon.svg" height={117} width={117} />
                 </div>

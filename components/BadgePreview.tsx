@@ -10,6 +10,7 @@ import SVG from 'react-inlinesvg';
 import { Pill } from 'components';
 import { getBadgeById } from '@/utils/api';
 import { truncateString } from '@/utils';
+import { BadgeIssuer } from '@/types';
 
 interface Props {
   imgSrc: string;
@@ -18,13 +19,23 @@ interface Props {
   totalCount: number;
   badgeCount?: number;
   slug: string;
-  issuer: string;
+  issuer: BadgeIssuer;
   id: string;
   canBeMinted: boolean;
   mintedAt: string;
   owner: string;
   routeId?: string;
 }
+
+const credentialClass: Record<BadgeIssuer, string> = {
+  '101': 'overflow-hidden rounded-full h-[42px]',
+  buildspace: 'overflow-hidden rounded-full h-[42px]',
+  gitpoap: 'overflow-hidden rounded-full h-[42px]',
+  kudos: 'overflow-hidden rounded-full h-[42px]',
+  mazury: 'h-[65px]',
+  poap: 'overflow-hidden rounded-full h-[42px]',
+  sismo: 'overflow-hidden rounded-full h-[42px]',
+};
 
 export const BadgePreview: React.FC<Props> = ({
   imgSrc,
@@ -76,12 +87,7 @@ export const BadgePreview: React.FC<Props> = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgSrc || '/default-avi.png'}
-          className={
-            `${
-              issuer !== 'mazury' ? 'h-[42px]' : 'h-[65px]'
-            } max-w-[42px] text-xs` +
-            (issuer !== 'mazury' ? 'overflow-hidden rounded-full' : '')
-          }
+          className={` max-w-[42px] text-xs` + credentialClass[issuer]}
           alt={`${heading} badge`}
         />
         <div className="ml-6 flex flex-col space-y-2">
@@ -133,7 +139,7 @@ export const BadgePreview: React.FC<Props> = ({
             isBadgeHidden={false}
             image={imgSrc}
             badgeCount={totalCount}
-            variant={issuer === 'mazury' ? 'badge' : issuer}
+            variant={issuer}
             slug={slug}
             id={id}
             owner={owner}

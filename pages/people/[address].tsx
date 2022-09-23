@@ -962,7 +962,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       badgeCount={badgeCount}
                       slug={sharedCredential?.badge_type.slug as string}
                       issuer={
-                        sharedCredential?.badge_type.issuer.name as string
+                        sharedCredential?.badge_type.issuer.name as BadgeIssuer
                       }
                       id={sharedCredential?.id as string}
                       owner={sharedCredential?.owner.username as string}
@@ -992,7 +992,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                       issuer,
                       slug,
                     } = badge_type;
-
                     return (
                       <BadgePreview
                         key={id}
