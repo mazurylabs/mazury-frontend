@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import debounce from 'lodash.debounce';
 
 import { useClickOutside, useMobile } from 'hooks';
 
@@ -42,8 +41,11 @@ const SearchPage: NextPage = () => {
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setUIState('result');
-    setIsFocused(false);
+    router.push(
+      { pathname: '/search', query: { ...router.query, query: searchTerm } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const handleKeydown = (event: React.KeyboardEvent) => {
@@ -61,23 +63,8 @@ const SearchPage: NextPage = () => {
     }
   }
 
-  const handleChangeDebounced = React.useCallback(
-    debounce(async (nextValue) => {
-      router.push(
-        { pathname: '/search', query: { ...router.query, query: nextValue } },
-        undefined,
-        { shallow: true }
-      );
-    }, 350),
-    [router]
-  );
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-
-    const query = event.target.value;
-
-    handleChangeDebounced(query);
   };
 
   React.useEffect(() => {
@@ -110,7 +97,7 @@ const SearchPage: NextPage = () => {
               <SVG height={24} width={24} src={`/icons/search-black.svg`} />
             </div>
 
-            <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
+            <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
               <input
                 ref={inputRef}
                 type="text"

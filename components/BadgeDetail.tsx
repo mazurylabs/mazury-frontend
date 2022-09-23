@@ -21,6 +21,7 @@ import { useClickOutside } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { isDev } from '@/config';
+import { BadgeIssuer } from '@/types';
 
 interface BadgeDetailProps {
   handleCloseModal: () => void;
@@ -32,7 +33,7 @@ interface BadgeDetailProps {
   badgeCount?: number;
   image: string;
   slug: string;
-  variant: 'badge' | 'poap';
+  variant: BadgeIssuer;
   id: string;
   canBeMinted: boolean;
   mintedAt?: string;
@@ -48,6 +49,17 @@ interface BadgeDetailButtonProp {
 }
 
 type Steps = 'idle' | 'initialise' | 'submitting';
+
+const credentialClass: Record<BadgeIssuer, string> = {
+  '101': 'h-[230px] w-[230px] rounded bg-gray-100 mb-4',
+  buildspace: 'h-[230px] w-[230px] rounded mb-4',
+  gitpoap: 'h-[230px] w-[230px] rounded-full mb-4',
+  kudos: 'h-[230px] w-[230px] rounded mb-4',
+  mazury:
+    'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px] mb-4',
+  poap: 'h-[230px] w-[230px] rounded-full mb-4',
+  sismo: 'h-[230px] w-[230px] rounded-sm bg-gray-100 mb-4',
+};
 
 const BadgeDetailButton = ({
   icon,
@@ -71,7 +83,7 @@ const BadgeDetailButton = ({
         />
       </div>
       <span
-        className={`font-inter text-base font-semibold leading-6 text-indigoGray-${
+        className={`font-sans text-base font-semibold leading-6 text-indigoGray-${
           disabled ? 40 : 90
         }`}
       >
@@ -114,8 +126,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   const animatedValue = isMobile ? trayAnimation : fadeAnimation;
 
   const handleSearch = (badge: string) => {
-    const queryParam =
-      (variant === 'badge' ? 'badges=' : 'poap=') + encodeURIComponent(badge);
+    const queryParam = 'badges=' + encodeURIComponent(badge);
 
     router.push(`/search?${queryParam}`);
   };
@@ -170,7 +181,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex h-[680px] flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
+      className="relative flex h-full flex-col px-6 pb-6 md:h-[719px] lg:h-full lg:w-full lg:p-0"
     >
       {isNewlyMinted && (
         <Player
@@ -196,15 +207,21 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
           <div
             className={`flex grow items-center justify-center lg:max-w-[45%] `}
           >
-            <img
-              src={image}
-              className={` ${
-                variant === 'poap'
-                  ? 'h-[230px] w-[230px] rounded-full'
-                  : 'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]'
-              }`}
-              alt={title + ' badge'}
-            />
+            {image?.slice(-4) == '.mp4' ? (
+              <video
+                src={image}
+                className={'mb-4 h-[230px] w-[300px] rounded bg-gray-100'}
+                autoPlay
+                loop
+                muted
+              />
+            ) : (
+              <img
+                src={image}
+                className={credentialClass[variant]}
+                alt={title + ' badge'}
+              />
+            )}
           </div>
 
           <div
@@ -217,7 +234,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 {title}
               </h2>
 
-              <p className="font-inter text-sm text-indigoGray-60 line-clamp-2">
+              <p className="font-sans text-sm text-indigoGray-60 line-clamp-2">
                 {description}
               </p>
 
@@ -226,18 +243,16 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   className={`flex w-fit items-center space-x-2 rounded bg-emerald-50 py-[5.33px] pl-[9.33px] pr-2`}
                 >
                   <div className="flex" role="presentation">
-                    <SVG height={16} width={16} src={`/icons/trophy.svg`} />
+                    <SVG height={16} width={16} src={`/icons/minted.svg`} />
                   </div>
-                  <p
-                    className={`font-inter text-xs font-bold text-emerald-900`}
-                  >
-                    {variant === 'badge' ? 'Badge' : 'Poap'} earned
+                  <p className={`font-sans text-xs font-bold text-emerald-900`}>
+                    Credential verified
                   </p>
                 </div>
 
                 <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
-                <div className="font-inter text-xs font-medium text-indigoGray-60">
+                <div className="font-sans text-xs font-medium text-indigoGray-60">
                   <p>{badgeCount} people</p>
                 </div>
               </div>
@@ -256,9 +271,9 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   boxShadow: '0px 0px 0px #fff',
                   transition: { duration: 1.5, delay: 0.5 },
                 }}
-                className="font-inter flex items-center justify-between rounded-lg py-1 px-2 text-xs"
+                className="flex items-center justify-between rounded-lg py-1 px-2 font-sans text-xs"
               >
-                {variant === 'badge' && (
+                {variant === 'mazury' && (
                   <div className="space-y-[2px]">
                     <motion.p
                       initial={isNewlyMinted && { color: '#F8F9FC' }}
@@ -309,7 +324,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                   <motion.a
                     rel="noreferrer"
                     href={
-                      variant === 'badge'
+                      variant === 'mazury'
                         ? isDev
                           ? 'https://testnets.opensea.io/collection/mazury-v3'
                           : 'https://opensea.io/collection/mazury'
@@ -323,7 +338,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     }}
                     className="text-indigoGray-5"
                   >
-                    {variant === 'badge' ? 'See on Opensea' : 'See on Poap'}
+                    {variant === 'mazury' ? 'See on Opensea' : 'See on Poap'}
                   </motion.a>
                 </div>
               </motion.div>
@@ -333,7 +348,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               <div>
                 <Button
                   variant="primary"
-                  className="font-inter flex w-full items-center justify-center space-x-2 bg-blue-600 text-sm font-semibold"
+                  className="flex w-full items-center justify-center space-x-2 bg-blue-600 font-sans text-sm font-semibold"
                   onClick={handleGoToTwitter}
                 >
                   <SVG
@@ -348,7 +363,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             )}
 
             <div className="h-fit divide-y divide-indigoGray-20  rounded-xl border border-indigoGray-20 pl-[18px] lg:hidden">
-              {!isBadgeMinted && variant === 'badge' && (
+              {!isBadgeMinted && variant === 'mazury' && (
                 <div>
                   <BadgeDetailButton
                     label="Mint NFT"
@@ -360,17 +375,11 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
               <div>
                 <BadgeDetailButton
-                  label={`Search using ${variant}`}
+                  label={`Search using ${
+                    variant === 'mazury' ? 'badge' : variant
+                  }`}
                   icon="search-black"
                   handleClick={() => handleSearch(slug)}
-                />
-              </div>
-
-              <div>
-                <BadgeDetailButton
-                  label="Hide on my profile"
-                  icon="eye-slash"
-                  handleClick={() => {}}
                 />
               </div>
 
@@ -421,19 +430,19 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     />
                   </div>
 
-                  <span className="font-inter text-sm font-semibold leading-[21px] text-indigoGray-90">
+                  <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                     {`Search`}
                   </span>
                 </button>
 
-                {variant === 'badge' && !isBadgeMinted && isOwnProfile && (
+                {variant === 'mazury' && !isBadgeMinted && isOwnProfile && (
                   <button
                     type="button"
                     className="ml-auto flex h-[37px] shrink-0 cursor-pointer items-center space-x-2 rounded-lg bg-violet-600 p-[10px] px-6 text-white shadow-sm"
                     onClick={() => handleSteps('initialise')}
                   >
                     <SVG src={`/icons/mint.svg`} height={16} width={16} />
-                    <span className="font-inter text-xs font-bold leading-6 text-indigoGray-5">
+                    <span className="font-sans text-xs font-bold leading-6 text-indigoGray-5">
                       Mint NFT
                     </span>
                   </button>
@@ -474,7 +483,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 alt={title + ' badge'}
               />
 
-              {variant === 'badge' && (
+              {variant === 'mazury' && (
                 <div className="absolute bottom-0 right-0 h-[117px] w-[117px] translate-x-[30%] translate-y-[20%]">
                   <SVG src="/badges/polygon.svg" height={117} width={117} />
                 </div>
@@ -490,7 +499,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 </h2>
               </div>
 
-              <div className="font-inter space-y-2 text-sm font-medium leading-[21px] text-indigoGray-60">
+              <div className="space-y-2 font-sans text-sm font-medium leading-[21px] text-indigoGray-60">
                 <p>
                   We use Polygon to mint your favourite badges without affecting
                   the enviornment while also taking the gas fees on us.

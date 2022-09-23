@@ -172,7 +172,7 @@ export const Sidebar: React.FC = () => {
                     isOpen && 'w-full'
                   } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
                 >
-                  <SVG width="16px" height="16px" src="/icons/login.svg" />{' '}
+                  <SVG width="16px" height="16px" src="/icons/user-black.svg" />{' '}
                   {isOpen && (
                     <span className="w-[fit-content] shrink-0">Sign in</span>
                   )}

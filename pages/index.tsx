@@ -126,7 +126,7 @@ const Home: NextPage = () => {
         {/* <div className="mb-5 hidden lg:flex">
           <button
             type="button"
-            className="font-inter flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-sans flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/network.svg'}
@@ -140,7 +140,7 @@ const Home: NextPage = () => {
 
           <button
             type="button"
-            className="font-inter ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-sans ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/recommendation.svg'}
@@ -167,7 +167,7 @@ const Home: NextPage = () => {
           <h2>KEYWORD SUGGESTIONS</h2>
         </div>
 
-        <ul className="font-inter font-medium">
+        <ul className="font-sans font-medium">
           {keywordSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -193,7 +193,7 @@ const Home: NextPage = () => {
           <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
 
-        <div className="font-inter px-2 font-medium">
+        <div className="px-2 font-sans font-medium">
           <ul className="mb-4">
             {badgeSuggestions.map((badge, index) => (
               <li
@@ -275,7 +275,7 @@ const Home: NextPage = () => {
   const result = <></>;
 
   const empty = (
-    <div className="font-inter mt-3 text-sm font-medium text-indigoGray-90">
+    <div className="mt-3 font-sans text-sm font-medium text-indigoGray-90">
       <p>No suggestions found</p>
     </div>
   );
@@ -352,7 +352,7 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
+                <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
                   <input
                     ref={inputRef}
                     type="text"
@@ -406,7 +406,7 @@ const Home: NextPage = () => {
 
             <div className="lg:16 mt-10 w-full lg:mt-16 lg:flex">
               <div className="grow lg:mr-16">
-                <div className="font-inter text-sm font-medium text-indigoGray-40">
+                <div className="font-sans text-sm font-medium text-indigoGray-40">
                   <h2>RECENT ACTIVITY IN YOUR NETWORK</h2>
                 </div>
 
@@ -447,7 +447,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
 
-              <div className="font-inter mt-10  w-full shrink-0 pb-8 lg:mt-0 lg:w-fit lg:pb-0">
+              <div className="mt-10 w-full  shrink-0 pb-8 font-sans lg:mt-0 lg:w-fit lg:pb-0">
                 <div className="text-sm font-medium text-indigoGray-40">
                   <h2>PEOPLE YOU MAY KNOW</h2>
                 </div>
@@ -478,7 +478,7 @@ const Home: NextPage = () => {
                                   )}
                                 </p>
 
-                                <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
+                                <p className="font-sans text-xs font-medium leading-6 text-indigoGray-60">
                                   Talent spotlight
                                 </p>
                               </div>
