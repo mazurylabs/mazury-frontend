@@ -9,6 +9,7 @@ import { useMobile } from 'hooks';
 import SVG from 'react-inlinesvg';
 import { Pill } from 'components';
 import { getBadgeById } from '@/utils/api';
+import { truncateString } from '@/utils';
 
 interface Props {
   imgSrc: string;
@@ -87,27 +88,31 @@ export const BadgePreview: React.FC<Props> = ({
           <h5 className="font-demi font-serif text-xl font-semibold  font-bold leading-6 text-indigoGray-90">
             {heading}
           </h5>
-          {/* <p className="text-sm font-medium text-indigoGray-80">
-            {truncateString(description, 100)}
-          </p> */}
-          {totalCount && (
-            <span className="font-inter text-xs font-medium leading-[14.4px] text-indigoGray-50">
-              <NumberFormat
-                value={totalCount}
-                displayType="text"
-                thousandSeparator
-              />{' '}
-              {totalCount > 1 ? 'people' : 'person'}{' '}
-              {totalCount > 1 ? 'have' : 'has'} this
-            </span>
-          )}
 
-          <div className="flex space-x-2">
+          <p className="text-sm font-medium text-indigoGray-80">
+            {truncateString(description, 30)}
+          </p>
+
+          <div className="flex items-center space-x-2">
             {issuer === 'mazury' && !canBeMinted && (
-              <div className="font-inter flex items-center space-x-2 bg-emerald-50 px-2 py-[3.5px] text-xs leading-[14.4px] text-emerald-900">
+              <div className=" flex items-center space-x-2 bg-emerald-50 px-2 py-[3.5px] ">
                 <SVG src="/icons/minted.svg" height={16} width={16} />
-                <span>Minted</span>
+                <span className="font-sans text-xs font-semibold leading-[14.4px] text-emerald-900">
+                  Minted
+                </span>
               </div>
+            )}
+
+            {totalCount && (
+              <span className="font-sans text-xs font-medium font-medium leading-[14.4px] leading-[14.4px] text-indigo-500">
+                <NumberFormat
+                  value={totalCount}
+                  displayType="text"
+                  thousandSeparator
+                />{' '}
+                {totalCount > 1 ? 'people' : 'person'}{' '}
+                {totalCount > 1 ? 'have' : 'has'} this
+              </span>
             )}
           </div>
         </div>
