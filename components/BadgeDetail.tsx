@@ -51,14 +51,14 @@ interface BadgeDetailButtonProp {
 type Steps = 'idle' | 'initialise' | 'submitting';
 
 const credentialClass: Record<BadgeIssuer, string> = {
-  '101': 'h-[230px] w-[230px] rounded-full',
-  buildspace: 'h-[230px] w-[230px] rounded-full',
-  gitpoap: 'h-[230px] w-[230px] rounded-full',
-  kudos: 'h-[230px] w-[230px] rounded-full',
+  '101': 'h-[230px] w-[230px] rounded-full mb-4',
+  buildspace: 'h-[230px] w-[230px] rounded mb-4',
+  gitpoap: 'h-[230px] w-[230px] rounded-full mb-4',
+  kudos: 'h-[230px] w-[230px] rounded mb-4',
   mazury:
-    'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px]',
-  poap: 'h-[230px] w-[230px] rounded-full',
-  sismo: 'h-[230px] w-[230px] rounded-full',
+    'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px] mb-4',
+  poap: 'h-[230px] w-[230px] rounded-full mb-4',
+  sismo: 'h-[230px] w-[230px] rounded-sm bg-gray-100 mb-4',
 };
 
 const BadgeDetailButton = ({
@@ -210,7 +210,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             {image?.slice(-4) == '.mp4' ? (
               <video
                 src={image}
-                className={'h-[230px] w-[230px]'}
+                className={'mb-4 h-[230px] w-[300px] rounded bg-gray-100'}
                 autoPlay
                 loop
                 muted

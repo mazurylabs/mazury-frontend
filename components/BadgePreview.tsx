@@ -28,13 +28,15 @@ interface Props {
 }
 
 const credentialClass: Record<BadgeIssuer, string> = {
-  '101': 'overflow-hidden rounded-full h-[42px]',
-  buildspace: 'overflow-hidden rounded-full h-[42px]',
-  gitpoap: 'overflow-hidden rounded-full h-[42px]',
-  kudos: 'overflow-hidden rounded-full h-[42px]',
-  mazury: 'h-[65px]',
-  poap: 'overflow-hidden rounded-full h-[42px]',
-  sismo: 'overflow-hidden rounded-full h-[42px]',
+  '101':
+    'overflow-hidden rounded h-[65px] min-w-[65px] max-w-[65px] bg-gray-100',
+  buildspace:
+    'overflow-hidden rounded h-[65px] min-w-[65px] max-w-[65px] bg-gray-100',
+  gitpoap: 'overflow-hidden rounded-full h-[65px] min-w-[65px] max-w-[65px]',
+  kudos: 'overflow-hidden rounded h-[65px] min-w-[65px] max-w-[65px]',
+  mazury: 'h-[65px] max-w-[42]',
+  poap: 'overflow-hidden rounded-full h-[65px] min-w-[65px] max-w-[65px]',
+  sismo: 'overflow-hidden h-[65px] min-w-[65px] max-w-[65px]',
 };
 
 export const BadgePreview: React.FC<Props> = ({
@@ -85,17 +87,27 @@ export const BadgePreview: React.FC<Props> = ({
         onClick={() => handleToggleModal(id)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imgSrc || '/default-avi.png'}
-          className={` max-w-[42px] text-xs` + credentialClass[issuer]}
-          alt={`${heading} badge`}
-        />
-        <div className="ml-6 flex flex-col space-y-2">
-          <h5 className="font-demi font-serif text-xl font-semibold  font-bold leading-6 text-indigoGray-90">
+        {imgSrc?.slice(-4) == '.mp4' ? (
+          <video
+            src={imgSrc}
+            className={credentialClass[issuer]}
+            autoPlay
+            loop
+            muted
+          />
+        ) : (
+          <img
+            src={imgSrc || '/default-avi.png'}
+            className={`text-xs ` + credentialClass[issuer]}
+            alt={`${heading} badge`}
+          />
+        )}
+        <div className="ml-6 flex flex-col">
+          <h5 className="mb-1 font-demi font-serif text-xl  font-semibold font-bold leading-6 text-indigoGray-90">
             {heading}
           </h5>
 
-          <p className="text-sm font-medium text-indigoGray-80">
+          <p className="mb-1 text-sm font-medium text-indigoGray-50">
             {truncateString(description, 30)}
           </p>
 
@@ -110,7 +122,7 @@ export const BadgePreview: React.FC<Props> = ({
             )}
 
             {totalCount && (
-              <span className="font-sans text-xs font-medium font-medium leading-[14.4px] leading-[14.4px] text-indigo-500">
+              <span className="font-sans text-xs font-medium leading-[14.4px] text-indigo-500">
                 <NumberFormat
                   value={totalCount}
                   displayType="text"
