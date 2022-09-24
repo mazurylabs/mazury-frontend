@@ -74,7 +74,7 @@ export interface Badge {
   updated_at: string;
   minted: boolean;
   minted_at: string;
-  external_links: any;
+  external_links?: any;
 }
 
 export type MappedSkills<T> = {
