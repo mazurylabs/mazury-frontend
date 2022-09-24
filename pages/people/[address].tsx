@@ -65,7 +65,6 @@ interface Props {
 interface PageProps extends Props {}
 
 const profileSections: ProfileSection[] = [
-  'Activity',
   'Credentials',
   'Referrals',
   'Writing',
@@ -135,7 +134,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
   const [activeSection, setActiveSection] =
-    React.useState<ProfileSection>('Activity');
+    React.useState<ProfileSection>('Credentials');
 
   const [badgesExpanded, setBadgesExpanded] = useState(false);
   const [referralsExpanded, setReferralsExpanded] = useState(false);
@@ -217,6 +216,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   // Opens the 'write referral' modal
   const handleWriteReferralClick = () => {
     setReferralModalOpen(true);
+  };
+
+  const handleConnectRequest = () => {
+    alert('Work in progress');
   };
 
   const onReferralModalClose = () => {
@@ -366,13 +369,12 @@ const Profile: React.FC<Props> = ({ address }) => {
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
                 <div
-                  className="ml-auto flex items-center"
+                  className="ml-auto flex items-center rounded-lg bg-emerald-600 px-4 py-2"
                   role="button"
-                  onClick={handleWriteReferralClick}
+                  onClick={handleConnectRequest}
                 >
-                  <PenIcon color={colors.indigoGray[90]} />
-                  <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                    {writeReferralButtonText}
+                  <span className="text-sm font-bold uppercase text-white">
+                    Request an intro
                   </span>
                 </div>
               )}
@@ -771,8 +773,6 @@ const Profile: React.FC<Props> = ({ address }) => {
               )}
             </div> */}
 
-            <HR />
-
             {/* {referrals && referrals?.length > 0 && (
               <div>
                 <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
@@ -789,7 +789,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             )} */}
 
-            <div className="mt-16">
+            <div className="">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   id="Credentials"
