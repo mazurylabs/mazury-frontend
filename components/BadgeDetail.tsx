@@ -160,6 +160,12 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     window.open(twitterLink, '_blank');
   };
 
+  const copyShareLinkToClipboard = async (slug: string) => {
+    const linkToCredential = `${window.location.host}/people/${owner}?credential=${variant}%23${id}`;
+    await navigator.clipboard.writeText(linkToCredential);
+    toast.success('Share link copied to clipboard!');
+  };
+
   const addressOrName = isDev
     ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
     : '0x2a44dd7ff860a93cb8f31c3b4104ba8a7d1c0b64';
@@ -417,6 +423,15 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               )}
 
               <div className="flex space-x-3">
+                <button
+                  type="button"
+                  className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20"
+                  onClick={() => copyShareLinkToClipboard(slug)}
+                >
+                  <div className="flex">
+                    <SVG src={`/icons/link.svg`} height={16} width={16} />
+                  </div>
+                </button>
                 <button
                   type="button"
                   className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
