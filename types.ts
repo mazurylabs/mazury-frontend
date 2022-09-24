@@ -62,6 +62,8 @@ export interface BadgeType {
     name: BadgeIssuer;
   };
   poap_badge_extra_data?: any;
+  openseaUrl?: string;
+  rainbowUrl?: string;
 }
 
 export interface Badge {
@@ -72,6 +74,7 @@ export interface Badge {
   updated_at: string;
   minted: boolean;
   minted_at: string;
+  external_links?: any;
 }
 
 export type MappedSkills<T> = {

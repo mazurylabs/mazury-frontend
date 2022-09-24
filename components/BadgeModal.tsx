@@ -156,7 +156,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   useEffect(() => {
     if (showUserBadges) {
       const userBadges = badges?.map((badge) => {
-        return badge.badge_type;
+        const badgeInfo = badge.badge_type;
+        badgeInfo['openseaUrl'] = badge.external_links.opensea;
+        badgeInfo['rainbowUrl'] = badge.external_links.rainbow;
+
+        return badgeInfo;
       });
       setBadgesInView(userBadges);
     } else {
@@ -385,6 +389,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   id={showBadgeDetails.id}
                   canBeMinted={false}
                   owner="You"
+                  openseaUrl={showBadgeDetails.openseaUrl}
+                  rainbowUrl={showBadgeDetails.rainbowUrl}
                 />
               )}
 
