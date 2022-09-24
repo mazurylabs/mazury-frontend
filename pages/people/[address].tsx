@@ -407,11 +407,10 @@ const Profile: React.FC<Props> = ({ address }) => {
                       <div
                         className="ml-auto flex items-center"
                         role="button"
-                        onClick={handleWriteReferralClick}
+                        onClick={handleConnectRequest}
                       >
-                        <PenIcon color={colors.indigoGray[90]} />
                         <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                          {writeReferralButtonText}
+                          Request an intro
                         </span>
                       </div>
                     )}
