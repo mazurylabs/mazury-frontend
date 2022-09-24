@@ -974,12 +974,25 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ).toDateString()
                           : 'Date unknown'
                       }
+                      openseaUrl={
+                        sharedCredential?.external_links.openseaUrl as string
+                      }
+                      rainbowUrl={
+                        sharedCredential?.external_links.rainbowUrl as string
+                      }
                     />
                   )}
 
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
-                    const { badge_type, id, minted, owner, minted_at } = badge;
+                    const {
+                      badge_type,
+                      id,
+                      minted,
+                      owner,
+                      minted_at,
+                      external_links,
+                    } = badge;
 
                     const {
                       image,
@@ -989,6 +1002,10 @@ const Profile: React.FC<Props> = ({ address }) => {
                       issuer,
                       slug,
                     } = badge_type;
+
+                    const { opensea, rainbow } = external_links;
+
+                    console.log(external_links);
                     return (
                       <BadgePreview
                         key={id}
@@ -1009,6 +1026,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                             ? new Date(minted_at).toDateString()
                             : 'Date unknown'
                         }
+                        openseaUrl={opensea}
+                        rainbowUrl={rainbow}
                       />
                     );
                   })

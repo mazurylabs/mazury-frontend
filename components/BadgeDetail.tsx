@@ -38,6 +38,8 @@ interface BadgeDetailProps {
   canBeMinted: boolean;
   mintedAt?: string;
   owner: string;
+  openseaUrl?: string;
+  rainbowUrl?: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -108,6 +110,8 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   canBeMinted,
   mintedAt,
   owner,
+  openseaUrl,
+  rainbowUrl,
 }) => {
   const router = useRouter();
   const containerRef = React.useRef(null!);
@@ -432,6 +436,30 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <SVG src={`/icons/link.svg`} height={16} width={16} />
                   </div>
                 </button>
+                {openseaUrl && (
+                  <a
+                    href={openseaUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20"
+                  >
+                    <div className="flex">
+                      <SVG src={`/icons/opensea.svg`} height={16} width={16} />
+                    </div>
+                  </a>
+                )}
+                {rainbowUrl && (
+                  <a
+                    href={rainbowUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20"
+                  >
+                    <div className="flex">
+                      <SVG src={`/icons/rainbow.svg`} height={16} width={16} />
+                    </div>
+                  </a>
+                )}
                 <button
                   type="button"
                   className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"

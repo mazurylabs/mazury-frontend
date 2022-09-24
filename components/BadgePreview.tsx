@@ -25,6 +25,8 @@ interface Props {
   mintedAt: string;
   owner: string;
   routeId?: string;
+  openseaUrl: string;
+  rainbowUrl: string;
 }
 
 const credentialClass: Record<BadgeIssuer, string> = {
@@ -52,6 +54,8 @@ export const BadgePreview: React.FC<Props> = ({
   mintedAt,
   owner,
   routeId,
+  openseaUrl,
+  rainbowUrl,
 }) => {
   const router = useRouter();
   const isMobile = useMobile();
@@ -150,6 +154,8 @@ export const BadgePreview: React.FC<Props> = ({
             owner={owner}
             canBeMinted={canBeMinted}
             mintedAt={mintedAt}
+            openseaUrl={openseaUrl}
+            rainbowUrl={rainbowUrl}
           />
         )}
       </AnimatePresence>
