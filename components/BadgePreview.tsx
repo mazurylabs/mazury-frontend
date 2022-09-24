@@ -65,26 +65,19 @@ export const BadgePreview: React.FC<Props> = ({
     if (selectedCredential === id || routeId) setShowBadgeDetails(true);
   }, [selectedCredential, id]);
 
-  const handleToggleModal = async (id?: string) => {
-    router.push(
-      {
-        pathname: router.asPath.split('?')[0],
-        ...(id ? { query: { credential: `${issuer}#${id}` } } : {}),
-      },
-      undefined,
-      { shallow: true }
-    );
+  const handleOpenModal = async () => {
+    setShowBadgeDetails(true);
+  };
 
-    if (id) {
-      setShowBadgeDetails(true);
-    }
+  const handleCloseModal = async () => {
+    setShowBadgeDetails(false);
   };
 
   return (
     <>
       <div
         className="relative flex cursor-pointer items-center rounded-2xl border border-indigoGray-10 p-4 hover:border-indigoGray-20 hover:shadow-lg"
-        onClick={() => handleToggleModal(id)}
+        onClick={() => handleOpenModal()}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {imgSrc?.slice(-4) == '.mp4' ? (
@@ -143,7 +136,7 @@ export const BadgePreview: React.FC<Props> = ({
       <AnimatePresence>
         {showBadgeDetails && (
           <BadgeDetail
-            handleCloseModal={handleToggleModal}
+            handleCloseModal={handleCloseModal}
             isMobile={isMobile}
             title={heading}
             description={description}
