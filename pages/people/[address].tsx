@@ -65,7 +65,6 @@ interface Props {
 interface PageProps extends Props {}
 
 const profileSections: ProfileSection[] = [
-  'Activity',
   'Credentials',
   'Referrals',
   'Writing',
@@ -135,7 +134,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
   const [activeSection, setActiveSection] =
-    React.useState<ProfileSection>('Activity');
+    React.useState<ProfileSection>('Credentials');
 
   const [badgesExpanded, setBadgesExpanded] = useState(false);
   const [referralsExpanded, setReferralsExpanded] = useState(false);
@@ -182,9 +181,9 @@ const Profile: React.FC<Props> = ({ address }) => {
     let ref;
 
     switch (section) {
-      case 'Activity':
-        ref = activityRef || altActivityRef;
-        break;
+      // case 'Activity':
+      //   ref = activityRef || altActivityRef;
+      //   break;
       case 'Credentials':
         ref = badgesRef;
         break;
@@ -198,7 +197,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         ref = writingRef;
         break;
       default:
-        ref = activityRef;
+        ref = badgesRef;
     }
     if (ref && ref.current) {
       let offsetTop = 390;
@@ -217,6 +216,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   // Opens the 'write referral' modal
   const handleWriteReferralClick = () => {
     setReferralModalOpen(true);
+  };
+
+  const handleConnectRequest = () => {
+    alert('Work in progress');
   };
 
   const onReferralModalClose = () => {
@@ -366,13 +369,12 @@ const Profile: React.FC<Props> = ({ address }) => {
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
                 <div
-                  className="ml-auto flex items-center"
+                  className="ml-auto flex items-center rounded-lg bg-emerald-600 px-4 py-2"
                   role="button"
-                  onClick={handleWriteReferralClick}
+                  onClick={handleConnectRequest}
                 >
-                  <PenIcon color={colors.indigoGray[90]} />
-                  <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                    {writeReferralButtonText}
+                  <span className="text-sm font-bold uppercase text-white">
+                    Request an intro
                   </span>
                 </div>
               )}
@@ -405,11 +407,10 @@ const Profile: React.FC<Props> = ({ address }) => {
                       <div
                         className="ml-auto flex items-center"
                         role="button"
-                        onClick={handleWriteReferralClick}
+                        onClick={handleConnectRequest}
                       >
-                        <PenIcon color={colors.indigoGray[90]} />
                         <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                          {writeReferralButtonText}
+                          Request an intro
                         </span>
                       </div>
                     )}
@@ -732,7 +733,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         }
         innerRightContent={
           <div className="pb-4">
-            <div>
+            {/* <div>
               <h3
                 id="Activity"
                 ref={activityRef}
@@ -769,9 +770,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   </Button>
                 </div>
               )}
-            </div>
-
-            <HR />
+            </div> */}
 
             {/* {referrals && referrals?.length > 0 && (
               <div>
@@ -789,9 +788,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               </div>
             )} */}
 
-            {referrals && referrals?.length <= 0 && <HR className="mt-0" />}
-
-            <div className="mt-16">
+            <div className="">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
                   id="Credentials"
