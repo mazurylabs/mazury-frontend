@@ -34,22 +34,22 @@ const keywordSuggestions = [
 
 const badgeSuggestions = [
   {
-    title: 'Contract deployer',
-    slug: 'contract_deployer',
-    img: '/badges/contract_deployer.png',
-    detail: 'People who deployed a smart contract',
+    title: 'Paradigm CTF 2022 Participant',
+    slug: 'paradigm-ctf-2022-2022',
+    img: '/badges/paradigm-ctf-2022.png',
+    detail: 'Hackers who completed at least 1 Paradigm CTF 2022 challange',
   },
   {
-    title: 'Buildspace alumni',
-    slug: 'buildspace',
-    img: '/badges/buildspace.png',
-    detail: 'People who finished a buildspace course',
+    title: 'Ethereum Merge Contributor',
+    slug: 'gitpoap-ethereum-merge-contributor-2022',
+    img: '/badges/gitpoap-ethereum-merge-contributor-2022.png',
+    detail: 'Significant contributors to the Ethereum Merge',
   },
   {
-    title: 'Developer DAO member',
-    slug: 'd_d_member',
-    img: '/badges/d_d.png',
-    detail: 'Members of Developer DAO',
+    title: 'ETHAmsterdam Staked Hacker',
+    slug: 'ethamsterdam-2022-staked-hacker-2022',
+    img: '/badges/ethamsterdam-2022-staked-hacker-2022.png',
+    detail: 'Hackers who participated in ETHAmsterdam 2022',
   },
 ];
 
@@ -204,7 +204,7 @@ const Home: NextPage = () => {
                 <div className="mr-4 flex">
                   <Image
                     src={badge.img}
-                    width={24}
+                    width={38}
                     height={38}
                     layout="fixed"
                     alt="badge"
@@ -221,26 +221,6 @@ const Home: NextPage = () => {
               </li>
             ))}
           </ul>
-
-          <div className="flex">
-            <div className="mr-4 w-6" aria-hidden={true} />
-            <BadgeModal
-              triggerButton={
-                <button
-                  type="button"
-                  className="flex items-center text-xs text-indigo-600"
-                >
-                  <span className="mr-2">See more badges</span>
-                  <Image
-                    src="/icons/arrow-right-indigo.svg"
-                    width={16}
-                    height={16}
-                    alt="arrow-right"
-                  />
-                </button>
-              }
-            />
-          </div>
         </div>
       </div>
     </div>
