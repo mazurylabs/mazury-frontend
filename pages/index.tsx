@@ -429,7 +429,7 @@ const Home: NextPage = () => {
 
               <div className="mt-10 w-full  shrink-0 pb-8 font-sans lg:mt-0 lg:w-fit lg:pb-0">
                 <div className="text-sm font-medium text-indigoGray-40">
-                  <h2>PEOPLE YOU MAY KNOW</h2>
+                  <h2>Recommended profiles</h2>
                 </div>
 
                 <div className="mt-3 grow lg:grow-0">
@@ -459,15 +459,15 @@ const Home: NextPage = () => {
                                 </p>
 
                                 <p className="font-sans text-xs font-medium leading-6 text-indigoGray-60">
-                                  Talent spotlight
+                                  Mazury Talent spotlight
                                 </p>
                               </div>
 
                               <div className="flex">
                                 <Image
                                   src="/icons/arrow-right.svg"
-                                  width={8}
-                                  height={12}
+                                  width={16}
+                                  height={16}
                                   alt="arrow-right"
                                 />
                               </div>
