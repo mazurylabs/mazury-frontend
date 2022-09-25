@@ -124,8 +124,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [getBadgeFromRoute]);
 
-  const { count: poapCount } = useBadges(eth_address, 'mazury');
-  const { count: badgeCount } = useBadges(eth_address, 'poap');
+  const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
   const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
 
@@ -1005,7 +1004,6 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                     const { opensea, rainbow } = external_links;
 
-                    console.log(external_links);
                     return (
                       <BadgePreview
                         key={id}

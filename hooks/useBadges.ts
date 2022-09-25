@@ -16,7 +16,7 @@ export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
 
   useEffect(() => {
     setBadges(data?.results as Badge[]);
-    data?.next && setNextEndpoint(data?.next);
+    data?.next ? setNextEndpoint(data?.next) : setNextEndpoint('');
   }, [data]);
 
   useEffect(() => {
