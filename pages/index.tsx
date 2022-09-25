@@ -288,7 +288,7 @@ const Home: NextPage = () => {
               </div>
 
               <div className="my-8 text-center font-serif text-3xl font-semibold leading-9 text-indigoGray-90 md:text-5xl md:leading-[3.6rem] lg:mt-0 xl:mb-10">
-                <h1>Welcome to the professional metaverse</h1>
+                <h1>Search people using verified credentials</h1>
               </div>
             </div>
 
