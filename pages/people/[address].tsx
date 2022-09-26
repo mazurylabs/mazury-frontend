@@ -57,6 +57,8 @@ import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { getBadgeById } from '@/utils/api';
 
+import { axios } from '@/lib/axios';
+
 interface Props {
   address: string;
   ens?: string;
@@ -217,8 +219,17 @@ const Profile: React.FC<Props> = ({ address }) => {
     setReferralModalOpen(true);
   };
 
-  const handleConnectRequest = () => {
-    alert('Work in progress');
+  const handleConnectRequest = async () => {
+    try {
+      await axios.get(`profiles/${eth_address}/request_connection/`);
+      alert(
+        'Congrats, you found a preview feature!\nIf you are a beta tester, we will soon connect you with this user 🎉\nIf you want to become a beta tester, please reach out to us at wojtek@mazury.xyz 📩'
+      );
+    } catch (error) {
+      alert(
+        'Congrats, you found a preview feature!\nYou need to log in to use it.'
+      );
+    }
   };
 
   const onReferralModalClose = () => {
@@ -373,7 +384,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   onClick={handleConnectRequest}
                 >
                   <span className="text-sm font-bold uppercase text-white">
-                    Request an intro
+                    Request contact
                   </span>
                 </div>
               )}
@@ -409,7 +420,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         onClick={handleConnectRequest}
                       >
                         <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                          Request an intro
+                          Request contact
                         </span>
                       </div>
                     )}
