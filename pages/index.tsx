@@ -422,11 +422,7 @@ const Home: NextPage = () => {
                     {Boolean(profiles) ? (
                       profiles?.map((suggestion, index) => (
                         <li key={index}>
-                          <Link
-                            href={`/people/${
-                              suggestion?.username || suggestion?.eth_address
-                            }`}
-                          >
+                          <Link href={`/people/${suggestion?.eth_address}`}>
                             <a className="flex">
                               <Avatar
                                 src={suggestion.avatar}
