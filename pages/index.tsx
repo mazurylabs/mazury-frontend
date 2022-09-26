@@ -384,50 +384,35 @@ const Home: NextPage = () => {
               )}
             </div>
 
-            <div className="lg:16 mt-10 w-full lg:mt-16 lg:flex">
-              <div className="grow lg:mr-16">
-                <div className="font-sans text-sm font-medium text-indigoGray-40">
-                  <h2>RECENT ACTIVITY IN YOUR NETWORK</h2>
+            <div className="lg:16 mt-10 w-full justify-center lg:mt-16 lg:flex">
+              <div className="grow rounded-md border border-indigoGray-20 bg-indigo-50 bg-opacity-10 p-3 lg:mr-[50px] lg:h-min lg:w-1/2 lg:p-4">
+                <div className="font-sans font-bold text-indigo-600">
+                  <h2>Mazury Talent</h2>
                 </div>
 
-                <div className="mt-3 ">
+                <div className="mt-1 mb-3 lg:mb-5">
                   <ul className="space-y-6">
-                    {!address ? (
-                      <p className="text-lg text-indigoGray-60">
-                        No recent activity to show. Use the searchbox to find
-                        your friend and give them a referral to spy on them
-                        here!
-                      </p>
-                    ) : Boolean(activity) ? (
-                      activity?.map((item) => {
-                        return (
-                          <ActivityPreview
-                            activity={item}
-                            key={item.id}
-                            avatarSize="md"
-                          />
-                        );
-                      })
-                    ) : (
-                      skeletonArray.map((_, index) => (
-                        <div
-                          className="flex w-full animate-pulse items-end"
-                          key={index}
-                        >
-                          <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
-
-                          <div className="ml-3 flex w-full flex-col justify-center space-y-[2px] lg:mr-[60px] lg:w-fit">
-                            <div className="h-4 w-20 rounded bg-indigoGray-20" />
-                            <div className="h-4 w-full rounded bg-indigoGray-20 lg:w-[400px]" />
-                          </div>
-                        </div>
-                      ))
-                    )}
+                    <p className="text-sm text-indigo-600">
+                      Get exclusive access to top jobs and get hired based on
+                      your verified credentials.
+                    </p>
                   </ul>
                 </div>
+
+                <a
+                  href="https://airtable.com/shr7Cjchcji8zMay7"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="w-[160px] rounded-lg bg-indigo-600 py-2 px-6 shadow-sm">
+                    <p className="text-center font-semibold text-indigo-50">
+                      Apply to join
+                    </p>
+                  </div>
+                </a>
               </div>
 
-              <div className="mt-10 w-full  shrink-0 pb-8 font-sans lg:mt-0 lg:w-fit lg:pb-0">
+              <div className="mt-10 w-full shrink-0 pb-8 font-sans lg:mt-0 lg:w-1/2 lg:pb-0 lg:pl-[50px]">
                 <div className="text-sm font-medium text-indigoGray-40">
                   <h2>Recommended profiles</h2>
                 </div>
@@ -451,7 +436,7 @@ const Home: NextPage = () => {
                                 className="object-cover"
                               />
 
-                              <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
+                              <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center">
                                 <p className="font-serif text-base font-bold text-indigoGray-90">
                                   {returnTruncatedIfEthAddress(
                                     suggestion.username
