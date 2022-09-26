@@ -16,7 +16,7 @@ import { Button } from './Button';
 import { Pill } from './Pill';
 import { Toggle } from './Toggle';
 import { BadgeDetail } from './BadgeDetail';
-import { BadgeType } from '../types';
+import { BadgeIssuer, BadgeType } from '../types';
 import { Portal } from './Portal';
 import { axios } from 'lib/axios';
 import { useSelector } from 'react-redux';
@@ -54,7 +54,7 @@ interface BadgeModalProps {
 
 export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   const intersectionRef = useRef(null!);
-  const [badgeIssuer, setBadgeIssuer] = useState<'mazury' | 'poap'>('mazury');
+  const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
   const { address } = useSelector(userSlice);
   const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
@@ -113,7 +113,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
     setHoveredbadge(badge);
   };
 
-  const handleBadgeIssuer = (issuer: 'mazury' | 'poap') => {
+  const handleBadgeIssuer = (issuer: BadgeIssuer) => {
     setRefresh('');
     setBadgesInView([]);
     setBadgeIssuer(issuer);
@@ -156,7 +156,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   useEffect(() => {
     if (showUserBadges) {
       const userBadges = badges?.map((badge) => {
-        return badge.badge_type;
+        const badgeInfo = badge.badge_type;
+        badgeInfo['openseaUrl'] = badge.external_links.opensea;
+        badgeInfo['rainbowUrl'] = badge.external_links.rainbow;
+
+        return badgeInfo;
       });
       setBadgesInView(userBadges);
     } else {
@@ -255,7 +259,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                 <p className="font-demi text-lg font-normal leading-5 text-indigoGray-90">
                   {truncateString(badge.title, 25)}
                 </p>
-                <p className="font-inter text-sm font-medium text-indigoGray-60 line-clamp-2">
+                <p className="font-sans text-sm font-medium text-indigoGray-60 line-clamp-2">
                   {truncateString(badge.description, 36)}
                 </p>
               </div>
@@ -275,7 +279,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                     />
                   </div>
                   <p
-                    className={`font-inter text-xs font-bold ${
+                    className={`font-sans text-xs font-bold ${
                       false ? 'text-indigoGray-90' : 'text-emerald-900'
                     }`}
                   >
@@ -285,7 +289,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                 <div className="flex h-1 w-1 rounded-full bg-indigoGray-50" />
 
-                <div className="font-inter text-xs font-medium text-indigoGray-60">
+                <div className="font-sans text-xs font-medium text-indigoGray-60">
                   <p>
                     {badgesCount}{' '}
                     {(badgesCount as number) < 2 ? 'person' : 'people'}
@@ -346,7 +350,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   );
 
   const empty = (
-    <div className="font-inter mt-3 px-6 text-sm font-medium text-indigoGray-90 lg:min-h-[19.6rem] lg:px-10">
+    <div className="mt-3 px-6 font-sans text-sm font-medium text-indigoGray-90 lg:min-h-[19.6rem] lg:px-10">
       <p>No suggestions found</p>
     </div>
   );
@@ -380,11 +384,13 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   isBadgeHidden={false}
                   badgeCount={badgesCount}
                   image={showBadgeDetails.image}
-                  variant={badgeIssuer === 'mazury' ? 'badge' : 'poap'}
+                  variant={badgeIssuer}
                   slug={showBadgeDetails.slug}
                   id={showBadgeDetails.id}
                   canBeMinted={false}
                   owner="You"
+                  openseaUrl={showBadgeDetails.openseaUrl}
+                  rainbowUrl={showBadgeDetails.rainbowUrl}
                 />
               )}
 
@@ -417,7 +423,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                       <div className="flex justify-between">
                         <div className="grow lg:flex lg:items-center">
-                          <div className="font-demi text-4xl font-normal text-indigoGray-90">
+                          <div className="shrink-0 font-demi text-4xl font-normal text-indigoGray-90">
                             <h1>All badges</h1>
                           </div>
 
@@ -435,7 +441,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                     />
                                   </div>
 
-                                  <div className="font-inter ml-[10px] mr-10 grow  text-base font-medium">
+                                  <div className="ml-[10px] mr-10 grow font-sans  text-base font-medium">
                                     <input
                                       ref={inputRef}
                                       type="text"
@@ -454,20 +460,57 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                                 </form>
                               </div>
                             ) : (
-                              <div className="flex space-x-[24px]">
+                              <div className="flex flex-wrap lg:max-w-[80%]">
                                 <Pill
-                                  label="Mazury badges"
+                                  label={<span>Mazury badges </span>}
                                   active={badgeIssuer === 'mazury'}
                                   color="fuchsia"
-                                  className="h-fit w-fit"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('mazury')}
                                 />
                                 <Pill
-                                  label="POAPs"
+                                  label={<span>POAPs</span>}
                                   active={badgeIssuer === 'poap'}
                                   color="fuchsia"
-                                  className="h-fit w-fit"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
                                   onClick={() => handleBadgeIssuer('poap')}
+                                />
+                                <Pill
+                                  label={<span>GitPOAP</span>}
+                                  active={badgeIssuer === 'gitpoap'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() => handleBadgeIssuer('gitpoap')}
+                                />
+                                <Pill
+                                  label={<span>Buildspace</span>}
+                                  active={badgeIssuer === 'buildspace'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() =>
+                                    handleBadgeIssuer('buildspace')
+                                  }
+                                />
+                                <Pill
+                                  label={<span>Sismo</span>}
+                                  active={badgeIssuer === 'sismo'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() => handleBadgeIssuer('sismo')}
+                                />
+                                <Pill
+                                  label="101"
+                                  active={badgeIssuer === '101'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0 lg:mr-3"
+                                  onClick={() => handleBadgeIssuer('101')}
+                                />
+                                <Pill
+                                  label={<span>Kudos</span>}
+                                  active={badgeIssuer === 'kudos'}
+                                  color="fuchsia"
+                                  className="h-fit w-fit shrink-0"
+                                  onClick={() => handleBadgeIssuer('kudos')}
                                 />
                               </div>
                             )}
@@ -476,7 +519,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
 
                         <>
                           {!isSearchOpen && (
-                            <div className="flex h-[39px] items-center self-end lg:h-[54px] lg:self-start">
+                            <div className="flex h-[39px] shrink-0 items-center self-end lg:h-[54px] lg:self-start">
                               <Button
                                 className="m-0 !p-0"
                                 variant="tertiary"
@@ -500,7 +543,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                           onToggle={handleToggleShowBadges}
                         />
 
-                        <div className="font-inter text-base text-indigoGray-70">
+                        <div className="font-sans text-base text-indigoGray-70">
                           <p>Show only your badges</p>
                         </div>
                       </div>

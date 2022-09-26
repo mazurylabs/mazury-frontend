@@ -62,6 +62,8 @@ export interface BadgeType {
     name: BadgeIssuer;
   };
   poap_badge_extra_data?: any;
+  openseaUrl?: string;
+  rainbowUrl?: string;
 }
 
 export interface Badge {
@@ -72,6 +74,7 @@ export interface Badge {
   updated_at: string;
   minted: boolean;
   minted_at: string;
+  external_links?: any;
 }
 
 export type MappedSkills<T> = {
@@ -244,7 +247,14 @@ export interface Post {
 
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
 
-export type BadgeIssuer = 'mazury' | 'poap';
+export type BadgeIssuer =
+  | 'mazury'
+  | 'poap'
+  | 'buildspace'
+  | 'gitpoap'
+  | 'sismo'
+  | 'kudos'
+  | '101';
 
 export type FilterType =
   | 'Credentials'
@@ -267,4 +277,15 @@ export type AuthVerifyResponse = {
   access_token: string;
   refresh: string;
   success: boolean;
+};
+
+export type CredentialCount = {
+  total: number;
+  mazury: number;
+  poap: number;
+  buildspace: number;
+  kudos: number;
+  gitpoap: number;
+  '101': number;
+  sismo: number;
 };

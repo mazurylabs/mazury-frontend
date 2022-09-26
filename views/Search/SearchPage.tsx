@@ -97,11 +97,11 @@ const SearchPage: NextPage = () => {
               <SVG height={24} width={24} src={`/icons/search-black.svg`} />
             </div>
 
-            <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
+            <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="woj.eth, frontend developer..."
+                placeholder="woj.eth, frontend developer, hackathon winner..."
                 aria-label="Search"
                 className="h-full w-full bg-transparent"
                 value={searchTerm}

@@ -142,7 +142,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
             <div className="flex grow flex-col">
               <div className="mb-6 text-sm text-indigoGray-40 md:mb-3">
                 <Link href={'/settings'}>
-                  <a className="font-inter flex w-fit items-center">
+                  <a className="flex w-fit items-center font-sans">
                     <Image
                       src="/icons/back.svg"
                       alt="Back"

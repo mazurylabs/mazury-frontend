@@ -44,7 +44,7 @@ export const useActiveProfileSection = () => {
   const referralsIsVisible = useIntersection(referralsRef);
   const writingIsVisible = useIntersection(writingRef);
 
-  const [activeSection, setActiveSection] = useState<Sections>('activity');
+  const [activeSection, setActiveSection] = useState<Sections>('credentials');
 
   useEffect(() => {
     setActivityRef(document.getElementById('activity'));
@@ -55,11 +55,7 @@ export const useActiveProfileSection = () => {
   }, []);
 
   useEffect(() => {
-    if (activityIsVisible) {
-      setActiveSection('activity');
-    } else if (altActivityIsVisible) {
-      setActiveSection('activity');
-    } else if (badgesIsVisible) {
+    if (badgesIsVisible) {
       setActiveSection('credentials');
     } else if (referralsIsVisible) {
       setActiveSection('referrals');

@@ -34,22 +34,22 @@ const keywordSuggestions = [
 
 const badgeSuggestions = [
   {
-    title: 'Contract deployer',
-    slug: 'contract_deployer',
-    img: '/badges/contract_deployer.png',
-    detail: 'People who deployed a smart contract',
+    title: 'Paradigm CTF 2022 Participant',
+    slug: 'paradigm-ctf-2022-2022',
+    img: '/badges/paradigm-ctf-2022.png',
+    detail: 'Hackers who completed at least 1 Paradigm CTF 2022 challange',
   },
   {
-    title: 'Buildspace alumni',
-    slug: 'buildspace',
-    img: '/badges/buildspace.png',
-    detail: 'People who finished a buildspace course',
+    title: 'Ethereum Merge Contributor',
+    slug: 'gitpoap-ethereum-merge-contributor-2022',
+    img: '/badges/gitpoap-ethereum-merge-contributor-2022.png',
+    detail: 'Significant contributors to the Ethereum Merge',
   },
   {
-    title: 'Developer DAO member',
-    slug: 'd_d_member',
-    img: '/badges/d_d.png',
-    detail: 'Members of Developer DAO',
+    title: 'ETHAmsterdam Staked Hacker',
+    slug: 'ethamsterdam-2022-staked-hacker-2022',
+    img: '/badges/ethamsterdam-2022-staked-hacker-2022.png',
+    detail: 'Hackers who participated in ETHAmsterdam 2022',
   },
 ];
 
@@ -126,7 +126,7 @@ const Home: NextPage = () => {
         {/* <div className="mb-5 hidden lg:flex">
           <button
             type="button"
-            className="font-inter flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-sans flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/network.svg'}
@@ -140,7 +140,7 @@ const Home: NextPage = () => {
 
           <button
             type="button"
-            className="font-inter ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
+            className="font-sans ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
           >
             <Image
               src={'/icons/recommendation.svg'}
@@ -167,7 +167,7 @@ const Home: NextPage = () => {
           <h2>KEYWORD SUGGESTIONS</h2>
         </div>
 
-        <ul className="font-inter font-medium">
+        <ul className="font-sans font-medium">
           {keywordSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -193,7 +193,7 @@ const Home: NextPage = () => {
           <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
 
-        <div className="font-inter px-2 font-medium">
+        <div className="px-2 font-sans font-medium">
           <ul className="mb-4">
             {badgeSuggestions.map((badge, index) => (
               <li
@@ -204,7 +204,7 @@ const Home: NextPage = () => {
                 <div className="mr-4 flex">
                   <Image
                     src={badge.img}
-                    width={24}
+                    width={38}
                     height={38}
                     layout="fixed"
                     alt="badge"
@@ -221,26 +221,6 @@ const Home: NextPage = () => {
               </li>
             ))}
           </ul>
-
-          <div className="flex">
-            <div className="mr-4 w-6" aria-hidden={true} />
-            <BadgeModal
-              triggerButton={
-                <button
-                  type="button"
-                  className="flex items-center text-xs text-indigo-600"
-                >
-                  <span className="mr-2">See more badges</span>
-                  <Image
-                    src="/icons/arrow-right-indigo.svg"
-                    width={16}
-                    height={16}
-                    alt="arrow-right"
-                  />
-                </button>
-              }
-            />
-          </div>
         </div>
       </div>
     </div>
@@ -275,7 +255,7 @@ const Home: NextPage = () => {
   const result = <></>;
 
   const empty = (
-    <div className="font-inter mt-3 text-sm font-medium text-indigoGray-90">
+    <div className="mt-3 font-sans text-sm font-medium text-indigoGray-90">
       <p>No suggestions found</p>
     </div>
   );
@@ -308,7 +288,7 @@ const Home: NextPage = () => {
               </div>
 
               <div className="my-8 text-center font-serif text-3xl font-semibold leading-9 text-indigoGray-90 md:text-5xl md:leading-[3.6rem] lg:mt-0 xl:mb-10">
-                <h1>Welcome to the professional metaverse</h1>
+                <h1>Search people using verified credentials</h1>
               </div>
             </div>
 
@@ -352,11 +332,11 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                <div className="font-inter ml-4 mr-10 grow  text-base font-medium">
+                <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
                   <input
                     ref={inputRef}
                     type="text"
-                    placeholder="woj.eth, frontend developer..."
+                    placeholder="woj.eth, frontend developer, hackathon winner..."
                     aria-label="Search"
                     className="h-full w-full bg-transparent"
                     value={searchTerm}
@@ -404,52 +384,37 @@ const Home: NextPage = () => {
               )}
             </div>
 
-            <div className="lg:16 mt-10 w-full lg:mt-16 lg:flex">
-              <div className="grow lg:mr-16">
-                <div className="font-inter text-sm font-medium text-indigoGray-40">
-                  <h2>RECENT ACTIVITY IN YOUR NETWORK</h2>
+            <div className="lg:16 mt-10 w-full justify-center lg:mt-16 lg:flex">
+              <div className="grow rounded-md border border-indigoGray-20 bg-indigo-50 bg-opacity-10 p-3 lg:mr-[50px] lg:h-min lg:w-1/2 lg:p-4">
+                <div className="font-sans font-bold text-indigo-600">
+                  <h2>Mazury Talent</h2>
                 </div>
 
-                <div className="mt-3 ">
+                <div className="mt-1 mb-3 lg:mb-5">
                   <ul className="space-y-6">
-                    {!address ? (
-                      <p className="text-lg text-indigoGray-60">
-                        No recent activity to show. Use the searchbox to find
-                        your friend and give them a referral to spy on them
-                        here!
-                      </p>
-                    ) : Boolean(activity) ? (
-                      activity?.map((item) => {
-                        return (
-                          <ActivityPreview
-                            activity={item}
-                            key={item.id}
-                            avatarSize="md"
-                          />
-                        );
-                      })
-                    ) : (
-                      skeletonArray.map((_, index) => (
-                        <div
-                          className="flex w-full animate-pulse items-end"
-                          key={index}
-                        >
-                          <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
-
-                          <div className="ml-3 flex w-full flex-col justify-center space-y-[2px] lg:mr-[60px] lg:w-fit">
-                            <div className="h-4 w-20 rounded bg-indigoGray-20" />
-                            <div className="h-4 w-full rounded bg-indigoGray-20 lg:w-[400px]" />
-                          </div>
-                        </div>
-                      ))
-                    )}
+                    <p className="text-sm text-indigo-600">
+                      Get exclusive access to top jobs and get hired based on
+                      your verified credentials.
+                    </p>
                   </ul>
                 </div>
+
+                <a
+                  href="https://airtable.com/shr7Cjchcji8zMay7"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="w-[160px] rounded-lg bg-indigo-600 py-2 px-6 shadow-sm">
+                    <p className="text-center font-semibold text-indigo-50">
+                      Apply to join
+                    </p>
+                  </div>
+                </a>
               </div>
 
-              <div className="font-inter mt-10  w-full shrink-0 pb-8 lg:mt-0 lg:w-fit lg:pb-0">
+              <div className="mt-10 w-full shrink-0 pb-8 font-sans lg:mt-0 lg:w-1/2 lg:pb-0 lg:pl-[50px]">
                 <div className="text-sm font-medium text-indigoGray-40">
-                  <h2>PEOPLE YOU MAY KNOW</h2>
+                  <h2>Recommended profiles</h2>
                 </div>
 
                 <div className="mt-3 grow lg:grow-0">
@@ -471,23 +436,23 @@ const Home: NextPage = () => {
                                 className="object-cover"
                               />
 
-                              <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center lg:grow-0">
+                              <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center">
                                 <p className="font-serif text-base font-bold text-indigoGray-90">
                                   {returnTruncatedIfEthAddress(
                                     suggestion.username
                                   )}
                                 </p>
 
-                                <p className="font-inter text-xs font-medium leading-6 text-indigoGray-60">
-                                  Talent spotlight
+                                <p className="font-sans text-xs font-medium leading-6 text-indigoGray-60">
+                                  Mazury Talent spotlight
                                 </p>
                               </div>
 
                               <div className="flex">
                                 <Image
                                   src="/icons/arrow-right.svg"
-                                  width={8}
-                                  height={12}
+                                  width={16}
+                                  height={16}
                                   alt="arrow-right"
                                 />
                               </div>

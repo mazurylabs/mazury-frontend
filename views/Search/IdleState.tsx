@@ -17,22 +17,22 @@ const keywordSuggestions = [
 
 const badgeSuggestions = [
   {
-    title: 'Contract deployer',
-    slug: 'contract_deployer',
-    img: '/badges/contract_deployer.png',
-    detail: 'People who deployed a smart contract',
+    title: 'Paradigm CTF 2022 Participant',
+    slug: 'paradigm-ctf-2022-2022',
+    img: '/badges/paradigm-ctf-2022.png',
+    detail: 'Hackers who completed at least 1 Paradigm CTF 2022 challange',
   },
   {
-    title: 'Buildspace alumni',
-    slug: 'buildspace',
-    img: '/badges/buildspace.png',
-    detail: 'People who finished a buildspace course',
+    title: 'Ethereum Merge Contributor',
+    slug: 'gitpoap-ethereum-merge-contributor-2022',
+    img: '/badges/gitpoap-ethereum-merge-contributor-2022.png',
+    detail: 'Significant contributors to the Ethereum Merge',
   },
   {
-    title: 'Developer DAO member',
-    slug: 'd_d_member',
-    img: '/badges/d_d.png',
-    detail: 'Members of Developer DAO',
+    title: 'ETHAmsterdam Staked Hacker',
+    slug: 'ethamsterdam-2022-staked-hacker-2022',
+    img: '/badges/ethamsterdam-2022-staked-hacker-2022.png',
+    detail: 'Hackers who participated in ETHAmsterdam 2022',
   },
 ];
 
@@ -56,7 +56,7 @@ export const IdleState = () => {
           <h2>KEYWORD SUGGESTIONS</h2>
         </div>
 
-        <ul className="font-inter font-medium">
+        <ul className="font-sans font-medium">
           {keywordSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -96,7 +96,7 @@ export const IdleState = () => {
           <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
 
-        <div className="font-inter px-2 font-medium">
+        <div className="px-2 font-sans font-medium">
           <ul className="mb-4">
             {badgeSuggestions.map((badge, index) => (
               <li
@@ -107,7 +107,7 @@ export const IdleState = () => {
                 <div className="mr-4 flex">
                   <Image
                     src={badge.img}
-                    width={24}
+                    width={38}
                     height={38}
                     layout="fixed"
                     alt="badge"

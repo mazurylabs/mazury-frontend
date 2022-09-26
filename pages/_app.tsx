@@ -14,6 +14,7 @@ import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
 import FeedbackFishButton from '@/components/FeedbackFishButton';
+import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -64,6 +65,21 @@ const App = ({ Component, pageProps }: AppProps) => {
 
       <Authenticator />
       <FeedbackFishButton />
+
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-1HSTDVKHYN"
+      />
+
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      
+        gtag('config', 'G-1HSTDVKHYN');
+      `}
+      </Script>
     </AppProvider>
   );
 };

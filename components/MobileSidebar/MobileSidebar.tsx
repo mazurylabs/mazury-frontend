@@ -28,7 +28,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
   };
 
   return (
-    <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] pt-4 pb-8 lg:hidden">
+    <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] py-4 lg:hidden">
       {children || (
         <>
           <Link href="/" passHref>
@@ -80,7 +80,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
             <Link href="/sign-in" passHref>
               <a>
                 <Image
-                  src="/icons/login.svg"
+                  src="/icons/user-black.svg"
                   alt="Sign in icon"
                   width="24px"
                   height="24px"
