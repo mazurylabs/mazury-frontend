@@ -165,7 +165,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   };
 
   const copyShareLinkToClipboard = async (slug: string) => {
-    const linkToCredential = `${window.location.host}/people/${owner}?credential=${variant}%23${id}`;
+    const linkToCredential = `https://${window.location.host}/people/${owner}?credential=${variant}%23${id}`;
     await navigator.clipboard.writeText(linkToCredential);
     toast.success('Share link copied to clipboard!');
   };
