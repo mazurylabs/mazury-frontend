@@ -74,6 +74,18 @@ export const BadgePreview: React.FC<Props> = ({
   };
 
   const handleCloseModal = async () => {
+    const route = router.asPath.split('?');
+
+    if (route.length > 1) {
+      router.push(
+        {
+          pathname: router.asPath.split('?')[0],
+          query: {},
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
     setShowBadgeDetails(false);
   };
 
