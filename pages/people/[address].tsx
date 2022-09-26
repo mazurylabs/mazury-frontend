@@ -221,9 +221,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const handleConnectRequest = async () => {
     try {
-      const res = await axios.get(
-        `profiles/${eth_address}/request_connection/`
-      );
+      await axios.get(`profiles/${eth_address}/request_connection/`);
       alert(
         'Congrats, you found a preview feature!\nIf you are a beta tester, we will soon connect you with this user 🎉\nIf you want to become a beta tester, please reach out to us at wojtek@mazury.xyz 📩'
       );
