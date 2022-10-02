@@ -28,12 +28,16 @@ export const Layout: FC<LayoutProps> = ({
 
   const variants = {
     open: {
-      width: 'fit-content',
-      transition: { duration: 0.1, ease: [0.01, 0.03, 0.04, 1] },
+      width: 225,
+      transition: { duration: 0.2 },
+    },
+    signInOpen: {
+      width: 335,
+      transition: { duration: 0.2 },
     },
     closed: {
       width: 75,
-      transition: { duration: 0.1, ease: [0.01, 0.03, 0.04, 1] },
+      transition: { duration: 0.2 },
     },
   };
 
@@ -47,7 +51,7 @@ export const Layout: FC<LayoutProps> = ({
       >
         <motion.aside
           variants={variants}
-          animate={isOpen ? 'open' : 'closed'}
+          animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
           className={`fixed top-0 z-30 !hidden h-screen flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => !signInOpen && setIsOpen(false)}

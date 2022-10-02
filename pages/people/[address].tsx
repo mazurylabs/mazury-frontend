@@ -1,9 +1,16 @@
+import Head from 'next/head';
 import { NextPage, NextPageContext } from 'next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { axios } from '@/lib/axios';
+import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
+import toast, { Toaster } from 'react-hot-toast';
+
 import {
   Button,
   Pill,
-  ActivityPreview,
   BadgePreview,
   HR,
   MirrorPost,
@@ -13,6 +20,7 @@ import {
   BlueSocialButton,
   PenIcon,
 } from 'components';
+
 import {
   Badge,
   BadgeIssuer,
@@ -21,18 +29,17 @@ import {
   Referral,
   Role,
 } from 'types';
+
 import {
   colors,
   getMetricDisplayValue,
-  getTruncatedAddress,
   goToLink,
   hasAlreadyReferredReceiver,
   returnTruncatedIfEthAddress,
   toCapitalizedWord,
   sectionToColor,
 } from 'utils';
-import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
-import Head from 'next/head';
+
 import {
   useBadges,
   useReferrals,
@@ -41,23 +48,16 @@ import {
   useProfile,
   useActiveProfileSection,
   useMobile,
-  useActivity,
   usePosts,
   useCredentialCount,
 } from 'hooks';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
+
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
-import { useMirrorPosts } from 'hooks/useMirrorPosts';
-import toast, { Toaster } from 'react-hot-toast';
 import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { getBadgeById } from '@/utils/api';
-
-import { axios } from '@/lib/axios';
 
 interface Props {
   address: string;
@@ -93,21 +93,13 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
 
-  const {
-    referrals,
-    error: referralError,
-    count: referralsCount,
-  } = useReferrals(eth_address);
-  const { activity, error: activityError } = useActivity(eth_address);
-  const { referrals: authoredReferrals, error: authoredReferralsError } =
-    useReferrals(eth_address, true);
+  const { referrals, count: referralsCount } = useReferrals(eth_address);
+  const { referrals: authoredReferrals } = useReferrals(eth_address, true);
 
-  const {
-    badges,
-    handleFetchMore,
-    // count: badgesCount,
-    hasMoreData,
-  } = useBadges(eth_address, badgeIssuer);
+  const { badges, handleFetchMore, hasMoreData } = useBadges(
+    eth_address,
+    badgeIssuer
+  );
 
   const { credentialCount } = useCredentialCount(eth_address);
 
@@ -182,9 +174,6 @@ const Profile: React.FC<Props> = ({ address }) => {
     let ref;
 
     switch (section) {
-      // case 'Activity':
-      //   ref = activityRef || altActivityRef;
-      //   break;
       case 'Credentials':
         ref = badgesRef;
         break;
@@ -282,17 +271,6 @@ const Profile: React.FC<Props> = ({ address }) => {
       }
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
-
-  // useEffect(() => {
-  //   let sectionId = window.location.hash;
-  //   let element = document?.querySelector(sectionId);
-  //   if (element) {
-  //     window?.scrollTo({
-  //       top: element.getBoundingClientRect().top,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  // }, []);
 
   const writeReferralButtonText = existingReferral
     ? 'Edit referral'
@@ -743,61 +721,6 @@ const Profile: React.FC<Props> = ({ address }) => {
         }
         innerRightContent={
           <div className="pb-4">
-            {/* <div>
-              <h3
-                id="Activity"
-                ref={activityRef}
-                className="hidden font-serif text-3xl font-bold text-indigoGray-90 md:block"
-              >
-                Activity
-              </h3>
-              <div
-                id="activity-alt"
-                ref={altActivityRef}
-                className="mt-0 flex flex-col gap-6 md:mt-8 xl:w-10/12"
-              >
-                {activity && activity.length > 0 ? (
-                  activity
-                    ?.slice(0, activityExpanded ? activity.length : 4)
-                    .map((item) => {
-                      return <ActivityPreview activity={item} key={item.id} />;
-                    })
-                ) : (
-                  <p className="text-lg text-indigoGray-60">
-                    No recent activity to show
-                  </p>
-                )}
-              </div>
-
-              {activity && activity.length > 4 && (
-                <div className="xl:w-10/12">
-                  <Button
-                    onClick={() => setActivityExpanded((v) => !v)}
-                    variant="secondary"
-                    className="mx-auto mt-6"
-                  >
-                    {activityExpanded ? 'COLLAPSE' : 'LOAD MORE'}
-                  </Button>
-                </div>
-              )}
-            </div> */}
-
-            {/* {referrals && referrals?.length > 0 && (
-              <div>
-                <h3 className="mt-12 font-serif text-xl font-bold text-indigoGray-90">
-                  Recent referrals
-                </h3>
-                <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 xl:w-10/12">
-                  {referrals?.slice(0, 2).map((referral) => {
-                    return (
-                      <ReferralPreview key={referral.id} referral={referral} />
-                    );
-                  })}
-                </div>
-                <HR />
-              </div>
-            )} */}
-
             <div className="">
               <div className="flex flex-col gap-4 md:flex-row md:items-center">
                 <h3
@@ -1164,17 +1087,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   Writing
                 </h3>
-
-                {/* <div className="flex gap-[24px]">
-                  <Pill
-                    color="amber"
-                    label="All posts"
-                    className="md:ml-8"
-                    active
-                  />
-                  <Pill color="amber" label="GM" />
-                  <Pill color="amber" label="Mirror" />
-                </div> */}
               </div>
 
               <div className="mt-8 grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
