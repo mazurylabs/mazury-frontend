@@ -254,8 +254,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         className={`flex h-[40px] ${
           isOpen && 'w-full'
         } items-center gap-4 rounded-md border ${
-          !active && 'border-hidden'
-        } p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 ${
+          !active &&
+          'border-hidden hover:bg-indigoGray-10 hover:text-indigoGray-50'
+        } p-3 text-sm font-medium text-indigoGray-90 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 ${
           active &&
           'border-solid border-indigoGray-30 bg-indigoGray-90 text-indigo-50'
         } ${className}`}
