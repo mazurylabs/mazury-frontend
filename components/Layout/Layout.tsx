@@ -52,13 +52,13 @@ export const Layout: FC<LayoutProps> = ({
         <motion.aside
           variants={variants}
           animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
-          className={`fixed top-0 z-30 !hidden h-screen flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
+          className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => !signInOpen && setIsOpen(false)}
           role="menu"
         >
           <Link href="/">
-            <a className="cursor-pointer">
+            <a className="h-[32px] w-[32px] cursor-pointer">
               <SVG src="/new-logo.svg" height="32px" width="32px" />
             </a>
           </Link>
