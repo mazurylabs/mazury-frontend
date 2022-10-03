@@ -58,7 +58,7 @@ export const Layout: FC<LayoutProps> = ({
           role="menu"
         >
           <Link href="/">
-            <a className="cursor-pointer">
+            <a className="h-[32px] w-[32px] cursor-pointer">
               <SVG src="/new-logo.svg" height="32px" width="32px" />
             </a>
           </Link>
