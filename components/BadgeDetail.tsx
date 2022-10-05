@@ -354,6 +354,22 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </motion.div>
             )}
 
+            {variant.includes('poap') && (
+              <div>
+                <motion.a
+                  rel="noreferrer"
+                  href={
+                    //external link
+                    '#'
+                  }
+                  target="_blank"
+                  className="text-indigoGray-5"
+                >
+                  See on Poap
+                </motion.a>
+              </div>
+            )}
+
             {isNewlyMinted && (
               <div>
                 <Button

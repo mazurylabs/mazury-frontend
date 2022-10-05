@@ -5,6 +5,10 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
+import { SidebarContext } from 'contexts';
+import { userSlice } from '@/selectors';
+import { logout } from '@/slices/user';
+import { SignIn } from '@/views/SignIn';
 
 import {
   ActivityPreview,
@@ -22,7 +26,6 @@ import {
 } from 'hooks';
 import { commify, returnTruncatedIfEthAddress } from 'utils';
 import { useSelector } from 'react-redux';
-import { userSlice } from '@/selectors';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
 
@@ -67,11 +70,17 @@ const Home: NextPage = () => {
   const isMobile = useMobile();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const { address } = useSelector(userSlice);
+  const { address, isAuthenticated } = useSelector(userSlice);
   const { activity } = useActivity(address as string, apiParams);
   const { profiles } = useProfileSuggestions(address as string, apiParams);
   const [currentSearchState, setCurrentSearchState] =
     useState<SearchState>('idle');
+  const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
+
+  const handleLogin = () => {
+    setIsOpen(true);
+    setSignInOpen(true);
+  };
 
   useClickOutside(searchRef, handleCloseSearch);
 
@@ -399,17 +408,24 @@ const Home: NextPage = () => {
                   </ul>
                 </div>
 
-                <a
-                  href="https://airtable.com/shr7Cjchcji8zMay7"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div className="w-[160px] rounded-lg bg-indigo-600 py-2 px-6 shadow-sm">
-                    <p className="text-center font-semibold text-indigo-50">
-                      Apply to join
-                    </p>
-                  </div>
-                </a>
+                {isAuthenticated ? (
+                  <a
+                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="grid w-[180px] place-items-center rounded-lg bg-indigo-600 py-2 text-center font-semibold text-indigo-50 shadow-sm"
+                  >
+                    Apply to join
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleLogin}
+                    className="grid w-[180px] place-items-center rounded-lg bg-indigo-600 py-2 text-center font-semibold text-indigo-50 shadow-sm"
+                  >
+                    Log in to apply
+                  </button>
+                )}
               </div>
 
               <div className="mt-10 w-full shrink-0 pb-8 font-sans lg:mt-0 lg:w-1/2 lg:pb-0 lg:pl-[50px]">
