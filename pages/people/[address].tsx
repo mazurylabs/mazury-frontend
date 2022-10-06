@@ -918,6 +918,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
+                    //pass here
                     const {
                       badge_type,
                       id,
@@ -960,6 +961,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                         openseaUrl={opensea}
                         rainbowUrl={rainbow}
+                        externalLink={
+                          Object.values(external_links)[0] as string
+                        }
                       />
                     );
                   })

@@ -40,6 +40,7 @@ interface BadgeDetailProps {
   owner: string;
   openseaUrl?: string;
   rainbowUrl?: string;
+  externalLinks?: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -112,6 +113,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   owner,
   openseaUrl,
   rainbowUrl,
+  externalLinks,
 }) => {
   const router = useRouter();
   const containerRef = React.useRef(null!);
@@ -354,16 +356,13 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </motion.div>
             )}
 
-            {variant.includes('poap') && (
+            {variant.includes('poap') && externalLinks && (
               <div>
                 <motion.a
                   rel="noreferrer"
-                  href={
-                    //external link
-                    '#'
-                  }
+                  href={externalLinks}
                   target="_blank"
-                  className="text-indigoGray-5"
+                  className="text-red-200"
                 >
                   See on Poap
                 </motion.a>

@@ -27,6 +27,7 @@ interface Props {
   routeId?: string;
   openseaUrl: string;
   rainbowUrl: string;
+  externalLink?: string;
 }
 
 const credentialClass: Record<BadgeIssuer, string> = {
@@ -56,6 +57,7 @@ export const BadgePreview: React.FC<Props> = ({
   routeId,
   openseaUrl,
   rainbowUrl,
+  externalLink,
 }) => {
   const router = useRouter();
   const isMobile = useMobile();
@@ -168,6 +170,7 @@ export const BadgePreview: React.FC<Props> = ({
             mintedAt={mintedAt}
             openseaUrl={openseaUrl}
             rainbowUrl={rainbowUrl}
+            externalLinks={externalLink}
           />
         )}
       </AnimatePresence>
