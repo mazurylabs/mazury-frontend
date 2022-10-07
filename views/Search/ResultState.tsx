@@ -23,7 +23,7 @@ import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
 const filters = [
-  'Mazury badges',
+  'Mazury',
   'POAP',
   'GitPOAP',
   'Buildspace',
@@ -199,7 +199,7 @@ export const ResultState = () => {
         isContactable={filter.contactable}
       />
     ),
-    'Mazury badges': (
+    Mazury: (
       <CredentialFilter
         handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}
@@ -367,7 +367,7 @@ export const ResultState = () => {
                 onMouseEnter={() => handleSelectFilter(filter as FilterType)}
                 onMouseLeave={() => handleSelectFilter('empty')}
               >
-                <span className="font-sans text-sm font-bold leading-[21px] text-indigoGray-90">
+                <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                   {filter}
                 </span>
                 <SVG src="/icons/angle-down.svg" height={16} width={16} />

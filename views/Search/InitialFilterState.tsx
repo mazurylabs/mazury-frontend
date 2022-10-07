@@ -13,7 +13,7 @@ interface Props {
 }
 
 const filters: FilterType[] = [
-  'Mazury badges',
+  'Mazury',
   'POAP',
   'GitPOAP',
   'Buildspace',
