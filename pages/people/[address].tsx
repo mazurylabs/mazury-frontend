@@ -961,9 +961,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                         openseaUrl={opensea}
                         rainbowUrl={rainbow}
-                        externalLink={
-                          Object.values(external_links)[0] as string
-                        }
+                        externalLink={external_links[issuer.name]}
                       />
                     );
                   })
