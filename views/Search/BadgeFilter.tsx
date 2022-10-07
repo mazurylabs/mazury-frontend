@@ -30,12 +30,14 @@ interface BadgeFilterProps {
     value: ValueOf<FilterState>
   ) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 export const BadgeFilter = ({
   selectedBadges,
   handleSelectBadge,
   handleGoBack,
+  handleApplyFilter,
 }: BadgeFilterProps) => {
   const containerRef = React.useRef(null!);
   const screenWidth = useScreenWidth();
@@ -130,7 +132,7 @@ export const BadgeFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 pb-10 shadow-base md:h-[600px] md:w-[500px] lg:h-[400px]"
+      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6  shadow-base md:h-[600px] md:w-[500px] lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -228,7 +230,7 @@ export const BadgeFilter = ({
       </div>
 
       <ScrollLock>
-        <div className="flex overflow-y-auto">
+        <div className="flex overflow-y-auto lg:grow">
           <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
             {badges?.map((badge, index) => (
               <li className="flex space-x-4" key={badge.id}>
@@ -270,6 +272,16 @@ export const BadgeFilter = ({
           </ul>
         </div>
       </ScrollLock>
+
+      <div className="flex space-x-2">
+        <button type="button" onClick={() => handleApplyFilter('badges')}>
+          Apply
+        </button>
+
+        <button type="button" onClick={() => handleApplyFilter('badges', true)}>
+          Reset
+        </button>
+      </div>
     </motion.div>
   );
 };

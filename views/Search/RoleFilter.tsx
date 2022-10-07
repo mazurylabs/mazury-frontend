@@ -10,6 +10,7 @@ interface RoleFilterProps {
   selectedRole: string;
   handleSelect: (key: keyof FilterState, value: ValueOf<FilterState>) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 // type Role = Omit<TrimmedRole, 'community_manager'>;
@@ -38,6 +39,7 @@ export const RoleFilter = ({
   handleGoBack,
   handleSelect,
   selectedRole,
+  handleApplyFilter,
 }: RoleFilterProps) => {
   const screenWidth = useScreenWidth();
 
@@ -112,6 +114,16 @@ export const RoleFilter = ({
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className="flex space-x-2">
+        <button type="button" onClick={() => handleApplyFilter('role')}>
+          Apply
+        </button>
+
+        <button type="button" onClick={() => handleApplyFilter('role', true)}>
+          Reset
+        </button>
       </div>
     </motion.div>
   );

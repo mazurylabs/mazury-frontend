@@ -18,6 +18,7 @@ interface SkillFilterProps {
     value: ValueOf<FilterState>
   ) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 type Skill = { name: string; slug: string };
@@ -26,6 +27,7 @@ export const SkillFilter = ({
   selectedSkills,
   handleGoBack,
   handleSelectSkill,
+  handleApplyFilter,
 }: SkillFilterProps) => {
   const initialMount = React.useRef(false);
   const intersectionRef = React.useRef(null!);
@@ -143,7 +145,7 @@ export const SkillFilter = ({
       </div>
 
       <ScrollLock>
-        <div className="flex overflow-y-auto">
+        <div className="flex overflow-y-auto lg:grow">
           <ul className="mt-7 grow space-y-8 overflow-x-hidden">
             {skills?.map((skill, index) => (
               <li className="flex space-x-4" key={skill.name + index}>
@@ -177,6 +179,16 @@ export const SkillFilter = ({
           </ul>
         </div>
       </ScrollLock>
+
+      <div className="flex space-x-2">
+        <button type="button" onClick={() => handleApplyFilter('skills')}>
+          Apply
+        </button>
+
+        <button type="button" onClick={() => handleApplyFilter('skills', true)}>
+          Reset
+        </button>
+      </div>
     </motion.div>
   );
 };
