@@ -39,6 +39,7 @@ export const BadgeFilter = ({
   handleGoBack,
   handleApplyFilter,
 }: BadgeFilterProps) => {
+  const isMounted = React.useRef(false);
   const containerRef = React.useRef(null!);
   const screenWidth = useScreenWidth();
   useClickOutside(containerRef, () => handleGoBack('empty'));
@@ -48,7 +49,7 @@ export const BadgeFilter = ({
   const [searchTerm, setSearchTerm] = React.useState('');
   const [cursor, setCursor] = React.useState('');
 
-  const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
+  // const { badgeTypes, nextBadgeType } = useBadgeTypes(badgeIssuer);
   const intersectionRef = React.useRef(null!);
   const shouldFetchBadge = useIntersection(intersectionRef.current, '50px');
 
@@ -88,25 +89,40 @@ export const BadgeFilter = ({
 
       const nextCursor = result.data.next?.split('.com/')[1];
 
-      if (cursor !== nextCursor) {
+      if (cursor !== nextCursor || !isMounted.current) {
         setBadges(result?.data?.results);
         setCursor(nextCursor);
+        isMounted.current = true;
       }
     }, 500),
     [badgeIssuer, cursor]
   );
 
   React.useEffect(() => {
-    setBadges(badgeTypes as BadgeType[]);
-  }, [badgeTypes]);
+    const getCredentials = async () => {
+      const searchEndpoint = `search/badge-types/?query=''&issuer=${badgeIssuer}`;
+
+      const result = await axios.get(searchEndpoint);
+
+      const nextCursor = result.data.next?.split('.com/')[1];
+
+      if (cursor !== nextCursor) {
+        setBadges(result?.data?.results);
+        setCursor(nextCursor);
+      }
+    };
+
+    getCredentials();
+  }, [badgeIssuer]);
 
   React.useEffect(() => {
     const fetchMore = async () => {
       try {
-        let next =
-          cursor || searchTerm ? cursor : nextBadgeType?.split('.com/')[1];
+        // let next =
+        //   cursor || searchTerm ? cursor : 'nextBadgeType'?.split('.com/')[1];
 
-        const result = await axios.get(next);
+        // const result = await axios.get(next);
+        const result = await axios.get(cursor);
 
         const newCursor = result.data.next?.split('.com/')[1];
 
