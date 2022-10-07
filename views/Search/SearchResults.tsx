@@ -12,7 +12,7 @@ export const SearchResults = React.forwardRef<HTMLDivElement, Props>(
   ({ result }, ref) => {
     return (
       <ScrollLock>
-        <div className="my-6 h-[100px] grow overflow-y-auto">
+        <div className="mt-6 h-[100px] grow overflow-y-auto">
           <div className="m-1 h-fit space-y-4">
             <Talent result={result} />
             {result.length >= 20 && (

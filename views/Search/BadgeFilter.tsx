@@ -4,7 +4,7 @@ import ScrollLock from 'react-scrolllock';
 import debounce from 'lodash.debounce';
 import { motion } from 'framer-motion';
 
-import { Checkbox, Pill } from 'components';
+import { Button, Checkbox, Pill } from 'components';
 
 import {
   useBadgeTypes,
@@ -30,12 +30,14 @@ interface BadgeFilterProps {
     value: ValueOf<FilterState>
   ) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 export const BadgeFilter = ({
   selectedBadges,
   handleSelectBadge,
   handleGoBack,
+  handleApplyFilter,
 }: BadgeFilterProps) => {
   const containerRef = React.useRef(null!);
   const screenWidth = useScreenWidth();
@@ -77,12 +79,12 @@ export const BadgeFilter = ({
 
   const handleSearch = React.useCallback(
     debounce(async (nextValue) => {
-      const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
-      const searchEndpoint = `search/badge-types/?query=${nextValue}&issuer=${badgeIssuer}`;
+      // const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
+      const searchEndpoint = `search/badge-types/?query=${
+        nextValue ? nextValue : ''
+      }&issuer=${badgeIssuer}`;
 
-      const result = await axios.get(
-        nextValue ? searchEndpoint : badgeTypesEndpoint
-      );
+      const result = await axios.get(searchEndpoint);
 
       const nextCursor = result.data.next?.split('.com/')[1];
 
@@ -130,7 +132,7 @@ export const BadgeFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 pb-10 shadow-base md:h-[600px] md:w-[500px] lg:h-[400px]"
+      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base  md:h-[600px] md:w-[500px] md:pb-2 lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -228,9 +230,9 @@ export const BadgeFilter = ({
       </div>
 
       <ScrollLock>
-        <div className="flex overflow-y-auto">
+        <div className="flex grow overflow-y-auto">
           <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
-            {badges?.map((badge, index) => (
+            {badges?.map((badge) => (
               <li className="flex space-x-4" key={badge.id}>
                 <Checkbox
                   key={badge.id}
@@ -270,6 +272,17 @@ export const BadgeFilter = ({
           </ul>
         </div>
       </ScrollLock>
+
+      <div className="ml-auto flex space-x-4 pt-2">
+        <Button onClick={() => handleApplyFilter('badges')}>Apply</Button>
+
+        <Button
+          variant="secondary"
+          onClick={() => handleApplyFilter('badges', true)}
+        >
+          Reset
+        </Button>
+      </div>
     </motion.div>
   );
 };
