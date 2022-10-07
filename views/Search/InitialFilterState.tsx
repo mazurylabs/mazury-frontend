@@ -2,8 +2,6 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 
-import { Toggle } from 'components/Toggle';
-
 import { trayAnimation, fadeAnimation } from 'utils';
 import { useScreenWidth, useClickOutside } from 'hooks';
 import { FilterType } from 'types';

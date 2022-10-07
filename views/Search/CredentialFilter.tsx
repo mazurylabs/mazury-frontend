@@ -142,7 +142,7 @@ export const CredentialFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base  md:h-[600px] md:w-[500px] md:pb-2 lg:h-[400px]"
+      className="flex h-[604px] w-full !cursor-default flex-col rounded-t-3xl bg-white p-6 shadow-base md:h-[600px]  md:w-[500px] md:rounded-3xl md:pb-2 lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -181,49 +181,47 @@ export const CredentialFilter = ({
         </form>
       </div>
 
-      <ScrollLock>
-        <div className="flex grow overflow-y-auto">
-          <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
-            {badges?.map((badge) => (
-              <li className="flex space-x-4" key={badge.id}>
-                <Checkbox
-                  key={badge.id}
-                  label={
-                    <div className="w-full font-sans">
-                      <p className="flex w-full text-base font-medium text-indigoGray-90">
-                        <span className="">
-                          {truncateString(badge.title, 40)}
+      <div className="flex grow overflow-y-auto">
+        <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
+          {badges?.map((badge) => (
+            <li className="flex space-x-4" key={badge.id}>
+              <Checkbox
+                key={badge.id}
+                label={
+                  <div className="w-full font-sans">
+                    <p className="flex w-full text-base font-medium text-indigoGray-90">
+                      <span className="">
+                        {truncateString(badge.title, 40)}
+                      </span>
+                      <span className="opacity-0" role="presentation">
+                        i
+                      </span>
+                      {badge.total_supply && (
+                        <span className="text-indigoGray-40">
+                          ({commify(Number(badge.total_supply))})
                         </span>
-                        <span className="opacity-0" role="presentation">
-                          i
-                        </span>
-                        {badge.total_supply && (
-                          <span className="text-indigoGray-40">
-                            ({commify(Number(badge.total_supply))})
-                          </span>
-                        )}
-                      </p>
+                      )}
+                    </p>
 
-                      <p className="text-xs font-normal leading-[18px]">
-                        {truncateString(badge.description, 50)}
-                      </p>
-                    </div>
-                  }
-                  checked={selectedBadges.includes(badge.slug)}
-                  setChecked={() => handleBadge(badge.slug)}
-                  id={badge.id}
-                  outerClassName="shrink-0"
-                />
-              </li>
-            ))}
+                    <p className="text-xs font-normal leading-[18px]">
+                      {truncateString(badge.description, 50)}
+                    </p>
+                  </div>
+                }
+                checked={selectedBadges.includes(badge.slug)}
+                setChecked={() => handleBadge(badge.slug)}
+                id={badge.id}
+                outerClassName="shrink-0"
+              />
+            </li>
+          ))}
 
-            <li
-              className="h-[0.1px] w-full bg-transparent"
-              ref={intersectionRef}
-            />
-          </ul>
-        </div>
-      </ScrollLock>
+          <li
+            className="h-[0.1px] w-full bg-transparent"
+            ref={intersectionRef}
+          />
+        </ul>
+      </div>
 
       <div className="ml-auto flex space-x-4 pt-2">
         <Button
