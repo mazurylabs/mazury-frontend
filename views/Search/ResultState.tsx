@@ -341,21 +341,15 @@ export const ResultState = () => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isFiltersOpen && (
-          <motion.div
-            {...fadeAnimation}
-            role="dialog"
-            aria-modal={true}
-            aria-expanded={isFiltersOpen}
-            className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
-          >
-            <AnimatePresence>
-              {selectedFilterState[selectedFilter]}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isFiltersOpen && (
+        <div
+          {...fadeAnimation}
+          role="dialog"
+          className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
+        >
+          {selectedFilterState[selectedFilter]}
+        </div>
+      )}
 
       <div className="hidden pl-6 lg:block">
         <div className="flex">
