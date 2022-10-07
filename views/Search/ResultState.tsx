@@ -176,7 +176,7 @@ export const ResultState = () => {
   const resultStates = {
     loading: <LoadingState />,
     empty: <EmptyState />,
-    result: <SearchResults result={searchResults} ref={ref} />,
+    result: <></>,
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
