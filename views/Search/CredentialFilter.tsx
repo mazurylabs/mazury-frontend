@@ -1,6 +1,5 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
-import ScrollLock from 'react-scrolllock';
 import debounce from 'lodash.debounce';
 import { motion } from 'framer-motion';
 
@@ -142,7 +141,7 @@ export const CredentialFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[604px] w-full !cursor-default flex-col rounded-t-3xl bg-white p-6 shadow-base md:h-[600px]  md:w-[500px] md:rounded-3xl md:pb-2 lg:h-[400px]"
+      className="flex h-[604px] w-full flex-col rounded-t-3xl bg-white p-6 shadow-base md:h-[600px]  md:w-[500px] md:rounded-3xl md:pb-2 lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
