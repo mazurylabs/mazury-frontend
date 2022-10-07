@@ -257,7 +257,6 @@ export type BadgeIssuer =
   | '101';
 
 export type FilterType =
-  | 'Credentials'
   | 'Mazury badges'
   | 'POAP'
   | 'GitPOAP'

@@ -23,7 +23,6 @@ import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
 const filters = [
-  'Credentials',
   'Mazury badges',
   'POAP',
   'GitPOAP',
@@ -198,14 +197,6 @@ export const ResultState = () => {
           handleFilter('contactable', !filter.contactable)
         }
         isContactable={filter.contactable}
-      />
-    ),
-    Credentials: (
-      <BadgeFilter
-        handleSelectBadge={handleFilter}
-        handleGoBack={handleSelectFilter}
-        selectedBadges={filter.badges}
-        handleApplyFilter={handleApplyFilter}
       />
     ),
     'Mazury badges': (

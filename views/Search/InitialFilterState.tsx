@@ -14,7 +14,15 @@ interface Props {
   isContactable: boolean;
 }
 
-const filters: FilterType[] = ['Credentials', 'Roles', 'Referred skills'];
+const filters: FilterType[] = [
+  'Mazury badges',
+  'POAP',
+  'GitPOAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 export const InitialFilterState = ({
   handleFilterNavigation,
