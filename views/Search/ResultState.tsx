@@ -9,6 +9,7 @@ import { Toggle } from 'components/Toggle';
 
 import { LoadingState } from './LoadingState';
 import { BadgeFilter } from './BadgeFilter';
+import { CredentialFilter } from './CredentialFilter';
 import { ReferralFilter } from './ReferralFilter';
 import { RoleFilter } from './RoleFilter';
 import { SkillFilter } from './SkillFilter';
@@ -21,7 +22,16 @@ import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
-const filters = ['Credentials', 'Roles', 'Referred skills'];
+const filters = [
+  'Credentials',
+  'Mazury badges',
+  'POAP',
+  'GitPOAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
@@ -180,29 +190,6 @@ export const ResultState = () => {
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
-    Roles: (
-      <RoleFilter
-        selectedRole={filter.role}
-        handleSelect={handleFilter}
-        handleGoBack={handleSelectFilter}
-        handleApplyFilter={handleApplyFilter}
-      />
-    ),
-    'Number of referrals': (
-      <ReferralFilter
-        selectedReferrals={[]}
-        handleSelectReferral={() => {}}
-        handleGoBack={handleSelectFilter}
-      />
-    ),
-    'Referred skills': (
-      <SkillFilter
-        selectedSkills={filter.skills}
-        handleSelectSkill={handleFilter}
-        handleGoBack={handleSelectFilter}
-        handleApplyFilter={handleApplyFilter}
-      />
-    ),
     empty: (
       <InitialFilterState
         handleFilterNavigation={handleSelectFilter}
@@ -219,6 +206,69 @@ export const ResultState = () => {
         handleGoBack={handleSelectFilter}
         selectedBadges={filter.badges}
         handleApplyFilter={handleApplyFilter}
+      />
+    ),
+    'Mazury badges': (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'mazury'}
+      />
+    ),
+    POAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'poap'}
+      />
+    ),
+    GitPOAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'gitpoap'}
+      />
+    ),
+    Buildspace: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'buildspace'}
+      />
+    ),
+    Sismo: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'sismo'}
+      />
+    ),
+    '101': (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'101'}
+      />
+    ),
+    Kudos: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'kudos'}
       />
     ),
   };
@@ -316,13 +366,13 @@ export const ResultState = () => {
         )}
       </AnimatePresence>
 
-      <div className="hidden space-y-4 pl-6 lg:block">
+      <div className="hidden pl-6 lg:block">
         <div className="flex">
-          <ul className="flex space-x-[52.47px]">
+          <ul className="mb-6 flex space-x-8">
             {filters.map((filter) => (
               <li
                 key={filter}
-                className="relative flex cursor-pointer items-center space-x-2"
+                className="relative flex cursor-pointer items-center space-x-1"
                 onMouseEnter={() => handleSelectFilter(filter as FilterType)}
                 onMouseLeave={() => handleSelectFilter('empty')}
               >
@@ -358,21 +408,9 @@ export const ResultState = () => {
             </p>
           </div>
         </div>
-
-        <div
-          className="flex w-fit items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
-          onClick={() => handleFilter('contactable', !filter.contactable)}
-        >
-          <Toggle
-            isToggled={filter.contactable}
-            onToggle={handleContactable}
-            className="flex h-fit"
-          />
-          <span>Contactable</span>
-        </div>
       </div>
 
-      <div className="mt-[25.5px]">
+      <div className="mt-1">
         <ul className="flex flex-wrap gap-2">
           {getCredentialFromRoute('role') && (
             <li>

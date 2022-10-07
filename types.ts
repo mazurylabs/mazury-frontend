@@ -258,9 +258,13 @@ export type BadgeIssuer =
 
 export type FilterType =
   | 'Credentials'
-  | 'Roles'
-  | 'Referred skills'
-  | 'Number of referrals'
+  | 'Mazury badges'
+  | 'POAP'
+  | 'GitPOAP'
+  | 'Buildspace'
+  | 'Sismo'
+  | '101'
+  | 'Kudos'
   | 'empty';
 
 export interface FilterState {
