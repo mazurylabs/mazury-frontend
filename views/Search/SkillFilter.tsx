@@ -144,41 +144,39 @@ export const SkillFilter = ({
         </form>
       </div>
 
-      <ScrollLock>
-        <div className="flex grow overflow-y-auto">
-          <ul className="mt-7 grow space-y-8 overflow-x-hidden">
-            {skills?.map((skill, index) => (
-              <li className="flex space-x-4" key={skill.name + index}>
-                <Checkbox
-                  key={skill.name}
-                  label={
-                    <div className="w-full font-sans">
-                      <p className="flex w-full text-base font-medium text-indigoGray-90">
-                        <span>{skill.name}</span>
-                        {/* <span className="opacity-0" role="presentation">
+      <div className="flex grow overflow-y-auto">
+        <ul className="mt-7 grow space-y-8 overflow-x-hidden">
+          {skills?.map((skill, index) => (
+            <li className="flex space-x-4" key={skill.name + index}>
+              <Checkbox
+                key={skill.name}
+                label={
+                  <div className="w-full font-sans">
+                    <p className="flex w-full text-base font-medium text-indigoGray-90">
+                      <span>{skill.name}</span>
+                      {/* <span className="opacity-0" role="presentation">
                           i
                         </span>
                         <span className="text-indigoGray-40">
                           ({commify(Number(badge.total_supply))})
                         </span> */}
-                      </p>
-                    </div>
-                  }
-                  checked={selectedSkills.includes(skill.slug)}
-                  setChecked={() => handleSkill(skill.slug)}
-                  id={skill.name}
-                  outerClassName="shrink-0"
-                />
-              </li>
-            ))}
+                    </p>
+                  </div>
+                }
+                checked={selectedSkills.includes(skill.slug)}
+                setChecked={() => handleSkill(skill.slug)}
+                id={skill.name}
+                outerClassName="shrink-0"
+              />
+            </li>
+          ))}
 
-            <li
-              className="h-[0.1px] w-full bg-transparent"
-              ref={intersectionRef}
-            />
-          </ul>
-        </div>
-      </ScrollLock>
+          <li
+            className="h-[0.1px] w-full bg-transparent"
+            ref={intersectionRef}
+          />
+        </ul>
+      </div>
 
       <div className="ml-auto flex space-x-4 pt-2">
         <Button onClick={() => handleApplyFilter('skills')}>Apply</Button>
