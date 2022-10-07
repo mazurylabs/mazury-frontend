@@ -70,7 +70,7 @@ const Home: NextPage = () => {
   const isMobile = useMobile();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const { address, isAuthenticated } = useSelector(userSlice);
+  const { address, isAuthenticated, profile } = useSelector(userSlice);
   const { activity } = useActivity(address as string, apiParams);
   const { profiles } = useProfileSuggestions(address as string, apiParams);
   const [currentSearchState, setCurrentSearchState] =
@@ -410,7 +410,7 @@ const Home: NextPage = () => {
 
                 {isAuthenticated ? (
                   <a
-                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
+                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}`}
                     target="_blank"
                     rel="noreferrer"
                     className="grid w-[180px] place-items-center rounded-lg bg-indigo-600 py-2 text-center font-semibold text-indigo-50 shadow-sm"
@@ -438,7 +438,7 @@ const Home: NextPage = () => {
                     {Boolean(profiles) ? (
                       profiles?.map((suggestion, index) => (
                         <li key={index}>
-                          <Link href={`/people/${suggestion?.eth_address}`}>
+                          <Link href={`/people/${suggestion?.username}`}>
                             <a className="flex">
                               <Avatar
                                 src={suggestion.avatar}

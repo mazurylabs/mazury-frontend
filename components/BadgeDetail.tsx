@@ -356,19 +356,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
               </motion.div>
             )}
 
-            {variant.includes('poap') && externalLinks && (
-              <div>
-                <motion.a
-                  rel="noreferrer"
-                  href={externalLinks}
-                  target="_blank"
-                  className="text-red-200"
-                >
-                  See on Poap
-                </motion.a>
-              </div>
-            )}
-
             {isNewlyMinted && (
               <div>
                 <Button
@@ -451,6 +438,29 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <SVG src={`/icons/link.svg`} height={16} width={16} />
                   </div>
                 </button>
+                {(variant.includes('poap') || variant === 'kudos') &&
+                  externalLinks && (
+                    <div>
+                      <motion.a
+                        rel="noreferrer"
+                        href={externalLinks}
+                        target="_blank"
+                        className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20
+                  "
+                      >
+                        {variant.includes('poap') ? (
+                          <SVG
+                            src={`/icons/poap.svg`}
+                            height={16}
+                            width={16}
+                            className="m-2"
+                          />
+                        ) : (
+                          <span>🎉</span>
+                        )}
+                      </motion.a>
+                    </div>
+                  )}
                 {openseaUrl && (
                   <a
                     href={openseaUrl}
@@ -477,7 +487,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 )}
                 <button
                   type="button"
-                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
                   onClick={() => handleSearch(slug)}
                 >
                   <div className="flex">
