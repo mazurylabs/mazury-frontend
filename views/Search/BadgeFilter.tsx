@@ -100,7 +100,7 @@ export const BadgeFilter = ({
 
   React.useEffect(() => {
     const getCredentials = async () => {
-      const searchEndpoint = `search/badge-types/?query=''&issuer=${badgeIssuer}`;
+      const searchEndpoint = `search/badge-types/?query=&issuer=${badgeIssuer}`;
 
       const result = await axios.get(searchEndpoint);
 
@@ -290,13 +290,18 @@ export const BadgeFilter = ({
       </ScrollLock>
 
       <div className="ml-auto flex space-x-4 pt-2">
-        <Button onClick={() => handleApplyFilter('badges')}>Apply</Button>
-
         <Button
           variant="secondary"
           onClick={() => handleApplyFilter('badges', true)}
+          className="lg:py-0.5"
         >
           Reset
+        </Button>
+        <Button
+          onClick={() => handleApplyFilter('badges')}
+          className="lg:py-0.5"
+        >
+          Apply
         </Button>
       </div>
     </motion.div>
