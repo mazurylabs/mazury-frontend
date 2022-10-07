@@ -379,9 +379,7 @@ export const ResultState = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className={clsx(
-                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl',
-                        selectedFilter === 'Number of referrals' &&
-                          'h-[136px] w-[260px]'
+                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
                       )}
                     >
                       {selectedFilterState[selectedFilter]}
