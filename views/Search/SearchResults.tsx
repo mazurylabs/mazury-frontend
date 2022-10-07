@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ScrollLock from 'react-scrolllock';
+import { TouchScrollable } from 'react-scrolllock';
 
 import { Profile } from 'types';
 import { Talent } from './Talent';
@@ -11,7 +11,7 @@ interface Props {
 export const SearchResults = React.forwardRef<HTMLDivElement, Props>(
   ({ result }, ref) => {
     return (
-      <ScrollLock>
+      <TouchScrollable>
         <div className="mt-6 h-[100px] grow overflow-y-auto">
           <div className="m-1 h-fit space-y-4">
             <Talent result={result} />
@@ -20,7 +20,7 @@ export const SearchResults = React.forwardRef<HTMLDivElement, Props>(
             )}
           </div>
         </div>
-      </ScrollLock>
+      </TouchScrollable>
     );
   }
 );

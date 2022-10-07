@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
-import ScrollLock from 'react-scrolllock';
+import { TouchScrollable } from 'react-scrolllock';
 import debounce from 'lodash.debounce';
 import { truncateString } from 'utils';
 
@@ -549,11 +549,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                       </div>
                     </div>
 
-                    <ScrollLock>
+                    <TouchScrollable>
                       <div className="pt-2">
                         {badgeModalStates[currentModalStep]}
                       </div>
-                    </ScrollLock>
+                    </TouchScrollable>
                   </motion.div>
                 </>
               )}

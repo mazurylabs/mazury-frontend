@@ -2,7 +2,7 @@ import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 import Image from 'next/image';
-import ScrollLock from 'react-scrolllock';
+import { TouchScrollable } from 'react-scrolllock';
 import { useRouter } from 'next/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useContractEvent } from 'wagmi';
@@ -212,7 +212,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
         </Button>
       </div>
 
-      <ScrollLock>
+      <TouchScrollable>
         <div className="flex grow flex-col lg:flex-row lg:items-center">
           <div
             className={`flex grow items-center justify-center lg:max-w-[45%] `}
@@ -494,7 +494,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             </div>
           </div>
         </div>
-      </ScrollLock>
+      </TouchScrollable>
     </motion.div>
   );
 
@@ -516,7 +516,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
         </Button>
       </div>
 
-      <ScrollLock>
+      <TouchScrollable>
         <div className="flex grow flex-col lg:flex-row lg:items-center">
           <div className="flex grow items-center justify-center lg:max-w-[45%]">
             <div className="relative">
@@ -567,7 +567,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             </div>
           </div>
         </div>
-      </ScrollLock>
+      </TouchScrollable>
     </motion.div>
   );
 
@@ -578,7 +578,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       exit={{ opacity: 0 }}
       className="flex h-[450px] flex-col space-y-6 px-6 pb-6 sm:h-[728px] lg:h-full lg:p-6"
     >
-      <ScrollLock>
+      <TouchScrollable>
         <div className="mt-6 flex grow flex-col">
           <div className="space-y-2">
             <h2 className="font-demi text-3xl text-indigoGray-90">
@@ -612,7 +612,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
             )}
           </div>
         </div>
-      </ScrollLock>
+      </TouchScrollable>
     </motion.div>
   );
 
