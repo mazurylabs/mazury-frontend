@@ -43,6 +43,14 @@ const FilterTag: React.FC<{ label: string; handleClose: () => void }> = ({
   );
 };
 
+const initialFilterState = {
+  query: '',
+  badges: [],
+  skills: [],
+  role: '',
+  contactable: false,
+};
+
 export const ResultState = () => {
   const [cursor, setCursor] = React.useState('');
   const { ref, entry } = useIntersect({ rootMargin: '50px' });
@@ -55,41 +63,64 @@ export const ResultState = () => {
   const [selectedFilter, setSelectedFilter] =
     React.useState<FilterType>('empty');
 
-  const [filter, setFilter] = React.useState<FilterState>({
-    query: '',
-    badges: [],
-    skills: [],
-    role: '',
-    contactable: false,
-  });
+  const [filter, setFilter] = React.useState<FilterState>(initialFilterState);
 
   const handleFilter = (
     key: keyof FilterState,
     value: ValueOf<FilterState>
   ) => {
-    let params = router.query;
+    // let params = router.query;
     if (key !== 'query') {
       setFilter((filter) => {
         return { ...filter, [key]: value };
       });
-
-      router.push(
-        {
-          pathname: '/search',
-          query: {
-            ...params,
-            [key]:
-              key === 'role' || key === 'contactable'
-                ? value
-                : (value as any).join(';'),
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
     }
+  };
+
+  const handleApplyFilter = (
+    key: keyof FilterState,
+    reset?: boolean,
+    value?: ValueOf<FilterState>
+  ) => {
+    const params = router.query;
+
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          ...params,
+          [key]: reset
+            ? initialFilterState[key]
+            : key === 'contactable'
+            ? value
+            : value && Array.isArray(value)
+            ? value.join(';')
+            : key === 'role'
+            ? filter[key]
+            : (filter[key] as any).join(';'),
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
 
     handleSearch(router.asPath);
+  };
+
+  const handleContactable = () => {
+    handleFilter('contactable', !filter.contactable);
+    handleApplyFilter('contactable', false, !filter.contactable);
+  };
+
+  const getCredentialFromRoute = (key: keyof FilterState) => {
+    let credential = router.query[key] as string;
+    const isArrayType = key === 'badges' || key === 'skills';
+
+    if (credential && isArrayType) {
+      return credential?.split(';');
+    }
+
+    return credential;
   };
 
   const handleSearch = React.useCallback(
@@ -154,6 +185,7 @@ export const ResultState = () => {
         selectedRole={filter.role}
         handleSelect={handleFilter}
         handleGoBack={handleSelectFilter}
+        handleApplyFilter={handleApplyFilter}
       />
     ),
     'Number of referrals': (
@@ -168,6 +200,7 @@ export const ResultState = () => {
         selectedSkills={filter.skills}
         handleSelectSkill={handleFilter}
         handleGoBack={handleSelectFilter}
+        handleApplyFilter={handleApplyFilter}
       />
     ),
     empty: (
@@ -185,6 +218,7 @@ export const ResultState = () => {
         handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}
         selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
       />
     ),
   };
@@ -242,6 +276,9 @@ export const ResultState = () => {
 
     populateFiltersFromRoute();
   }, []);
+
+  const routeBadges = getCredentialFromRoute('badges') as string[];
+  const routeSkills = getCredentialFromRoute('skills') as string[];
 
   return (
     <div className="mt-5 flex w-full flex-col lg:mt-6">
@@ -328,7 +365,7 @@ export const ResultState = () => {
         >
           <Toggle
             isToggled={filter.contactable}
-            onToggle={() => handleFilter('contactable', !filter.contactable)}
+            onToggle={handleContactable}
             className="flex h-fit"
           />
           <span>Contactable</span>
@@ -337,49 +374,58 @@ export const ResultState = () => {
 
       <div className="mt-[25.5px]">
         <ul className="flex flex-wrap gap-2">
-          {filter.role && (
+          {getCredentialFromRoute('role') && (
             <li>
               <FilterTag
-                label={filter.role}
-                handleClose={() => handleFilter('role', '')}
+                label={getCredentialFromRoute('role') as string}
+                handleClose={() => handleApplyFilter('role', true)}
               />
             </li>
           )}
 
-          <>
-            {filter.badges.map((badge, index) => {
-              const updatedBadges = filter.badges.filter(
-                (item) => item !== badge
-              );
-              return (
-                <li>
-                  <FilterTag
-                    key={index + badge}
-                    label={badge}
-                    handleClose={() => handleFilter('badges', updatedBadges)}
-                  />
-                </li>
-              );
-            })}
-          </>
+          {routeBadges && (
+            <>
+              {routeBadges?.map((badge, index) => {
+                const updatedBadges = routeBadges?.filter(
+                  (item) => item !== badge
+                );
 
-          <>
-            {filter.skills.map((skill, index) => {
-              const updatedSkills = filter.skills.filter(
-                (item) => item !== skill
-              );
+                return (
+                  <li>
+                    <FilterTag
+                      key={index + badge}
+                      label={badge}
+                      handleClose={() =>
+                        handleApplyFilter('badges', false, updatedBadges)
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </>
+          )}
 
-              return (
-                <li>
-                  <FilterTag
-                    key={index + skill}
-                    label={skill}
-                    handleClose={() => handleFilter('skills', updatedSkills)}
-                  />
-                </li>
-              );
-            })}
-          </>
+          {routeSkills && (
+            <>
+              {routeSkills?.map((skill, index) => {
+                const updatedSkills = routeSkills?.filter(
+                  (item) => item !== skill
+                );
+
+                return (
+                  <li>
+                    <FilterTag
+                      key={index + skill}
+                      label={skill}
+                      handleClose={() =>
+                        handleApplyFilter('skills', false, updatedSkills)
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </>
+          )}
 
           {/* {filter.contactable && <li>{filter.contactable}</li>} */}
         </ul>
