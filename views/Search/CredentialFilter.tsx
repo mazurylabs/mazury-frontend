@@ -2,6 +2,7 @@ import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import debounce from 'lodash.debounce';
 import { motion } from 'framer-motion';
+import { TouchScrollable } from 'react-scrolllock';
 
 import { Button, Checkbox, Pill } from 'components';
 
@@ -181,45 +182,47 @@ export const CredentialFilter = ({
       </div>
 
       <div className="flex grow overflow-y-auto">
-        <ul className="mt-7 grow space-y-5 overflow-x-hidden lg:mt-2">
-          {badges?.map((badge) => (
-            <li className="flex space-x-4" key={badge.id}>
-              <Checkbox
-                key={badge.id}
-                label={
-                  <div className="w-full font-sans">
-                    <p className="flex w-full text-base font-medium text-indigoGray-90">
-                      <span className="">
-                        {truncateString(badge.title, 40)}
-                      </span>
-                      <span className="opacity-0" role="presentation">
-                        i
-                      </span>
-                      {badge.total_supply && (
-                        <span className="text-indigoGray-40">
-                          ({commify(Number(badge.total_supply))})
+        <TouchScrollable>
+          <ul className="mt-7 grow space-y-5 overflow-x-hidden lg:mt-2">
+            {badges?.map((badge) => (
+              <li className="flex space-x-4" key={badge.id}>
+                <Checkbox
+                  key={badge.id}
+                  label={
+                    <div className="w-full font-sans">
+                      <p className="flex w-full text-base font-medium text-indigoGray-90">
+                        <span className="">
+                          {truncateString(badge.title, 40)}
                         </span>
-                      )}
-                    </p>
+                        <span className="opacity-0" role="presentation">
+                          i
+                        </span>
+                        {badge.total_supply && (
+                          <span className="text-indigoGray-40">
+                            ({commify(Number(badge.total_supply))})
+                          </span>
+                        )}
+                      </p>
 
-                    <p className="text-xs font-normal leading-[18px]">
-                      {truncateString(badge.description, 50)}
-                    </p>
-                  </div>
-                }
-                checked={selectedBadges.includes(badge.slug)}
-                setChecked={() => handleBadge(badge.slug)}
-                id={badge.id}
-                outerClassName="shrink-0"
-              />
-            </li>
-          ))}
+                      <p className="text-xs font-normal leading-[18px]">
+                        {truncateString(badge.description, 50)}
+                      </p>
+                    </div>
+                  }
+                  checked={selectedBadges.includes(badge.slug)}
+                  setChecked={() => handleBadge(badge.slug)}
+                  id={badge.id}
+                  outerClassName="shrink-0"
+                />
+              </li>
+            ))}
 
-          <li
-            className="h-[0.1px] w-full bg-transparent"
-            ref={intersectionRef}
-          />
-        </ul>
+            <li
+              className="h-[0.1px] w-full bg-transparent"
+              ref={intersectionRef}
+            />
+          </ul>
+        </TouchScrollable>
       </div>
 
       <div className="ml-auto flex space-x-4 pt-2">
