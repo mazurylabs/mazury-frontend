@@ -181,7 +181,7 @@ export const CredentialFilter = ({
       </div>
 
       <div className="flex grow overflow-y-auto">
-        <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
+        <ul className="mt-7 grow space-y-5 overflow-x-hidden lg:mt-2">
           {badges?.map((badge) => (
             <li className="flex space-x-4" key={badge.id}>
               <Checkbox
