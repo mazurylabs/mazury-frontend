@@ -64,6 +64,8 @@ export interface BadgeType {
   poap_badge_extra_data?: any;
   openseaUrl?: string;
   rainbowUrl?: string;
+  poapUrl?: string;
+  kudosUrl?: string;
 }
 
 export interface Badge {

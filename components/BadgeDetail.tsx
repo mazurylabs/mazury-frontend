@@ -40,6 +40,8 @@ interface BadgeDetailProps {
   owner: string;
   openseaUrl?: string;
   rainbowUrl?: string;
+  poapUrl?: string;
+  kudosUrl?: string;
   externalLinks?: string;
 }
 
@@ -113,6 +115,8 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   owner,
   openseaUrl,
   rainbowUrl,
+  poapUrl,
+  kudosUrl,
   externalLinks,
 }) => {
   const router = useRouter();
@@ -438,29 +442,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <SVG src={`/icons/link.svg`} height={16} width={16} />
                   </div>
                 </button>
-                {(variant.includes('poap') || variant === 'kudos') &&
-                  externalLinks && (
-                    <div>
-                      <motion.a
-                        rel="noreferrer"
-                        href={externalLinks}
-                        target="_blank"
-                        className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20
-                  "
-                      >
-                        {variant.includes('poap') ? (
-                          <SVG
-                            src={`/icons/poap.svg`}
-                            height={16}
-                            width={16}
-                            className="m-2"
-                          />
-                        ) : (
-                          <span>🎉</span>
-                        )}
-                      </motion.a>
-                    </div>
-                  )}
                 {openseaUrl && (
                   <a
                     href={openseaUrl}
@@ -483,6 +464,28 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <div className="flex">
                       <SVG src={`/icons/rainbow.svg`} height={16} width={16} />
                     </div>
+                  </a>
+                )}
+                {poapUrl && (
+                  <a
+                    href={poapUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20"
+                  >
+                    <div className="flex">
+                      <SVG src={`/icons/poap.svg`} height={16} width={16} />
+                    </div>
+                  </a>
+                )}
+                {kudosUrl && (
+                  <a
+                    href={kudosUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20"
+                  >
+                    <span>🎉</span>
                   </a>
                 )}
                 <button

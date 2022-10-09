@@ -913,6 +913,12 @@ const Profile: React.FC<Props> = ({ address }) => {
                       rainbowUrl={
                         sharedCredential?.external_links.rainbowUrl as string
                       }
+                      poapUrl={
+                        sharedCredential?.external_links.poapUrl as string
+                      }
+                      kudosUrl={
+                        sharedCredential?.external_links.kudosUrl as string
+                      }
                     />
                   )}
 
@@ -937,7 +943,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       slug,
                     } = badge_type;
 
-                    const { opensea, rainbow } = external_links;
+                    const { opensea, rainbow, poap, kudos } = external_links;
 
                     return (
                       <BadgePreview
@@ -961,6 +967,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                         openseaUrl={opensea}
                         rainbowUrl={rainbow}
+                        poapUrl={poap}
+                        kudosUrl={kudos}
                         externalLink={external_links[issuer.name]}
                       />
                     );

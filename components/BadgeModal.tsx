@@ -159,6 +159,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
         const badgeInfo = badge.badge_type;
         badgeInfo['openseaUrl'] = badge.external_links.opensea;
         badgeInfo['rainbowUrl'] = badge.external_links.rainbow;
+        badgeInfo['poapUrl'] = badge.external_links.opensea;
+        badgeInfo['kudosUrl'] = badge.external_links.rainbow;
 
         return badgeInfo;
       });
@@ -391,6 +393,8 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
                   owner="You"
                   openseaUrl={showBadgeDetails.openseaUrl}
                   rainbowUrl={showBadgeDetails.rainbowUrl}
+                  poapUrl={showBadgeDetails.poapUrl}
+                  kudosUrl={showBadgeDetails.kudosUrl}
                 />
               )}
 
