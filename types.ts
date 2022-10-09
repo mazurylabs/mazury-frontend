@@ -143,6 +143,7 @@ export interface Profile
   email_verified?: boolean;
   website: string;
   full_name?: string;
+  credentials_count?: number;
 }
 
 export interface ListResponse<T> {

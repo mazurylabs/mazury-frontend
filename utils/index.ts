@@ -238,6 +238,7 @@ export const getRoles = (data: Profile, query: ParsedUrlQuery) => {
 export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
   let badges = data.map((badge) => {
     const title = badge.badge_type.title;
+    const image = badge.badge_type.image;
     const hightlighted =
       (query?.badges as string)?.slice(1)?.split('_')?.join(' ') ===
       title.toLowerCase();
@@ -245,10 +246,11 @@ export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
     return {
       title,
       hightlighted,
+      image,
     };
   });
 
-  const validBadges = badges.slice(0, 2);
+  const validBadges = badges.slice(0, 3);
   let remainder = validBadges.length - 2;
 
   return { badges: validBadges, remainder: remainder < 1 ? 0 : remainder };
