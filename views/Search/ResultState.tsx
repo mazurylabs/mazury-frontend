@@ -351,7 +351,7 @@ export const ResultState = () => {
         </div>
       )}
 
-      <div className="mb-4 hidden pl-6 lg:block">
+      <div className="mb-4 hidden pl-4 lg:block">
         <div className="mb-2 flex items-center">
           <ul className="flex space-x-8">
             {filters.map((filter) => (
@@ -384,12 +384,12 @@ export const ResultState = () => {
             ))}
           </ul>
           <a
-            className="ml-10 hidden text-sm font-light underline xl:block"
+            className="ml-10 hidden text-sm font-light underline 2xl:block"
             rel="noreferrer"
             target="_blank"
-            href="https://mazury.notion.site/dc8386a5dbab4bd387feb4a73488e6cb?v=4ea3ddb4c6084e3690bb62155abcf899"
+            href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773"
           >
-            Learn how use our search
+            Learn how to scout talent using Mazury Search
           </a>
 
           <div className="ml-auto">
@@ -400,12 +400,12 @@ export const ResultState = () => {
           </div>
         </div>
         <a
-          className="text-sm font-light underline xl:hidden"
+          className="text-sm font-light underline 2xl:hidden"
           rel="noreferrer"
           target="_blank"
-          href="https://mazury.notion.site/dc8386a5dbab4bd387feb4a73488e6cb?v=4ea3ddb4c6084e3690bb62155abcf899"
+          href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773"
         >
-          Learn how use our search
+          Learn how to scout talent using Mazury Search
         </a>
       </div>
 
