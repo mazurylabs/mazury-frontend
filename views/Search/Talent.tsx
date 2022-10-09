@@ -116,7 +116,7 @@ export const Talent = ({ result }: Props) => {
                       ))}
 
                       {(result.credentials_count as number) > 3 && (
-                        <p className="text-xs font-medium text-gray-700">
+                        <p className="pl-2 text-xs font-medium text-gray-700">
                           and {(result.credentials_count as number) - 3} more
                         </p>
                       )}
@@ -127,12 +127,15 @@ export const Talent = ({ result }: Props) => {
                     </p>
                   )}
                 </div>
-                <div className="hidden items-center space-x-3 lg:ml-auto lg:flex">
-                  {(Boolean(result.twitter) ||
-                    Boolean(result.website) ||
-                    Boolean(result.github)) && (
-                    <div className="mx-[15px] h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05]" />
-                  )}
+                <div className="hidden w-24 items-center space-x-3 lg:ml-auto lg:flex">
+                  <div className="mr-1 h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05]" />
+                  {!Boolean(result.twitter) &&
+                    !Boolean(result.website) &&
+                    !Boolean(result.github) && (
+                      <p className="text-xs font-medium text-gray-700">
+                        No socials
+                      </p>
+                    )}
                   {Boolean(result.twitter) && <FaTwitter />}
                   {Boolean(result.website) && <FaGlobe />}
                   {Boolean(result.github) && <FaGithub />}
