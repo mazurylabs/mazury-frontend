@@ -501,7 +501,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </p>
 
                 <div
-                  className={`no-scrollbar w-full gap-6 overflow-x-scroll md:overflow-auto ${
+                  className={`no-scrollbar hidden w-full gap-6 overflow-x-scroll md:flex md:overflow-auto ${
                     shouldCollapseHeader ? 'hidden' : 'flex'
                   }`}
                 >
@@ -913,11 +913,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                       rainbowUrl={
                         sharedCredential?.external_links.rainbowUrl as string
                       }
+                      poapUrl={
+                        sharedCredential?.external_links.poapUrl as string
+                      }
+                      kudosUrl={
+                        sharedCredential?.external_links.kudosUrl as string
+                      }
                     />
                   )}
 
                 {badges && badges.length > 0 ? (
                   badges.map((badge) => {
+                    //pass here
                     const {
                       badge_type,
                       id,
@@ -936,7 +943,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       slug,
                     } = badge_type;
 
-                    const { opensea, rainbow } = external_links;
+                    const { opensea, rainbow, poap, kudos } = external_links;
 
                     return (
                       <BadgePreview
@@ -960,6 +967,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                         openseaUrl={opensea}
                         rainbowUrl={rainbow}
+                        poapUrl={poap}
+                        kudosUrl={kudos}
+                        externalLink={external_links[issuer.name]}
                       />
                     );
                   })

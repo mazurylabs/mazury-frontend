@@ -1,8 +1,8 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
-import ScrollLock from 'react-scrolllock';
 import debounce from 'lodash.debounce';
 import { motion } from 'framer-motion';
+import { TouchScrollable } from 'react-scrolllock';
 
 import { Button, Checkbox, Pill } from 'components';
 
@@ -31,20 +31,21 @@ interface BadgeFilterProps {
   ) => void;
   handleGoBack: (filter: FilterType) => void;
   handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
+  credentialName: string;
 }
 
-export const BadgeFilter = ({
+export const CredentialFilter = ({
   selectedBadges,
   handleSelectBadge,
   handleGoBack,
   handleApplyFilter,
+  credentialName,
 }: BadgeFilterProps) => {
   const isMounted = React.useRef(false);
   const containerRef = React.useRef(null!);
   const screenWidth = useScreenWidth();
   useClickOutside(containerRef, () => handleGoBack('empty'));
 
-  const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer>('mazury');
   const [badges, setBadges] = React.useState<BadgeType[]>([]);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [cursor, setCursor] = React.useState('');
@@ -55,13 +56,6 @@ export const BadgeFilter = ({
 
   const variants =
     screenWidth > 768 ? {} : screenWidth <= 640 ? trayAnimation : fadeAnimation;
-
-  const handleBadgeIssuer = (issuer: BadgeIssuer) => {
-    setCursor('');
-    setSearchTerm('');
-    setBadges([]);
-    setBadgeIssuer(issuer);
-  };
 
   const handleBadge = (slug: string) => {
     if (selectedBadges.includes(slug)) {
@@ -83,7 +77,7 @@ export const BadgeFilter = ({
       // const badgeTypesEndpoint = `badge_types?issuer=${badgeIssuer}`;
       const searchEndpoint = `search/badge-types/?query=${
         nextValue ? nextValue : ''
-      }&issuer=${badgeIssuer}`;
+      }&issuer=${credentialName}`;
 
       const result = await axios.get(searchEndpoint);
 
@@ -95,12 +89,12 @@ export const BadgeFilter = ({
         isMounted.current = true;
       }
     }, 500),
-    [badgeIssuer, cursor]
+    [cursor]
   );
 
   React.useEffect(() => {
     const getCredentials = async () => {
-      const searchEndpoint = `search/badge-types/?query=&issuer=${badgeIssuer}`;
+      const searchEndpoint = `search/badge-types/?query=&issuer=${credentialName}`;
 
       const result = await axios.get(searchEndpoint);
 
@@ -113,7 +107,7 @@ export const BadgeFilter = ({
     };
 
     getCredentials();
-  }, [badgeIssuer]);
+  }, [credentialName]);
 
   React.useEffect(() => {
     const fetchMore = async () => {
@@ -140,7 +134,7 @@ export const BadgeFilter = ({
     if (shouldFetchBadge) {
       fetchMore();
     }
-  }, [shouldFetchBadge, badgeIssuer]);
+  }, [shouldFetchBadge, credentialName]);
 
   return (
     <motion.div
@@ -148,7 +142,7 @@ export const BadgeFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[604px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base  md:h-[600px] md:w-[500px] md:pb-2 lg:h-[400px]"
+      className="flex h-[604px] w-full flex-col rounded-t-3xl bg-white p-6 shadow-base md:h-[600px] md:w-[500px] md:rounded-3xl md:pb-2 lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -160,12 +154,12 @@ export const BadgeFilter = ({
             <SVG src="/icons/back.svg" height={24} width={24} />
           </div>
           <span className="font-sans text-xl font-medium leading-[30px] text-indigoGray-90">
-            Badges
+            Credentials
           </span>
         </button>
       </div>
 
-      <div>
+      <div className="mb-2">
         <form
           className="flex h-12 w-full items-center space-x-[18px] rounded-lg bg-indigoGray-5 py-2 pl-[14px] pr-2"
           onSubmit={(event) => event.preventDefault()}
@@ -187,67 +181,9 @@ export const BadgeFilter = ({
         </form>
       </div>
 
-      <div className="mt-6 h-fit w-full space-y-2">
-        <div className="flex h-fit w-fit space-x-[24px]">
-          <Pill
-            label={<span>Mazury badges </span>}
-            active={badgeIssuer === 'mazury'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('mazury')}
-          />
-          <Pill
-            label={<span>POAPs</span>}
-            active={badgeIssuer === 'poap'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('poap')}
-          />
-          <Pill
-            label={<span>GitPOAP</span>}
-            active={badgeIssuer === 'gitpoap'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('gitpoap')}
-          />
-          <Pill
-            label={<span>Buildspace</span>}
-            active={badgeIssuer === 'buildspace'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('buildspace')}
-          />
-        </div>
-
-        <div className="flex h-fit w-fit space-x-[24px]">
-          <Pill
-            label={<span>Sismo</span>}
-            active={badgeIssuer === 'sismo'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('sismo')}
-          />
-          <Pill
-            label={<span>101</span>}
-            active={badgeIssuer === '101'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('101')}
-          />
-
-          <Pill
-            label={<span>Kudos</span>}
-            active={badgeIssuer === 'kudos'}
-            color="fuchsia"
-            className="h-fit w-fit shrink-0"
-            onClick={() => handleBadgeIssuer('kudos')}
-          />
-        </div>
-      </div>
-
-      <ScrollLock>
-        <div className="flex grow overflow-y-auto">
-          <ul className="mt-7 grow space-y-8 overflow-x-hidden lg:mt-2">
+      <div className="flex grow overflow-y-auto">
+        <TouchScrollable>
+          <ul className="mt-7 grow space-y-5 overflow-x-hidden lg:mt-2">
             {badges?.map((badge) => (
               <li className="flex space-x-4" key={badge.id}>
                 <Checkbox
@@ -286,8 +222,8 @@ export const BadgeFilter = ({
               ref={intersectionRef}
             />
           </ul>
-        </div>
-      </ScrollLock>
+        </TouchScrollable>
+      </div>
 
       <div className="ml-auto flex space-x-4 pt-2">
         <Button

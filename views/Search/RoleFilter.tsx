@@ -5,11 +5,13 @@ import clsx from 'clsx';
 import { useScreenWidth } from 'hooks';
 import { FilterState, FilterType, TrimmedRole, ValueOf } from 'types';
 import { fadeAnimation, trayAnimation } from 'utils';
+import { Button } from '@/components';
 
 interface RoleFilterProps {
   selectedRole: string;
   handleSelect: (key: keyof FilterState, value: ValueOf<FilterState>) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 // type Role = Omit<TrimmedRole, 'community_manager'>;
@@ -38,6 +40,7 @@ export const RoleFilter = ({
   handleGoBack,
   handleSelect,
   selectedRole,
+  handleApplyFilter,
 }: RoleFilterProps) => {
   const screenWidth = useScreenWidth();
 
@@ -61,7 +64,7 @@ export const RoleFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[434px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base md:h-[434px] md:w-[500px] lg:h-[375px]"
+      className="flex h-[470px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base md:w-[500px] md:pb-2 lg:h-fit"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -112,6 +115,17 @@ export const RoleFilter = ({
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className="ml-auto flex space-x-4 pt-2">
+        <Button onClick={() => handleApplyFilter('role')}>Apply</Button>
+
+        <Button
+          variant="secondary"
+          onClick={() => handleApplyFilter('role', true)}
+        >
+          Reset
+        </Button>
       </div>
     </motion.div>
   );

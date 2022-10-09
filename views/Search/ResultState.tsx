@@ -9,6 +9,7 @@ import { Toggle } from 'components/Toggle';
 
 import { LoadingState } from './LoadingState';
 import { BadgeFilter } from './BadgeFilter';
+import { CredentialFilter } from './CredentialFilter';
 import { ReferralFilter } from './ReferralFilter';
 import { RoleFilter } from './RoleFilter';
 import { SkillFilter } from './SkillFilter';
@@ -21,7 +22,15 @@ import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
-const filters = ['Credentials', 'Roles', 'Referred skills'];
+const filters = [
+  'Mazury',
+  'POAP',
+  'GitPOAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
@@ -43,6 +52,14 @@ const FilterTag: React.FC<{ label: string; handleClose: () => void }> = ({
   );
 };
 
+const initialFilterState = {
+  query: '',
+  badges: [],
+  skills: [],
+  role: '',
+  contactable: false,
+};
+
 export const ResultState = () => {
   const [cursor, setCursor] = React.useState('');
   const { ref, entry } = useIntersect({ rootMargin: '50px' });
@@ -55,41 +72,64 @@ export const ResultState = () => {
   const [selectedFilter, setSelectedFilter] =
     React.useState<FilterType>('empty');
 
-  const [filter, setFilter] = React.useState<FilterState>({
-    query: '',
-    badges: [],
-    skills: [],
-    role: '',
-    contactable: false,
-  });
+  const [filter, setFilter] = React.useState<FilterState>(initialFilterState);
 
   const handleFilter = (
     key: keyof FilterState,
     value: ValueOf<FilterState>
   ) => {
-    let params = router.query;
+    // let params = router.query;
     if (key !== 'query') {
       setFilter((filter) => {
         return { ...filter, [key]: value };
       });
-
-      router.push(
-        {
-          pathname: '/search',
-          query: {
-            ...params,
-            [key]:
-              key === 'role' || key === 'contactable'
-                ? value
-                : (value as any).join(';'),
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
     }
+  };
+
+  const handleApplyFilter = (
+    key: keyof FilterState,
+    reset?: boolean,
+    value?: ValueOf<FilterState>
+  ) => {
+    const params = router.query;
+
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          ...params,
+          [key]: reset
+            ? initialFilterState[key]
+            : key === 'contactable'
+            ? value
+            : value && Array.isArray(value)
+            ? value.join(';')
+            : key === 'role'
+            ? filter[key]
+            : (filter[key] as any).join(';'),
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
 
     handleSearch(router.asPath);
+  };
+
+  const handleContactable = () => {
+    handleFilter('contactable', !filter.contactable);
+    handleApplyFilter('contactable', false, !filter.contactable);
+  };
+
+  const getCredentialFromRoute = (key: keyof FilterState) => {
+    let credential = router.query[key] as string;
+    const isArrayType = key === 'badges' || key === 'skills';
+
+    if (credential && isArrayType) {
+      return credential?.split(';');
+    }
+
+    return credential;
   };
 
   const handleSearch = React.useCallback(
@@ -149,27 +189,6 @@ export const ResultState = () => {
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
-    Roles: (
-      <RoleFilter
-        selectedRole={filter.role}
-        handleSelect={handleFilter}
-        handleGoBack={handleSelectFilter}
-      />
-    ),
-    'Number of referrals': (
-      <ReferralFilter
-        selectedReferrals={[]}
-        handleSelectReferral={() => {}}
-        handleGoBack={handleSelectFilter}
-      />
-    ),
-    'Referred skills': (
-      <SkillFilter
-        selectedSkills={filter.skills}
-        handleSelectSkill={handleFilter}
-        handleGoBack={handleSelectFilter}
-      />
-    ),
     empty: (
       <InitialFilterState
         handleFilterNavigation={handleSelectFilter}
@@ -180,11 +199,67 @@ export const ResultState = () => {
         isContactable={filter.contactable}
       />
     ),
-    Credentials: (
-      <BadgeFilter
+    Mazury: (
+      <CredentialFilter
         handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}
         selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'mazury'}
+      />
+    ),
+    POAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'poap'}
+      />
+    ),
+    GitPOAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'gitpoap'}
+      />
+    ),
+    Buildspace: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'buildspace'}
+      />
+    ),
+    Sismo: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'sismo'}
+      />
+    ),
+    '101': (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'101'}
+      />
+    ),
+    Kudos: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'kudos'}
       />
     ),
   };
@@ -243,6 +318,9 @@ export const ResultState = () => {
     populateFiltersFromRoute();
   }, []);
 
+  const routeBadges = getCredentialFromRoute('badges') as string[];
+  const routeSkills = getCredentialFromRoute('skills') as string[];
+
   return (
     <div className="mt-5 flex w-full flex-col lg:mt-6">
       <div className="ml-[25px] flex lg:hidden">
@@ -263,33 +341,27 @@ export const ResultState = () => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isFiltersOpen && (
-          <motion.div
-            {...fadeAnimation}
-            role="dialog"
-            aria-modal={true}
-            aria-expanded={isFiltersOpen}
-            className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
-          >
-            <AnimatePresence>
-              {selectedFilterState[selectedFilter]}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isFiltersOpen && (
+        <div
+          {...fadeAnimation}
+          role="dialog"
+          className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
+        >
+          {selectedFilterState[selectedFilter]}
+        </div>
+      )}
 
-      <div className="hidden space-y-4 pl-6 lg:block">
+      <div className="hidden pl-6 lg:block">
         <div className="flex">
-          <ul className="flex space-x-[52.47px]">
+          <ul className="mb-6 flex space-x-8">
             {filters.map((filter) => (
               <li
                 key={filter}
-                className="relative flex cursor-pointer items-center space-x-2"
+                className="relative flex cursor-pointer items-center space-x-1"
                 onMouseEnter={() => handleSelectFilter(filter as FilterType)}
                 onMouseLeave={() => handleSelectFilter('empty')}
               >
-                <span className="font-sans text-sm font-bold leading-[21px] text-indigoGray-90">
+                <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                   {filter}
                 </span>
                 <SVG src="/icons/angle-down.svg" height={16} width={16} />
@@ -301,9 +373,7 @@ export const ResultState = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className={clsx(
-                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl',
-                        selectedFilter === 'Number of referrals' &&
-                          'h-[136px] w-[260px]'
+                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
                       )}
                     >
                       {selectedFilterState[selectedFilter]}
@@ -321,65 +391,62 @@ export const ResultState = () => {
             </p>
           </div>
         </div>
-
-        <div
-          className="flex w-fit items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
-          onClick={() => handleFilter('contactable', !filter.contactable)}
-        >
-          <Toggle
-            isToggled={filter.contactable}
-            onToggle={() => handleFilter('contactable', !filter.contactable)}
-            className="flex h-fit"
-          />
-          <span>Contactable</span>
-        </div>
       </div>
 
-      <div className="mt-[25.5px]">
+      <div className="mt-1">
         <ul className="flex flex-wrap gap-2">
-          {filter.role && (
+          {getCredentialFromRoute('role') && (
             <li>
               <FilterTag
-                label={filter.role}
-                handleClose={() => handleFilter('role', '')}
+                label={getCredentialFromRoute('role') as string}
+                handleClose={() => handleApplyFilter('role', true)}
               />
             </li>
           )}
 
-          <>
-            {filter.badges.map((badge, index) => {
-              const updatedBadges = filter.badges.filter(
-                (item) => item !== badge
-              );
-              return (
-                <li>
-                  <FilterTag
-                    key={index + badge}
-                    label={badge}
-                    handleClose={() => handleFilter('badges', updatedBadges)}
-                  />
-                </li>
-              );
-            })}
-          </>
+          {routeBadges && (
+            <>
+              {routeBadges?.map((badge, index) => {
+                const updatedBadges = routeBadges?.filter(
+                  (item) => item !== badge
+                );
 
-          <>
-            {filter.skills.map((skill, index) => {
-              const updatedSkills = filter.skills.filter(
-                (item) => item !== skill
-              );
+                return (
+                  <li>
+                    <FilterTag
+                      key={index + badge}
+                      label={badge}
+                      handleClose={() =>
+                        handleApplyFilter('badges', false, updatedBadges)
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </>
+          )}
 
-              return (
-                <li>
-                  <FilterTag
-                    key={index + skill}
-                    label={skill}
-                    handleClose={() => handleFilter('skills', updatedSkills)}
-                  />
-                </li>
-              );
-            })}
-          </>
+          {routeSkills && (
+            <>
+              {routeSkills?.map((skill, index) => {
+                const updatedSkills = routeSkills?.filter(
+                  (item) => item !== skill
+                );
+
+                return (
+                  <li>
+                    <FilterTag
+                      key={index + skill}
+                      label={skill}
+                      handleClose={() =>
+                        handleApplyFilter('skills', false, updatedSkills)
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </>
+          )}
 
           {/* {filter.contactable && <li>{filter.contactable}</li>} */}
         </ul>

@@ -112,11 +112,7 @@ const SearchPage: NextPage = () => {
 
             <div className="h-8 w-8">
               {isFocused && (
-                <button
-                  type="submit"
-                  className="border-none !p-0"
-                  disabled={searchTerm === ''}
-                >
+                <button type="submit" className="border-none !p-0">
                   <SVG
                     height={32}
                     width={32}

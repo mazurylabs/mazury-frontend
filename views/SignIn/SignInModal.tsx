@@ -12,6 +12,7 @@ import { Button, Modal, Spinner } from '@/components';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
 import { userSlice } from '@/selectors';
 import { login } from '@/slices/user';
+import { SidebarContext } from '@/contexts';
 
 type Steps = 'initialise' | 'loading' | 'error';
 
@@ -25,6 +26,8 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const { address, profile } = useSelector(userSlice);
   const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
+
+  const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
   const handleAuthCredentials = async () => {
     if (!address) {
@@ -78,7 +81,8 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
         if (data) {
           onClose();
           dispatch(login(data));
-
+          setSignInOpen(false);
+          setIsOpen(false);
           if (!data.onboarded) {
             router.push('/onboarding');
           } else {

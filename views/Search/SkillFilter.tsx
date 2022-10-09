@@ -4,7 +4,7 @@ import SVG from 'react-inlinesvg';
 import ScrollLock from 'react-scrolllock';
 import debounce from 'lodash.debounce';
 
-import { Checkbox } from 'components';
+import { Button, Checkbox } from 'components';
 
 import { useScreenWidth, useIntersection } from 'hooks';
 import { FilterState, FilterType, ValueOf } from 'types';
@@ -18,6 +18,7 @@ interface SkillFilterProps {
     value: ValueOf<FilterState>
   ) => void;
   handleGoBack: (filter: FilterType) => void;
+  handleApplyFilter: (key: keyof FilterState, reset?: boolean) => void;
 }
 
 type Skill = { name: string; slug: string };
@@ -26,6 +27,7 @@ export const SkillFilter = ({
   selectedSkills,
   handleGoBack,
   handleSelectSkill,
+  handleApplyFilter,
 }: SkillFilterProps) => {
   const initialMount = React.useRef(false);
   const intersectionRef = React.useRef(null!);
@@ -103,7 +105,7 @@ export const SkillFilter = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex h-[600px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base md:h-[687px] md:w-[500px] lg:h-[400px]"
+      className="flex h-[600px] w-full !cursor-default flex-col rounded-3xl bg-white p-6 shadow-base md:h-[687px] md:w-[500px] md:pb-2 lg:h-[400px]"
     >
       <div className="mb-6 lg:hidden">
         <button
@@ -143,7 +145,7 @@ export const SkillFilter = ({
       </div>
 
       <ScrollLock>
-        <div className="flex overflow-y-auto">
+        <div className="flex grow overflow-y-auto">
           <ul className="mt-7 grow space-y-8 overflow-x-hidden">
             {skills?.map((skill, index) => (
               <li className="flex space-x-4" key={skill.name + index}>
@@ -177,6 +179,17 @@ export const SkillFilter = ({
           </ul>
         </div>
       </ScrollLock>
+
+      <div className="ml-auto flex space-x-4 pt-2">
+        <Button onClick={() => handleApplyFilter('skills')}>Apply</Button>
+
+        <Button
+          variant="secondary"
+          onClick={() => handleApplyFilter('skills', true)}
+        >
+          Reset
+        </Button>
+      </div>
     </motion.div>
   );
 };

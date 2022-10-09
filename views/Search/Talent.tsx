@@ -1,8 +1,10 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
+import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import { Avatar } from 'components';
 import { useRouter } from 'next/router';
+import { truncateString } from '@/utils';
 
 import { Badge, Profile } from 'types';
 import {
@@ -31,6 +33,28 @@ const Tag = ({
   );
 };
 
+const CredentialTag = ({
+  label,
+  highlighted,
+  image,
+}: {
+  label?: string;
+  highlighted?: boolean;
+  image?: string;
+}) => {
+  return (
+    <div
+      className={clsx(
+        highlighted && 'bg-emerald-50 text-emerald-900',
+        'flex h-fit w-fit items-center rounded bg-indigoGray-5 px-2 py-1 font-sans text-xs font-semibold text-indigoGray-90'
+      )}
+    >
+      <img src={image} className="mr-2 h-4 w-4 object-contain"></img>
+      {truncateString(label as string, 25)}
+    </div>
+  );
+};
+
 interface Props {
   result?: Profile[];
 }
@@ -53,7 +77,7 @@ export const Talent = ({ result }: Props) => {
             href={`/people/${result.username || result.eth_address}`}
           >
             <a className="flex list-none flex-col space-y-4 rounded-2xl border border-indigoGray-20 p-4 shadow-sm lg:space-y-0">
-              <div className="flex items-center  ">
+              <div className="flex items-center">
                 <div>
                   <Avatar
                     src={result.avatar}
@@ -64,85 +88,73 @@ export const Talent = ({ result }: Props) => {
                   />
                 </div>
 
-                <div className="ml-3 flex flex-col items-start space-y-2 ">
+                <div className="ml-3 flex flex-col items-start space-y-2 lg:w-40">
                   <p className="font-serif text-xl font-bold leading-6 text-indigoGray-90">
                     {returnTruncatedIfEthAddress(result.username)}
                   </p>
 
                   <div className="flex flex-col lg:flex-row">
-                    {result.referred_by.length > 0 && (
-                      <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
-                        {commify(result.referred_by.length)} referral
-                        {result.referred_by.length > 1 && 's'}
-                      </p>
-                    )}
-
-                    {roles.length !== 0 && (
-                      <div className="flex space-x-2 lg:hidden">
-                        {roles.map((role, index) => (
-                          <Tag
-                            key={(role?.title as string) + result.id + index}
-                            highlighted={role?.hightlighted}
-                            label={role?.title}
-                          />
-                        ))}
-
-                        {Boolean(roleRemainder) && <p>{roleRemainder} more</p>}
-                      </div>
-                    )}
+                    <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
+                      {/* result.credential_count.length */}
+                      {commify(result.credentials_count as number)} credential
+                      {(result.credentials_count as number) > 1 && 's'}
+                    </p>
                   </div>
                 </div>
 
-                <div className="hidden items-center lg:ml-auto lg:flex">
-                  {roles.length !== 0 && (
-                    <>
-                      <div className="space-x-2 lg:flex">
-                        {roles.map((role, index) => (
-                          <Tag
-                            key={(role?.title as string) + result.id + index}
-                            highlighted={role?.hightlighted}
-                            label={role?.title}
-                          />
-                        ))}
-
-                        {Boolean(roleRemainder) && <p>{roleRemainder} more</p>}
-                      </div>
-
-                      <div className="mx-[15px] h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05]" />
-                    </>
-                  )}
-
-                  <div className="hidden space-x-2 lg:flex">
+                <div className="hidden items-center lg:ml-10 lg:flex">
+                  <div className="hidden space-x-2 lg:flex lg:items-center">
                     {badges.map((badge) => (
-                      <Tag
+                      <CredentialTag
                         key={badge.title + result.id}
                         highlighted={badge?.hightlighted}
                         label={badge.title}
+                        image={badge.image}
                       />
                     ))}
 
-                    {Boolean(remainder) && <p>{remainder} more</p>}
+                    {(result.credentials_count as number) > 3 && (
+                      <p className="text-xs font-medium text-gray-700">
+                        and {(result.credentials_count as number) - 3} more
+                      </p>
+                    )}
                   </div>
+                </div>
+                <div className="hidden items-center space-x-3 lg:ml-auto lg:flex">
+                  {(Boolean(result.twitter) ||
+                    Boolean(result.website) ||
+                    Boolean(result.github)) && (
+                    <div className="mx-[15px] h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05]" />
+                  )}
+                  {Boolean(result.twitter) && <FaTwitter />}
+                  {Boolean(result.website) && <FaGlobe />}
+                  {Boolean(result.github) && <FaGithub />}
                 </div>
 
                 <div className="ml-auto self-start lg:hidden">
                   <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
-                    {commify(result.referred_by.length)} referral
-                    {result.referred_by.length > 1 && 's'}
+                    {/* result.credential_count.length */}
+                    {commify(result.credentials_count as number)} credential
+                    {(result.credentials_count as number) > 1 && 's'}
                   </p>
                 </div>
               </div>
 
-              <div className="flex space-x-2 lg:hidden">
+              <div className="flex flex-col space-y-1 lg:hidden">
                 {badges.map((badge) => (
-                  <Tag
+                  <CredentialTag
                     key={badge.title + result.id}
                     highlighted={badge?.hightlighted}
                     label={badge.title}
+                    image={badge.image}
                   />
                 ))}
 
-                {Boolean(remainder) && <p>{remainder} more</p>}
+                {(result.credentials_count as number) > 3 && (
+                  <p className="pl-2 text-xs font-medium text-gray-700">
+                    and {(result.credentials_count as number) - 3} more
+                  </p>
+                )}
               </div>
             </a>
           </Link>
