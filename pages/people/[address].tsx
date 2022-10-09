@@ -501,7 +501,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </p>
 
                 <div
-                  className={`no-scrollbar w-full gap-6 overflow-x-scroll md:overflow-auto ${
+                  className={`no-scrollbar hidden w-full gap-6 overflow-x-scroll md:flex md:overflow-auto ${
                     shouldCollapseHeader ? 'hidden' : 'flex'
                   }`}
                 >
