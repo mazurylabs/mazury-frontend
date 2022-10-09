@@ -27,6 +27,8 @@ interface Props {
   routeId?: string;
   openseaUrl: string;
   rainbowUrl: string;
+  poapUrl: string;
+  kudosUrl: string;
   externalLink?: string;
 }
 
@@ -57,6 +59,8 @@ export const BadgePreview: React.FC<Props> = ({
   routeId,
   openseaUrl,
   rainbowUrl,
+  poapUrl,
+  kudosUrl,
   externalLink,
 }) => {
   const router = useRouter();
@@ -170,6 +174,8 @@ export const BadgePreview: React.FC<Props> = ({
             mintedAt={mintedAt}
             openseaUrl={openseaUrl}
             rainbowUrl={rainbowUrl}
+            poapUrl={poapUrl}
+            kudosUrl={kudosUrl}
             externalLinks={externalLink}
           />
         )}
