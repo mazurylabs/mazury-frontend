@@ -351,9 +351,9 @@ export const ResultState = () => {
         </div>
       )}
 
-      <div className="hidden pl-6 lg:block">
-        <div className="flex">
-          <ul className="mb-6 flex space-x-8">
+      <div className="mb-4 hidden pl-6 lg:block">
+        <div className="mb-2 flex items-center">
+          <ul className="flex space-x-8">
             {filters.map((filter) => (
               <li
                 key={filter}
@@ -383,6 +383,14 @@ export const ResultState = () => {
               </li>
             ))}
           </ul>
+          <a
+            className="ml-10 hidden text-sm font-light underline xl:block"
+            rel="noreferrer"
+            target="_blank"
+            href="https://mazury.notion.site/dc8386a5dbab4bd387feb4a73488e6cb?v=4ea3ddb4c6084e3690bb62155abcf899"
+          >
+            Learn how use our search
+          </a>
 
           <div className="ml-auto">
             <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
@@ -391,6 +399,14 @@ export const ResultState = () => {
             </p>
           </div>
         </div>
+        <a
+          className="text-sm font-light underline xl:hidden"
+          rel="noreferrer"
+          target="_blank"
+          href="https://mazury.notion.site/dc8386a5dbab4bd387feb4a73488e6cb?v=4ea3ddb4c6084e3690bb62155abcf899"
+        >
+          Learn how use our search
+        </a>
       </div>
 
       <div className="mt-1">
