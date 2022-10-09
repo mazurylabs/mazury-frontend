@@ -97,28 +97,35 @@ export const Talent = ({ result }: Props) => {
                     <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
                       {/* result.credential_count.length */}
                       {commify(result.credentials_count as number)} credential
-                      {(result.credentials_count as number) > 1 && 's'}
+                      {(result.credentials_count as number) != 1 && 's'}
                     </p>
                   </div>
                 </div>
+                <div className="mx-[15px] hidden h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05] lg:block" />
 
                 <div className="hidden items-center lg:ml-10 lg:flex">
-                  <div className="hidden space-x-2 lg:flex lg:items-center">
-                    {badges.map((badge) => (
-                      <CredentialTag
-                        key={badge.title + result.id}
-                        highlighted={badge?.hightlighted}
-                        label={badge.title}
-                        image={badge.image}
-                      />
-                    ))}
+                  {(result.credentials_count as number) > 0 ? (
+                    <div className="hidden space-x-2 lg:flex lg:items-center">
+                      {badges.map((badge) => (
+                        <CredentialTag
+                          key={badge.title + result.id}
+                          highlighted={badge?.hightlighted}
+                          label={badge.title}
+                          image={badge.image}
+                        />
+                      ))}
 
-                    {(result.credentials_count as number) > 3 && (
-                      <p className="text-xs font-medium text-gray-700">
-                        and {(result.credentials_count as number) - 3} more
-                      </p>
-                    )}
-                  </div>
+                      {(result.credentials_count as number) > 3 && (
+                        <p className="text-xs font-medium text-gray-700">
+                          and {(result.credentials_count as number) - 3} more
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-xs font-medium text-gray-700">
+                      No credentials found
+                    </p>
+                  )}
                 </div>
                 <div className="hidden items-center space-x-3 lg:ml-auto lg:flex">
                   {(Boolean(result.twitter) ||
@@ -135,27 +142,33 @@ export const Talent = ({ result }: Props) => {
                   <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
                     {/* result.credential_count.length */}
                     {commify(result.credentials_count as number)} credential
-                    {(result.credentials_count as number) > 1 && 's'}
+                    {(result.credentials_count as number) != 1 && 's'}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col space-y-1 lg:hidden">
-                {badges.map((badge) => (
-                  <CredentialTag
-                    key={badge.title + result.id}
-                    highlighted={badge?.hightlighted}
-                    label={badge.title}
-                    image={badge.image}
-                  />
-                ))}
+              {(result.credentials_count as number) > 0 ? (
+                <div className="flex flex-col space-y-1 lg:hidden">
+                  {badges.map((badge) => (
+                    <CredentialTag
+                      key={badge.title + result.id}
+                      highlighted={badge?.hightlighted}
+                      label={badge.title}
+                      image={badge.image}
+                    />
+                  ))}
 
-                {(result.credentials_count as number) > 3 && (
-                  <p className="pl-2 text-xs font-medium text-gray-700">
-                    and {(result.credentials_count as number) - 3} more
-                  </p>
-                )}
-              </div>
+                  {(result.credentials_count as number) > 3 && (
+                    <p className="pl-2 text-xs font-medium text-gray-700">
+                      and {(result.credentials_count as number) - 3} more
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-xs font-medium text-gray-700 lg:hidden">
+                  No credentials found
+                </p>
+              )}
             </a>
           </Link>
         );
