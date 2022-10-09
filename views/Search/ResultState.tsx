@@ -403,7 +403,7 @@ export const ResultState = () => {
           className="text-sm font-light underline 2xl:hidden"
           rel="noreferrer"
           target="_blank"
-          href="https://mazury.notion.site/dc8386a5dbab4bd387feb4a73488e6cb?v=4ea3ddb4c6084e3690bb62155abcf899"
+          href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773"
         >
           Learn how to scout talent using Mazury Search
         </a>
