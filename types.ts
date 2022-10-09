@@ -143,6 +143,7 @@ export interface Profile
   email_verified?: boolean;
   website: string;
   full_name?: string;
+  credentials_count?: number;
 }
 
 export interface ListResponse<T> {
@@ -257,10 +258,13 @@ export type BadgeIssuer =
   | '101';
 
 export type FilterType =
-  | 'Credentials'
-  | 'Roles'
-  | 'Referred skills'
-  | 'Number of referrals'
+  | 'Mazury'
+  | 'POAP'
+  | 'GitPOAP'
+  | 'Buildspace'
+  | 'Sismo'
+  | '101'
+  | 'Kudos'
   | 'empty';
 
 export interface FilterState {

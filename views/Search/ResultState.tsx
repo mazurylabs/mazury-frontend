@@ -9,6 +9,7 @@ import { Toggle } from 'components/Toggle';
 
 import { LoadingState } from './LoadingState';
 import { BadgeFilter } from './BadgeFilter';
+import { CredentialFilter } from './CredentialFilter';
 import { ReferralFilter } from './ReferralFilter';
 import { RoleFilter } from './RoleFilter';
 import { SkillFilter } from './SkillFilter';
@@ -21,7 +22,15 @@ import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 
-const filters = ['Credentials', 'Roles', 'Referred skills'];
+const filters = [
+  'Mazury',
+  'POAP',
+  'GitPOAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 type ResultSteps = 'loading' | 'empty' | 'result';
 
@@ -180,29 +189,6 @@ export const ResultState = () => {
   };
 
   const selectedFilterState: Record<FilterType, JSX.Element> = {
-    Roles: (
-      <RoleFilter
-        selectedRole={filter.role}
-        handleSelect={handleFilter}
-        handleGoBack={handleSelectFilter}
-        handleApplyFilter={handleApplyFilter}
-      />
-    ),
-    'Number of referrals': (
-      <ReferralFilter
-        selectedReferrals={[]}
-        handleSelectReferral={() => {}}
-        handleGoBack={handleSelectFilter}
-      />
-    ),
-    'Referred skills': (
-      <SkillFilter
-        selectedSkills={filter.skills}
-        handleSelectSkill={handleFilter}
-        handleGoBack={handleSelectFilter}
-        handleApplyFilter={handleApplyFilter}
-      />
-    ),
     empty: (
       <InitialFilterState
         handleFilterNavigation={handleSelectFilter}
@@ -213,12 +199,67 @@ export const ResultState = () => {
         isContactable={filter.contactable}
       />
     ),
-    Credentials: (
-      <BadgeFilter
+    Mazury: (
+      <CredentialFilter
         handleSelectBadge={handleFilter}
         handleGoBack={handleSelectFilter}
         selectedBadges={filter.badges}
         handleApplyFilter={handleApplyFilter}
+        credentialName={'mazury'}
+      />
+    ),
+    POAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'poap'}
+      />
+    ),
+    GitPOAP: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'gitpoap'}
+      />
+    ),
+    Buildspace: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'buildspace'}
+      />
+    ),
+    Sismo: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'sismo'}
+      />
+    ),
+    '101': (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'101'}
+      />
+    ),
+    Kudos: (
+      <CredentialFilter
+        handleSelectBadge={handleFilter}
+        handleGoBack={handleSelectFilter}
+        selectedBadges={filter.badges}
+        handleApplyFilter={handleApplyFilter}
+        credentialName={'kudos'}
       />
     ),
   };
@@ -300,33 +341,27 @@ export const ResultState = () => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isFiltersOpen && (
-          <motion.div
-            {...fadeAnimation}
-            role="dialog"
-            aria-modal={true}
-            aria-expanded={isFiltersOpen}
-            className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
-          >
-            <AnimatePresence>
-              {selectedFilterState[selectedFilter]}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isFiltersOpen && (
+        <div
+          {...fadeAnimation}
+          role="dialog"
+          className="fixed top-0 right-0 z-10 flex h-screen w-screen items-end bg-[rgba(17,15,42,0.2)] md:flex md:items-center md:justify-center"
+        >
+          {selectedFilterState[selectedFilter]}
+        </div>
+      )}
 
-      <div className="hidden space-y-4 pl-6 lg:block">
+      <div className="hidden pl-6 lg:block">
         <div className="flex">
-          <ul className="flex space-x-[52.47px]">
+          <ul className="mb-6 flex space-x-8">
             {filters.map((filter) => (
               <li
                 key={filter}
-                className="relative flex cursor-pointer items-center space-x-2"
+                className="relative flex cursor-pointer items-center space-x-1"
                 onMouseEnter={() => handleSelectFilter(filter as FilterType)}
                 onMouseLeave={() => handleSelectFilter('empty')}
               >
-                <span className="font-sans text-sm font-bold leading-[21px] text-indigoGray-90">
+                <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                   {filter}
                 </span>
                 <SVG src="/icons/angle-down.svg" height={16} width={16} />
@@ -338,9 +373,7 @@ export const ResultState = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className={clsx(
-                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl',
-                        selectedFilter === 'Number of referrals' &&
-                          'h-[136px] w-[260px]'
+                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
                       )}
                     >
                       {selectedFilterState[selectedFilter]}
@@ -358,21 +391,9 @@ export const ResultState = () => {
             </p>
           </div>
         </div>
-
-        <div
-          className="flex w-fit items-center space-x-2 font-sans text-base font-bold leading-[21px] text-indigoGray-90"
-          onClick={() => handleFilter('contactable', !filter.contactable)}
-        >
-          <Toggle
-            isToggled={filter.contactable}
-            onToggle={handleContactable}
-            className="flex h-fit"
-          />
-          <span>Contactable</span>
-        </div>
       </div>
 
-      <div className="mt-[25.5px]">
+      <div className="mt-1">
         <ul className="flex flex-wrap gap-2">
           {getCredentialFromRoute('role') && (
             <li>

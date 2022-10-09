@@ -2,8 +2,6 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 
-import { Toggle } from 'components/Toggle';
-
 import { trayAnimation, fadeAnimation } from 'utils';
 import { useScreenWidth, useClickOutside } from 'hooks';
 import { FilterType } from 'types';
@@ -14,7 +12,15 @@ interface Props {
   isContactable: boolean;
 }
 
-const filters: FilterType[] = ['Credentials', 'Roles', 'Referred skills'];
+const filters: FilterType[] = [
+  'Mazury',
+  'POAP',
+  'GitPOAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 export const InitialFilterState = ({
   handleFilterNavigation,
@@ -36,7 +42,7 @@ export const InitialFilterState = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="h-[354px] w-full rounded-3xl bg-white p-6 pb-10 shadow-3xl md:h-[354px] md:w-[500px] lg:hidden"
+      className="h-[400px] w-full rounded-t-3xl bg-white p-6 pb-10 shadow-3xl md:h-[400px] md:w-[500px] lg:hidden"
     >
       <div className="space-y-6">
         <div>
@@ -58,35 +64,10 @@ export const InitialFilterState = ({
                   <p className="text-sm font-semibold leading-[21px] text-indigoGray-60">
                     {filter}
                   </p>
-                  {index === 2 && (
-                    <p className="text-xs font-normal leading-[18px] text-black-800">
-                      Users referred them for that
-                    </p>
-                  )}
                 </div>
-                <SVG src="/icons/arrow-right.svg" height={12.73} width={7.78} />
+                <SVG src="/icons/arrow-right.svg" height={16} width={16} />
               </li>
             ))}
-
-            <li
-              className="flex items-center justify-between"
-              onClick={handleContactable}
-            >
-              <div className="space-y-[2px] font-sans">
-                <p className="text-sm font-semibold leading-[21px] text-indigoGray-60">
-                  Contactable
-                </p>
-                <p className="text-xs font-normal leading-[18px] text-black-800">
-                  Users with contact information in the profile
-                </p>
-              </div>
-
-              <Toggle
-                isToggled={isContactable}
-                onToggle={handleContactable}
-                className="flex h-fit"
-              />
-            </li>
           </ul>
         </div>
       </div>
