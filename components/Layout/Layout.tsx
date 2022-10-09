@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FC, useState } from 'react';
+import { FC, useContext } from 'react';
 import { SidebarContext } from 'contexts';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
@@ -23,8 +23,7 @@ export const Layout: FC<LayoutProps> = ({
   variant = 'three-part',
   children,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [signInOpen, setSignInOpen] = useState(false);
+  const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
 
   const variants = {
     open: {
@@ -46,27 +45,23 @@ export const Layout: FC<LayoutProps> = ({
       className="flex min-h-screen w-full flex-col"
       data-testid="layout-container"
     >
-      <SidebarContext.Provider
-        value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
+      <motion.aside
+        variants={variants}
+        animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
+        className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => !signInOpen && setIsOpen(false)}
+        role="menu"
       >
-        <motion.aside
-          variants={variants}
-          animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
-          className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => !signInOpen && setIsOpen(false)}
-          role="menu"
-        >
-          <Link href="/">
-            <a className="h-[32px] w-[32px] cursor-pointer">
-              <SVG src="/new-logo.svg" height="32px" width="32px" />
-            </a>
-          </Link>
+        <Link href="/">
+          <a className="h-[32px] w-[32px] cursor-pointer">
+            <SVG src="/new-logo.svg" height="32px" width="32px" />
+          </a>
+        </Link>
 
-          <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
-          {sidebarContent}
-        </motion.aside>
-      </SidebarContext.Provider>
+        <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
+        {sidebarContent}
+      </motion.aside>
 
       <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
         {variant === 'three-part' && (

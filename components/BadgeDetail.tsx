@@ -40,6 +40,7 @@ interface BadgeDetailProps {
   owner: string;
   openseaUrl?: string;
   rainbowUrl?: string;
+  externalLinks?: string;
 }
 
 interface BadgeDetailButtonProp {
@@ -112,6 +113,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
   owner,
   openseaUrl,
   rainbowUrl,
+  externalLinks,
 }) => {
   const router = useRouter();
   const containerRef = React.useRef(null!);
@@ -244,7 +246,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 {title}
               </h2>
 
-              <p className="font-sans text-sm text-indigoGray-60">
+              <p className="font-sans text-sm text-indigoGray-60 line-clamp-[7]">
                 {description}
               </p>
 
@@ -436,6 +438,29 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                     <SVG src={`/icons/link.svg`} height={16} width={16} />
                   </div>
                 </button>
+                {(variant.includes('poap') || variant === 'kudos') &&
+                  externalLinks && (
+                    <div>
+                      <motion.a
+                        rel="noreferrer"
+                        href={externalLinks}
+                        target="_blank"
+                        className="flex h-[37px] w-[40px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-90 border-opacity-20
+                  "
+                      >
+                        {variant.includes('poap') ? (
+                          <SVG
+                            src={`/icons/poap.svg`}
+                            height={16}
+                            width={16}
+                            className="m-2"
+                          />
+                        ) : (
+                          <span>🎉</span>
+                        )}
+                      </motion.a>
+                    </div>
+                  )}
                 {openseaUrl && (
                   <a
                     href={openseaUrl}
@@ -462,7 +487,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
                 )}
                 <button
                   type="button"
-                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
+                  className="flex h-[37px] w-[104px] shrink-0 cursor-pointer items-center justify-center space-x-2 rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-sm"
                   onClick={() => handleSearch(slug)}
                 >
                   <div className="flex">

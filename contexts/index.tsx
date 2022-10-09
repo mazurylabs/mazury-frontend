@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { createContext, Dispatch, SetStateAction, FC, useState } from 'react';
 import { PersonBasicDetails } from 'types';
 
 interface SidebarContextType {
@@ -14,6 +14,19 @@ export const SidebarContext = createContext<SidebarContextType>({
   signInOpen: false,
   setSignInOpen: () => {},
 });
+
+export const SidebarProvider: React.FC = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [signInOpen, setSignInOpen] = useState(false);
+
+  return (
+    <SidebarContext.Provider
+      value={{ isOpen, setIsOpen, signInOpen, setSignInOpen }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
+};
 
 export interface OnboardingFormDataType {
   bio?: string;
