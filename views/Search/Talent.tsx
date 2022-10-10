@@ -42,7 +42,6 @@ const CredentialTag = ({
   highlighted?: boolean;
   image?: string;
 }) => {
-  console.log('this is the image', image);
   return (
     <div
       className={clsx(
