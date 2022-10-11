@@ -150,31 +150,32 @@ const Home: NextPage = () => {
         <div className="px-2 font-sans font-medium lg:mr-12 lg:pt-0">
           <ul className="mb-4 grid grid-cols-1 lg:grid-cols-2">
             {credentialSuggestions.map((credential, index) => (
-              <li
-                key={index}
-                className=" flex cursor-pointer items-center py-2"
-                onClick={() => handleSearch('', credential.slug)}
-              >
-                <div className="mr-4 flex">
-                  <Image
-                    src={credential.img}
-                    width={46}
-                    height={46}
-                    layout="fixed"
-                    alt="badge"
-                  />
-                </div>
+              <a href={`/search?badges=${credential.slug}`}>
+                <li
+                  key={index}
+                  className=" flex cursor-pointer items-center py-2"
+                >
+                  <div className="mr-4 flex">
+                    <Image
+                      src={credential.img}
+                      width={46}
+                      height={46}
+                      layout="fixed"
+                      alt="badge"
+                    />
+                  </div>
 
-                <div>
-                  <p className="font-semibold text-indigoGray-90">
-                    {credential.title}
-                  </p>
+                  <div>
+                    <p className="font-semibold text-indigoGray-90">
+                      {credential.title}
+                    </p>
 
-                  <p className="text-xs text-indigoGray-80 text-opacity-80">
-                    {credential.detail}
-                  </p>
-                </div>
-              </li>
+                    <p className="text-xs text-indigoGray-80 text-opacity-80">
+                      {credential.detail}
+                    </p>
+                  </div>
+                </li>
+              </a>
             ))}
           </ul>
         </div>
