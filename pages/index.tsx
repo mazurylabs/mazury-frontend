@@ -29,12 +29,6 @@ import { useSelector } from 'react-redux';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
 
-const keywordSuggestions = [
-  { title: 'Frontend developer', results: 259 },
-  { title: 'Smart contract developer', results: 792 },
-  { title: 'Designer', results: 163 },
-];
-
 const credentialSuggestions = [
   {
     title: 'Paradigm CTF 2022 Participant',
