@@ -35,12 +35,12 @@ const keywordSuggestions = [
   { title: 'Designer', results: 163 },
 ];
 
-const badgeSuggestions = [
+const credentialSuggestions = [
   {
     title: 'Paradigm CTF 2022 Participant',
     slug: 'paradigm-ctf-2022-2022',
     img: '/badges/paradigm-ctf-2022.png',
-    detail: 'Hackers who completed at least 1 Paradigm CTF 2022 challange',
+    detail: 'Participants in Paradigm CTF 2022 challange',
   },
   {
     title: 'Ethereum Merge Contributor',
@@ -49,10 +49,28 @@ const badgeSuggestions = [
     detail: 'Significant contributors to the Ethereum Merge',
   },
   {
-    title: 'ETHAmsterdam Staked Hacker',
+    title: 'ETHAmsterdam 2022 Staked Hacker',
     slug: 'ethamsterdam-2022-staked-hacker-2022',
     img: '/badges/ethamsterdam-2022-staked-hacker-2022.png',
     detail: 'Hackers who participated in ETHAmsterdam 2022',
+  },
+  {
+    title: '2022 wagmi Contributor',
+    slug: 'gitpoap-2022-wagmi-contributor-2022',
+    img: '/badges/gitpoap-2022-wagmi-contributor-2022-logo-1662563704917.webp',
+    detail: 'Open source developers who contributed to wagmi project in 2022',
+  },
+  {
+    title: 'Ethereum Power User ZK Badge',
+    slug: 'ethereum-power-user-zk-badge',
+    img: '/badges/ethereum_power_users.svg',
+    detail: 'ZK Badge owned by the most active users on Ethereum',
+  },
+  {
+    title: '2022 OpenZeppelin Contracts for Cairo',
+    slug: 'gitpoap-2022-openzeppelin-contracts-for-cairo-contributor-2022',
+    img: '/badges/gitpoap-2022-openzeppelin-contracts-for-cairo-contributor-2022-logo-1663873330809.png',
+    detail: 'Contributors to OpenZeppelin cairo contracts in 2022',
   },
 ];
 
@@ -131,101 +149,36 @@ const Home: NextPage = () => {
 
   const idle = (
     <div className="w-full lg:flex">
-      <div className="grow-[3] border-b border-solid border-indigoGray-20 pb-7 lg:border-b-0 lg:pb-0">
-        {/* <div className="mb-5 hidden lg:flex">
-          <button
-            type="button"
-            className="font-sans flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
-          >
-            <Image
-              src={'/icons/network.svg'}
-              layout="fixed"
-              width={20}
-              height={20}
-              alt="network"
-            />
-            <span className="ml-2">See your network</span>
-          </button>
-
-          <button
-            type="button"
-            className="font-sans ml-3 flex shrink-0 items-center rounded-xl bg-indigo-50 py-1 px-2 text-xs font-bold text-indigo-700"
-          >
-            <Image
-              src={'/icons/recommendation.svg'}
-              layout="fixed"
-              width={16}
-              height={16}
-              alt="recommendations"
-            />
-            <span className="ml-2">See recommendations</span>
-          </button>
-        </div> */}
-
-        <div className="mb-3 flex text-xs font-medium text-indigoGray-40">
-          {/* <div className="mr-2 hidden lg:flex">
-            <Image
-              src={'/icons/previous.svg'}
-              layout="fixed"
-              width={16}
-              height={16}
-              alt="previous search"
-            />
-          </div> */}
-          {/* <h2>{isMobile ? 'KEYWORD SUGGESTIONS' : 'PREVIOUS SEARCH'}</h2> */}
-          <h2>KEYWORD SUGGESTIONS</h2>
-        </div>
-
-        <ul className="font-sans font-medium">
-          {keywordSuggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              className="mb-6 cursor-pointer"
-              onClick={() => handleSearch(suggestion.title)}
-            >
-              <p className="text-sm text-indigoGray-90">{suggestion.title}</p>
-
-              <div className="flex text-xs  text-indigoGray-50">
-                <p>{commify(suggestion.results)} results</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mb-[44.5px] mt-7 mr-14 hidden justify-center lg:flex">
-        <div className=" w-[1px] shrink-0 bg-indigoGray-20 " />
-      </div>
-
-      <div className="pt-8 lg:mr-12 lg:pt-0">
+      <div className="grow-[3] border-indigoGray-20 pb-7">
         <div className="mb-3 flex text-xs font-medium text-indigoGray-50">
           <h2>CREDENTIAL SEARCH SUGGESTIONS</h2>
         </div>
-
-        <div className="px-2 font-sans font-medium">
-          <ul className="mb-4">
-            {badgeSuggestions.map((badge, index) => (
+        <div className="px-2 font-sans font-medium lg:mr-12 lg:pt-0">
+          <ul className="mb-4 grid grid-cols-1 lg:grid-cols-2">
+            {credentialSuggestions.map((credential, index) => (
               <li
                 key={index}
-                className=" mb-4 flex cursor-pointer items-center"
-                onClick={() => handleSearch('', badge.slug)}
+                className=" flex cursor-pointer items-center py-2"
+                onClick={() => handleSearch('', credential.slug)}
               >
                 <div className="mr-4 flex">
                   <Image
-                    src={badge.img}
-                    width={38}
-                    height={38}
+                    src={credential.img}
+                    width={46}
+                    height={46}
                     layout="fixed"
                     alt="badge"
                   />
                 </div>
 
                 <div>
-                  <p className=" text-base font-semibold text-indigoGray-90">
-                    {badge.title}
+                  <p className="font-semibold text-indigoGray-90">
+                    {credential.title}
                   </p>
 
-                  <p className="text-sm text-indigoGray-60">{badge.detail}</p>
+                  <p className="text-xs text-indigoGray-80 text-opacity-80">
+                    {credential.detail}
+                  </p>
                 </div>
               </li>
             ))}
@@ -341,13 +294,23 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
+                <div className="ml-4 mr-10 grow font-sans text-base font-medium">
                   <input
                     ref={inputRef}
                     type="text"
-                    placeholder="woj.eth, frontend developer, hackathon winner..."
+                    placeholder="Paradigm CTF 2022, ETHAmsterdam 2022 Finalist Hacker, woj.eth..."
                     aria-label="Search"
-                    className="h-full w-full bg-transparent"
+                    className="hidden h-full w-full bg-transparent lg:block"
+                    value={searchTerm}
+                    onChange={handleChange}
+                    onFocus={handleFocusBlur}
+                  />
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Paradigm CTF 2022..."
+                    aria-label="Search"
+                    className="h-full w-full bg-transparent lg:hidden"
                     value={searchTerm}
                     onChange={handleChange}
                     onFocus={handleFocusBlur}
