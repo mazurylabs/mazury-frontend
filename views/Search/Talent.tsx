@@ -49,7 +49,11 @@ const CredentialTag = ({
         'flex h-fit w-fit items-center rounded bg-indigoGray-5 px-2 py-1 font-sans text-xs font-semibold text-indigoGray-90'
       )}
     >
-      <img src={image} className="mr-2 h-4 w-4 object-contain"></img>
+      {image?.includes('mp4') ? (
+        <video src={image} className="mr-2 h-4 w-4 object-contain"></video>
+      ) : (
+        <img src={image} className="mr-2 h-4 w-4 object-contain" />
+      )}
       {truncateString(label as string, 25)}
     </div>
   );
