@@ -101,9 +101,19 @@ const SearchPage: NextPage = () => {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="woj.eth, frontend developer, hackathon winner..."
+                placeholder="Paradigm CTF 2022, ETHAmsterdam 2022 Finalist Hacker, woj.eth..."
                 aria-label="Search"
-                className="h-full w-full bg-transparent"
+                className="hidden h-full w-full bg-transparent lg:block"
+                value={searchTerm}
+                onChange={handleChange}
+                onFocus={handleFocusBlur}
+              />
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Paradigm CTF 2022..."
+                aria-label="Search"
+                className="h-full w-full bg-transparent lg:hidden"
                 value={searchTerm}
                 onChange={handleChange}
                 onFocus={handleFocusBlur}
