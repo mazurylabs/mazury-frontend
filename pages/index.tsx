@@ -150,11 +150,8 @@ const Home: NextPage = () => {
         <div className="px-2 font-sans font-medium lg:mr-12 lg:pt-0">
           <ul className="mb-4 grid grid-cols-1 lg:grid-cols-2">
             {credentialSuggestions.map((credential, index) => (
-              <a href={`/search?badges=${credential.slug}`}>
-                <li
-                  key={index}
-                  className=" flex cursor-pointer items-center py-2"
-                >
+              <a href={`/search?badges=${credential.slug}`} key={index}>
+                <li className=" flex cursor-pointer items-center py-2">
                   <div className="mr-4 flex">
                     <Image
                       src={credential.img}
