@@ -90,7 +90,7 @@ const TwitterPage: NextPage = () => {
     }, []);
 
     return (
-      <>
+      <div className="w-[300px] md:w-[350px]">
         <h3 className="font-demi text-3xl text-indigoGray-90">
           Verify Twitter link
         </h3>
@@ -101,26 +101,30 @@ const TwitterPage: NextPage = () => {
         <Input
           label="Twitter link"
           outerClassName="mt-4"
-          placeholder="e.g. https://twitter.com/mazuryxyz"
+          placeholder="e.g. https://twitter.com/mazuryxyz/status/1565365440557236224"
           value={url}
           onChange={(val) => setUrl(val)}
         />
 
         <div className="mt-4 flex w-full justify-around gap-4">
-          <Button variant="secondary" onClick={handleSkip}>
+          <Button className="w-1/2" variant="secondary" onClick={handleSkip}>
             SKIP
           </Button>
-          <Button variant="primary" onClick={() => handleConnectTwitter()}>
-            RETRY
+          <Button
+            className="w-1/2"
+            variant="primary"
+            onClick={() => handleConnectTwitter()}
+          >
+            CONNECT
           </Button>
         </div>
-      </>
+      </div>
     );
   };
 
   const ErrorStep = () => {
     return (
-      <div className="flex flex-col">
+      <div className="flex w-[300px] flex-col md:w-[350px]">
         <h3 className="font-demi text-3xl text-indigoGray-90">
           Connection failed
         </h3>
@@ -129,10 +133,9 @@ const TwitterPage: NextPage = () => {
         </span>
 
         <div className="mt-4 flex w-full justify-around gap-4">
-          <Button variant="secondary" onClick={handleSkip}>
-            SKIP
+          <Button className="w-1/2" variant="secondary" onClick={handleSkip}>
+            GO BACK
           </Button>
-          <Button variant="primary">RETRY</Button>
         </div>
       </div>
     );
@@ -146,25 +149,9 @@ const TwitterPage: NextPage = () => {
     }, []);
 
     return (
-      <div className="flex flex-col">
-        <h3 className="font-demi text-3xl text-indigoGray-90">
-          Sign with wallet
-        </h3>
-        <span className="mt-2 text-sm text-indigoGray-60">
-          Before we finish we need you to sign this with your wallet
-        </span>
-
-        <div className="mt-4 flex justify-center">
+      <div className="flex w-[300px] flex-col md:w-[350px]">
+        <div className="my-10 flex justify-center">
           <Spinner />
-        </div>
-
-        <div className="mt-4 flex w-full justify-around gap-4">
-          <Button variant="secondary" onClick={handleSkip}>
-            SKIP
-          </Button>
-          <Button variant="primary" onClick={() => handleConnectTwitter()}>
-            RETRY
-          </Button>
         </div>
       </div>
     );
@@ -172,7 +159,7 @@ const TwitterPage: NextPage = () => {
 
   const SuccessStep = () => {
     return (
-      <div className="flex flex-col">
+      <div className="flex w-[300px] flex-col md:w-[350px]">
         <h3 className="font-demi text-3xl text-indigoGray-90">
           You are connected
         </h3>
