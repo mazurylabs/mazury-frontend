@@ -1,6 +1,6 @@
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
-import { Profile } from '@/types';
-import storage from '@/utils/storage';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../config/index';
+import { Profile } from '../types';
+import storage from '../utils/storage';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {

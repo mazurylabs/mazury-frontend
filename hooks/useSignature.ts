@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSignMessage } from 'wagmi';
 
-import { createSiweMessage } from '@/utils/api';
+import { createSiweMessage } from '../utils/api';
 
 export const useSignature = (address: string) => {
   const [_, signMessage] = useSignMessage();
