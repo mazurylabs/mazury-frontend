@@ -1,4 +1,4 @@
-import { axios } from '@/lib/axios';
+import { axios } from '../lib/axios';
 import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import type { ListResponse, Badge, BadgeIssuer } from '../types';

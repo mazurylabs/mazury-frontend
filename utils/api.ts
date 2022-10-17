@@ -10,7 +10,7 @@ import {
   Referral,
 } from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
-import { axios } from '@/lib/axios';
+import { axios } from '../lib/axios';
 
 export const getProfile: (
   address: string

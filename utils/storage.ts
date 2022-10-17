@@ -1,5 +1,5 @@
 import jwt_decode from 'jwt-decode';
-import { APP_STORAGE_PREFIX } from '@/config';
+import { APP_STORAGE_PREFIX } from '../config/index';
 
 const storage = {
   getToken: (key: string) => {
