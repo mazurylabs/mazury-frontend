@@ -3,61 +3,17 @@ import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 import Image from 'next/image';
 import React from 'react';
+import { useConnections } from '../../hooks';
 
-const dummyconnections = [
-  {
-    avatar: '/avatar-2.png',
-    userName: 'tranqui.eth',
-    status: 'Processing',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'dhiahfioahsoifa.eth',
-    status: 'Denied',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'matt.eth',
-    status: 'Accepted',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'woj.eth',
-    status: 'Denied',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'shluc.eth',
-    status: 'Processing',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'tranqui.eth',
-    status: 'Processing',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'dhiahfioahsoifa.eth',
-    status: 'Denied',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'matt.eth',
-    status: 'Accepted',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'woj.eth',
-    status: 'Denied',
-  },
-  {
-    avatar: '/avatar-2.png',
-    userName: 'shluc.eth',
-    status: 'Processing',
-  },
-];
+const connectionStatusColor = {
+  pending: 'text-yellow-600',
+  accepted: 'text-green-600',
+  declined: 'text-indigoGray-60',
+};
 
-const YourConnections = () => {
+const Connections = () => {
+  const { connections } = useConnections();
+
   return (
     <Layout variant="plain">
       <div className="mt-9 mb-10 px-4 lg:mt-16 lg:px-8">
@@ -88,21 +44,23 @@ const YourConnections = () => {
         </p>
 
         <div className="mt-[34px] grid w-full grid-cols-1 gap-y-7 lg:mt-0 lg:grid-cols-2 lg:gap-6">
-          {dummyconnections.map((connection, index) => (
+          {connections?.map((connection, index) => (
             <div key={index}>
               <div className="flex items-center">
-                <Image
-                  height={40}
-                  width={40}
-                  src={connection.avatar}
-                  layout="fixed"
-                  alt={connection.userName}
+                <img
+                  className="h-10 w-10 overflow-hidden rounded-full"
+                  src={connection.requested_profile.avatar}
+                  alt={connection.requested_profile.username}
                 />
                 <div className="ml-3 flex flex-col">
                   <h4 className="font-serif text-base lowercase text-indigoGray-70">
-                    {connection.userName}
+                    {connection.requested_profile.username}
                   </h4>
-                  <p className="font-sans text-xs font-medium capitalize">
+                  <p
+                    className={`font-sans text-xs font-medium capitalize ${
+                      connectionStatusColor[connection.status]
+                    }`}
+                  >
                     {connection.status}
                   </p>
                 </div>
@@ -126,4 +84,4 @@ const YourConnections = () => {
   );
 };
 
-export default YourConnections;
+export default Connections;

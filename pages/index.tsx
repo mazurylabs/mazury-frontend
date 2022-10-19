@@ -383,18 +383,20 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                <a
-                  href="/people/your-connections"
-                  className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3"
-                >
-                  See your connections
-                  <Image
-                    src="/icons/arrow-right.svg"
-                    width={16}
-                    height={16}
-                    alt="arrow-right"
-                  />
-                </a>
+                {isAuthenticated && (
+                  <a
+                    href="/people/connections"
+                    className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3"
+                  >
+                    See your connections
+                    <Image
+                      src="/icons/arrow-right.svg"
+                      width={16}
+                      height={16}
+                      alt="arrow-right"
+                    />
+                  </a>
+                )}
               </div>
 
               <div className="w-full shrink-0 pb-8 font-sans lg:w-1/2 lg:pb-0 lg:pl-[50px]">
