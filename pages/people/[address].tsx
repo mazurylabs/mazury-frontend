@@ -112,6 +112,8 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const { credentialCount } = useCredentialCount(eth_address);
 
+  const { isAuthenticated } = useSelector(userSlice);
+
   const getBadgeFromRoute = useCallback(async (id: string) => {
     if (badges.find((badge) => badge.id === id)) return;
     const badge = await getBadgeById(id);
@@ -230,7 +232,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         setIsRequestModalOpen(true);
       }
     } catch (error: any) {
-      if (error.message.includes('403')) {
+      if (error.message.includes('403') || !isAuthenticated) {
         setIsRequestModalOpen(true);
       }
     }
@@ -376,7 +378,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
                 <button
-                  className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg text-center font-sans text-sm font-bold text-indigoGray-5 ${
+                  className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-bold text-indigoGray-5 ${
                     isConnectionRequested || Boolean(connectionStatus?.status)
                       ? 'bg-gray-200'
                       : 'bg-indigoGray-90'
@@ -388,7 +390,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                   }
                 >
                   <span
-                    className={`px-3 ${
+                    className={`${
                       isConnectionRequested
                         ? 'text-indigoGray-90'
                         : 'text-indigoGray-5'
@@ -431,7 +433,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     {/* Write referral button, small screens */}
                     {!viewingOwnProfile && (
                       <button
-                        className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg text-center font-sans text-sm font-bold text-indigoGray-5 ${
+                        className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-bold text-indigoGray-5 ${
                           isConnectionRequested ||
                           Boolean(connectionStatus?.status)
                             ? 'bg-gray-200'
@@ -445,7 +447,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                       >
                         <span
-                          className={`px-3 ${
+                          className={`${
                             isConnectionRequested
                               ? 'text-indigoGray-90'
                               : 'text-indigoGray-5'
