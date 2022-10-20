@@ -58,4 +58,5 @@ export const mockProfile: Profile = {
   email: '',
   website: '',
   full_name: '',
+  is_recruiter: false,
 };

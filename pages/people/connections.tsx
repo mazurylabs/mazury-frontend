@@ -38,6 +38,7 @@ const Connections = () => {
             className="ml-1 font-bold text-indigo-600"
             href="mailto:wojtek@mazury.xyz"
             target="_blank"
+            rel="noreferrer"
           >
             wojtek@mazury.xyz
           </a>
@@ -75,6 +76,7 @@ const Connections = () => {
             className="ml-1 font-bold text-indigo-600"
             href="mailto:wojtek@mazury.xyz"
             target="_blank"
+            rel="noreferrer"
           >
             wojtek@mazury.xyz
           </a>
