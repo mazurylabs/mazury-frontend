@@ -4,9 +4,11 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
 import userReducer from './user';
+import profileSuggestionsReducer from './profileSuggestions';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  profileSuggestions: profileSuggestionsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
