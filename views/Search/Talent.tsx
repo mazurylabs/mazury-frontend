@@ -35,17 +35,14 @@ const Tag = ({
 
 const CredentialTag = ({
   label,
-  highlighted,
   image,
 }: {
   label?: string;
-  highlighted?: boolean;
   image?: string;
 }) => {
   return (
     <div
       className={clsx(
-        highlighted && 'bg-emerald-50 text-emerald-900',
         'flex h-fit w-fit items-center rounded bg-indigoGray-5 px-2 py-1 font-sans text-xs font-semibold text-indigoGray-90'
       )}
     >
@@ -113,7 +110,6 @@ export const Talent = ({ result }: Props) => {
                       {badges.map((badge) => (
                         <CredentialTag
                           key={badge.title + result.id}
-                          highlighted={badge?.hightlighted}
                           label={badge.title}
                           image={badge.image}
                         />
@@ -159,7 +155,6 @@ export const Talent = ({ result }: Props) => {
                   {badges.map((badge) => (
                     <CredentialTag
                       key={badge.title + result.id}
-                      highlighted={badge?.hightlighted}
                       label={badge.title}
                       image={badge.image}
                     />
