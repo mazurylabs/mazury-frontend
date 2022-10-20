@@ -28,8 +28,9 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   const Authenticator = () => {
+    const isMounted = React.useRef(false);
     const dispatch = useDispatch();
-    const { address } = useSelector(userSlice);
+    const { address, profile } = useSelector(userSlice);
     const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
     const accessToken = storage.getToken(ACCESS_TOKEN_KEY);
 
@@ -41,8 +42,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         return dispatch(logout());
       }
 
-      if (address) {
+      if (address && !isMounted.current && !profile) {
         const { data } = await getProfile(address || '');
+
         if (data && isAccessTokenValid) {
           dispatch(login(data));
         }
@@ -50,6 +52,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     }, [address, isRefreshTokenExpired, dispatch, isAccessTokenValid]);
 
     React.useEffect(() => {
+      isMounted.current = true;
+
       clearWagmiStorage();
       handleProfile();
     }, [handleProfile]);

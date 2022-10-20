@@ -71,6 +71,42 @@ export const getBadgeById: (id: string) => Promise<APIResponse<Badge>> = async (
   }
 };
 
+export const requestConnection: (
+  address: string
+) => Promise<APIResponse<Badge>> = async (address) => {
+  try {
+    const res = await axios.post(
+      `/connections/request/?eth_address=${address}`,
+      {}
+    );
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const requestConnectionStatus: (
+  address: string
+) => Promise<APIResponse<Badge>> = async (address) => {
+  try {
+    const res = await axios.get(`/connections/check/?eth_address=${address}`);
+
+    return {
+      data: res.data,
+      error: null,
+    };
+  } catch (error: any) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
 export const getMessageToBeSigned: (
   address: string
 ) => Promise<APIResponse<string | null>> = async (address) => {
