@@ -76,8 +76,7 @@ const Home: NextPage = () => {
   const { address, isAuthenticated, profile } = useSelector(userSlice);
   const { suggestions } = useSelector(profileSuggestionsSlice);
 
-  suggestions.length === 0 &&
-    useProfileSuggestions(address as string, apiParams);
+  useProfileSuggestions(address as string, apiParams);
 
   const handleLogin = () => {
     setIsOpen(true);
