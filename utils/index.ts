@@ -239,13 +239,9 @@ export const getHighlightedBadges = (data: Badge[], query: ParsedUrlQuery) => {
   let badges = data.map((badge) => {
     const title = badge.badge_type.title;
     const image = badge.badge_type.image;
-    const hightlighted =
-      (query?.badges as string)?.slice(1)?.split('_')?.join(' ') ===
-      title.toLowerCase();
 
     return {
       title,
-      hightlighted,
       image,
     };
   });

@@ -152,11 +152,11 @@ export const ResultState = () => {
         let queryPath = path.includes('?') ? path : '?' + path;
 
         const decodedPath = decodeURIComponent(
-          queryPath.replace('?', '/profiles?')
+          queryPath.replace('?', '/search-es/?')
         );
 
         const result = await axios.get(decodedPath);
-        let nextCursor = result.data.next?.split('.com/')[1];
+        let nextCursor = result.data.next?.split('.com/')[1]; // TODO
 
         if (result.data?.results?.length !== 0) {
           setSearchResults(result.data.results);
