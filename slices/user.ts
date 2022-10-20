@@ -50,9 +50,14 @@ const authSlice = createSlice({
       storage.clearToken(ACCESS_TOKEN_KEY);
       storage.clearToken(REFRESH_TOKEN_KEY);
     },
+
+    updateUserProfile: (state, { payload }: PayloadAction<any>) => {
+      state.profile = { ...state.profile, ...payload };
+    },
   },
 });
 
-export const { login, loginError, logout, setAddress } = authSlice.actions;
+export const { login, loginError, logout, setAddress, updateUserProfile } =
+  authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,13 +1,15 @@
-import { Button, Input, Modal, RoleCard, WalletRequestModal } from 'components';
-import { OnboardingFormDataType } from 'contexts';
-import { useMobile, useProfile } from 'hooks';
+import * as React from 'react';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
-import { FC } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { useSWRConfig } from 'swr';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { Role } from 'types';
 import { updateProfile } from 'utils/api';
+import { useMobile } from 'hooks';
+import { OnboardingFormDataType } from 'contexts';
+import { userSlice } from '@/selectors';
+import { Button, Input, Modal, RoleCard, WalletRequestModal } from 'components';
+import { updateUserProfile } from '@/slices/user';
 
 type Steps = 'active' | 'idle' | 'error';
 
@@ -17,22 +19,23 @@ interface IEditProfileModalProps {
   address: string;
 }
 
-export const EditProfileModal: FC<IEditProfileModalProps> = ({
+export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
   isOpen,
   onClose,
   address,
 }) => {
-  const { mutate } = useSWRConfig();
-  const { profile } = useProfile(address);
-  const [formData, setFormData] = useState(profile);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fileUrl, setFileUrl] = useState<string>();
-  const [file, setFile] = useState<File | null>(null);
-  const [shouldRemoveAvi, setShouldRemoveAvi] = useState(false);
-  const [walletRequestStep, setWalletRequestStep] = useState<Steps>('idle');
   const isMobile = useMobile();
+  const dispatch = useDispatch();
+  const { profile } = useSelector(userSlice);
+  const [formData, setFormData] = React.useState(profile);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [fileUrl, setFileUrl] = React.useState<string>();
+  const [file, setFile] = React.useState<File | null>(null);
+  const [shouldRemoveAvi, setShouldRemoveAvi] = React.useState(false);
+  const [walletRequestStep, setWalletRequestStep] =
+    React.useState<Steps>('idle');
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onAddPicClick = () => {
     if (fileInputRef.current) {
@@ -62,6 +65,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
+
       if (!formData) {
         return toast.error('Something went wrong.');
       }
@@ -77,6 +81,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
         role_creator: formData.role_creator,
         role_researcher: formData.role_researcher,
       };
+
       const { data, error } = await updateProfile(
         address,
         '',
@@ -84,13 +89,16 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
         file,
         shouldRemoveAvi
       );
+
+      dispatch(updateUserProfile(data));
+
       if (error || !data) {
         setWalletRequestStep('error');
         return toast.error('Failed to update profile');
       }
+
       toast.success('Profile updated successfully');
       setWalletRequestStep('idle');
-      mutate(`/profiles/${address}`);
       onClose();
     } catch (error) {
       // @ts-expect-error
@@ -101,13 +109,12 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (file) {
-      setShouldRemoveAvi(false);
-      const fileUrl = URL.createObjectURL(file as Blob);
-      setFileUrl(fileUrl);
-    }
-  }, [file]);
+  if (file) {
+    const fileUrl = URL.createObjectURL(file as Blob);
+
+    setShouldRemoveAvi(false);
+    setFileUrl(fileUrl);
+  }
 
   if (!profile || !formData) {
     return null;

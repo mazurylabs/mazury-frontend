@@ -44,7 +44,6 @@ import {
   useBadges,
   useReferrals,
   useScrollPosition,
-  useTotalBadgeCounts,
   useProfile,
   useActiveProfileSection,
   useMobile,
@@ -87,8 +86,14 @@ const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
   const accountData = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
-  const { profile, error } = useProfile(address);
-  const eth_address = profile?.eth_address || '';
+
+  const viewingOwnProfile = accountData?.address === address;
+
+  const { profile, error } = useProfile(address, viewingOwnProfile);
+
+  const account = viewingOwnProfile ? accountData.profile : profile;
+
+  const eth_address = account?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
@@ -120,8 +125,6 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
-  const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-
   const { posts } = usePosts(eth_address);
 
   const scrollPos = useScrollPosition();
@@ -135,7 +138,6 @@ const Profile: React.FC<Props> = ({ address }) => {
     'received'
   );
   const [postsExpanded, setPostsExpanded] = useState(false);
-  const [activityExpanded, setActivityExpanded] = useState(false);
 
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -155,7 +157,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const referralsToShow =
     referralsToggle === 'received' ? referrals : authoredReferrals;
 
-  const viewingOwnProfile = accountData?.address === eth_address;
+  // const viewingOwnProfile = accountData?.address === eth_address;
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
@@ -167,7 +169,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const currActiveSection = useActiveProfileSection();
   const isMobile = useMobile();
 
-  const hasAnySocial = profile?.github || profile?.website || profile?.twitter;
+  const hasAnySocial = account?.github || account?.website || account?.twitter;
 
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
@@ -297,7 +299,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     );
   }
 
-  if (!profile) {
+  if (!account) {
     return (
       <ProfilePageLoadingState
         headerRef={headerRef}
@@ -318,7 +320,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     <>
       <Toaster />
       <Head>
-        <title>{returnTruncatedIfEthAddress(profile.username)} | Mazury</title>
+        <title>{returnTruncatedIfEthAddress(account.username)} | Mazury</title>
       </Head>
       <EditProfileModal
         isOpen={editProfileModalOpen}
@@ -329,10 +331,10 @@ const Profile: React.FC<Props> = ({ address }) => {
         isOpen={referralModalOpen}
         onClose={onReferralModalClose}
         receiver={{
-          avatar: profile.avatar,
-          ens_name: profile.ens_name,
-          eth_address: profile.eth_address,
-          username: profile.username,
+          avatar: account.avatar,
+          ens_name: account.ens_name,
+          eth_address: account.eth_address,
+          username: account.username,
         }}
         existingReferral={existingReferral}
         receivedReferral={receivedReferral}
@@ -351,7 +353,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 height={16}
               />
               <p className="font-demi">
-                {returnTruncatedIfEthAddress(profile.username)}
+                {returnTruncatedIfEthAddress(account.username)}
               </p>
 
               {/* Write referral button, large screens */}
@@ -387,7 +389,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       height={16}
                     />
                     <p className="font-demi">
-                      {returnTruncatedIfEthAddress(profile.username)}
+                      {returnTruncatedIfEthAddress(account.username)}
                     </p>
 
                     {/* Write referral button, small screens */}
@@ -426,8 +428,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                         width: shouldCollapseHeader ? '56px' : '100px',
                         height: shouldCollapseHeader ? '56px' : '100px',
                       }}
-                      src={profile.avatar}
-                      alt={`${profile.username}'s avatar`}
+                      src={account.avatar}
+                      alt={`${account.username}'s avatar`}
                       className="rounded-full object-cover"
                     />
                     <div className="flex flex-col">
@@ -436,24 +438,24 @@ const Profile: React.FC<Props> = ({ address }) => {
                           animate={{
                             fontSize: shouldCollapseHeader
                               ? '30px'
-                              : isMobile && profile.username.length > 8
+                              : isMobile && account.username.length > 8
                               ? '32px'
                               : '48px',
                           }}
                           className={`no-scrollbar overflow-x-scroll font-demi text-indigoGray-90 md:overflow-auto`}
                         >
-                          {profile.username == profile.eth_address
-                            ? returnTruncatedIfEthAddress(profile.eth_address)
-                            : profile.username.length > 15 && isMobile
-                            ? profile.username.slice(0, 10) + '...'
-                            : profile.username}
+                          {account.username == account.eth_address
+                            ? returnTruncatedIfEthAddress(account.eth_address)
+                            : account.username.length > 15 && isMobile
+                            ? account.username.slice(0, 10) + '...'
+                            : account.username}
                         </motion.h1>
                         <h3
                           className={`hidden text-indigoGray-40 md:inline-block ${
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
-                          {profile.full_name}
+                          {account.full_name}
                         </h3>
                       </div>
 
@@ -462,7 +464,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
-                        {profile.full_name}
+                        {account.full_name}
                       </h3>
 
                       <div className="flex items-center">
@@ -473,9 +475,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-base'
                           }`}
                         >
-                          {profile.ens_name && `${profile.ens_name} `}
+                          {account.ens_name && `${account.ens_name} `}
                           <span className="text-indigoGray-40">
-                            ({returnTruncatedIfEthAddress(profile.eth_address)})
+                            ({returnTruncatedIfEthAddress(account.eth_address)})
                           </span>
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -497,7 +499,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     shouldCollapseHeader ? 'hidden' : 'block'
                   }`}
                 >
-                  {profile.bio}
+                  {account.bio}
                 </p>
 
                 <div
@@ -507,7 +509,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
                   {Object.keys(roleFieldToLabel).map((role: Role) => {
-                    if (profile[role] === true) {
+                    if (account[role] === true) {
                       return (
                         <button
                           key={role}
@@ -614,40 +616,40 @@ const Profile: React.FC<Props> = ({ address }) => {
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
-              {profile.twitter && (
+              {account.twitter && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
-                    goToLink(`https://twitter.com/${profile.twitter}`)
+                    goToLink(`https://twitter.com/${account.twitter}`)
                   }
                 >
-                  <FaTwitter /> {profile.twitter}
+                  <FaTwitter /> {account.twitter}
                 </BlueSocialButton>
               )}
-              {profile.website && (
+              {account.website && (
                 <BlueSocialButton
                   variant="secondary"
-                  onClick={() => goToLink(profile.website)}
+                  onClick={() => goToLink(account.website)}
                 >
-                  <FaGlobe /> {profile.website}
+                  <FaGlobe /> {account.website}
                 </BlueSocialButton>
               )}
-              {profile.github && (
+              {account.github && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
-                    goToLink(`https://github.com/${profile.github}`)
+                    goToLink(`https://github.com/${account.github}`)
                   }
                 >
-                  <FaGithub /> {profile.github}
+                  <FaGithub /> {account.github}
                 </BlueSocialButton>
               )}
-              {profile.eth_address && (
+              {account.eth_address && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
                     goToLink(
-                      `https://chat.blockscan.com/index?a=${profile.eth_address}`
+                      `https://chat.blockscan.com/index?a=${account.eth_address}`
                     )
                   }
                 >
@@ -1106,8 +1108,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                     .map((post) => (
                       <MirrorPost
                         author={{
-                          username: profile?.username,
-                          avatarSrc: profile?.avatar,
+                          username: account?.username,
+                          avatarSrc: account?.avatar,
                         }}
                         bgImageSrc={post?.background_image || ''}
                         title={post.title}
