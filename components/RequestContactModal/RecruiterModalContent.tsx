@@ -3,7 +3,6 @@ import { useState } from 'react';
 import SVG from 'react-inlinesvg';
 
 export const RecruiterModalContent = () => {
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   return (
     <div className="mt-6 flex h-[240px] lg:h-[250px]">
       <div>
