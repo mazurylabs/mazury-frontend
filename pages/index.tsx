@@ -94,6 +94,8 @@ const Home: NextPage = () => {
     setSignInOpen(true);
   };
 
+  const accountData = useSelector(userSlice);
+
   useClickOutside(searchRef, handleCloseSearch);
 
   const handleFocusBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -347,43 +349,71 @@ const Home: NextPage = () => {
                 </div>
               )}
             </div>
-
             <div className="lg:16 mt-10 w-full justify-center lg:mt-16 lg:flex">
-              <div className="grow rounded-md border border-indigoGray-20 bg-indigo-50 bg-opacity-10 p-3 lg:mr-[50px] lg:h-min lg:w-1/2 lg:p-4">
-                <div className="font-sans font-bold text-indigo-600">
-                  <h2>Mazury Talent</h2>
+              <div className="mb-6 lg:mr-[50px] lg:mb-3 lg:h-min lg:w-1/2 lg:p-4">
+                <div className="mb-6 grow rounded-md border border-indigoGray-20 bg-indigo-50 bg-opacity-10 p-3 lg:mb-3">
+                  <div className="font-sans font-bold text-indigo-600">
+                    <h2>Mazury Talent</h2>
+                  </div>
+
+                  <div className="mt-1 mb-3 lg:mb-5">
+                    <ul className="space-y-6">
+                      {accountData.profile?.is_recruiter ? (
+                        <p className="text-sm text-indigo-600">
+                          We can help you find the best talent using our
+                          database of verified talent ready for new projects
+                        </p>
+                      ) : (
+                        <p className="text-sm text-indigo-600">
+                          Get exclusive access to top jobs and get hired based
+                          on your verified credentials.
+                        </p>
+                      )}
+                    </ul>
+                  </div>
+
+                  {isAuthenticated ? (
+                    <a
+                      href={`${
+                        accountData.profile?.is_recruiter
+                          ? 'mailto:wojtek@mazury.xyz'
+                          : 'https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}'
+                      }`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="grid w-max place-items-center rounded-lg bg-indigo-600 py-2 px-6 text-center font-medium text-indigo-50 shadow-sm"
+                    >
+                      {accountData.profile?.is_recruiter
+                        ? 'Contact us'
+                        : 'Apply to join'}
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleLogin}
+                      className="grid w-max place-items-center rounded-lg bg-indigo-600 py-2 px-6 text-center font-medium text-indigo-50 shadow-sm"
+                    >
+                      Log in to apply
+                    </button>
+                  )}
                 </div>
 
-                <div className="mt-1 mb-3 lg:mb-5">
-                  <ul className="space-y-6">
-                    <p className="text-sm text-indigo-600">
-                      Get exclusive access to top jobs and get hired based on
-                      your verified credentials.
-                    </p>
-                  </ul>
-                </div>
-
-                {isAuthenticated ? (
-                  <a
-                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="grid w-[180px] place-items-center rounded-lg bg-indigo-600 py-2 text-center font-semibold text-indigo-50 shadow-sm"
-                  >
-                    Apply to join
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleLogin}
-                    className="grid w-[180px] place-items-center rounded-lg bg-indigo-600 py-2 text-center font-semibold text-indigo-50 shadow-sm"
-                  >
-                    Log in to apply
-                  </button>
+                {isAuthenticated && (
+                  <Link href="/people/connections">
+                    <a className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3">
+                      See your connections
+                      <Image
+                        src="/icons/arrow-right.svg"
+                        width={16}
+                        height={16}
+                        alt="arrow-right"
+                      />
+                    </a>
+                  </Link>
                 )}
               </div>
 
-              <div className="mt-10 w-full shrink-0 pb-8 font-sans lg:mt-0 lg:w-1/2 lg:pb-0 lg:pl-[50px]">
+              <div className="w-full shrink-0 pb-8 font-sans lg:w-1/2 lg:pb-0 lg:pl-[50px]">
                 <div className="text-sm font-medium text-indigoGray-40">
                   <h2>Recommended profiles</h2>
                 </div>
