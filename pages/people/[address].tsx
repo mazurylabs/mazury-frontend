@@ -379,7 +379,9 @@ const Profile: React.FC<Props> = ({ address }) => {
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
                 <button
-                  className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                  className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                    !connectionStatus ? 'animate-pulse' : ''
+                  } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
                     isConnectionRequested || Boolean(connectionStatus?.status)
                       ? 'bg-gray-200'
                       : 'bg-indigoGray-90'
@@ -391,28 +393,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                   }
                 >
                   <div className="mr-2">
-                    {isConnectionRequested ||
-                      (connectionStatus?.status?.includes('pending') && (
-                        <SVG
-                          src="/icons/connection-pending.svg"
-                          height={16}
-                          width={16}
-                        />
-                      ))}
-                    {connectionStatus?.status?.includes('denied') && (
-                      <SVG
-                        src="/icons/connection-denied.svg"
-                        height={16}
-                        width={16}
-                      />
-                    )}
-                    {connectionStatus?.status?.includes('accepted') && (
-                      <SVG
-                        src="/icons/connection-accepted.svg"
-                        height={16}
-                        width={16}
-                      />
-                    )}
+                    <SVG
+                      src={`/icons/connection-${
+                        isConnectionRequested
+                          ? 'pending'
+                          : connectionStatus.status
+                      }.svg`}
+                      height={16}
+                      width={16}
+                    />
                   </div>
                   <span
                     className={`${
@@ -421,7 +410,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                         : 'text-indigoGray-5'
                     }`}
                   >
-                    {connectionStatus?.status
+                    {!isConnectionRequested && !connectionStatus
+                      ? ''
+                      : connectionStatus?.status
                       ? `Contact ${connectionStatus.status}`
                       : isConnectionRequested
                       ? 'Contact Pending'
@@ -458,7 +449,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                     {/* Write referral button, small screens */}
                     {!viewingOwnProfile && (
                       <button
-                        className={`font-inter flex h-[29px] w-auto items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                        className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                          !connectionStatus ? 'animate-pulse' : ''
+                        } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
                           isConnectionRequested ||
                           Boolean(connectionStatus?.status)
                             ? 'bg-gray-200'
@@ -472,28 +465,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                         }
                       >
                         <div className="mr-2">
-                          {isConnectionRequested ||
-                            (connectionStatus?.status?.includes('pending') && (
-                              <SVG
-                                src="/icons/connection-pending.svg"
-                                height={16}
-                                width={16}
-                              />
-                            ))}
-                          {connectionStatus?.status?.includes('denied') && (
-                            <SVG
-                              src="/icons/connection-denied.svg"
-                              height={16}
-                              width={16}
-                            />
-                          )}
-                          {connectionStatus?.status?.includes('accepted') && (
-                            <SVG
-                              src="/icons/connection-accepted.svg"
-                              height={16}
-                              width={16}
-                            />
-                          )}
+                          <SVG
+                            src={`/icons/connection-${
+                              isConnectionRequested
+                                ? 'pending'
+                                : connectionStatus.status
+                            }.svg`}
+                            height={16}
+                            width={16}
+                          />
                         </div>
                         <span
                           className={`${
@@ -503,7 +483,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-5'
                           }`}
                         >
-                          {connectionStatus?.status
+                          {!isConnectionRequested && !connectionStatus
+                            ? ''
+                            : connectionStatus?.status
                             ? `Contact ${connectionStatus.status}`
                             : isConnectionRequested
                             ? 'Contact Pending'
