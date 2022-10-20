@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
+import SVG from 'react-inlinesvg';
 
 import {
   Button,
@@ -19,6 +20,7 @@ import {
   ReferralPreview,
   BlueSocialButton,
   PenIcon,
+  Modal,
 } from 'components';
 
 import {
@@ -56,7 +58,15 @@ import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
-import { getBadgeById } from '@/utils/api';
+import {
+  getBadgeById,
+  requestConnection,
+  requestConnectionStatus,
+} from '@/utils/api';
+import { useConnectionStatus } from '@/hooks/useConnectionStatus';
+import { RequestStatusModal } from '@/components/RequestContactModal/RequestStatusModal';
+import { RecruiterModalContent } from '@/components/RequestContactModal/RecruiterModalContent';
+import { NonRecruiterModalContent } from '@/components/RequestContactModal/NonRecruiterModalContent';
 
 interface Props {
   address: string;
@@ -108,6 +118,8 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const { credentialCount } = useCredentialCount(eth_address);
 
+  const { isAuthenticated } = useSelector(userSlice);
+
   const getBadgeFromRoute = useCallback(async (id: string) => {
     if (badges.find((badge) => badge.id === id)) return;
     const badge = await getBadgeById(id);
@@ -125,12 +137,15 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
+  const { connectionStatus } = useConnectionStatus(eth_address);
   const { posts } = usePosts(eth_address);
 
   const scrollPos = useScrollPosition();
   const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Credentials');
+
+  const [isConnectionRequested, setConnectionRequested] = useState(false);
 
   const [badgesExpanded, setBadgesExpanded] = useState(false);
   const [referralsExpanded, setReferralsExpanded] = useState(false);
@@ -144,6 +159,8 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   // To track whether the 'edit profile' modal is open or not
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   // If the author has already referred the receiver, this holds that referral. Else it's null.
   const [existingReferral, setExistingReferral] = useState<Referral | null>(
@@ -212,14 +229,16 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const handleConnectRequest = async () => {
     try {
-      await axios.get(`profiles/${eth_address}/request_connection/`);
-      alert(
-        'Congrats, you found a preview feature!\nIf you are a beta tester, we will soon connect you with this user 🎉\nIf you want to become a beta tester, please reach out to us at wojtek@mazury.xyz 📩'
-      );
-    } catch (error) {
-      alert(
-        'Congrats, you found a preview feature!\nYou need to log in to use it.'
-      );
+      const { data } = await requestConnection(eth_address);
+
+      if (data) {
+        setConnectionRequested(true);
+        setIsRequestModalOpen(true);
+      }
+    } catch (error: any) {
+      if (error.message.includes('403') || !isAuthenticated) {
+        setIsRequestModalOpen(true);
+      }
     }
   };
 
@@ -273,6 +292,8 @@ const Profile: React.FC<Props> = ({ address }) => {
       }
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
+
+  // console.log(!connectionStatus?.status);
 
   const writeReferralButtonText = existingReferral
     ? 'Edit referral'
@@ -343,30 +364,64 @@ const Profile: React.FC<Props> = ({ address }) => {
         sidebarContent={<Sidebar />}
         headerContent={
           <div className="sticky top-0 left-0 z-10 bg-white">
-            <div className="hidden items-center gap-4 py-4 px-[39.5px] md:flex">
-              <Image
-                onClick={() => router.back()}
-                className="hover:cursor-pointer"
-                src="/icons/back.svg"
-                alt="Back"
-                width={16}
-                height={16}
-              />
-              <p className="font-demi">
-                {returnTruncatedIfEthAddress(account.username)}
-              </p>
+            <div className="hidden items-center justify-between gap-4 py-4 px-[39.5px] md:flex">
+              <div className="flex items-center">
+                <Image
+                  onClick={() => router.back()}
+                  className="hover:cursor-pointer"
+                  src="/icons/back.svg"
+                  alt="Back"
+                  width={16}
+                  height={16}
+                />
+                <p className="ml-2 font-demi">
+                  {returnTruncatedIfEthAddress(account.username)}
+                </p>
+              </div>
 
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
-                <div
-                  className="ml-auto flex items-center rounded-lg bg-emerald-600 px-4 py-2"
-                  role="button"
+                <button
+                  className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                    !connectionStatus ? 'animate-pulse' : ''
+                  } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                    isConnectionRequested || Boolean(connectionStatus?.status)
+                      ? 'bg-gray-200'
+                      : 'bg-indigoGray-90'
+                  }`}
+                  type="button"
                   onClick={handleConnectRequest}
+                  disabled={
+                    isConnectionRequested || Boolean(connectionStatus?.status)
+                  }
                 >
-                  <span className="text-sm font-bold uppercase text-white">
-                    Request contact
+                  <div className="mr-2">
+                    <SVG
+                      src={`/icons/connection-${
+                        isConnectionRequested
+                          ? 'pending'
+                          : connectionStatus.status
+                      }.svg`}
+                      height={16}
+                      width={16}
+                    />
+                  </div>
+                  <span
+                    className={`${
+                      isConnectionRequested || Boolean(connectionStatus.status)
+                        ? 'text-indigoGray-40'
+                        : 'text-indigoGray-5'
+                    }`}
+                  >
+                    {!isConnectionRequested && !connectionStatus
+                      ? ''
+                      : connectionStatus?.status
+                      ? `Contact ${connectionStatus.status}`
+                      : isConnectionRequested
+                      ? 'Contact Pending'
+                      : 'Request contact'}
                   </span>
-                </div>
+                </button>
               )}
             </div>
 
@@ -379,30 +434,67 @@ const Profile: React.FC<Props> = ({ address }) => {
             >
               <div className="flex flex-col gap-4 lg:gap-8">
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-4 md:hidden">
-                    <Image
-                      onClick={() => router.back()}
-                      className="hover:cursor-pointer"
-                      src="/icons/back.svg"
-                      alt="Back"
-                      width={16}
-                      height={16}
-                    />
-                    <p className="font-demi">
-                      {returnTruncatedIfEthAddress(account.username)}
-                    </p>
+                  <div className="flex items-center justify-between gap-4 md:hidden">
+                    <div className="flex items-center">
+                      <Image
+                        onClick={() => router.back()}
+                        className="hover:cursor-pointer"
+                        src="/icons/back.svg"
+                        alt="Back"
+                        width={16}
+                        height={16}
+                      />
+                      <p className="ml-2 font-demi">
+                        {returnTruncatedIfEthAddress(account.username)}
+                      </p>
+                    </div>
 
                     {/* Write referral button, small screens */}
                     {!viewingOwnProfile && (
-                      <div
-                        className="ml-auto flex items-center"
-                        role="button"
+                      <button
+                        className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                          !connectionStatus ? 'animate-pulse' : ''
+                        } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                          isConnectionRequested ||
+                          Boolean(connectionStatus?.status)
+                            ? 'bg-gray-200'
+                            : 'bg-indigoGray-90'
+                        }`}
+                        type="button"
                         onClick={handleConnectRequest}
+                        disabled={
+                          isConnectionRequested ||
+                          Boolean(connectionStatus?.status)
+                        }
                       >
-                        <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                          Request contact
+                        <div className="mr-2">
+                          <SVG
+                            src={`/icons/connection-${
+                              isConnectionRequested
+                                ? 'pending'
+                                : connectionStatus.status
+                            }.svg`}
+                            height={16}
+                            width={16}
+                          />
+                        </div>
+                        <span
+                          className={`${
+                            isConnectionRequested ||
+                            Boolean(connectionStatus.status)
+                              ? 'text-indigoGray-40'
+                              : 'text-indigoGray-5'
+                          }`}
+                        >
+                          {!isConnectionRequested && !connectionStatus
+                            ? ''
+                            : connectionStatus?.status
+                            ? `Contact ${connectionStatus.status}`
+                            : isConnectionRequested
+                            ? 'Contact Pending'
+                            : 'Request contact'}
                         </span>
-                      </div>
+                      </button>
                     )}
 
                     {
@@ -1138,6 +1230,17 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
       />
+
+      <RequestStatusModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+      >
+        {accountData.profile?.is_recruiter ? (
+          <RecruiterModalContent />
+        ) : (
+          <NonRecruiterModalContent />
+        )}
+      </RequestStatusModal>
     </>
   );
 };
