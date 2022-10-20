@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useDispatch } from 'react-redux';
 import { ListResponse, Profile } from '../types';
-import { setSuggestions } from '@/slices/profileSuggestions';
+import { setSuggestions } from '../slices/profileSuggestions';
 
 export const useProfileSuggestions = (
   address?: string,
