@@ -16,7 +16,7 @@ const Connections = () => {
   return (
     <Layout variant="plain">
       <div className="mb-10 px-4 lg:mt-16 lg:px-8">
-        <div className="sticky z-50 w-full bg-white pt-9">
+        <div className="w-full bg-white pt-9">
           <Link href="/">
             <a className="h-6 w-6">
               <SVG src="/icons/arrow-left.svg" height={24} width={24} />
