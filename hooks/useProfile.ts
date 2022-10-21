@@ -1,12 +1,15 @@
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { axios } from '../lib/axios';
 import { Profile } from '../types';
+import { login } from '@/slices/user';
 
 export const useProfile = (
   address: string | undefined,
   isOwnProfile?: boolean
 ) => {
+  const dispatch = useDispatch();
   const [profile, setProfile] = React.useState<Profile>();
   const [error, setError] = React.useState(null);
 
@@ -14,18 +17,21 @@ export const useProfile = (
     const fetchProfile = async () => {
       try {
         const { data } = await axios.get(
-          `/profiles/${address}?action=display_profile_page`
+          `/profiles/${address}${
+            !isOwnProfile ? '?action=display_profile_page' : ''
+          }`
         );
 
         if (data) {
-          setProfile(data);
+          !isOwnProfile && setProfile(data);
+          isOwnProfile && dispatch(login(data));
         }
       } catch (error: any) {
         setError(error);
       }
     };
 
-    !isOwnProfile && fetchProfile();
+    address && fetchProfile();
   }, []);
 
   return {

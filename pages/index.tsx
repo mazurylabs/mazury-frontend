@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -10,7 +10,12 @@ import { profileSuggestionsSlice, userSlice } from '@/selectors';
 import { useSelector } from 'react-redux';
 
 import { Avatar, Button, MobileSidebar, Layout } from 'components';
-import { useClickOutside, useMobile, useProfileSuggestions } from 'hooks';
+import {
+  useClickOutside,
+  useMobile,
+  useProfile,
+  useProfileSuggestions,
+} from 'hooks';
 import { returnTruncatedIfEthAddress } from 'utils';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
@@ -73,10 +78,11 @@ const Home: NextPage = () => {
 
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const { address, isAuthenticated, profile } = useSelector(userSlice);
+  const { address, isAuthenticated } = useSelector(userSlice);
   const { suggestions } = useSelector(profileSuggestionsSlice);
 
   useProfileSuggestions(address as string, apiParams);
+  useProfile(address as string, Boolean(address));
 
   const handleLogin = () => {
     setIsOpen(true);

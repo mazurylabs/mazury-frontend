@@ -99,7 +99,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const viewingOwnProfile = accountData?.address === address;
 
-  const { profile, error } = useProfile(address);
+  const { profile, error } = useProfile(address, viewingOwnProfile);
 
   const account = viewingOwnProfile ? accountData.profile : profile;
 
