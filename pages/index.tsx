@@ -359,8 +359,8 @@ const Home: NextPage = () => {
                     <ul className="space-y-6">
                       {accountData.profile?.is_recruiter ? (
                         <p className="text-sm text-indigo-600">
-                          We can help you find the best talent using our
-                          database of verified talent ready for new projects
+                          Hire straight from our pool of top crypto native
+                          talent with a proven track record
                         </p>
                       ) : (
                         <p className="text-sm text-indigo-600">
@@ -375,7 +375,7 @@ const Home: NextPage = () => {
                     <a
                       href={`${
                         accountData.profile?.is_recruiter
-                          ? 'mailto:wojtek@mazury.xyz'
+                          ? 'mailto:recruiting@mazury.xyz'
                           : `https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}`
                       }`}
                       target="_blank"

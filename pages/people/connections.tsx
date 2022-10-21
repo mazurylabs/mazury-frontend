@@ -24,22 +24,23 @@ const Connections = () => {
             </a>
           </Link>
 
-          <h1 className="font-serif text-4xl font-semibold">
+          <h1 className="mt-3 mb-4 font-serif text-4xl font-semibold lg:mb-12">
             Your connections
           </h1>
-
-          <hr className="mt-4 mb-8 hidden w-full border border-indigoGray-20 lg:block" />
         </div>
 
-        <p className="mb-6 hidden font-sans text-xs font-medium text-indigoGray-60 lg:block">
-          Connections are in testing. If you have any problems message us at
+        <p className="mb-8 font-sans text-sm font-medium text-indigoGray-60 lg:block lg:max-w-4xl lg:text-xs">
+          We are working hard to connect you with selected talent. We have
+          emails to some, for other we will run our custom searches.<br></br>The
+          process can take up to few days. If you have any problems, please
+          message us at
           <a
             className="ml-1 font-bold text-indigo-600"
-            href="mailto:wojtek@mazury.xyz"
+            href="mailto:recruiting@mazury.xyz"
             target="_blank"
             rel="noreferrer"
           >
-            wojtek@mazury.xyz
+            recruiting@mazury.xyz
           </a>
         </p>
 
@@ -72,18 +73,6 @@ const Connections = () => {
             </div>
           ))}
         </div>
-
-        <p className="mt-6 font-sans text-xs font-medium text-indigoGray-60 lg:hidden">
-          Connections are in testing. If you have any problems message us at
-          <a
-            className="ml-1 font-bold text-indigo-600"
-            href="mailto:wojtek@mazury.xyz"
-            target="_blank"
-            rel="noreferrer"
-          >
-            wojtek@mazury.xyz
-          </a>
-        </p>
       </div>
     </Layout>
   );
