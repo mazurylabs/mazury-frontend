@@ -12,8 +12,8 @@ export const NonRecruiterModalContent = () => {
         <p className="font-sans text-sm font-normal text-indigoGray-90">
           We are currently running this feature in a shielded mode.
           <br></br>
-          <br></br>If you're interesting in connecting with talent on Mazury,
-          please reach out to us at
+          <br></br>If you&apos;re interesting in connecting with talent on
+          Mazury, please reach out to us at
           <a
             href="mailto:recruiting@mazury.xyz"
             className="ml-1 font-semibold text-indigo-600"
