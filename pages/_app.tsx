@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { getProfile } from '@/utils/api';
 import storage from '@/utils/storage';
-import { REFRESH_TOKEN_KEY } from '@/config';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
@@ -28,25 +28,32 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   const Authenticator = () => {
+    const isMounted = React.useRef(false);
     const dispatch = useDispatch();
-    const { address } = useSelector(userSlice);
+    const { address, profile } = useSelector(userSlice);
     const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
+    const accessToken = storage.getToken(ACCESS_TOKEN_KEY);
+
     const isRefreshTokenExpired = storage.isTokenExpired(refreshToken);
+    const isAccessTokenValid = storage.isTokenExpired(accessToken);
 
     const handleProfile = React.useCallback(async () => {
       if (isRefreshTokenExpired) {
         return dispatch(logout());
       }
 
-      if (address) {
+      if (address && !isMounted.current && !profile) {
         const { data } = await getProfile(address || '');
-        if (data) {
+
+        if (data && isAccessTokenValid) {
           dispatch(login(data));
         }
       }
-    }, [address, isRefreshTokenExpired, dispatch]);
+    }, [address, isRefreshTokenExpired, dispatch, isAccessTokenValid]);
 
     React.useEffect(() => {
+      isMounted.current = true;
+
       clearWagmiStorage();
       handleProfile();
     }, [handleProfile]);

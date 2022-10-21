@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
+import SVG from 'react-inlinesvg';
 
 import {
   Button,
@@ -19,6 +20,7 @@ import {
   ReferralPreview,
   BlueSocialButton,
   PenIcon,
+  Modal,
 } from 'components';
 
 import {
@@ -44,7 +46,6 @@ import {
   useBadges,
   useReferrals,
   useScrollPosition,
-  useTotalBadgeCounts,
   useProfile,
   useActiveProfileSection,
   useMobile,
@@ -57,7 +58,15 @@ import { ProfilePageLoadingState } from 'views/Profile/LoadingState';
 import { EditProfileModal } from 'views/Profile/EditProfileModal';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
-import { getBadgeById } from '@/utils/api';
+import {
+  getBadgeById,
+  requestConnection,
+  requestConnectionStatus,
+} from '@/utils/api';
+import { useConnectionStatus } from '@/hooks/useConnectionStatus';
+import { RequestStatusModal } from '@/components/RequestContactModal/RequestStatusModal';
+import { RecruiterModalContent } from '@/components/RequestContactModal/RecruiterModalContent';
+import { NonRecruiterModalContent } from '@/components/RequestContactModal/NonRecruiterModalContent';
 
 interface Props {
   address: string;
@@ -87,8 +96,14 @@ const Profile: React.FC<Props> = ({ address }) => {
   const router = useRouter();
   const accountData = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
-  const { profile, error } = useProfile(address);
-  const eth_address = profile?.eth_address || '';
+
+  const viewingOwnProfile = accountData?.address === address;
+
+  const { profile, error } = useProfile(address, viewingOwnProfile);
+
+  const account = viewingOwnProfile ? accountData.profile : profile;
+
+  const eth_address = account?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
@@ -102,6 +117,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   );
 
   const { credentialCount } = useCredentialCount(eth_address);
+
+  const { isAuthenticated } = useSelector(userSlice);
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     if (badges.find((badge) => badge.id === id)) return;
@@ -120,8 +137,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
-  const { totalBadgeCounts, error: badgeCountsError } = useTotalBadgeCounts();
-
+  const { connectionStatus } = useConnectionStatus(eth_address);
   const { posts } = usePosts(eth_address);
 
   const scrollPos = useScrollPosition();
@@ -129,19 +145,22 @@ const Profile: React.FC<Props> = ({ address }) => {
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Credentials');
 
+  const [isConnectionRequested, setConnectionRequested] = useState(false);
+
   const [badgesExpanded, setBadgesExpanded] = useState(false);
   const [referralsExpanded, setReferralsExpanded] = useState(false);
   const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
     'received'
   );
   const [postsExpanded, setPostsExpanded] = useState(false);
-  const [activityExpanded, setActivityExpanded] = useState(false);
 
   // To track whether the 'write referral' modal is open or not
   const [referralModalOpen, setReferralModalOpen] = useState(false);
 
   // To track whether the 'edit profile' modal is open or not
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   // If the author has already referred the receiver, this holds that referral. Else it's null.
   const [existingReferral, setExistingReferral] = useState<Referral | null>(
@@ -155,7 +174,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const referralsToShow =
     referralsToggle === 'received' ? referrals : authoredReferrals;
 
-  const viewingOwnProfile = accountData?.address === eth_address;
+  // const viewingOwnProfile = accountData?.address === eth_address;
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
@@ -167,7 +186,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const currActiveSection = useActiveProfileSection();
   const isMobile = useMobile();
 
-  const hasAnySocial = profile?.github || profile?.website || profile?.twitter;
+  const hasAnySocial = account?.github || account?.website || account?.twitter;
 
   const handleSectionClick = (section: ProfileSection) => {
     setActiveSection(section);
@@ -210,14 +229,16 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const handleConnectRequest = async () => {
     try {
-      await axios.get(`profiles/${eth_address}/request_connection/`);
-      alert(
-        'Congrats, you found a preview feature!\nIf you are a beta tester, we will soon connect you with this user 🎉\nIf you want to become a beta tester, please reach out to us at wojtek@mazury.xyz 📩'
-      );
-    } catch (error) {
-      alert(
-        'Congrats, you found a preview feature!\nYou need to log in to use it.'
-      );
+      const { data } = await requestConnection(eth_address);
+
+      if (data) {
+        setConnectionRequested(true);
+        setIsRequestModalOpen(true);
+      }
+    } catch (error: any) {
+      if (error.message.includes('403') || !isAuthenticated) {
+        setIsRequestModalOpen(true);
+      }
     }
   };
 
@@ -272,6 +293,8 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
 
+  // console.log(!connectionStatus?.status);
+
   const writeReferralButtonText = existingReferral
     ? 'Edit referral'
     : 'Write referral';
@@ -297,7 +320,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     );
   }
 
-  if (!profile) {
+  if (!account) {
     return (
       <ProfilePageLoadingState
         headerRef={headerRef}
@@ -318,7 +341,7 @@ const Profile: React.FC<Props> = ({ address }) => {
     <>
       <Toaster />
       <Head>
-        <title>{returnTruncatedIfEthAddress(profile.username)} | Mazury</title>
+        <title>{returnTruncatedIfEthAddress(account.username)} | Mazury</title>
       </Head>
       <EditProfileModal
         isOpen={editProfileModalOpen}
@@ -329,10 +352,10 @@ const Profile: React.FC<Props> = ({ address }) => {
         isOpen={referralModalOpen}
         onClose={onReferralModalClose}
         receiver={{
-          avatar: profile.avatar,
-          ens_name: profile.ens_name,
-          eth_address: profile.eth_address,
-          username: profile.username,
+          avatar: account.avatar,
+          ens_name: account.ens_name,
+          eth_address: account.eth_address,
+          username: account.username,
         }}
         existingReferral={existingReferral}
         receivedReferral={receivedReferral}
@@ -341,30 +364,64 @@ const Profile: React.FC<Props> = ({ address }) => {
         sidebarContent={<Sidebar />}
         headerContent={
           <div className="sticky top-0 left-0 z-10 bg-white">
-            <div className="hidden items-center gap-4 py-4 px-[39.5px] md:flex">
-              <Image
-                onClick={() => router.back()}
-                className="hover:cursor-pointer"
-                src="/icons/back.svg"
-                alt="Back"
-                width={16}
-                height={16}
-              />
-              <p className="font-demi">
-                {returnTruncatedIfEthAddress(profile.username)}
-              </p>
+            <div className="hidden items-center justify-between gap-4 py-4 px-[39.5px] md:flex">
+              <div className="flex items-center">
+                <Image
+                  onClick={() => router.back()}
+                  className="hover:cursor-pointer"
+                  src="/icons/back.svg"
+                  alt="Back"
+                  width={16}
+                  height={16}
+                />
+                <p className="ml-2 font-demi">
+                  {returnTruncatedIfEthAddress(account.username)}
+                </p>
+              </div>
 
               {/* Write referral button, large screens */}
               {!viewingOwnProfile && (
-                <div
-                  className="ml-auto flex items-center rounded-lg bg-emerald-600 px-4 py-2"
-                  role="button"
+                <button
+                  className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                    !connectionStatus ? 'animate-pulse' : ''
+                  } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                    isConnectionRequested || Boolean(connectionStatus?.status)
+                      ? 'bg-gray-200'
+                      : 'bg-indigoGray-90'
+                  }`}
+                  type="button"
                   onClick={handleConnectRequest}
+                  disabled={
+                    isConnectionRequested || Boolean(connectionStatus?.status)
+                  }
                 >
-                  <span className="text-sm font-bold uppercase text-white">
-                    Request contact
+                  <div className="mr-2">
+                    <SVG
+                      src={`/icons/connection-${
+                        isConnectionRequested
+                          ? 'pending'
+                          : connectionStatus.status
+                      }.svg`}
+                      height={16}
+                      width={16}
+                    />
+                  </div>
+                  <span
+                    className={`${
+                      isConnectionRequested || Boolean(connectionStatus.status)
+                        ? 'text-indigoGray-40'
+                        : 'text-indigoGray-5'
+                    }`}
+                  >
+                    {!isConnectionRequested && !connectionStatus
+                      ? ''
+                      : connectionStatus?.status
+                      ? `Contact ${connectionStatus.status}`
+                      : isConnectionRequested
+                      ? 'Contact Pending'
+                      : 'Request contact'}
                   </span>
-                </div>
+                </button>
               )}
             </div>
 
@@ -377,30 +434,67 @@ const Profile: React.FC<Props> = ({ address }) => {
             >
               <div className="flex flex-col gap-4 lg:gap-8">
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-4 md:hidden">
-                    <Image
-                      onClick={() => router.back()}
-                      className="hover:cursor-pointer"
-                      src="/icons/back.svg"
-                      alt="Back"
-                      width={16}
-                      height={16}
-                    />
-                    <p className="font-demi">
-                      {returnTruncatedIfEthAddress(profile.username)}
-                    </p>
+                  <div className="flex items-center justify-between gap-4 md:hidden">
+                    <div className="flex items-center">
+                      <Image
+                        onClick={() => router.back()}
+                        className="hover:cursor-pointer"
+                        src="/icons/back.svg"
+                        alt="Back"
+                        width={16}
+                        height={16}
+                      />
+                      <p className="ml-2 font-demi">
+                        {returnTruncatedIfEthAddress(account.username)}
+                      </p>
+                    </div>
 
                     {/* Write referral button, small screens */}
                     {!viewingOwnProfile && (
-                      <div
-                        className="ml-auto flex items-center"
-                        role="button"
+                      <button
+                        className={`font-inter flex h-[29px] w-auto min-w-[186px] ${
+                          !connectionStatus ? 'animate-pulse' : ''
+                        } items-center justify-center rounded-lg px-6 text-center font-sans text-sm font-semibold text-indigoGray-5 ${
+                          isConnectionRequested ||
+                          Boolean(connectionStatus?.status)
+                            ? 'bg-gray-200'
+                            : 'bg-indigoGray-90'
+                        }`}
+                        type="button"
                         onClick={handleConnectRequest}
+                        disabled={
+                          isConnectionRequested ||
+                          Boolean(connectionStatus?.status)
+                        }
                       >
-                        <span className="ml-2 text-sm font-bold uppercase text-indigoGray-90">
-                          Request contact
+                        <div className="mr-2">
+                          <SVG
+                            src={`/icons/connection-${
+                              isConnectionRequested
+                                ? 'pending'
+                                : connectionStatus.status
+                            }.svg`}
+                            height={16}
+                            width={16}
+                          />
+                        </div>
+                        <span
+                          className={`${
+                            isConnectionRequested ||
+                            Boolean(connectionStatus.status)
+                              ? 'text-indigoGray-40'
+                              : 'text-indigoGray-5'
+                          }`}
+                        >
+                          {!isConnectionRequested && !connectionStatus
+                            ? ''
+                            : connectionStatus?.status
+                            ? `Contact ${connectionStatus.status}`
+                            : isConnectionRequested
+                            ? 'Contact Pending'
+                            : 'Request contact'}
                         </span>
-                      </div>
+                      </button>
                     )}
 
                     {
@@ -426,8 +520,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                         width: shouldCollapseHeader ? '56px' : '100px',
                         height: shouldCollapseHeader ? '56px' : '100px',
                       }}
-                      src={profile.avatar}
-                      alt={`${profile.username}'s avatar`}
+                      src={account.avatar}
+                      alt={`${account.username}'s avatar`}
                       className="rounded-full object-cover"
                     />
                     <div className="flex flex-col">
@@ -436,24 +530,24 @@ const Profile: React.FC<Props> = ({ address }) => {
                           animate={{
                             fontSize: shouldCollapseHeader
                               ? '30px'
-                              : isMobile && profile.username.length > 8
+                              : isMobile && account.username.length > 8
                               ? '32px'
                               : '48px',
                           }}
                           className={`no-scrollbar overflow-x-scroll font-demi text-indigoGray-90 md:overflow-auto`}
                         >
-                          {profile.username == profile.eth_address
-                            ? returnTruncatedIfEthAddress(profile.eth_address)
-                            : profile.username.length > 15 && isMobile
-                            ? profile.username.slice(0, 10) + '...'
-                            : profile.username}
+                          {account.username == account.eth_address
+                            ? returnTruncatedIfEthAddress(account.eth_address)
+                            : account.username.length > 15 && isMobile
+                            ? account.username.slice(0, 10) + '...'
+                            : account.username}
                         </motion.h1>
                         <h3
                           className={`hidden text-indigoGray-40 md:inline-block ${
                             shouldCollapseHeader ? 'text-sm' : 'text-lg'
                           }`}
                         >
-                          {profile.full_name}
+                          {account.full_name}
                         </h3>
                       </div>
 
@@ -462,7 +556,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           shouldCollapseHeader ? 'text-sm' : 'text-lg'
                         }`}
                       >
-                        {profile.full_name}
+                        {account.full_name}
                       </h3>
 
                       <div className="flex items-center">
@@ -473,9 +567,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-base'
                           }`}
                         >
-                          {profile.ens_name && `${profile.ens_name} `}
+                          {account.ens_name && `${account.ens_name} `}
                           <span className="text-indigoGray-40">
-                            ({returnTruncatedIfEthAddress(profile.eth_address)})
+                            ({returnTruncatedIfEthAddress(account.eth_address)})
                           </span>
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -497,7 +591,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                     shouldCollapseHeader ? 'hidden' : 'block'
                   }`}
                 >
-                  {profile.bio}
+                  {account.bio}
                 </p>
 
                 <div
@@ -507,7 +601,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                 >
                   {/* @ts-expect-error any element of type 'Role' is also a 'string' */}
                   {Object.keys(roleFieldToLabel).map((role: Role) => {
-                    if (profile[role] === true) {
+                    if (account[role] === true) {
                       return (
                         <button
                           key={role}
@@ -614,40 +708,40 @@ const Profile: React.FC<Props> = ({ address }) => {
                 shouldCollapseHeader && 'hidden md:flex'
               }`}
             >
-              {profile.twitter && (
+              {account.twitter && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
-                    goToLink(`https://twitter.com/${profile.twitter}`)
+                    goToLink(`https://twitter.com/${account.twitter}`)
                   }
                 >
-                  <FaTwitter /> {profile.twitter}
+                  <FaTwitter /> {account.twitter}
                 </BlueSocialButton>
               )}
-              {profile.website && (
+              {account.website && (
                 <BlueSocialButton
                   variant="secondary"
-                  onClick={() => goToLink(profile.website)}
+                  onClick={() => goToLink(account.website)}
                 >
-                  <FaGlobe /> {profile.website}
+                  <FaGlobe /> {account.website}
                 </BlueSocialButton>
               )}
-              {profile.github && (
+              {account.github && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
-                    goToLink(`https://github.com/${profile.github}`)
+                    goToLink(`https://github.com/${account.github}`)
                   }
                 >
-                  <FaGithub /> {profile.github}
+                  <FaGithub /> {account.github}
                 </BlueSocialButton>
               )}
-              {profile.eth_address && (
+              {account.eth_address && (
                 <BlueSocialButton
                   variant="secondary"
                   onClick={() =>
                     goToLink(
-                      `https://chat.blockscan.com/index?a=${profile.eth_address}`
+                      `https://chat.blockscan.com/index?a=${account.eth_address}`
                     )
                   }
                 >
@@ -1106,8 +1200,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                     .map((post) => (
                       <MirrorPost
                         author={{
-                          username: profile?.username,
-                          avatarSrc: profile?.avatar,
+                          username: account?.username,
+                          avatarSrc: account?.avatar,
                         }}
                         bgImageSrc={post?.background_image || ''}
                         title={post.title}
@@ -1136,6 +1230,17 @@ const Profile: React.FC<Props> = ({ address }) => {
           </div>
         }
       />
+
+      <RequestStatusModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+      >
+        {accountData.profile?.is_recruiter ? (
+          <RecruiterModalContent />
+        ) : (
+          <NonRecruiterModalContent />
+        )}
+      </RequestStatusModal>
     </>
   );
 };

@@ -15,7 +15,7 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
     useContext(TwitterModalContext);
 
   return (
-    <>
+    <div className="w-[300px] md:w-[350px]">
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Verify Twitter link
       </h3>
@@ -26,18 +26,20 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
       <Input
         label="Twitter link"
         outerClassName="mt-4"
-        placeholder="e.g. https://twitter.com/mazuryxyz"
+        placeholder="e.g. https://twitter.com/mazuryxyz/status/1565365440557236224"
         value={tweetURL}
         onChange={(val) => setTweetURL(val)}
       />
 
       <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary">SKIP</Button>
-        <Button onClick={goToNextStep} variant="primary">
-          Continue
+        <Button className="w-1/2" variant="secondary">
+          SKIP
+        </Button>
+        <Button className="w-1/2" onClick={goToNextStep} variant="primary">
+          CONNECT
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -68,23 +70,9 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      <h3 className="font-demi text-3xl text-indigoGray-90">
-        Sign with wallet
-      </h3>
-      <span className="mt-2 text-sm text-indigoGray-60">
-        Before we finish we need you to sign this with your wallet
-      </span>
-
-      <div className="mt-4 flex justify-center">
+    <div className="flex w-[300px] flex-col md:w-[350px]">
+      <div className="my-4 flex justify-center">
         <Spinner />
-      </div>
-
-      <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary">SKIP</Button>
-        <Button onClick={requestSignature} variant="primary">
-          RETRY
-        </Button>
       </div>
     </div>
   );
@@ -93,7 +81,7 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
 const FailedStep: FC<ContentComponentProps> = ({}) => {
   const { goToNextStep } = useContext(TwitterModalContext);
   return (
-    <div className="flex flex-col">
+    <div className="flex w-[300px] flex-col md:w-[350px]">
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Connection failed
       </h3>
@@ -102,9 +90,8 @@ const FailedStep: FC<ContentComponentProps> = ({}) => {
       </span>
 
       <div className="mt-4 flex w-full justify-around gap-4">
-        <Button variant="secondary">SKIP</Button>
-        <Button onClick={goToNextStep} variant="primary">
-          RETRY
+        <Button className="w-1/2" variant="secondary">
+          GO BACK
         </Button>
       </div>
     </div>
@@ -113,7 +100,7 @@ const FailedStep: FC<ContentComponentProps> = ({}) => {
 
 const SuccessStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex w-[300px] flex-col md:w-[350px]">
       <h3 className="font-demi text-3xl text-indigoGray-90">
         You are connected
       </h3>

@@ -1,8 +1,8 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
-import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '@/config';
-import storage from '@/utils/storage';
-import { refreshToken } from '@/utils/api';
+import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '../config/index';
+import storage from '../utils/storage';
+import { refreshToken } from '../utils/api';
 
 async function authRequestInterceptor(config: AxiosRequestConfig) {
   if (!config?.headers) return;

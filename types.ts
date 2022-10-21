@@ -46,6 +46,11 @@ export interface PersonBasicDetails {
   avatar: string;
 }
 
+export interface ConnectionType {
+  requested_profile: { avatar: string; eth_address: string; username: string };
+  status: 'pending' | 'accepted' | 'declined';
+}
+
 export interface BadgeType {
   id: string;
   total_supply?: number;
@@ -146,6 +151,7 @@ export interface Profile
   website: string;
   full_name?: string;
   credentials_count?: number;
+  is_recruiter: boolean;
 }
 
 export interface ListResponse<T> {

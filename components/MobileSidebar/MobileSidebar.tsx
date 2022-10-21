@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { userSlice } from '@/selectors';
-import { logout } from '@/slices/user';
+import { userSlice } from '../../selectors/index';
+import { logout } from '../../slices/user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

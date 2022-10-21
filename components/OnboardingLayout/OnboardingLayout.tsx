@@ -1,4 +1,4 @@
-import { userSlice } from '@/selectors';
+import { userSlice } from '../../selectors/index';
 import { Button } from 'components';
 import { OnboardingContext } from 'contexts';
 import Image from 'next/image';

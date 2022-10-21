@@ -154,11 +154,7 @@ const SocialsPage: NextPage = () => {
 
       <SocialButton
         icon={<FaTwitter width="20px" height="20px" />}
-        label={
-          twitterConnected
-            ? `Connected as ${formData.twitter}` || 'Connected'
-            : 'Twitter'
-        }
+        label={twitterConnected ? 'Connected' : 'Twitter'}
         backgroundColor="#4A99E9"
         className="mt-12"
         onClick={onTwitterClick}
@@ -167,11 +163,7 @@ const SocialsPage: NextPage = () => {
 
       <SocialButton
         icon={<FaGithub width="20px" height="20px" />}
-        label={
-          githubConnected
-            ? `Connected as ${formData.github}` || 'Connected'
-            : 'Github'
-        }
+        label={githubConnected ? 'Connected' : 'Github'}
         backgroundColor="#262626"
         className="mt-4"
         onClick={onGithubClick}

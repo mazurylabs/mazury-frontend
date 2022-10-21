@@ -1,6 +1,6 @@
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
-import { Profile } from '@/types';
-import storage from '@/utils/storage';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../config/index';
+import { Profile } from '../types';
+import storage from '../utils/storage';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
@@ -50,9 +50,14 @@ const authSlice = createSlice({
       storage.clearToken(ACCESS_TOKEN_KEY);
       storage.clearToken(REFRESH_TOKEN_KEY);
     },
+
+    updateUserProfile: (state, { payload }: PayloadAction<any>) => {
+      state.profile = { ...state.profile, ...payload };
+    },
   },
 });
 
-export const { login, loginError, logout, setAddress } = authSlice.actions;
+export const { login, loginError, logout, setAddress, updateUserProfile } =
+  authSlice.actions;
 
 export default authSlice.reducer;
