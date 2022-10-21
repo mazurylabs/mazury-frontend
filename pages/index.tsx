@@ -10,7 +10,12 @@ import { profileSuggestionsSlice, userSlice } from '@/selectors';
 import { useSelector } from 'react-redux';
 
 import { Avatar, Button, MobileSidebar, Layout } from 'components';
-import { useClickOutside, useMobile, useProfileSuggestions } from 'hooks';
+import {
+  useClickOutside,
+  useMobile,
+  useProfile,
+  useProfileSuggestions,
+} from 'hooks';
 import { returnTruncatedIfEthAddress } from 'utils';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
@@ -77,6 +82,7 @@ const Home: NextPage = () => {
   const { suggestions } = useSelector(profileSuggestionsSlice);
 
   useProfileSuggestions(address as string, apiParams);
+  useProfile(address as string, Boolean(address));
 
   const handleLogin = () => {
     setIsOpen(true);
@@ -342,7 +348,11 @@ const Home: NextPage = () => {
               <div className="mb-6 lg:mr-[50px] lg:mb-3 lg:h-min lg:w-1/2 lg:p-4">
                 <div className="mb-6 grow rounded-md border border-indigoGray-20 bg-indigo-50 bg-opacity-10 p-3 lg:mb-3">
                   <div className="font-sans font-bold text-indigo-600">
-                    <h2>Mazury Talent</h2>
+                    <h2>
+                      {profile?.is_recruiter
+                        ? 'Recruiting with Mazury'
+                        : 'Mazury Talent'}
+                    </h2>
                   </div>
 
                   <div className="mt-1 mb-3 lg:mb-5">
@@ -366,7 +376,7 @@ const Home: NextPage = () => {
                       href={`${
                         accountData.profile?.is_recruiter
                           ? 'mailto:wojtek@mazury.xyz'
-                          : 'https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}'
+                          : `https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}`
                       }`}
                       target="_blank"
                       rel="noreferrer"
@@ -387,7 +397,7 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                {accountData.profile?.is_recruiter && (
+                {isAuthenticated && profile?.is_recruiter && (
                   <Link href="/people/connections">
                     <a className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3">
                       See your connections
