@@ -2,9 +2,11 @@ import { axios } from '@/lib/axios';
 import { useEffect, useState } from 'react';
 import SVG from 'react-inlinesvg';
 
+import { Profile } from 'types';
+
 import { Talent } from './Talent';
 
-const TEMPORARY_RECOMMENDED_DATA = [
+const TEMPORARY_RECOMMENDED_DATA: Profile[] = [
   {
     id: '5ac19001-cf6d-42c1-af62-37e7dc96137f',
     top_badges: [
