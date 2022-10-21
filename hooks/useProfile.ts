@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { axios } from '../lib/axios';
 import { Profile } from '../types';
-import { login } from '@/slices/user';
+import { login } from '../slices/user';
 
 export const useProfile = (
   address: string | undefined,
