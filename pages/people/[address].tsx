@@ -418,7 +418,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       : connectionStatus?.status
                       ? `Contact ${connectionStatus.status}`
                       : isConnectionRequested
-                      ? 'Contact Pending'
+                      ? 'Contact pending'
                       : 'Request contact'}
                   </span>
                 </button>
@@ -491,7 +491,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                             : connectionStatus?.status
                             ? `Contact ${connectionStatus.status}`
                             : isConnectionRequested
-                            ? 'Contact Pending'
+                            ? 'Contact pending'
                             : 'Request contact'}
                         </span>
                       </button>
