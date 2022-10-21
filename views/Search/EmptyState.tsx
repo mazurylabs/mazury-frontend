@@ -1,5 +1,4 @@
-import { axios } from '@/lib/axios';
-import { useEffect, useState } from 'react';
+//@ts-nocheck
 import SVG from 'react-inlinesvg';
 
 import { Profile } from 'types';
