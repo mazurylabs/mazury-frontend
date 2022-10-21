@@ -387,7 +387,7 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                {isAuthenticated && (
+                {accountData.profile?.is_recruiter && (
                   <Link href="/people/connections">
                     <a className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3">
                       See your connections

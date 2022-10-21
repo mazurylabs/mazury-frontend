@@ -13,10 +13,10 @@ export const NonRecruiterModalContent = () => {
           This feature is in testing. If you wish to join the beta group,
           message us at
           <a
-            href="mailto:wojtek@mazury.com"
+            href="mailto:wojtek@mazury.xyz"
             className="ml-1 font-semibold text-indigo-600"
           >
-            wojtek@mazury.com
+            wojtek@mazury.xyz
           </a>
         </p>
       </div>
