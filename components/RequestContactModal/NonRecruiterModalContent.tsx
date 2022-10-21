@@ -7,16 +7,18 @@ export const NonRecruiterModalContent = () => {
     <div className="mt-6 h-[210px] lg:h-[250px]">
       <div>
         <h3 className="mt-6 mb-2 font-serif text-3xl font-semibold text-indigoGray-90">
-          Beta feature
+          Connect with any eth address
         </h3>
         <p className="font-sans text-sm font-normal text-indigoGray-90">
-          This feature is in testing. If you wish to join the beta group,
-          message us at
+          We are currently running this feature in a shielded mode.
+          <br></br>
+          <br></br>If you&apos;re interesting in connecting with talent on
+          Mazury, please reach out to us at
           <a
-            href="mailto:wojtek@mazury.com"
+            href="mailto:recruiting@mazury.xyz"
             className="ml-1 font-semibold text-indigo-600"
           >
-            wojtek@mazury.com
+            recruiting@mazury.xyz
           </a>
         </p>
       </div>

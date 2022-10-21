@@ -14,8 +14,9 @@ export const RecruiterModalContent = () => {
           Request in processing
         </h3>
         <p className="font-sans text-sm font-normal text-indigoGray-90">
-          For safety we are processing contact data manually at this point. We
-          will inform you once the contact data is available.
+          For privacy and security reasons, we are processing the connections
+          manually. We will inform you via email once the contact data is
+          available.
         </p>
       </div>
     </div>

@@ -99,7 +99,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const viewingOwnProfile = accountData?.address === address;
 
-  const { profile, error } = useProfile(address, viewingOwnProfile);
+  const { profile, error } = useProfile(address);
 
   const account = viewingOwnProfile ? accountData.profile : profile;
 
@@ -418,7 +418,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       : connectionStatus?.status
                       ? `Contact ${connectionStatus.status}`
                       : isConnectionRequested
-                      ? 'Contact Pending'
+                      ? 'Contact pending'
                       : 'Request contact'}
                   </span>
                 </button>
@@ -491,7 +491,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                             : connectionStatus?.status
                             ? `Contact ${connectionStatus.status}`
                             : isConnectionRequested
-                            ? 'Contact Pending'
+                            ? 'Contact pending'
                             : 'Request contact'}
                         </span>
                       </button>
