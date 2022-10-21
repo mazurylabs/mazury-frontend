@@ -73,10 +73,7 @@ export const Talent = ({ result }: Props) => {
         const { badges, remainder } = composeBadges(result.top_badges);
 
         return (
-          <Link
-            key={result.id}
-            href={`/people/${result.username || result.eth_address}`}
-          >
+          <Link key={result.id} href={`/people/${result.eth_address}`}>
             <a className="flex list-none flex-col space-y-4 rounded-2xl border border-indigoGray-20 p-4 shadow-sm lg:space-y-0">
               <div className="flex items-center">
                 <div>

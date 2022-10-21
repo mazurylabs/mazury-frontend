@@ -376,7 +376,7 @@ const Home: NextPage = () => {
                       href={`${
                         accountData.profile?.is_recruiter
                           ? 'mailto:recruiting@mazury.xyz'
-                          : `https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.username}`
+                          : `https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.eth_address}`
                       }`}
                       target="_blank"
                       rel="noreferrer"
@@ -422,7 +422,7 @@ const Home: NextPage = () => {
                     {Boolean(suggestions) ? (
                       suggestions?.map((suggestion, index) => (
                         <li key={index}>
-                          <Link href={`/people/${suggestion?.username}`}>
+                          <Link href={`/people/${suggestion?.eth_address}`}>
                             <a className="flex">
                               <Avatar
                                 src={suggestion.avatar}
