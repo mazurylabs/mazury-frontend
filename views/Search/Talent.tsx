@@ -56,7 +56,11 @@ const CredentialTag = ({
   );
 };
 
-export const Talent = ({ result }) => {
+interface Props {
+  result?: Profile[];
+}
+
+export const Talent = ({ result }: Props) => {
   const { query } = useRouter();
 
   const composeRoles = (data: Profile) => getRoles(data, query);
