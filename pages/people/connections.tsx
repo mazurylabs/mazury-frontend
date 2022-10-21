@@ -47,10 +47,7 @@ const Connections = () => {
           {connections?.map((connection, index) => (
             <div key={index}>
               <Link
-                href={`/people/${
-                  connection?.requested_profile.username ||
-                  connection.requested_profile.eth_address
-                }`}
+                href={`/people/${connection.requested_profile.eth_address}`}
               >
                 <a className="flex items-center">
                   <img
