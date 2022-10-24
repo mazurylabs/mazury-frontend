@@ -73,6 +73,7 @@ export const ResultState = () => {
     React.useState<FilterType>('empty');
 
   const [filter, setFilter] = React.useState<FilterState>(initialFilterState);
+  const [isFilterActive, setIsFilterActive] = React.useState(false);
 
   const handleFilter = (
     key: keyof FilterState,
@@ -358,28 +359,34 @@ export const ResultState = () => {
               <li
                 key={filter}
                 className="relative flex cursor-pointer items-center space-x-1"
-                onMouseEnter={() => handleSelectFilter(filter as FilterType)}
-                onMouseLeave={() => handleSelectFilter('empty')}
+                onClick={() => {
+                  handleSelectFilter(filter as FilterType),
+                    setIsFilterActive(!isFilterActive);
+                }}
+                // onMouseLeave={() => handleSelectFilter('empty')}
               >
                 <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
                   {filter}
                 </span>
                 <SVG src="/icons/angle-down.svg" height={16} width={16} />
-
-                <AnimatePresence>
-                  {selectedFilter === filter && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className={clsx(
-                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
+                {isFilterActive && (
+                  <div className="absolute top-6">
+                    <AnimatePresence>
+                      {selectedFilter === filter && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className={clsx(
+                            'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
+                          )}
+                        >
+                          {selectedFilterState[selectedFilter]}
+                        </motion.div>
                       )}
-                    >
-                      {selectedFilterState[selectedFilter]}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    </AnimatePresence>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
