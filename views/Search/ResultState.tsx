@@ -21,7 +21,7 @@ import { FilterState, FilterType, Profile, ValueOf } from 'types';
 import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
-import { useClickOutside } from 'hooks';
+import { useClickOutside } from '@/hooks';
 
 const filters = [
   'Mazury',
@@ -62,6 +62,7 @@ const initialFilterState = {
 };
 
 export const ResultState = () => {
+  const filterRef = React.useRef<HTMLUListElement>(null!);
   const [cursor, setCursor] = React.useState('');
   const { ref, entry } = useIntersect({ rootMargin: '50px' });
   const shouldFetchMore = entry?.isIntersecting;
@@ -70,18 +71,11 @@ export const ResultState = () => {
   const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
   const [currentStep, setCurrentStep] = React.useState<ResultSteps>('loading');
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
+  useClickOutside(filterRef, () => setSelectedFilter('empty'));
   const [selectedFilter, setSelectedFilter] =
     React.useState<FilterType>('empty');
 
   const [filter, setFilter] = React.useState<FilterState>(initialFilterState);
-
-  const [isFilterActive, setIsFilterActive] = React.useState(false);
-  const filterRef = React.useRef(null!);
-  const handleFilterClose = () => {
-    setIsFilterActive(false);
-  };
-
-  useClickOutside(filterRef, handleFilterClose);
 
   const handleFilter = (
     key: keyof FilterState,
@@ -189,7 +183,11 @@ export const ResultState = () => {
     []
   );
 
-  const handleSelectFilter = (filter: FilterType) => setSelectedFilter(filter);
+  const handleSelectFilter = (filter: FilterType) => {
+    setSelectedFilter((prevFilter) =>
+      prevFilter === filter ? 'empty' : filter
+    );
+  };
 
   const resultStates = {
     loading: <LoadingState />,
@@ -349,6 +347,7 @@ export const ResultState = () => {
           </p>
         </div>
       </div>
+
       {isFiltersOpen && (
         <div
           {...fadeAnimation}
@@ -358,42 +357,38 @@ export const ResultState = () => {
           {selectedFilterState[selectedFilter]}
         </div>
       )}
+
       <div className="mb-4 hidden pl-4 lg:block">
         <div className="mb-2 flex items-center">
-          <ul className="flex space-x-8">
+          <ul className="flex space-x-8" ref={filterRef}>
             {filters.map((filter) => (
-              <li
-                key={filter}
-                className="relative flex cursor-pointer items-center space-x-1"
-                onClick={() => {
-                  handleSelectFilter(filter as FilterType),
-                    setIsFilterActive(!isFilterActive);
-                }}
-                ref={filterRef}
-                // onMouseLeave={() => handleSelectFilter('empty')}
-              >
-                <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
-                  {filter}
-                </span>
-                <SVG src="/icons/angle-down.svg" height={16} width={16} />
-                {isFilterActive && (
-                  <div className="absolute top-6">
-                    <AnimatePresence>
-                      {selectedFilter === filter && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className={clsx(
-                            'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
-                          )}
-                        >
-                          {selectedFilterState[selectedFilter]}
-                        </motion.div>
+              <li key={filter} className="fit-content relative">
+                <div
+                  className="flex cursor-pointer items-center  space-x-1"
+                  onClick={() => handleSelectFilter(filter as FilterType)}
+
+                  // onMouseLeave={() => handleSelectFilter('empty')}
+                >
+                  <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
+                    {filter}
+                  </span>
+                  <SVG src="/icons/angle-down.svg" height={16} width={16} />
+                </div>
+
+                <AnimatePresence>
+                  {selectedFilter === filter && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className={clsx(
+                        'absolute top-[100%] left-0 z-10 !ml-[-24px] h-[400px] w-[500px] rounded-t-3xl bg-white shadow-3xl md:rounded-b-3xl'
                       )}
-                    </AnimatePresence>
-                  </div>
-                )}
+                    >
+                      {selectedFilterState[selectedFilter]}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </li>
             ))}
           </ul>
@@ -422,6 +417,7 @@ export const ResultState = () => {
           Learn how to scout talent using Mazury Search
         </a>
       </div>
+
       <div className="mt-1">
         <ul className="flex flex-wrap gap-2">
           {getCredentialFromRoute('role') && (
@@ -480,6 +476,7 @@ export const ResultState = () => {
           {/* {filter.contactable && <li>{filter.contactable}</li>} */}
         </ul>
       </div>
+
       <div className="flex grow flex-col">{resultStates[currentStep]}</div>
     </div>
   );
