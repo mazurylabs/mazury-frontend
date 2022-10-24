@@ -101,7 +101,7 @@ const SearchPage: NextPage = () => {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Paradigm CTF 2022, ETHAmsterdam 2022 Finalist Hacker, woj.eth..."
+                placeholder="Smart contract, ethonline, paradigm, woj.eth..."
                 aria-label="Search"
                 className="hidden h-full w-full bg-transparent lg:block"
                 value={searchTerm}
@@ -111,7 +111,7 @@ const SearchPage: NextPage = () => {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Paradigm CTF 2022..."
+                placeholder="Smart contract, ethonline..."
                 aria-label="Search"
                 className="h-full w-full bg-transparent lg:hidden"
                 value={searchTerm}
