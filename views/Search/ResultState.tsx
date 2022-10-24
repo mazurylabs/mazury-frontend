@@ -21,6 +21,7 @@ import { FilterState, FilterType, Profile, ValueOf } from 'types';
 import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
+import { useClickOutside } from 'hooks';
 
 const filters = [
   'Mazury',
@@ -73,7 +74,14 @@ export const ResultState = () => {
     React.useState<FilterType>('empty');
 
   const [filter, setFilter] = React.useState<FilterState>(initialFilterState);
+
   const [isFilterActive, setIsFilterActive] = React.useState(false);
+  const filterRef = React.useRef(null!);
+  const handleFilterClose = () => {
+    setIsFilterActive(false);
+  };
+
+  useClickOutside(filterRef, handleFilterClose);
 
   const handleFilter = (
     key: keyof FilterState,
@@ -341,7 +349,6 @@ export const ResultState = () => {
           </p>
         </div>
       </div>
-
       {isFiltersOpen && (
         <div
           {...fadeAnimation}
@@ -351,7 +358,6 @@ export const ResultState = () => {
           {selectedFilterState[selectedFilter]}
         </div>
       )}
-
       <div className="mb-4 hidden pl-4 lg:block">
         <div className="mb-2 flex items-center">
           <ul className="flex space-x-8">
@@ -363,6 +369,7 @@ export const ResultState = () => {
                   handleSelectFilter(filter as FilterType),
                     setIsFilterActive(!isFilterActive);
                 }}
+                ref={filterRef}
                 // onMouseLeave={() => handleSelectFilter('empty')}
               >
                 <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
@@ -415,7 +422,6 @@ export const ResultState = () => {
           Learn how to scout talent using Mazury Search
         </a>
       </div>
-
       <div className="mt-1">
         <ul className="flex flex-wrap gap-2">
           {getCredentialFromRoute('role') && (
@@ -474,7 +480,6 @@ export const ResultState = () => {
           {/* {filter.contactable && <li>{filter.contactable}</li>} */}
         </ul>
       </div>
-
       <div className="flex grow flex-col">{resultStates[currentStep]}</div>
     </div>
   );
