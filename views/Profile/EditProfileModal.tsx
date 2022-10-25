@@ -90,7 +90,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
         shouldRemoveAvi
       );
 
-      dispatch(updateUserProfile(data));
+      dispatch(updateUserProfile({ ...data, avatar: fileUrl }));
 
       if (error || !data) {
         setWalletRequestStep('error');
