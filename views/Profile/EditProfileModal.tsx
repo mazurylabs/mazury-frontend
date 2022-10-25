@@ -109,12 +109,14 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
     }
   };
 
-  if (file) {
+  const handleFileUpload = (event: any) => {
+    const file = event.target.files[0];
     const fileUrl = URL.createObjectURL(file as Blob);
 
+    setFile(event.target.files[0]);
     setShouldRemoveAvi(false);
     setFileUrl(fileUrl);
-  }
+  };
 
   if (!profile || !formData) {
     return null;
@@ -169,13 +171,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
                   accept="image/*"
                   type="file"
                   hidden
-                  onChange={(e) => {
-                    if (e.target.files) {
-                      setFile(e.target.files[0]);
-                    } else {
-                      console.error('Couldnt get file frome the input.');
-                    }
-                  }}
+                  onChange={handleFileUpload}
                 />
 
                 <Button
