@@ -27,6 +27,7 @@ async function authResponseErrorInterceptor(error: any) {
 
     prevRequest.sent = true;
     const { access } = await refreshToken(storedToken);
+    storage.setToken(access, ACCESS_TOKEN_KEY);
     prevRequest.headers['Authorization'] = `Bearer ${access}`;
     return axios(prevRequest);
   }
