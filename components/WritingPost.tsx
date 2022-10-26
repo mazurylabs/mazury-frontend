@@ -102,14 +102,9 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
             {author.username}
           </h5>
 
-          <span className="ml-auto flex h-[32px] w-[64px] items-center justify-center rounded-xl border-2 border-lime-600 px-6 py-2 text-lime-600">
-            <Image
-              src="/icons/mirror-icon.svg"
-              alt="Mirror icon"
-              width="11.79px"
-              height="16px"
-            />
-          </span>
+          <p className="ml-auto flex items-center justify-center rounded-xl border-2 border-blue-800 px-4 py-1 font-sans text-xs uppercase text-blue-800">
+            gm
+          </p>
         </div>
         <h4 className="mt-12 font-demi text-3xl text-indigoGray-80">{title}</h4>
       </div>
