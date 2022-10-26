@@ -72,7 +72,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
 
       const formDataToBeSent: OnboardingFormDataType = {
         website: formData.website,
-        bio: formData.bio,
+        bio: formData.bio + ' ', //empty space added as a hot fix for 503 error
         full_name: formData.full_name,
         role_community_manager: formData.role_community_manager,
         role_developer: formData.role_developer,
