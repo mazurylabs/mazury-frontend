@@ -51,8 +51,8 @@ export const Sidebar: React.FC = () => {
 
   const handleLogOut = () => {
     disconnect();
-    dispatch(logout());
     router.push('/');
+    dispatch(logout());
   };
 
   return (

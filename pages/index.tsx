@@ -86,7 +86,7 @@ const Home: NextPage = () => {
 
   const handleLogin = () => {
     setIsOpen(true);
-    setSignInOpen(true);
+    isMobile ? router.push('/sign-in') : setSignInOpen(true);
   };
 
   const accountData = useSelector(userSlice);

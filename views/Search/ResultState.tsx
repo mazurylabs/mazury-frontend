@@ -22,6 +22,7 @@ import { commify, fadeAnimation, toCapitalizedWord } from 'utils';
 import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 import { useClickOutside } from '@/hooks';
+import { RequireSignin } from '@/components/RequireSignin';
 
 const filters = [
   'Mazury',
@@ -477,7 +478,10 @@ export const ResultState = () => {
         </ul>
       </div>
 
-      <div className="flex grow flex-col">{resultStates[currentStep]}</div>
+      <div className="relative flex grow flex-col">
+        {resultStates[currentStep]}
+        <RequireSignin />
+      </div>
     </div>
   );
 };

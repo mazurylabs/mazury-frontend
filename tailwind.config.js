@@ -284,6 +284,10 @@ module.exports = {
       borderWidth: {
         DEFAULT: '1px',
       },
+      backgroundImage: {
+        'gradient-1':
+          'radial-gradient(226.36% 675.72% at 49.85% -115.1%, #EBDEFF 0%, rgba(244, 237, 255, 0) 100%), radial-gradient(145.54% 144.79% at 39.65% 194.79%, #E6FFF0 0%, rgba(169, 255, 203, 0) 100%), #EEEEEE',
+      },
     },
     container: {
       center: true,

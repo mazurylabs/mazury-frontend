@@ -9,7 +9,7 @@ import { createSiweMessage, getTokens } from '@/utils/api';
 import storage from '@/utils/storage';
 
 import { Button, Modal, Spinner } from '@/components';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, ROUTE_PATH } from '@/config';
 import { userSlice } from '@/selectors';
 import { login } from '@/slices/user';
 import { SidebarContext } from '@/contexts';
@@ -77,6 +77,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
     try {
       if (address) {
         const { data } = await getProfile(address);
+        const pathToRoute = storage.getToken(ROUTE_PATH);
 
         if (data) {
           onClose();
@@ -85,6 +86,9 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           setIsOpen(false);
           if (!data.onboarded) {
             router.push('/onboarding');
+          } else if (pathToRoute) {
+            router.push(pathToRoute);
+            storage.clearToken(ROUTE_PATH);
           } else {
             router.push(`/`);
           }
