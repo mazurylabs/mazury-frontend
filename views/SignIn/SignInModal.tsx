@@ -88,7 +88,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
             router.push('/onboarding');
           } else if (pathToRoute) {
             router.push(pathToRoute);
-            storage.clearToken(ROUTE_PATH);
+            // storage.clearToken(ROUTE_PATH);
           } else {
             router.push(`/`);
           }

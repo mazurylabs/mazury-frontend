@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,8 @@ import { userSlice } from '@/selectors';
 import { SidebarContext } from '@/contexts';
 import storage from '@/utils/storage';
 import { ROUTE_PATH } from '@/config';
-import { useMobile } from '@/hooks';
+import { useCountDown, useMobile } from '@/hooks';
+import { verifyEmail } from '@/utils/api';
 
 export const RequireSignin = () => {
   const isMobile = useMobile();
@@ -18,6 +19,7 @@ export const RequireSignin = () => {
   const router = useRouter();
   const { profile, isAuthenticated } = useSelector(userSlice);
   const { setSignInOpen, signInOpen } = React.useContext(SidebarContext);
+  const { count, handleStartCounter } = useCountDown(30);
 
   const isEmailVerified = profile?.email && profile?.email_verified;
   const isSearchPage = router.pathname.includes('search');
@@ -31,13 +33,23 @@ export const RequireSignin = () => {
   const handleSignin = () => {
     prevPath.current = router.asPath;
     setIsSignInRequired(false);
-    handleClose();
     storage.setToken(router.asPath, ROUTE_PATH);
     isMobile ? router.push('/sign-in') : setSignInOpen(true);
   };
 
+  const handleEmailVerification = async () => {
+    if (isAuthenticated) {
+      const { error } = await verifyEmail(profile?.eth_address as string);
+      if (!error) {
+        handleStartCounter();
+      }
+    }
+  };
+
+  const handleRefresh = () => router.reload();
+
   const initial = (
-    <div className="z-20 flex h-[210px] w-[343px] flex-col rounded-xl bg-white shadow-xl lg:w-[400px]">
+    <div className="z-20 flex h-[210px] w-[343px] flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:w-[400px]">
       <div className="relative flex h-[96px] items-center justify-center bg-gradient-1 p-3 pl-[13.5px]">
         {!isSearchPage && (
           <button
@@ -73,7 +85,9 @@ export const RequireSignin = () => {
       <div className="space-y-2">
         <h1 className="font-demi text-3xl text-indigoGray-90">Verify e-mail</h1>
         <p className="font-sans text-sm font-medium text-indigoGray-60">
-          In order to continue, you need to verify your e-mail address
+          In order to continue, you need to verify your e-mail address. Please
+          check your email and follow the instructions. If you did not receive
+          an email or if it expired, you can resend one.
         </p>
       </div>
 
@@ -82,12 +96,15 @@ export const RequireSignin = () => {
         <button
           type="button"
           className="h-[45px] w-[50%] rounded-lg bg-indigoGray-10 font-sans text-sm font-semibold text-indigoGray-90 shadow-sm"
+          onClick={handleEmailVerification}
+          disabled={count > 0}
         >
-          Resend message
+          {count > 0 ? `${count} Seconds` : 'Resend Message'}
         </button>
         <button
           type="button"
           className="h-[45px] w-[50%] rounded-lg bg-indigoGray-10 bg-indigoGray-90 text-indigoGray-5"
+          onClick={handleRefresh}
         >
           Refresh
         </button>
@@ -102,16 +119,22 @@ export const RequireSignin = () => {
   if (isAuthenticated || (prevPath.current && !signInOpen)) return null;
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, zIndex: '-1' }}
+      animate={{
+        opacity: 1,
+        zIndex: signInOpen ? '10' : '30',
+        transition: { delay: isSearchPage ? 0.7 : 40 },
+      }}
       className={`${
         isSearchPage && !signInOpen
           ? 'before:bg-[rgba(255, 255, 255, 0.7)] absolute backdrop-blur-[5px]'
           : 'fixed before:bg-indigoGray-90'
-      } top-0 left-0 ${
-        signInOpen ? 'z-10' : 'z-30'
-      } flex h-full w-full items-center justify-center  before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50`}
+      } top-0 left-0 flex h-full w-full items-center justify-center  before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50`}
     >
-      {isSignInRequired && <>{isEmailVerified ? verify : initial}</>}
-    </div>
+      {isSignInRequired && (
+        <>{!isAuthenticated ? initial : !isEmailVerified ? verify : null}</>
+      )}
+    </motion.div>
   );
 };

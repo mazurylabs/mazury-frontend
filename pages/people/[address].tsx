@@ -5,7 +5,7 @@ import { axios } from '@/lib/axios';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import SVG from 'react-inlinesvg';
 
@@ -1243,7 +1243,9 @@ const Profile: React.FC<Props> = ({ address }) => {
         )}
       </RequestStatusModal>
 
-      <RequireSignin />
+      <AnimatePresence>
+        <RequireSignin />
+      </AnimatePresence>
     </>
   );
 };
