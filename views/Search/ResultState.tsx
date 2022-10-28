@@ -597,8 +597,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient8.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=6a3e976a0a4973242f620628e25751babb668d914791ea8915088805d1c7aa0d',
+    avatar: '/avatar-2.png',
     eth_address: '0xE913c0f42fB60F85Bd43bDdDAf4e004135eF318c',
     bio: '',
     username: '0xE913c0f42fB60F85Bd43bDdDAf4e004135eF318c',
@@ -711,8 +710,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient3.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a5b820eab9cf7920c894e75fda08ac7521e5af08d43f032d494f03de4fcb5326',
+    avatar: '/default-avi.png',
     eth_address: '0x7447aa707b577D1EB65f8f7102fd3A54Ad81fa6d',
     bio: '',
     username: '0x7447aa707b577D1EB65f8f7102fd3A54Ad81fa6d',
@@ -786,8 +784,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/avatars/0x0b13047B3100ae0e97a27873936742268DeCC512/895A8B23-D01F-456B-A692-141B9A89AA1B_1Rxeylq.JPG?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=3dc7398bc8434a5e5448c8961fe1883c10580879547fa36a580971fd7eb60425',
+    avatar: '/waves.png',
     eth_address: '0x0b13047B3100ae0e97a27873936742268DeCC512',
     bio: 'im working tthere!',
     username: 'matteo',
@@ -872,8 +869,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient5.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=26c216036cc7fe63f33f9dbed40da328bf09ea724bd535b3507764b903d688f3',
+    avatar: '/avatar-2.png',
     eth_address: '0xCa0F403D2A602e4D8c0A6A984b973D7958FBF463',
     bio: '',
     username: '0x7i7o.eth',
@@ -986,8 +982,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient6.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ff93047a9a7439280b49e39777f0412b74016f86e15257d8934f33c3b0bbb266',
+    avatar: '/waves.png',
     eth_address: '0xF4844a06d4f995C4c03195AfcB5Aa59dCBB5b4Fc',
     bio: '',
     username: 'wijuwiju.eth',
@@ -1083,8 +1078,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient7.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ec34e56e87ca6f002c3ae74084b26b404086b49c06c7bf27370a151b69ca5988',
+    avatar: '/default-avi.png',
     eth_address: '0x2cf8b2A689B9bE7dbe508089184Bac178925d010',
     bio: '',
     username: '0x2cf8b2A689B9bE7dbe508089184Bac178925d010',
@@ -1197,8 +1191,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient3.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a5b820eab9cf7920c894e75fda08ac7521e5af08d43f032d494f03de4fcb5326',
+    avatar: '/default-avi.png',
     eth_address: '0x2bEBa030cdC9c4a47c5aa657974840428b9fEfAc',
     bio: '',
     username: '0x2bEBa030cdC9c4a47c5aa657974840428b9fEfAc',
@@ -1311,8 +1304,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient1.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=7b3d697355e1dd356a5b1a80bef566926e607d0bb3d666667a7f3cfad924366b',
+    avatar: '/avatar-2.png',
     eth_address: '0xE04885c3f1419C6E8495C33bDCf5F8387cd88846',
     bio: '',
     username: 'skydao.eth',
@@ -1425,8 +1417,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient5.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=26c216036cc7fe63f33f9dbed40da328bf09ea724bd535b3507764b903d688f3',
+    avatar: '/default-avi.png',
     eth_address: '0xB6d052d6F5921d52C1c14b69a02De04f840CeFCd',
     bio: '',
     username: 'wackerow.eth',
@@ -1539,8 +1530,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient4.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=c562df2d13c76ae98512491bf47c697eb8240157f3daba5c1b4d3c5e17bf588e',
+    avatar: '/default-avi.png',
     eth_address: '0x1EC1CcEF3e1735bdA3F4BA698e8a524AA7c93274',
     bio: '',
     username: 'mantisclone.eth',
@@ -1639,8 +1629,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient4.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=c562df2d13c76ae98512491bf47c697eb8240157f3daba5c1b4d3c5e17bf588e',
+    avatar: '/default-avi.png',
     eth_address: '0xF1B64174Bc04780affD4b555C1c2EA4acb82ad07',
     bio: '',
     username: '0xF1B64174Bc04780affD4b555C1c2EA4acb82ad07',
@@ -1728,8 +1717,7 @@ const dummyProfile = [
         },
       },
     ],
-    avatar:
-      'https://mazury-staging.s3.eu-central-1.amazonaws.com/gradient7.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20221028%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20221028T104351Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ec34e56e87ca6f002c3ae74084b26b404086b49c06c7bf27370a151b69ca5988',
+    avatar: '/default-avi.png',
     eth_address: '0xdc66cC593c838939dc52Aa692EEc8c348732c4C1',
     bio: '',
     username: '0xdc66cC593c838939dc52Aa692EEc8c348732c4C1',

@@ -19,6 +19,7 @@ export const RequireSignin = () => {
   const router = useRouter();
   const { profile, isAuthenticated } = useSelector(userSlice);
   const { setSignInOpen, signInOpen } = React.useContext(SidebarContext);
+  const [isClosed, setIsClosed] = React.useState(false);
   const { count, handleStartCounter } = useCountDown(30);
 
   const isEmailVerified = profile?.email && profile?.email_verified;
@@ -26,6 +27,7 @@ export const RequireSignin = () => {
 
   const handleClose = () => {
     setIsSignInRequired(false);
+    setIsClosed(true);
     storage.clearToken(ROUTE_PATH);
     prevPath.current = router.asPath;
   };
@@ -49,7 +51,11 @@ export const RequireSignin = () => {
   const handleRefresh = () => router.reload();
 
   const initial = (
-    <div className="z-20 flex h-[210px] w-[343px] flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:w-[400px]">
+    <div
+      className={` ${
+        isSearchPage && !signInOpen ? 'lg:relative lg:top-[-25%]' : ''
+      } z-20 flex h-[210px] w-[343px] flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:w-[400px]`}
+    >
       <div className="relative flex h-[96px] items-center justify-center bg-gradient-1 p-3 pl-[13.5px]">
         {!isSearchPage && (
           <button
@@ -81,7 +87,11 @@ export const RequireSignin = () => {
   );
 
   const verify = (
-    <div className="z-20 flex min-h-[179px] w-[343px] shrink-0 flex-col space-y-4 rounded-xl bg-white px-6 py-4 shadow-xl lg:w-[400px]">
+    <div
+      className={`${
+        isSearchPage && !signInOpen ? 'lg:relative lg:top-[-25%]' : ''
+      } z-20 flex min-h-[179px] w-[343px] shrink-0 flex-col space-y-4 rounded-xl bg-white px-6 py-4 shadow-xl lg:w-[400px]`}
+    >
       <div className="space-y-2">
         <h1 className="font-demi text-3xl text-indigoGray-90">Verify e-mail</h1>
         <p className="font-sans text-sm font-medium text-indigoGray-60">
@@ -112,11 +122,15 @@ export const RequireSignin = () => {
     </div>
   );
 
+  React.useEffect(() => {
+    if (!signInOpen) setIsSignInRequired(true);
+  }, [signInOpen]);
+
   if (prevPath.current && !signInOpen && !isMobile) {
     storage.clearToken(ROUTE_PATH);
   }
 
-  if (isAuthenticated || (prevPath.current && !signInOpen)) return null;
+  if (isClosed) return null;
 
   return (
     <motion.div
@@ -124,7 +138,9 @@ export const RequireSignin = () => {
       animate={{
         opacity: 1,
         zIndex: signInOpen ? '10' : '30',
-        transition: { delay: isSearchPage ? 0.7 : 40 },
+        transition: {
+          delay: isSearchPage && !signInOpen ? 0.7 : signInOpen ? 0 : 0,
+        },
       }}
       className={`${
         isSearchPage && !signInOpen
