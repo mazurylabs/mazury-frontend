@@ -1,3 +1,4 @@
+import { Post } from '@/types';
 import Image from 'next/image';
 import React from 'react';
 import { Avatar } from '.';
@@ -77,6 +78,7 @@ interface MirrorPostProps {
   title: string;
   link: string;
   bgImageSrc: string;
+  source: Post['source'];
 }
 
 export const MirrorPost: React.FC<MirrorPostProps> = ({
@@ -84,6 +86,7 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
   title,
   link,
   bgImageSrc,
+  source,
 }) => {
   return (
     <div className="relative">
@@ -102,9 +105,18 @@ export const MirrorPost: React.FC<MirrorPostProps> = ({
             {author.username}
           </h5>
 
-          <p className="ml-auto flex items-center justify-center rounded-xl border-2 border-blue-800 px-4 py-1 font-sans text-xs uppercase text-blue-800">
-            gm
-          </p>
+          <span
+            className={`ml-auto flex h-[32px] w-[64px] items-center justify-center rounded-xl border-2 ${
+              source === 'gm' ? 'border-lime-600' : 'border-blue-800'
+            } px-6 py-2`}
+          >
+            <Image
+              src={`/icons/${source === 'gm' ? 'mirror-gr' : 'gm'}-icon.svg`}
+              alt="Mirror icon"
+              width="11.79px"
+              height="16px"
+            />
+          </span>
         </div>
         <h4 className="mt-12 font-demi text-3xl text-indigoGray-80">{title}</h4>
       </div>
