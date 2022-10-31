@@ -13,6 +13,7 @@ import { useCountDown, useMobile } from '@/hooks';
 import { verifyEmail } from '@/utils/api';
 
 export const RequireSignin = () => {
+  const ref = React.useRef<HTMLDivElement>(null!);
   const isMobile = useMobile();
   const prevPath = React.useRef('');
   const [isSignInRequired, setIsSignInRequired] = React.useState(true);
@@ -130,16 +131,17 @@ export const RequireSignin = () => {
     storage.clearToken(ROUTE_PATH);
   }
 
-  if (isClosed) return null;
+  if (isClosed || isAuthenticated || isEmailVerified) return null;
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, zIndex: '-1' }}
       animate={{
         opacity: 1,
         zIndex: signInOpen ? '10' : '30',
         transition: {
-          delay: isSearchPage && !signInOpen ? 0.7 : signInOpen ? 0 : 0,
+          delay: prevPath.current ? 0.01 : isSearchPage ? 0.7 : 40,
         },
       }}
       className={`${

@@ -188,6 +188,7 @@ export const ResultState = () => {
   );
 
   const handleSelectFilter = (filter: FilterType) => {
+    if (!shouldQuerySearch) return;
     setSelectedFilter((prevFilter) =>
       prevFilter === filter ? 'empty' : filter
     );

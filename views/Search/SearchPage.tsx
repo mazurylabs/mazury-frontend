@@ -9,10 +9,13 @@ import { useClickOutside, useMobile } from 'hooks';
 import { ResultState } from './ResultState';
 import { EmptyState } from './EmptyState';
 import { IdleState } from './IdleState';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 type SearchState = 'idle' | 'result' | 'empty';
 
 const SearchPage: NextPage = () => {
+  const { profile, isAuthenticated } = useSelector(userSlice);
   const searchRef = React.useRef<HTMLDivElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
 
@@ -23,6 +26,9 @@ const SearchPage: NextPage = () => {
   const [isFocused, setIsFocused] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [UIState, setUIState] = React.useState<SearchState>('result');
+
+  const shouldQuerySearch =
+    isAuthenticated || (profile?.email && profile.email_verified);
 
   const animationAttributes = !isMobile
     ? {
@@ -36,6 +42,7 @@ const SearchPage: NextPage = () => {
     : {};
 
   const handleFocusBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (!shouldQuerySearch) return;
     setIsFocused(() => (event.type === 'focus' ? true : false));
   };
 
