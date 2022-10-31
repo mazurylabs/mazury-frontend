@@ -77,8 +77,8 @@ export const RequireSignin = () => {
       </div>
 
       <div className="flex grow flex-col items-center space-y-4 px-6 py-4">
-        <p className="font-sans text-sm font-medium text-indigoGray-60">
-          In order to continue, you need to sign in
+        <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
+          Join the professional world of web3 on Mazury
         </p>
         <Button className="w-[295px]" onClick={handleSignin}>
           Sign in
