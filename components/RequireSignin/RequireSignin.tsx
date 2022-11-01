@@ -2,7 +2,7 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Button } from '../Button';
 import { userSlice } from '@/selectors';
@@ -10,10 +10,12 @@ import { SidebarContext } from '@/contexts';
 import storage from '@/utils/storage';
 import { ROUTE_PATH } from '@/config';
 import { useCountDown, useMobile } from '@/hooks';
-import { verifyEmail } from '@/utils/api';
+import { getProfile, verifyEmail } from '@/utils/api';
+import { login } from '@/slices/user';
 
 export const RequireSignin = () => {
   const ref = React.useRef<HTMLDivElement>(null!);
+  const dispatch = useDispatch();
   const isMobile = useMobile();
   const prevPath = React.useRef('');
   const [isSignInRequired, setIsSignInRequired] = React.useState(true);
@@ -23,7 +25,7 @@ export const RequireSignin = () => {
   const [isClosed, setIsClosed] = React.useState(false);
   const { count, handleStartCounter } = useCountDown(30);
 
-  const isEmailVerified = profile?.email && profile?.email_verified;
+  const isEmailVerified = Boolean(profile?.email && profile?.email_verified);
   const isSearchPage = router.pathname.includes('search');
 
   const handleClose = () => {
@@ -49,7 +51,13 @@ export const RequireSignin = () => {
     }
   };
 
-  const handleRefresh = () => router.reload();
+  const handleRefresh = async () => {
+    const { data } = await getProfile(profile?.eth_address as string);
+
+    if (data) {
+      dispatch(login(data));
+    }
+  };
 
   const initial = (
     <div
@@ -131,7 +139,7 @@ export const RequireSignin = () => {
     storage.clearToken(ROUTE_PATH);
   }
 
-  if (isClosed || isAuthenticated || isEmailVerified) return null;
+  if (isClosed || (isAuthenticated && isEmailVerified)) return null;
 
   return (
     <motion.div
@@ -150,7 +158,7 @@ export const RequireSignin = () => {
           : 'fixed before:bg-indigoGray-90'
       } top-0 left-0 flex h-full w-full items-center justify-center  before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50`}
     >
-      {isSignInRequired && (
+      {true && (
         <>{!isAuthenticated ? initial : !isEmailVerified ? verify : null}</>
       )}
     </motion.div>

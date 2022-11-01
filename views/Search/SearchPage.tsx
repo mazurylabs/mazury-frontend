@@ -28,7 +28,7 @@ const SearchPage: NextPage = () => {
   const [UIState, setUIState] = React.useState<SearchState>('result');
 
   const shouldQuerySearch =
-    isAuthenticated || (profile?.email && profile.email_verified);
+    isAuthenticated && profile?.email && profile.email_verified;
 
   const animationAttributes = !isMobile
     ? {

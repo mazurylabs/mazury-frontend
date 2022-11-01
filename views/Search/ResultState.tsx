@@ -195,7 +195,7 @@ export const ResultState = () => {
   };
 
   const shouldQuerySearch =
-    isAuthenticated || (profile?.email && profile.email_verified);
+    isAuthenticated && profile?.email && profile.email_verified;
 
   const resultStates = {
     loading: <LoadingState />,
