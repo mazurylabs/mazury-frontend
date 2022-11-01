@@ -5,7 +5,7 @@ import { axios } from '@/lib/axios';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import SVG from 'react-inlinesvg';
 
@@ -67,6 +67,7 @@ import { useConnectionStatus } from '@/hooks/useConnectionStatus';
 import { RequestStatusModal } from '@/components/RequestContactModal/RequestStatusModal';
 import { RecruiterModalContent } from '@/components/RequestContactModal/RecruiterModalContent';
 import { NonRecruiterModalContent } from '@/components/RequestContactModal/NonRecruiterModalContent';
+import { RequireSignin } from '@/components/RequireSignin';
 
 interface Props {
   address: string;
@@ -1242,6 +1243,10 @@ const Profile: React.FC<Props> = ({ address }) => {
           <NonRecruiterModalContent />
         )}
       </RequestStatusModal>
+
+      <AnimatePresence>
+        <RequireSignin />
+      </AnimatePresence>
     </>
   );
 };
