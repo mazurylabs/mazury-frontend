@@ -6,13 +6,15 @@ import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { getProfile, updateProfile, verifyTweet } from 'utils/api';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 
 type User = Record<'twitter' | 'address', string>;
 type Steps = 'idle' | 'active' | 'loading' | 'error' | 'success';
 
 const TwitterPage: NextPage = () => {
+  const dispatch = useDispatch();
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
@@ -59,6 +61,7 @@ const TwitterPage: NextPage = () => {
     setUser((user) => {
       return { ...user, twitter: '' };
     });
+    dispatch(updateUserProfile({ twitter: '' }));
   };
 
   const submitForVerification = async () => {
@@ -67,6 +70,7 @@ const TwitterPage: NextPage = () => {
     if (error) {
       setCurrentStep('error');
     } else {
+      dispatch(updateUserProfile({ twitter: data.username }));
       setUser((user) => {
         return { ...user, twitter: data.username };
       });

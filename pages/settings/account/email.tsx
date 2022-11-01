@@ -4,13 +4,15 @@ import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
 import { updateProfile, verifyEmail } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
+  const dispatch = useDispatch();
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
@@ -65,6 +67,7 @@ const EmailPage: NextPage = () => {
         setCurrentStep('error');
         return alert('Error updating profile.');
       } else {
+        dispatch(updateUserProfile(data));
         setIsNewChange(true);
         setCurrentStep('idle');
         setEmail(data.email); //optimistic update for the input fields

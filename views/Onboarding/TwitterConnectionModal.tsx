@@ -1,9 +1,10 @@
 import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 import { Button, Input, Modal, Spinner } from 'components';
 import { TwitterModalContext } from 'contexts';
 import Image from 'next/image';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getMessageToBeSigned, verifyTweet } from 'utils/api';
 
 interface ContentComponentProps {
@@ -44,17 +45,19 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
 };
 
 const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
+  const dispatch = useDispatch();
   const { goToNextStep, tweetURL, setCurrentStep } =
     useContext(TwitterModalContext);
 
   const submitForVerification = useCallback(async () => {
-    const { error } = await verifyTweet(tweetURL as string);
+    const { error, data } = await verifyTweet(tweetURL as string);
 
     if (error) {
       // In case of an error go to the next step i.e. the error screen
       goToNextStep();
     } else {
       // In case of success skip the next screen
+      dispatch(updateUserProfile({ twitter: data.username }));
       setCurrentStep((currentStep) => currentStep + 2);
     }
   }, [goToNextStep, tweetURL, setCurrentStep]);
