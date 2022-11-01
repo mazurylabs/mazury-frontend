@@ -1207,6 +1207,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         title={post.title}
                         link={post?.url}
                         key={post.id}
+                        source={post.source}
                       />
                     ))
                 ) : (

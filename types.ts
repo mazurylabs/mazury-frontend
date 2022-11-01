@@ -252,6 +252,7 @@ export interface Post {
   background_image: string;
   preview: string;
   url: string;
+  source: 'mirror' | 'gm';
 }
 
 export type FCWithClassName<P = {}> = FC<P & { className?: string }>;
