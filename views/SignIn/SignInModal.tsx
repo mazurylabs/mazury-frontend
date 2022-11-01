@@ -120,7 +120,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
         <Button
           variant="tertiary"
           onClick={handleInitialise}
-          className="w-full bg-emerald-600 text-white"
+          className="w-full bg-emerald-600 text-white hover:text-white active:text-white"
           size="large"
         >
           <SVG

@@ -149,7 +149,7 @@ export const RequireSignin = () => {
         opacity: 1,
         zIndex: signInOpen ? '10' : '30',
         transition: {
-          delay: prevPath.current ? 0.01 : isSearchPage ? 0.7 : 40,
+          delay: prevPath.current ? 0.01 : isSearchPage ? 0 : 20,
         },
       }}
       className={`${
