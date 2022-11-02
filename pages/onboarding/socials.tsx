@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { isValid, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
+import toast, { Toaster } from 'react-hot-toast';
 
 const SocialsPage: NextPage = () => {
   const {
@@ -74,6 +75,11 @@ const SocialsPage: NextPage = () => {
   };
 
   const onSubmit = async () => {
+    if (!formData.email) {
+      toast.error('Email is required');
+      return;
+    }
+
     if (!formData.eth_address) {
       return alert('Please connect your wallet first');
     }
@@ -86,7 +92,8 @@ const SocialsPage: NextPage = () => {
     );
 
     if (updateProfileError) {
-      return alert('Error updating profile.');
+      toast.error('Error updating profile.');
+      return;
     }
   };
 
@@ -176,6 +183,7 @@ const SocialsPage: NextPage = () => {
         className="mt-4"
         disabled
       />
+      <Toaster />
     </OnboardingLayout>
   );
 };
