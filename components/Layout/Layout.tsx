@@ -63,12 +63,12 @@ export const Layout: FC<LayoutProps> = ({
         {sidebarContent}
       </motion.aside>
 
-      <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
+      <main className="sticky top-0 mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
         {variant === 'three-part' && (
           <>
             {headerContent}
 
-            <div className="sticky top-0 flex min-h-[80vh] grow flex-col gap-8 md:flex-row">
+            <div className="flex min-h-[80vh] grow flex-col gap-8 md:flex-row">
               {/* TODO: Fix alignment. Align with the content in the header */}
               <div className="hidden w-full flex-col gap-4 md:flex md:w-3/12">
                 {innerLeftContent}
