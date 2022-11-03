@@ -6,11 +6,12 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { isValid, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
 import toast, { Toaster } from 'react-hot-toast';
+import { updateUserProfile } from '@/slices/user';
 
 const SocialsPage: NextPage = () => {
   const {
@@ -28,6 +29,7 @@ const SocialsPage: NextPage = () => {
   const debouncedEmail = useDebounce(formData.email);
   const { address, profile } = useSelector(userSlice);
   const canContinue = valid.email;
+  const dispatch = useDispatch();
 
   const onTwitterClick = async () => {
     if (!address) {
@@ -84,12 +86,14 @@ const SocialsPage: NextPage = () => {
       return alert('Please connect your wallet first');
     }
 
-    const { error: updateProfileError } = await updateProfile(
+    const { error: updateProfileError, data } = await updateProfile(
       formData.eth_address,
       '',
       formData,
       avatarFile
     );
+
+    dispatch(updateUserProfile(data));
 
     if (updateProfileError) {
       toast.error('Error updating profile.');
