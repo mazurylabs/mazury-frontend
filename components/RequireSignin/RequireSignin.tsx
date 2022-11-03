@@ -163,7 +163,7 @@ export const RequireSignin = () => {
     if (!signInOpen) setIsSignInRequired(true);
   }, [signInOpen]);
 
-  if (prevPath.current && !signInOpen && !isMobile) {
+  if (prevPath.current && !signInOpen && !isMobile && profile?.onboarded) {
     storage.clearToken(ROUTE_PATH);
   }
 
