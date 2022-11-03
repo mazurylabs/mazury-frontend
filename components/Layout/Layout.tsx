@@ -68,7 +68,7 @@ export const Layout: FC<LayoutProps> = ({
           <>
             {headerContent}
 
-            <div className="flex grow flex-col gap-8 md:flex-row">
+            <div className="sticky top-0 flex min-h-[80vh] grow flex-col gap-8 md:flex-row">
               {/* TODO: Fix alignment. Align with the content in the header */}
               <div className="hidden w-full flex-col gap-4 md:flex md:w-3/12">
                 {innerLeftContent}
