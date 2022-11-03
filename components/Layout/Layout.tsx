@@ -63,7 +63,7 @@ export const Layout: FC<LayoutProps> = ({
         {sidebarContent}
       </motion.aside>
 
-      <main className="sticky top-0 mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
+      <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
         {variant === 'three-part' && (
           <>
             {headerContent}
