@@ -25,7 +25,7 @@ export const RequireSignin = () => {
   const [isClosed, setIsClosed] = React.useState(false);
   const { count, handleStartCounter } = useCountDown(30);
 
-  const isEmailVerified = Boolean(profile?.email && profile?.email_verified);
+  const isEmailVerified = Boolean(profile?.email_verified);
   const isSearchPage = router.pathname.includes('search');
 
   const handleClose = () => {
@@ -59,6 +59,8 @@ export const RequireSignin = () => {
     }
   };
 
+  const handleGoToSettings = () => router.push('settings/account/email');
+
   const initial = (
     <div
       className={` ${
@@ -90,6 +92,32 @@ export const RequireSignin = () => {
         </p>
         <Button className="w-[295px]" onClick={handleSignin}>
           Sign in
+        </Button>
+      </div>
+    </div>
+  );
+
+  const email = (
+    <div
+      className={` ${
+        isSearchPage && !signInOpen ? 'lg:relative lg:top-[-25%]' : ''
+      } z-20 flex h-[210px] w-[343px] flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:w-[400px]`}
+    >
+      <div className="relative flex h-[96px] items-center justify-center bg-gradient-1 p-3 pl-[13.5px]">
+        <div className="flex space-x-4">
+          <h2 className="font-demi text-3xl text-indigoGray-90">
+            Insert e-mail
+          </h2>
+        </div>
+      </div>
+
+      <div className="flex grow flex-col items-center space-y-4 px-6 py-4">
+        <p className="text-center font-sans text-sm font-medium text-indigoGray-60">
+          Mazury is the bridge between you and the professional world of web3.
+          For communication we will need your e-mail.
+        </p>
+        <Button className="w-[295px]" onClick={handleGoToSettings}>
+          Go to settings
         </Button>
       </div>
     </div>
@@ -135,11 +163,13 @@ export const RequireSignin = () => {
     if (!signInOpen) setIsSignInRequired(true);
   }, [signInOpen]);
 
-  if (prevPath.current && !signInOpen && !isMobile) {
+  if (prevPath.current && !signInOpen && !isMobile && profile?.onboarded) {
     storage.clearToken(ROUTE_PATH);
   }
 
-  if (isClosed || (isAuthenticated && isEmailVerified)) return null;
+  if (isClosed || (isAuthenticated && isEmailVerified && profile?.email)) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -159,7 +189,13 @@ export const RequireSignin = () => {
       } top-0 left-0 flex h-full w-full items-center justify-center  before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50`}
     >
       {true && (
-        <>{!isAuthenticated ? initial : !isEmailVerified ? verify : null}</>
+        <>
+          {!isAuthenticated
+            ? initial
+            : !isEmailVerified && profile?.email
+            ? verify
+            : email}
+        </>
       )}
     </motion.div>
   );

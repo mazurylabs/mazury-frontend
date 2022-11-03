@@ -2,16 +2,18 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
-import { updateProfile, verifyEmail } from 'utils/api';
+import { getProfile, updateProfile, verifyEmail } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
+import { login, updateUserProfile } from '@/slices/user';
+import { useCountDown } from '@/hooks/useCountDown';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
+  const { count, handleStartCounter } = useCountDown(30);
   const dispatch = useDispatch();
   useProtectedRoute();
 
@@ -39,15 +41,24 @@ const EmailPage: NextPage = () => {
   };
 
   const handleEmailVerification = async () => {
-    setCurrentStep('active');
+    // setCurrentStep('active');
 
     if (address) {
       const { error } = await verifyEmail(address);
       if (!error) {
         setCurrentStep('idle');
+        handleStartCounter();
       } else {
         setCurrentStep('error');
       }
+    }
+  };
+
+  const handleRefresh = async () => {
+    const { data } = await getProfile(profile?.eth_address as string);
+
+    if (data) {
+      dispatch(login(data));
     }
   };
 
@@ -67,7 +78,13 @@ const EmailPage: NextPage = () => {
         setCurrentStep('error');
         return alert('Error updating profile.');
       } else {
-        dispatch(updateUserProfile(data));
+        console.log(data);
+        dispatch(
+          updateUserProfile({
+            ...data,
+            ...(profile?.email !== email && { email_verified: false }),
+          })
+        );
         setIsNewChange(true);
         setCurrentStep('idle');
         setEmail(data.email); //optimistic update for the input fields
@@ -84,29 +101,41 @@ const EmailPage: NextPage = () => {
   return (
     <SettingsLayout
       content={
-        <div className="flex grow flex-col">
+        <div className="flex grow flex-col pb-4">
           <div className="font-serif text-4xl font-semibold leading-9">
             <h2>Email</h2>
           </div>
 
-          {accountEmail && !profile?.email_verified && (
-            <div className="mt-8 rounded-md bg-indigoGray-10 p-3">
-              <div>
-                <h3 className="font-bold">Confirmation</h3>
-
-                <p className="my-3">
-                  You haven’t confirmed your current address. If you wish to do
-                  so, we can resend the link.
+          {(accountEmail || profile?.email) && !profile?.email_verified && (
+            <div className="mt-8 space-y-4 rounded-xl border border-indigoGray-20 px-6 py-4">
+              <div className="space-y-2">
+                <h1 className="font-demi text-3xl text-indigoGray-90">
+                  Verify e-mail
+                </h1>
+                <p className="font-sans text-sm font-medium text-indigoGray-60">
+                  In order to continue, you need to verify your e-mail address.
+                  Please check your email and follow the instructions. If you
+                  did not receive an email or if it expired, you can resend one.
                 </p>
+              </div>
 
-                <Button
-                  className="bg-transparent text-lg uppercase"
-                  size="large"
-                  variant="secondary"
+              <div className="flex space-x-4">
+                {/* <Button className="!block w-[50%] !p-3">Resend message</Button> */}
+                <button
+                  type="button"
+                  className="h-[45px] w-[50%] rounded-lg bg-indigoGray-10 font-sans text-sm font-semibold text-indigoGray-90 shadow-sm"
                   onClick={handleEmailVerification}
+                  disabled={count > 0}
                 >
-                  RESEND E-MAIL
-                </Button>
+                  {count > 0 ? `${count} Seconds` : 'Resend Message'}
+                </button>
+                <button
+                  type="button"
+                  className="h-[45px] w-[50%] rounded-lg bg-indigoGray-10 bg-indigoGray-90 text-indigoGray-5"
+                  onClick={handleRefresh}
+                >
+                  Refresh
+                </button>
               </div>
             </div>
           )}

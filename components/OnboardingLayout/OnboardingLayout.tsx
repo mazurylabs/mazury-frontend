@@ -10,7 +10,7 @@ import { OnboardingLayoutProps } from './OnboardingLayout.types';
 const onboardingRoutes = [
   '/',
   'role',
-  'refer',
+  // 'refer',
   // 'write', ** we have removed this page from the onboarding flow because it is now accessible via the individual 'refer' buttons
   // 'whitelist', ** we don't want this whitelist page anymore
   'socials',
@@ -30,6 +30,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   const router = useRouter();
   const { address, profile, loading } = useSelector(userSlice);
   const {
+    formData,
     setFormData,
     fetched,
     setFetched,
@@ -41,6 +42,9 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
     const currentRoute = [...router.pathname.split('/'), '/'][2];
     if (bottomButtonOnClick) {
       await bottomButtonOnClick();
+    }
+    if (currentRoute === 'socials' && !formData.email) {
+      return;
     }
     if (currentRoute === 'write') {
       return router.push('/onboarding/socials');
