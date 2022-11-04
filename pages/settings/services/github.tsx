@@ -4,13 +4,15 @@ import { useState, useEffect } from 'react';
 import { Button, SettingsLayout } from 'components';
 import { updateProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 
 type User = Record<'github' | 'address', string>;
 type Steps = 'idle' | 'success';
 
 const GithubPage: NextPage = () => {
+  const dispatch = useDispatch();
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
@@ -47,7 +49,7 @@ const GithubPage: NextPage = () => {
     if (error) {
       return alert('Error disconnecting profile.');
     }
-
+    dispatch(updateUserProfile({ github: '' }));
     setUser((user) => {
       return { ...user, github: '' };
     });

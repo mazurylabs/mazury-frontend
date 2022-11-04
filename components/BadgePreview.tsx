@@ -138,13 +138,18 @@ export const BadgePreview: React.FC<Props> = ({
 
             {totalCount && (
               <span className="font-sans text-xs font-medium leading-[14.4px] text-indigo-500">
-                <NumberFormat
-                  value={totalCount}
-                  displayType="text"
-                  thousandSeparator
-                />{' '}
-                {totalCount > 1 ? 'people' : 'person'}{' '}
-                {totalCount > 1 ? 'have' : 'has'} this
+                {totalCount >= 1 && (
+                  <NumberFormat
+                    value={totalCount}
+                    displayType="text"
+                    thousandSeparator
+                  />
+                )}
+                {totalCount > 1
+                  ? 'people have this'
+                  : totalCount === 1
+                  ? 'person has this'
+                  : 'Indexing in progress'}
               </span>
             )}
           </div>

@@ -72,7 +72,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
 
       const formDataToBeSent: OnboardingFormDataType = {
         website: formData.website,
-        bio: formData.bio,
+        bio: formData.bio + ' ', //empty space added as a hot fix for 503 error
         full_name: formData.full_name,
         role_community_manager: formData.role_community_manager,
         role_developer: formData.role_developer,
@@ -90,7 +90,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
         shouldRemoveAvi
       );
 
-      dispatch(updateUserProfile(data));
+      dispatch(updateUserProfile({ ...data, avatar: fileUrl }));
 
       if (error || !data) {
         setWalletRequestStep('error');
@@ -109,12 +109,14 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
     }
   };
 
-  if (file) {
+  const handleFileUpload = (event: any) => {
+    const file = event.target.files[0];
     const fileUrl = URL.createObjectURL(file as Blob);
 
+    setFile(event.target.files[0]);
     setShouldRemoveAvi(false);
     setFileUrl(fileUrl);
-  }
+  };
 
   if (!profile || !formData) {
     return null;
@@ -169,13 +171,7 @@ export const EditProfileModal: React.FC<IEditProfileModalProps> = ({
                   accept="image/*"
                   type="file"
                   hidden
-                  onChange={(e) => {
-                    if (e.target.files) {
-                      setFile(e.target.files[0]);
-                    } else {
-                      console.error('Couldnt get file frome the input.');
-                    }
-                  }}
+                  onChange={handleFileUpload}
                 />
 
                 <Button

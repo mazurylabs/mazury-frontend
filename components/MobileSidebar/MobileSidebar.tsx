@@ -66,15 +66,6 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
                   />{' '}
                 </a>
               </Link>
-
-              <a onClick={logout}>
-                <Image
-                  src="/icons/sign-out.svg"
-                  alt="Sign out icon"
-                  width="24px"
-                  height="24px"
-                />{' '}
-              </a>
             </>
           ) : (
             <Link href="/sign-in" passHref>

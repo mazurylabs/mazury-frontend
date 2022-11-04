@@ -6,10 +6,12 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getTwitterConnectionPopupLink } from 'utils';
 import { isValid, updateProfile } from 'utils/api';
 import { TwitterConnectionModal } from 'views';
+import toast, { Toaster } from 'react-hot-toast';
+import { updateUserProfile } from '@/slices/user';
 
 const SocialsPage: NextPage = () => {
   const {
@@ -27,6 +29,7 @@ const SocialsPage: NextPage = () => {
   const debouncedEmail = useDebounce(formData.email);
   const { address, profile } = useSelector(userSlice);
   const canContinue = valid.email;
+  const dispatch = useDispatch();
 
   const onTwitterClick = async () => {
     if (!address) {
@@ -74,19 +77,27 @@ const SocialsPage: NextPage = () => {
   };
 
   const onSubmit = async () => {
+    if (!formData.email) {
+      toast.error('Email is required');
+      return;
+    }
+
     if (!formData.eth_address) {
       return alert('Please connect your wallet first');
     }
 
-    const { error: updateProfileError } = await updateProfile(
+    const { error: updateProfileError, data } = await updateProfile(
       formData.eth_address,
       '',
       formData,
       avatarFile
     );
 
+    dispatch(updateUserProfile(data));
+
     if (updateProfileError) {
-      return alert('Error updating profile.');
+      toast.error('Error updating profile.');
+      return;
     }
   };
 
@@ -108,7 +119,7 @@ const SocialsPage: NextPage = () => {
 
       <p className="mt-4 text-sm font-medium text-indigoGray-60">
         You can let others contact you and let us notify you about updates on
-        your profile. All this data is optional.
+        your profile.
       </p>
 
       <form className="mt-6 flex flex-col">
@@ -176,6 +187,7 @@ const SocialsPage: NextPage = () => {
         className="mt-4"
         disabled
       />
+      <Toaster />
     </OnboardingLayout>
   );
 };

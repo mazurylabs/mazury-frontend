@@ -3,8 +3,9 @@ import { NextPage } from 'next';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { updateProfile } from 'utils/api';
 import { useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 
 type Steps = 'idle' | 'active' | 'error';
 
@@ -14,6 +15,7 @@ interface User {
 }
 
 const UsernamePage: NextPage = () => {
+  const dispatch = useDispatch();
   useProtectedRoute();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
@@ -61,9 +63,12 @@ const UsernamePage: NextPage = () => {
     setCurrentStep('idle');
 
     //optimistic update for the input fields
-    setUsername(data.username);
-    setFullname(data.full_name);
-    setDisabled(true);
+    if (data) {
+      dispatch(updateUserProfile(data));
+      setUsername(data.username);
+      setFullname(data.full_name);
+      setDisabled(true);
+    }
 
     if (updateProfileError) {
       return alert('Error updating profile.');
