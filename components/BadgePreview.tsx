@@ -146,9 +146,9 @@ export const BadgePreview: React.FC<Props> = ({
                   />
                 )}
                 {totalCount > 1
-                  ? 'people have this'
+                  ? ' people have this'
                   : totalCount === 1
-                  ? 'person has this'
+                  ? ' person has this'
                   : 'Indexing in progress'}
               </span>
             )}
