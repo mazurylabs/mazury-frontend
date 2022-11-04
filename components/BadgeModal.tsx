@@ -198,7 +198,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({ triggerButton }) => {
   }, [shouldFetchBadge, showUserBadges, badgeIssuer]);
 
   const idle = (
-    <ul className="z-10 h-[450px] space-y-8 overflow-y-auto overflow-x-hidden px-6 lg:grid lg:h-[287px] lg:grid-cols-2 lg:gap-y-7 lg:gap-x-[80px] lg:space-y-0 lg:px-10">
+    <ul className="z-40 h-[450px] space-y-8 overflow-y-auto overflow-x-hidden px-6 lg:grid lg:h-[287px] lg:grid-cols-2 lg:gap-y-7 lg:gap-x-[80px] lg:space-y-0 lg:px-10">
       <div
         className="detail-container fixed z-20 mt-8 ml-8"
         style={{

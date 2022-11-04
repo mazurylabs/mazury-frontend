@@ -652,7 +652,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
 
   return (
     <div
-      className="fixed bottom-0 left-0 z-10 z-[10000] flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
+      className="fixed bottom-0 left-0 z-[10000] flex h-full w-full items-end lg:inset-0 lg:flex lg:items-center lg:justify-center"
       // onClick={() => isMobile && handleCloseModal()}
     >
       <Toaster />
@@ -668,7 +668,7 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
       <motion.div
         ref={containerRef}
         {...animatedValue}
-        className="z-10 h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
+        className="z-[900] h-fit w-full grow overflow-hidden rounded-t-3xl bg-white pt-[30px] shadow-3xl lg:block lg:flex lg:h-[500px] lg:max-w-[900px] lg:flex-col lg:rounded-b-3xl lg:px-6 lg:pb-6 lg:pt-6"
       >
         <div className="hidden lg:block">
           {currentStep !== 'submitting' && (
