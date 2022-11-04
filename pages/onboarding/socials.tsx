@@ -119,7 +119,7 @@ const SocialsPage: NextPage = () => {
 
       <p className="mt-4 text-sm font-medium text-indigoGray-60">
         You can let others contact you and let us notify you about updates on
-        your profile. All this data is optional.
+        your profile.
       </p>
 
       <form className="mt-6 flex flex-col">
