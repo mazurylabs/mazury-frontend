@@ -1,55 +1,79 @@
 import * as React from 'react';
 
-import { OnboardingContext, OnboardingFormDataType } from '@/contexts';
-import { PersonBasicDetails } from '@/types';
+import { ValueOf } from '@/types';
+import { Context, OnboardingStepsEnum } from './types';
 
-const initialOnboardingState = {
-  username: '',
-  role_community_manager: false,
-  role_creator: false,
-  role_investor: false,
-  role_developer: false,
-  role_designer: false,
-  role_researcher: false,
-  role_trader: false,
-  open_to_opportunities: false,
-  full_name: '',
-};
+export const OnboardingContext = React.createContext<Context>({
+  activeStep: OnboardingStepsEnum.PROFILEINFORMATION,
+  viewedSteps: [],
+  profile: {} as Context['profile'],
+  handleSetProfile: () => null,
+  handleStep: () => null,
+  handleViewedSteps: () => null,
+});
 
 export const OnboardingProvider: React.FC = ({ children }) => {
-  const [onboardingFormData, setOnboardingFormData] =
-    React.useState<OnboardingFormDataType>(initialOnboardingState);
-  const [fetchedProfile, setFetchedProfile] = React.useState(false);
-  const [avatarFile, setAvatarFile] = React.useState<File | null>(null);
-  const [referralReceiver, setReferralReceiver] =
-    React.useState<PersonBasicDetails>();
-  const [twitterConnected, setTwitterConnected] = React.useState(false);
-  const [githubConnected, setGithubConnected] = React.useState(false);
-  const [valid, setValid] = React.useState({
-    username: true,
-    email: true,
-  });
+  const [activeStep, setActiveStep] = React.useState<Context['activeStep']>(
+    OnboardingStepsEnum.PROFILEINFORMATION
+  );
+
+  const [viewedSteps, setViewedSteps] = React.useState<Context['viewedSteps']>([
+    activeStep,
+  ]);
+
+  const [profile, setProfile] = React.useState<Context['profile']>(
+    {} as Context['profile']
+  );
+
+  const handleSetProfile = (
+    key: keyof Context['profile'],
+    value: ValueOf<Context['profile']>
+  ) => {
+    setProfile((profile) => ({ ...profile, [key]: value }));
+  };
+
+  const handleStep = (step: OnboardingStepsEnum) => {
+    setActiveStep(step);
+
+    if (!viewedSteps.includes(step)) {
+      setViewedSteps((prevSteps) => [...prevSteps, step]);
+    } else {
+      const updatedViewedSteps = viewedSteps.filter(
+        (prevStep) => prevStep !== activeStep
+      );
+
+      setViewedSteps(updatedViewedSteps);
+    }
+  };
+
+  const handleViewedSteps = (steps: OnboardingStepsEnum[]) => {
+    setViewedSteps(steps);
+  };
 
   return (
     <OnboardingContext.Provider
       value={{
-        formData: onboardingFormData,
-        setFormData: setOnboardingFormData,
-        fetched: fetchedProfile,
-        setFetched: setFetchedProfile,
-        avatarFile,
-        setAvatarFile,
-        referralReceiver,
-        setReferralReceiver,
-        twitterConnected,
-        setTwitterConnected,
-        githubConnected,
-        setGithubConnected,
-        valid,
-        setValid,
+        activeStep,
+        profile,
+        handleSetProfile,
+        handleStep,
+        viewedSteps,
+        handleViewedSteps,
       }}
     >
       {children}
     </OnboardingContext.Provider>
   );
+};
+
+export const useOnboardingContext = (): Context => {
+  const context = React.useContext(OnboardingContext);
+
+  if (!context) {
+    throw new Error(
+      'Ensure that you wrap any components in the OnboardingProvider component'
+    );
+  }
+
+  return context;
 };
