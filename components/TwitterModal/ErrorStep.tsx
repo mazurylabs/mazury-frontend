@@ -5,11 +5,13 @@ import { Button } from '../Button';
 interface ErrorStepProps {
   handleSkip: () => void;
   handleRetry: () => void;
+  loading: boolean;
 }
 
 export const ErrorStep: React.FC<ErrorStepProps> = ({
   handleSkip,
   handleRetry,
+  loading,
 }) => {
   return (
     <div className="w-fit max-w-[300px]">
@@ -32,6 +34,7 @@ export const ErrorStep: React.FC<ErrorStepProps> = ({
           className="w-[140px] shrink-0"
           variant="primary"
           onClick={handleRetry}
+          loading
         >
           Retry
         </Button>

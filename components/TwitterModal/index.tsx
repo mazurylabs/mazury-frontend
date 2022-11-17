@@ -93,6 +93,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
       <ErrorStep
         handleSkip={handleSkip}
         handleRetry={() => submitForVerification()}
+        loading={loading}
       />
     ),
     disconnect: (
