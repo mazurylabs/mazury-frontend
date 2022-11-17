@@ -5,6 +5,5 @@ export interface ButtonProps {
   disabled?: boolean;
   className?: string;
   size?: 'small' | 'large';
+  loading?: boolean;
 }
-
-export interface BaseButtonProps extends Omit<ButtonProps, 'variant'> {}
