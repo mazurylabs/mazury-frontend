@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Toaster, toast } from 'react-hot-toast';
 
 import { Button, Checkbox } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
@@ -17,6 +18,7 @@ const howDidYouFindUsSources = [
 ];
 
 export const HowDidYouFindUs = () => {
+  const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
   const { handleStep, profile, handleSetProfile } = useOnboardingContext();
   const { profile: userProfile } = useSelector(userSlice);
@@ -29,6 +31,8 @@ export const HowDidYouFindUs = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
+
     const { error, data } = await updateProfile(
       userProfile?.eth_address as string,
       '',
@@ -38,7 +42,11 @@ export const HowDidYouFindUs = () => {
     if (!error) {
       dispatch(updateUserProfile(data));
       handleStep(OnboardingStepsEnum['ALLSET']);
+    } else {
+      toast.error('Something went wrong');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -63,7 +71,14 @@ export const HowDidYouFindUs = () => {
         </div>
       </div>
 
-      <Button size="large" onClick={handleSubmit} className="mt-auto w-full">
+      <Toaster />
+
+      <Button
+        size="large"
+        onClick={handleSubmit}
+        className="mt-auto w-full"
+        loading={loading}
+      >
         {profile.how_did_you_find_us ? 'Continue' : 'Skip'}
       </Button>
     </>
