@@ -5,7 +5,12 @@ import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider'
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 
 export const Consent = () => {
-  const { handleStep } = useOnboardingContext();
+  const { handleStep, handleSetProfile } = useOnboardingContext();
+
+  const handleConsent = () => {
+    handleSetProfile('privacy_consent', true);
+    handleStep(OnboardingStepsEnum['HOWDIDYOUFINDUS']);
+  };
 
   return (
     <>
@@ -46,11 +51,7 @@ export const Consent = () => {
           Privacy policy and confirm that you understood these documents.
         </p>
 
-        <Button
-          size="large"
-          onClick={() => handleStep(OnboardingStepsEnum['HOWDIDYOUFINDUS'])}
-          className="mt-auto w-full"
-        >
+        <Button size="large" onClick={handleConsent} className="mt-auto w-full">
           I accept
         </Button>
       </div>

@@ -155,6 +155,7 @@ export interface Profile
   is_recruiter: boolean;
   how_did_you_find_us: string;
   location: string;
+  privacy_consent?: boolean;
 }
 
 export interface ListResponse<T> {
