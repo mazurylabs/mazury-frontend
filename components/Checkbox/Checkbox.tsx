@@ -8,6 +8,7 @@ export const Checkbox: FC<CheckboxProps> = ({
   setChecked,
   id,
   outerClassName,
+  innerClassName,
 }) => {
   const hiddenCheckboxRef = useRef<HTMLInputElement>(null);
 
@@ -23,12 +24,13 @@ export const Checkbox: FC<CheckboxProps> = ({
       <button
         type="button"
         onClick={onVisibleCheckboxClick}
-        className="h-6 h-4 hover:cursor-pointer"
+        className={`hover:cursor-pointer`}
       >
         <SVG
           src={`/icons/checkbox-${checked ? 'checked' : 'unchecked'}.svg`}
           width="24px"
           height="24px"
+          className={innerClassName}
         />
       </button>
 

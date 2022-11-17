@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Button } from '@/components';
+import { Button, Checkbox } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { updateProfile } from '@/utils/api';
 import { userSlice } from '@/selectors';
@@ -88,10 +88,18 @@ const CheckButton = ({
       <span className="font-sans text-base font-medium text-indigoGray-90">
         {label}
       </span>
-      <div
+      {/* <div
         className={`h-4 w-4 rounded border-[1.5px] border-indigoGray-20 ${
           checked ? 'bg-indigoGray-90' : 'transparent'
         }`}
+      /> */}
+      <Checkbox
+        label={<div className="sr-only">{label}</div>}
+        checked={checked}
+        setChecked={onCheck}
+        id={label}
+        innerClassName="!w-4 !h-4"
+        outerClassName="w-4 h-4"
       />
     </button>
   );
