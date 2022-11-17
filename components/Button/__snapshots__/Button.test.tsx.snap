@@ -5,7 +5,9 @@ exports[`Button disabled state 1`] = `
   class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
   disabled=""
 >
-  Button
+  <div>
+    Button
+  </div>
 </button>
 `;
 
@@ -13,24 +15,26 @@ exports[`Button multiple children (SVG icon) 1`] = `
 <button
   class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
 >
-  <svg
-    data-testid="icon"
-    fill="currentColor"
-    height="1em"
-    stroke="currentColor"
-    stroke-width="0"
-    viewBox="0 0 512 512"
-    width="1em"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
-    />
-  </svg>
-   
-  <span>
-    Search
-  </span>
+  <div>
+    <svg
+      data-testid="icon"
+      fill="currentColor"
+      height="1em"
+      stroke="currentColor"
+      stroke-width="0"
+      viewBox="0 0 512 512"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+      />
+    </svg>
+     
+    <span>
+      Search
+    </span>
+  </div>
 </button>
 `;
 
@@ -38,7 +42,9 @@ exports[`Button renders a button 1`] = `
 <button
   class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
 >
-  Button
+  <div>
+    Button
+  </div>
 </button>
 `;
 
@@ -46,7 +52,9 @@ exports[`Button secondary variant 1`] = `
 <button
   class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
 >
-  Button
+  <div>
+    Button
+  </div>
 </button>
 `;
 
@@ -54,7 +62,9 @@ exports[`Button size prop works as intended 1`] = `
 <button
   class="flex items-center justify-center gap-2 rounded-[8px] py-3 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 undefined"
 >
-  Button
+  <div>
+    Button
+  </div>
 </button>
 `;
 
@@ -62,6 +72,8 @@ exports[`Button tertiary variant 1`] = `
 <button
   class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30 undefined"
 >
-  Button
+  <div>
+    Button
+  </div>
 </button>
 `;
