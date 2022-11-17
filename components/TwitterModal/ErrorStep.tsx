@@ -34,7 +34,7 @@ export const ErrorStep: React.FC<ErrorStepProps> = ({
           className="w-[140px] shrink-0"
           variant="primary"
           onClick={handleRetry}
-          loading
+          loading={loading}
         >
           Retry
         </Button>
