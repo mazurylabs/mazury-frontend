@@ -23,11 +23,14 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
   handleSubmit,
   isDisconnecting,
 }) => {
+  const [loading, setLoading] = React.useState(false);
   const { profile } = useSelector(userSlice);
   const [url, setUrl] = React.useState<string>('');
   const [currentStep, setCurrentStep] = React.useState<Steps>(Steps.IDLE);
 
   const submitForVerification = async () => {
+    setLoading(true);
+
     const { data, error } = await verifyTweet(url);
 
     if (error) {
@@ -36,9 +39,13 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
       handleSubmit(data.username);
       setCurrentStep(Steps.IDLE);
     }
+
+    setLoading(false);
   };
 
   const disconnectTwitter = async () => {
+    setLoading(true);
+
     const { error } = await updateProfile(profile?.eth_address as string, '', {
       twitter: '',
     });
@@ -46,7 +53,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     if (error) {
       return alert('Error disconnecting profile.');
     }
-
+    setLoading(false);
     handleSubmit('');
   };
 
@@ -79,6 +86,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
         handleConnect={() => submitForVerification()}
         handleSkip={handleSkip}
         url={url}
+        loading={loading}
       />
     ),
     error: (
@@ -91,6 +99,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
       <DisconnectStep
         handleCancel={() => setCurrentStep(Steps.IDLE)}
         handleDisconnect={() => disconnectTwitter()}
+        loading={loading}
       />
     ),
   };

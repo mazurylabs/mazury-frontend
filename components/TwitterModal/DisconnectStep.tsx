@@ -5,11 +5,13 @@ import { Button } from '../Button';
 interface DisconnectStepProps {
   handleCancel: () => void;
   handleDisconnect: () => void;
+  loading: boolean;
 }
 
 export const DisconnectStep: React.FC<DisconnectStepProps> = ({
   handleDisconnect,
   handleCancel,
+  loading,
 }) => {
   return (
     <div className="w-fit max-w-[300px]">
@@ -35,6 +37,7 @@ export const DisconnectStep: React.FC<DisconnectStepProps> = ({
             handleDisconnect();
             handleCancel();
           }}
+          loading={loading}
         >
           Disconnect
         </Button>

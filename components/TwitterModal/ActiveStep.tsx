@@ -7,6 +7,7 @@ interface ActiveStepProps {
   handleConnect: () => void;
   handleSkip: () => void;
   handleChange: (value: string) => void;
+  loading: boolean;
 }
 
 export const ActiveStep: React.FC<ActiveStepProps> = ({
@@ -14,6 +15,7 @@ export const ActiveStep: React.FC<ActiveStepProps> = ({
   handleConnect,
   handleSkip,
   handleChange,
+  loading,
 }) => {
   return (
     <div className="w-fit max-w-[300px]">
@@ -45,6 +47,7 @@ export const ActiveStep: React.FC<ActiveStepProps> = ({
           variant="primary"
           onClick={handleConnect}
           disabled={!url}
+          loading={loading}
         >
           Connect
         </Button>
