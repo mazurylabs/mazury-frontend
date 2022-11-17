@@ -59,4 +59,7 @@ export const mockProfile: Profile = {
   website: '',
   full_name: '',
   is_recruiter: false,
+  how_did_you_find_us: '',
+  linkedIn: '',
+  location: '',
 };
