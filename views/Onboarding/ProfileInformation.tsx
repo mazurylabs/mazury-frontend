@@ -44,7 +44,7 @@ export const ProfileInformation = () => {
 
         <div className="space-y-4">
           <div className="space-y-1 font-sansMid font-medium">
-            <h3 className="text-xs text-black-300">ENS NAME</h3>
+            <h3 className="text-xs text-black-300">WALLET USED</h3>
             {profile?.ens_name && (
               <p className="text-lg text-indigoGray-90">
                 {userProfile?.ens_name}
