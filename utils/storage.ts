@@ -7,7 +7,7 @@ const storage = {
       window.localStorage.getItem(APP_STORAGE_PREFIX + key) as string
     );
   },
-  setToken: (token: string, key: string) => {
+  setToken: (token: any, key: string) => {
     window.localStorage.setItem(
       APP_STORAGE_PREFIX + key,
       JSON.stringify(token)

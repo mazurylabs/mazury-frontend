@@ -8,18 +8,18 @@ export const OpenToProjects = () => {
   const { handleStep, handleSetProfile } = useOnboardingContext();
 
   const handleNext = (isOpenToProject: boolean) => {
-    handleSetProfile('open_to_projects', isOpenToProject);
+    handleSetProfile('open_to_opportunities', isOpenToProject);
     handleStep(OnboardingStepsEnum['LOCATION']);
   };
 
   return (
     <>
-      <div className="mb-[90px] flex flex-col">
+      <div className="mb-[90px] flex flex-col sm:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             Open to projects?
           </h2>
-          <p className="font-sans text-sm font-medium text-indigoGray-60">
+          <p className="font-sansMid text-sm font-medium text-indigoGray-60">
             We mark users that might consider project proposals for recruiters.
             This makes the situation clear for everyone
           </p>
@@ -28,13 +28,18 @@ export const OpenToProjects = () => {
 
       <div className="mt-auto space-y-4">
         <Button
+          size="large"
           onClick={() => handleNext(false)}
           className="mt-auto w-full !bg-indigoGray-10 !text-indigoGray-90"
           variant="primary"
         >
           Skip for now
         </Button>
-        <Button onClick={() => handleNext(true)} className="mt-auto w-full">
+        <Button
+          size="large"
+          onClick={() => handleNext(true)}
+          className="mt-auto w-full"
+        >
           I’m open to opportunities
         </Button>
       </div>

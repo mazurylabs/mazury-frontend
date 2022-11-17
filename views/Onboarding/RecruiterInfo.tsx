@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SVG from 'react-inlinesvg';
 
 import { Button } from '@/components';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
@@ -9,7 +10,7 @@ export const RecruiterInfo = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             Recruiter info
@@ -17,6 +18,10 @@ export const RecruiterInfo = () => {
           <p className="font-sans text-sm font-medium text-indigoGray-60">
             We are creating a platform tailored to web3 recruiters.
           </p>
+        </div>
+
+        <div className="flex w-full justify-center">
+          <SVG width={120} height={131} src="/icons/recruiter.svg" />
         </div>
 
         <div className="space-y-6">
@@ -46,6 +51,7 @@ export const RecruiterInfo = () => {
         </div>
       </div>
       <Button
+        size="large"
         onClick={() => handleStep(OnboardingStepsEnum['SOCIALS'])}
         className="mt-auto w-full"
       >

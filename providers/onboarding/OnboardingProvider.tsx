@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { ValueOf } from '@/types';
 import { Context, OnboardingStepsEnum } from './types';
+import { ONBOARDING_DATA } from '@/config';
+import storage from '@/utils/storage';
 
 export const OnboardingContext = React.createContext<Context>({
   activeStep: OnboardingStepsEnum.PROFILEINFORMATION,
@@ -13,17 +15,26 @@ export const OnboardingContext = React.createContext<Context>({
 });
 
 export const OnboardingProvider: React.FC = ({ children }) => {
+  const storedOnboardingData = storage.getToken(ONBOARDING_DATA) as Context;
+
   const [activeStep, setActiveStep] = React.useState<Context['activeStep']>(
-    OnboardingStepsEnum.PROFILEINFORMATION
+    () => {
+      return (
+        storedOnboardingData?.activeStep ||
+        OnboardingStepsEnum.PROFILEINFORMATION
+      );
+    }
   );
 
-  const [viewedSteps, setViewedSteps] = React.useState<Context['viewedSteps']>([
-    activeStep,
-  ]);
-
-  const [profile, setProfile] = React.useState<Context['profile']>(
-    {} as Context['profile']
+  const [viewedSteps, setViewedSteps] = React.useState<Context['viewedSteps']>(
+    () => {
+      return storedOnboardingData?.viewedSteps || [activeStep];
+    }
   );
+
+  const [profile, setProfile] = React.useState<Context['profile']>(() => {
+    return storedOnboardingData?.profile || ({} as Context['profile']);
+  });
 
   const handleSetProfile = (
     key: keyof Context['profile'],
@@ -34,6 +45,8 @@ export const OnboardingProvider: React.FC = ({ children }) => {
 
   const handleStep = (step: OnboardingStepsEnum) => {
     setActiveStep(step);
+
+    storage.clearToken(ONBOARDING_DATA);
 
     if (!viewedSteps.includes(step)) {
       setViewedSteps((prevSteps) => [...prevSteps, step]);

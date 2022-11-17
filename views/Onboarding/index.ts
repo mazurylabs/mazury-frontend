@@ -8,4 +8,3 @@ export * from './ProfileInformation';
 export * from './ProfileType';
 export * from './RecruiterInfo';
 export * from './Socials';
-export * from './Talent';

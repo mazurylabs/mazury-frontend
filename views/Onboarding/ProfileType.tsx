@@ -7,12 +7,10 @@ import { Context, OnboardingStepsEnum } from '@/providers/onboarding/types';
 export const ProfileType = () => {
   const { handleSetProfile, handleStep } = useOnboardingContext();
 
-  const handleNext = (profileType: Context['profile']['profile_type']) => {
-    handleSetProfile('profile_type', profileType);
+  const handleNext = (isRecruiter?: Context['profile']['is_recruiter']) => {
+    handleSetProfile('is_recruiter', isRecruiter);
     handleStep(
-      OnboardingStepsEnum[
-        profileType === 'recruiter' ? 'RECRUITER' : 'OPENTOPROJECTS'
-      ]
+      OnboardingStepsEnum[isRecruiter ? 'RECRUITER' : 'OPENTOPROJECTS']
     );
   };
 
@@ -22,10 +20,10 @@ export const ProfileType = () => {
         <h2 className="font-demi text-4xl text-indigoGray-90">
           What are you up to?
         </h2>
-        <p className="font-sans text-sm font-medium text-indigoGray-60">
+        <p className="font-sansMid text-sm font-medium text-indigoGray-60">
           Do you plan to use Mazury for recruiting or as a professional?
         </p>
-        <p className="font-sans text-sm font-medium text-indigoGray-60">
+        <p className="font-sansMid text-sm font-medium text-indigoGray-60">
           This decision can be change in the future
         </p>
       </div>
@@ -33,9 +31,9 @@ export const ProfileType = () => {
       <div className="space-y-4">
         <button
           className="flex w-full justify-between rounded-lg border border-indigoGray-20 p-6"
-          onClick={() => handleNext('recruiter')}
+          onClick={() => handleNext(true)}
         >
-          <span className="font-sans text-base font-medium text-indigoGray-90">
+          <span className="font-sansMid text-base font-medium text-indigoGray-90">
             I’m a recruiter
           </span>
           <SVG src="/icons/arrow-right.svg" height={24} width={24} />
@@ -43,9 +41,9 @@ export const ProfileType = () => {
 
         <button
           className="flex w-full justify-between rounded-lg border border-indigoGray-20 p-6"
-          onClick={() => handleNext('talent')}
+          onClick={() => handleNext(false)}
         >
-          <span className="font-sans text-base font-medium text-indigoGray-90">
+          <span className="font-sansMid text-base font-medium text-indigoGray-90">
             I’m a professional
           </span>
           <SVG src="/icons/arrow-right.svg" height={24} width={24} />

@@ -1,7 +1,11 @@
 import * as React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Button } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
+import { updateProfile } from '@/utils/api';
+import { userSlice } from '@/selectors';
+import { updateUserProfile } from '@/slices/user';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 
 const howDidYouFindUsSources = [
@@ -13,7 +17,9 @@ const howDidYouFindUsSources = [
 ];
 
 export const HowDidYouFindUs = () => {
+  const dispatch = useDispatch();
   const { handleStep, profile, handleSetProfile } = useOnboardingContext();
+  const { profile: userProfile } = useSelector(userSlice);
 
   const handleCheck = (selectedSource: string) => {
     handleSetProfile(
@@ -22,12 +28,25 @@ export const HowDidYouFindUs = () => {
     );
   };
 
+  const handleSubmit = async () => {
+    const { error, data } = await updateProfile(
+      userProfile?.eth_address as string,
+      '',
+      profile
+    );
+
+    if (!error) {
+      dispatch(updateUserProfile(data));
+      handleStep(OnboardingStepsEnum['ALLSET']);
+    }
+  };
+
   return (
     <>
-      <div className="mb-[90px] space-y-8">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Last step!</h2>
-          <p className="font-sans text-sm font-medium text-indigoGray-60">
+          <p className="font-sansMid text-sm font-medium text-indigoGray-60">
             We’d like to know how you found out about Mazury
           </p>
         </div>
@@ -44,10 +63,7 @@ export const HowDidYouFindUs = () => {
         </div>
       </div>
 
-      <Button
-        onClick={() => handleStep(OnboardingStepsEnum['ALLSET'])}
-        className="mt-auto w-full"
-      >
+      <Button size="large" onClick={handleSubmit} className="mt-auto w-full">
         {profile.how_did_you_find_us ? 'Continue' : 'Skip'}
       </Button>
     </>

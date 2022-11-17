@@ -143,6 +143,7 @@ export interface Profile
   verified: boolean;
   github: string;
   twitter: string;
+  linkedIn: string;
   github_last_checked?: string | null;
   open_to_opportunities: boolean;
   onboarded: boolean;
@@ -152,6 +153,8 @@ export interface Profile
   full_name?: string;
   credentials_count?: number;
   is_recruiter: boolean;
+  how_did_you_find_us: string;
+  location: string;
 }
 
 export interface ListResponse<T> {

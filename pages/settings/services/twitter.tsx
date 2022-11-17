@@ -1,26 +1,20 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
-import { getProfile, updateProfile, verifyTweet } from 'utils/api';
-import { getTwitterConnectionPopupLink } from 'utils';
+import { Button, SettingsLayout } from 'components';
 import { useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { updateUserProfile } from '@/slices/user';
+import { TwitterModal } from '@/components/TwitterModal';
 
 type User = Record<'twitter' | 'address', string>;
-type Steps = 'idle' | 'active' | 'loading' | 'error' | 'success';
 
 const TwitterPage: NextPage = () => {
   const dispatch = useDispatch();
   useProtectedRoute();
-
-  const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const { address, profile } = useSelector(userSlice);
 
-  const [url, setUrl] = useState('');
   const [user, setUser] = useState<User>({
     twitter: '',
     address: '',
@@ -35,165 +29,6 @@ const TwitterPage: NextPage = () => {
       });
     }
   }, [address, user.address, profile?.eth_address, profile?.twitter]);
-
-  const handleSkip = () => {
-    setCurrentStep('idle');
-    setUrl('');
-  };
-
-  const handleVerifyTwitter = async () => {
-    const twitterPopupLink = getTwitterConnectionPopupLink(user.address);
-
-    window.open(twitterPopupLink, '_blank');
-
-    setCurrentStep('active');
-  };
-
-  const disconnectTwitter = async () => {
-    const { error } = await updateProfile(user.address, '', {
-      twitter: '',
-    });
-
-    if (error) {
-      return alert('Error disconnecting profile.');
-    }
-
-    setUser((user) => {
-      return { ...user, twitter: '' };
-    });
-    dispatch(updateUserProfile({ twitter: '' }));
-  };
-
-  const submitForVerification = async () => {
-    const { data, error } = await verifyTweet(url as string);
-
-    if (error) {
-      setCurrentStep('error');
-    } else {
-      dispatch(updateUserProfile({ twitter: data.username }));
-      setUser((user) => {
-        return { ...user, twitter: data.username };
-      });
-      setCurrentStep('success');
-    }
-  };
-
-  const handleConnectTwitter = async () => {
-    submitForVerification();
-  };
-
-  const handleDisconnectTwitter = async () => {
-    disconnectTwitter();
-  };
-
-  const ActiveStep = () => {
-    useEffect(() => {
-      if (url) {
-        setCurrentStep('loading');
-      }
-    }, []);
-
-    return (
-      <div className="w-[300px] md:w-[350px]">
-        <h3 className="font-demi text-3xl text-indigoGray-90">
-          Verify Twitter link
-        </h3>
-        <span className="mt-2 text-sm text-indigoGray-60">
-          Paste your tweet&apos;s link here to verify
-        </span>
-
-        <Input
-          label="Twitter link"
-          outerClassName="mt-4"
-          placeholder="e.g. https://twitter.com/mazuryxyz/status/1565365440557236224"
-          value={url}
-          onChange={(val) => setUrl(val)}
-        />
-
-        <div className="mt-4 flex w-full justify-around gap-4">
-          <Button className="w-1/2" variant="secondary" onClick={handleSkip}>
-            SKIP
-          </Button>
-          <Button
-            className="w-1/2"
-            variant="primary"
-            onClick={() => handleConnectTwitter()}
-          >
-            CONNECT
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  const ErrorStep = () => {
-    return (
-      <div className="flex w-[300px] flex-col md:w-[350px]">
-        <h3 className="font-demi text-3xl text-indigoGray-90">
-          Connection failed
-        </h3>
-        <span className="mt-2 text-sm text-indigoGray-60">
-          Something went wrong.
-        </span>
-
-        <div className="mt-4 flex w-full justify-around gap-4">
-          <Button className="w-1/2" variant="secondary" onClick={handleSkip}>
-            GO BACK
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  const WalletSigningStep = () => {
-    useEffect(() => {
-      handleConnectTwitter();
-      // we only want to run this once
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    return (
-      <div className="flex w-[300px] flex-col md:w-[350px]">
-        <div className="my-10 flex justify-center">
-          <Spinner />
-        </div>
-      </div>
-    );
-  };
-
-  const SuccessStep = () => {
-    return (
-      <div className="flex w-[300px] flex-col md:w-[350px]">
-        <h3 className="font-demi text-3xl text-indigoGray-90">
-          You are connected
-        </h3>
-
-        <div className="mt-4 flex w-full justify-center">
-          <Image
-            src="/icons/success.png"
-            height="64px"
-            width="64px"
-            alt="Success indicator"
-          />
-        </div>
-
-        {/* TEMP */}
-        <div className="mt-4 flex w-full justify-around gap-4">
-          <Button variant="primary" onClick={handleSkip}>
-            CONTINUE
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  const steps: Record<Steps, JSX.Element> = {
-    idle: <></>,
-    active: <ActiveStep />,
-    error: <ErrorStep />,
-    loading: <WalletSigningStep />,
-    success: <SuccessStep />,
-  };
 
   return (
     <SettingsLayout
@@ -223,24 +58,22 @@ const TwitterPage: NextPage = () => {
                 </div>
               </div>
 
-              <Button
-                className="w-full uppercase"
-                size="large"
-                onClick={
-                  user.twitter ? handleDisconnectTwitter : handleVerifyTwitter
+              <TwitterModal
+                trigger={
+                  <Button className="w-full uppercase" size="large">
+                    {user.twitter ? 'DISCONNECT' : 'CONNECT'} TWITTER
+                  </Button>
                 }
-              >
-                {user.twitter ? 'DISCONNECT' : 'CONNECT'} TWITTER
-              </Button>
+                isDisconnecting={!!user.twitter}
+                handleSubmit={(twitter) => {
+                  setUser((user) => {
+                    return { ...user, twitter };
+                  });
+                  dispatch(updateUserProfile({ twitter }));
+                }}
+              />
             </div>
           </div>
-
-          <Modal
-            isOpen={currentStep !== 'idle'}
-            onClose={() => setCurrentStep('idle')}
-          >
-            {steps[currentStep]}
-          </Modal>
         </div>
       }
     />

@@ -25,3 +25,5 @@ export * from './SocialButton';
 export * from './MobileSidebar';
 export * from './Dropdown';
 export * from './Skeleton';
+export * from './GithubModal';
+export * from './TwitterModal';

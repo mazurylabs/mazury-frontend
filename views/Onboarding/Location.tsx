@@ -10,10 +10,10 @@ export const Location = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Location</h2>
-          <p className="font-sans text-sm font-medium text-indigoGray-60">
+          <p className="font-sansMid text-sm font-medium text-indigoGray-60">
             Although optional, location gives a better personalisation for the
             job offers you might receive from recruiters
           </p>
@@ -22,12 +22,12 @@ export const Location = () => {
         <div className="space-y-1">
           <Input
             id="location"
-            label="Insert location"
-            value={profile.location}
-            placeholder="Insert e-mail"
+            label="Location"
+            value={profile.location || ''}
+            placeholder="Insert location"
             onChange={(value) => handleSetProfile('location', value)}
           />
-          <div className="flex space-x-1 pl-2">
+          <div className="flex items-center space-x-1 pl-2">
             <SVG src="/icons/error-warning-line.svg" height={12} width={12} />
             <p className="font-sans text-xs text-indigoGray-40">
               Optional. Important for recruiters looking for candidates.
@@ -36,7 +36,8 @@ export const Location = () => {
         </div>
       </div>
       <Button
-        onClick={() => handleStep(OnboardingStepsEnum['TALENT'])}
+        size="large"
+        onClick={() => handleStep(OnboardingStepsEnum['SOCIALS'])}
         className="mt-auto w-full"
       >
         {profile.location ? 'Continue' : 'Skip'}

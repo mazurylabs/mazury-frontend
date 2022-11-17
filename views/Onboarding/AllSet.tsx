@@ -8,7 +8,7 @@ export const AllSet = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             You’re all set
@@ -20,7 +20,11 @@ export const AllSet = () => {
         </div>
       </div>
 
-      <Button onClick={() => router.push('/search')} className="mt-auto w-full">
+      <Button
+        size="large"
+        onClick={() => router.push('/search')}
+        className="mt-auto w-full"
+      >
         Go to app
       </Button>
     </>
