@@ -1,22 +1,29 @@
-import { FC, useState } from 'react';
+import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { useAccount } from 'wagmi';
+import SVG from 'react-inlinesvg';
+import { useSelector, useDispatch } from 'react-redux';
+import { Toaster, toast } from 'react-hot-toast';
 
-import { Button, Layout, Sidebar, Pill } from 'components';
+import { Button, Layout, Sidebar, Pill, Spinner } from 'components';
 import {
   SettingsCardProps,
   SettingsLayoutProps,
   SettingsLinkProps,
 } from './SettingsLayout.types';
+import { Toggle } from '../Toggle';
+import { userSlice } from '@/selectors';
+import { updateProfile } from '@/utils/api';
+import { logout, updateUserProfile } from '@/slices/user';
 
-const SettingsCard: FC<SettingsCardProps> = ({ title, links }) => {
+const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
   const nestedRoute = title.includes('services')
     ? title.split(' ')[1].toLowerCase()
     : title.toLowerCase();
 
   return (
-    <div className="mb-8 md:mb-16">
+    <div>
       <div className="mb-3">
         <h2 className="font-demi text-xl text-indigoGray-90 md:text-3xl">
           {title}
@@ -30,14 +37,11 @@ const SettingsCard: FC<SettingsCardProps> = ({ title, links }) => {
             key={link + index}
           >
             <a className="flex justify-between p-4">
-              <span>{link.split('-').join(' ')}</span>
+              <span className="font-sans text-sm font-semibold text-indigoGray-90">
+                {link.split('-').join(' ')}
+              </span>
 
-              <Image
-                src="/icons/arrow-right.svg"
-                width="7.78px"
-                height="12.73px"
-                alt="back"
-              />
+              <SVG src="/icons/angle-right.svg" width={24} height={24} />
             </a>
           </Link>
         ))}
@@ -89,13 +93,8 @@ const SettingsLink = ({ title, links }: SettingsLinkProps) => {
                 href={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
                 as={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
               >
-                <a className="flex pl-6">
-                  <Image
-                    src={'/icons/list-disc.svg'}
-                    width="4px"
-                    height="4px"
-                    alt="list disc"
-                  />
+                <a className="flex items-center pl-6">
+                  <SVG src={'/icons/list-disc.svg'} width="4px" height="4px" />
 
                   <span className="ml-5">{link.split('-').join(' ')}</span>
                 </a>
@@ -108,7 +107,41 @@ const SettingsLink = ({ title, links }: SettingsLinkProps) => {
   );
 };
 
-export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
+export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
+  const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { profile } = useSelector(userSlice);
+  const [_, disconnect] = useAccount();
+
+  const handleOpenToOpportunities = async () => {
+    const payload = {
+      open_to_opportunities: !profile?.open_to_opportunities,
+    };
+
+    setLoading(true);
+
+    const { error } = await updateProfile(
+      profile?.eth_address as string,
+      '',
+      payload
+    );
+
+    if (!error) {
+      dispatch(updateUserProfile(payload));
+    } else {
+      toast.error('Something went wrong');
+    }
+
+    setLoading(false);
+  };
+
+  const handleLogOut = () => {
+    disconnect();
+    router.push('/');
+    dispatch(logout());
+  };
+
   return (
     <Layout
       headerContent={
@@ -126,7 +159,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
           <div>
             <SettingsLink
               title="Account"
-              links={['Username', 'Email', 'Ethereum-address']}
+              links={['Username', 'Email', 'Ethereum-address', 'Profile-type']}
             />
 
             <SettingsLink
@@ -137,18 +170,13 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
         </div>
       }
       innerRightContent={
-        <div className="flex grow flex-col md:max-w-[31.25rem]">
+        <div className="flex grow flex-col pb-4 md:max-w-[31.25rem]">
           {content ? (
             <div className="flex grow flex-col">
               <div className="mb-6 text-sm text-indigoGray-40 md:mb-3">
                 <Link href={'/settings'}>
                   <a className="flex w-fit items-center font-sans">
-                    <Image
-                      src="/icons/back.svg"
-                      alt="Back"
-                      width="16px"
-                      height="16px"
-                    />
+                    <SVG src="/icons/back.svg" width="16px" height="16px" />
 
                     <span className="ml-3">SETTINGS</span>
                   </a>
@@ -157,22 +185,102 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
               <div className="flex grow flex-col">{content}</div>
             </div>
           ) : (
-            <div>
+            <div className="space-y-8 pb-4">
               <SettingsCard
                 title="Account"
                 links={['Username', 'Email', 'Ethereum-address']}
               />
+
+              <button
+                type="button"
+                className="flex w-full items-center space-x-2"
+                onClick={handleOpenToOpportunities}
+              >
+                <div className="flex grow items-center justify-between rounded-lg border border-indigoGray-20 p-4">
+                  <div className="flex flex-col items-start">
+                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                      Open to new opportunities
+                    </p>
+                    <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                      Recruiters will be able to send you project proposals
+                    </p>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <div className="h-4 w-4">
+                      {loading && <Spinner size={16} />}
+                    </div>
+
+                    <Toggle
+                      isToggled={!!profile?.open_to_opportunities}
+                      onToggle={() => {}}
+                    />
+                  </div>
+                </div>
+              </button>
+
+              <Link href="/settings/account/profile-type">
+                <a
+                  type="button"
+                  className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
+                >
+                  <div className="flex flex-col items-start">
+                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                      Profile type
+                    </p>
+                    <p className="font-sansMid text-xs font-medium text-indigo-600">
+                      {profile?.is_recruiter ? 'Recruiter' : 'Talent'}
+                    </p>
+                  </div>
+                  <div>
+                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
+                  </div>
+                </a>
+              </Link>
 
               <SettingsCard
                 title="Connected services"
                 links={['Twitter', 'Github', 'Discord']}
               />
 
+              <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
+                <Link href="/policies/privacy">
+                  <a className="flex w-full justify-between">
+                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                      Privacy policy
+                    </p>
+                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
+                  </a>
+                </Link>
+
+                <Link href="/policies/terms">
+                  <a className="flex w-full justify-between">
+                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                      Terms of service
+                    </p>
+                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
+                  </a>
+                </Link>
+              </div>
+
+              <button
+                type="button"
+                className="flex w-full items-center space-x-3 rounded-lg border border-indigoGray-20 p-4"
+                onClick={handleLogOut}
+              >
+                <div>
+                  <SVG src="/icons/sign-out.svg" width={16} height={16} />
+                </div>
+                <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  Sign out
+                </p>
+              </button>
+
               <div>
                 <h2 className="font-demi text-xl text-indigoGray-90 md:text-3xl">
                   Delete account
                 </h2>
-                <p className="my-3">
+                <p className="my-3 font-sansMid font-medium text-indigoGray-60">
                   Deleting your account means we delete all the information you
                   provided after signing up. We cannot delete other information
                   since it is on the blockchain.
@@ -183,6 +291,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ content }) => {
               </div>
             </div>
           )}
+          <Toaster />
         </div>
       }
     />

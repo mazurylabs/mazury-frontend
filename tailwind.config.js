@@ -8,10 +8,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter-Regular', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
         sansSemi: ['Inter-SemiBold', 'sans-serif'],
         sansMid: ['Inter-Medium', 'sans-serif'],
         sansBold: ['Inter-Bold', 'sans-serif'],
+        sansThin: ['Inter-Thin', 'sans-serif'],
         serif: ['Masqualero', 'serif'],
         demi: ['Masqualero DemiBold', 'serif'],
       },
