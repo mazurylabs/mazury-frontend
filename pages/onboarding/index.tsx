@@ -46,7 +46,7 @@ const OnboardingPage: NextPage = () => {
               </Link>
 
               <div className="flex h-full w-full flex-col sm:w-[530px]">
-                <div className="sticky top-0 space-y-4 bg-white pt-4 pb-2 sm:pt-20">
+                <div className="space-y-4 bg-white pt-4 sm:pt-6">
                   <button
                     type="button"
                     onClick={handleGoBack}

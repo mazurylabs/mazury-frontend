@@ -2,9 +2,16 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 
 import { Button } from '@/components';
+import storage from '@/utils/storage';
+import { ROUTE_PATH } from '@/config';
 
 export const AllSet = () => {
   const router = useRouter();
+
+  const handleSubmit = () => {
+    const pathToRoute = storage.getToken(ROUTE_PATH);
+    router.push(pathToRoute || '/');
+  };
 
   return (
     <>
@@ -20,11 +27,7 @@ export const AllSet = () => {
         </div>
       </div>
 
-      <Button
-        size="large"
-        onClick={() => router.push('/search')}
-        className="mt-auto w-full"
-      >
+      <Button size="large" onClick={handleSubmit} className="mt-auto w-full">
         Go to app
       </Button>
     </>

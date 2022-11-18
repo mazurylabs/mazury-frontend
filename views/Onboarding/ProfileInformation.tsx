@@ -33,7 +33,7 @@ export const ProfileInformation = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
+      <div className="mb-[90px] space-y-8 sm:space-y-6">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Hi there</h2>
           <p className="font-sansSemi text-sm font-medium text-indigoGray-60">
@@ -114,7 +114,7 @@ export const ProfileInformation = () => {
               <div className="flex h-[29px] w-[131px] items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-base">
                 <label
                   htmlFor="avatar-upload"
-                  className="cursor-pointer font-sansSemi text-sm font-semibold text-indigoGray-90"
+                  className="cursor-pointer font-sans text-sm font-semibold text-indigoGray-90"
                 >
                   Add picture
                 </label>
@@ -133,7 +133,7 @@ export const ProfileInformation = () => {
             <Button
               onClick={handleRemove}
               variant="tertiary"
-              className="w-full !p-0 !font-sansSemi"
+              className="w-full !p-0 !font-sans"
               disabled={!profile.avatar}
             >
               Remove

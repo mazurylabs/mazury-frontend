@@ -6,7 +6,7 @@ import { Button, Checkbox } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { updateProfile } from '@/utils/api';
 import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
+import { login } from '@/slices/user';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 
 const howDidYouFindUsSources = [
@@ -40,7 +40,7 @@ export const HowDidYouFindUs = () => {
     );
 
     if (!error) {
-      dispatch(updateUserProfile(data));
+      dispatch(login(data));
       handleStep(OnboardingStepsEnum['ALLSET']);
     } else {
       toast.error('Something went wrong');
@@ -51,7 +51,7 @@ export const HowDidYouFindUs = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
+      <div className="mb-[90px] space-y-8 sm:space-y-6">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Last step!</h2>
           <p className="font-sansMid text-sm font-medium text-indigoGray-60">
@@ -59,7 +59,7 @@ export const HowDidYouFindUs = () => {
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-3">
           {howDidYouFindUsSources.map((source) => (
             <CheckButton
               key={source}
@@ -103,11 +103,6 @@ const CheckButton = ({
       <span className="font-sans text-base font-medium text-indigoGray-90">
         {label}
       </span>
-      {/* <div
-        className={`h-4 w-4 rounded border-[1.5px] border-indigoGray-20 ${
-          checked ? 'bg-indigoGray-90' : 'transparent'
-        }`}
-      /> */}
       <Checkbox
         label={<div className="sr-only">{label}</div>}
         checked={checked}
