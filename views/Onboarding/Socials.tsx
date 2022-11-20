@@ -49,7 +49,7 @@ export const Socials = () => {
         <Input
           id="website"
           label="Website"
-          value={profile.website}
+          value={profile.website || ''}
           placeholder="Insert website"
           onChange={(value) => {
             handleSetProfile('website', value);

@@ -95,10 +95,9 @@ const CheckButton = ({
   onCheck: () => void;
 }) => {
   return (
-    <button
-      type="button"
+    <div
       onClick={onCheck}
-      className="flex h-[56px] w-full items-center justify-between rounded rounded-lg border border-indigoGray-20 px-6"
+      className="flex h-[56px] w-full cursor-pointer items-center justify-between rounded rounded-lg border border-indigoGray-20 px-6"
     >
       <span className="font-sans text-base font-medium text-indigoGray-90">
         {label}
@@ -111,6 +110,6 @@ const CheckButton = ({
         innerClassName="!w-4 !h-4"
         outerClassName="w-4 h-4"
       />
-    </button>
+    </div>
   );
 };
