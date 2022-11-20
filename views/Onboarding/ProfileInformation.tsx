@@ -133,7 +133,7 @@ export const ProfileInformation = () => {
             <Button
               onClick={handleRemove}
               variant="tertiary"
-              className="w-full !p-0 !font-sans"
+              className="w-full !p-0 !font-sans !font-semibold"
               disabled={!profile.avatar}
             >
               Remove

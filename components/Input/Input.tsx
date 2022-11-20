@@ -20,7 +20,7 @@ export const Input: FC<InputProps> = ({
     <div className={`flex flex-col ${outerClassName}`}>
       {label && (
         <label
-          className="font-sans text-sm font-medium text-indigoGray-40"
+          className="font-sans text-sm font-normal text-indigoGray-40"
           htmlFor={id}
         >
           {label}
