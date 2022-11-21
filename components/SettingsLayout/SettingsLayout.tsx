@@ -244,7 +244,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
               />
 
               <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
-                <Link href="/policies/privacy">
+                <Link href="/privacy-policy">
                   <a className="flex w-full justify-between">
                     <p className="font-sans text-sm font-semibold text-indigoGray-90">
                       Privacy policy
@@ -253,7 +253,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
                   </a>
                 </Link>
 
-                <Link href="/policies/terms">
+                <Link href="/terms-of-service">
                   <a className="flex w-full justify-between">
                     <p className="font-sans text-sm font-semibold text-indigoGray-90">
                       Terms of service

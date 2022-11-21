@@ -1,11 +1,24 @@
 import * as React from 'react';
+import Link from 'next/link';
 
 import { Button } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
+import storage from '@/utils/storage';
+import { ONBOARDING_DATA } from '@/config';
 
 export const Consent = () => {
-  const { handleStep, handleSetProfile } = useOnboardingContext();
+  const { handleStep, profile, handleSetProfile, viewedSteps, activeStep } =
+    useOnboardingContext();
+
+  const handleOnboardingData = () => {
+    const onboardingData = {
+      profile,
+      viewedSteps,
+      activeStep,
+    };
+    storage.setToken(onboardingData, ONBOARDING_DATA);
+  };
 
   const handleConsent = () => {
     handleSetProfile('privacy_consent', true);
@@ -25,9 +38,14 @@ export const Consent = () => {
 
         <div className="mb-[90px] space-y-6 ">
           <div>
-            <h3 className="font-sans font-semibold text-blue-800 underline">
-              Terms of service
-            </h3>
+            <Link href={'/terms-of-service'}>
+              <a
+                className="font-sans font-semibold text-blue-800 underline"
+                onClick={handleOnboardingData}
+              >
+                Terms of service
+              </a>
+            </Link>
             <p className="font-sansMid text-sm font-medium text-indigoGray-60">
               We’re in 2022, so there are some documents you should click
               through to use Mazury
@@ -35,9 +53,14 @@ export const Consent = () => {
           </div>
 
           <div>
-            <h3 className="font-sans font-semibold text-blue-800 underline">
-              Privacy policy
-            </h3>
+            <Link href={'/privacy-policy'}>
+              <a
+                className="font-sans font-semibold text-blue-800 underline"
+                onClick={handleOnboardingData}
+              >
+                Privacy policy
+              </a>
+            </Link>
             <p className="font-sansMid text-sm font-medium text-indigoGray-60">
               We’re in 2022, so there are some documents you should click
               through to use Mazury
