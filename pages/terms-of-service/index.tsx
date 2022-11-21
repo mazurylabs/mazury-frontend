@@ -5,7 +5,6 @@ const TermsOfService = () => {
   return (
     <>
       <Helmet>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Terms of Service</title>
         <style>
           {`html {
