@@ -3,7 +3,6 @@ import * as React from 'react';
 import { WagmiProvider } from './wagmi';
 import { ReduxProvider } from './redux';
 import { SwrProvider } from './swr';
-import { OnboardingProvider } from './onboarding/OnboardingProvider'; //is unncessary and ideally should be moved to the page where used
 import { SidebarProvider } from '@/contexts';
 
 export const AppProvider: React.FC = ({ children }) => {
@@ -11,9 +10,7 @@ export const AppProvider: React.FC = ({ children }) => {
     <ReduxProvider>
       <SwrProvider>
         <WagmiProvider>
-          <OnboardingProvider>
-            <SidebarProvider>{children}</SidebarProvider>
-          </OnboardingProvider>
+          <SidebarProvider>{children}</SidebarProvider>
         </WagmiProvider>
       </SwrProvider>
     </ReduxProvider>

@@ -17,6 +17,7 @@ const Page: NextPage = () => {
       }
       if (githubCode) {
         const { data, error } = await connectGithub(githubCode);
+
         if (error) {
           return alert('Error connecting to Github');
         }
@@ -25,7 +26,13 @@ const Page: NextPage = () => {
         if (originRoute) {
           router.push('/settings/services/github');
         } else {
-          router.push('/onboarding/socials');
+          router.push(
+            {
+              pathname: '/onboarding',
+              query: { username: data?.username },
+            },
+            '/onboarding'
+          );
         }
       }
     })();

@@ -47,6 +47,7 @@ export interface OnboardingFormDataType {
   twitter?: string;
   github?: string;
   full_name?: string;
+  is_recruiter?: boolean;
 }
 
 interface OnboardingContextType {

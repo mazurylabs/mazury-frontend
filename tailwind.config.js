@@ -9,6 +9,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        sansSemi: ['Inter-SemiBold', 'sans-serif'],
+        sansMid: ['Inter-Medium', 'sans-serif'],
+        sansBold: ['Inter-Bold', 'sans-serif'],
+        sansThin: ['Inter-Thin', 'sans-serif'],
         serif: ['Masqualero', 'serif'],
         demi: ['Masqualero DemiBold', 'serif'],
       },

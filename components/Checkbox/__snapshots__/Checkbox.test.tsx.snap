@@ -6,7 +6,7 @@ exports[`Checkbox renders and behaves correctly 1`] = `
   data-testid="checkbox-outer-container"
 >
   <button
-    class="h-6 h-4 hover:cursor-pointer"
+    class="hover:cursor-pointer"
     type="button"
   />
   <label
