@@ -4,14 +4,37 @@ import SVG from 'react-inlinesvg';
 import { Button, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
+import { isValid } from '@/utils/api';
 
 export const Communication = () => {
-  const [touched, setTouched] = React.useState(false);
+  const [error, setError] = React.useState<string>('');
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { handleStep, profile, handleSetProfile } = useOnboardingContext();
 
-  const handleSubmit = () => {
-    setTouched(true);
-    profile.email && handleStep(OnboardingStepsEnum['PROFILETYPE']);
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    setError('');
+
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!profile.email.toLowerCase().match(emailRegex)) {
+      setError('Email address is invalid');
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await isValid('email', profile.email);
+
+    setLoading(false);
+
+    if (!error) {
+      handleStep(OnboardingStepsEnum['PROFILETYPE']);
+    } else {
+      setError('Email already exists');
+    }
   };
 
   return (
@@ -40,17 +63,13 @@ export const Communication = () => {
             }
             value={profile.email || ''}
             placeholder="Insert e-mail"
-            onChange={(value) => {
-              handleSetProfile('email', value);
-            }}
-            error={touched && !profile.email}
+            onChange={(value) => handleSetProfile('email', value)}
+            error={!!error}
           />
           <div className="flex items-center space-x-1 pl-2">
             <SVG src="/icons/error-warning-line.svg" height={12} width={12} />
             <p className="font-sans text-xs text-indigoGray-40">
-              {touched && !profile.email
-                ? 'Email is required'
-                : 'We will send you a confirmation e-mail'}
+              {error ? error : 'We will send you a confirmation e-mail'}
             </p>
           </div>
         </div>
@@ -60,6 +79,8 @@ export const Communication = () => {
         onClick={handleSubmit}
         className="mt-auto w-full"
         disabled={!profile.email}
+        loading={loading}
+        type="submit"
       >
         Continue
       </Button>
