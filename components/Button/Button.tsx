@@ -16,9 +16,9 @@ export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   className,
   size = 'small',
-  disabled,
-  onClick,
   loading,
+  type = 'button',
+  ...rest
 }) => {
   return (
     <button
@@ -27,13 +27,7 @@ export const Button: React.FC<ButtonProps> = ({
       } px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${
         variants[variant]
       } ${className}`}
-      onClick={(e) => {
-        e.preventDefault();
-        if (onClick) {
-          onClick();
-        }
-      }}
-      disabled={disabled}
+      {...rest}
     >
       <div>{children}</div>
       {loading && (
