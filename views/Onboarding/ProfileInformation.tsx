@@ -6,9 +6,11 @@ import { Button, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { userSlice } from '@/selectors';
+import { isValid } from '@/utils/api';
 
 export const ProfileInformation = () => {
-  const [touched, setTouched] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const { profile: userProfile } = useSelector(userSlice);
   const { handleStep, handleSetProfile, profile } = useOnboardingContext();
 
@@ -26,9 +28,20 @@ export const ProfileInformation = () => {
     handleSetProfile('avatar', '');
   };
 
-  const handleSubmit = () => {
-    setTouched(true);
-    profile.username && handleStep(OnboardingStepsEnum['COMMUNICATION']);
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(false);
+
+    const { error } = await isValid('username', profile.username);
+
+    setLoading(false);
+
+    if (!error) {
+      handleStep(OnboardingStepsEnum['COMMUNICATION']);
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -71,9 +84,9 @@ export const ProfileInformation = () => {
               onChange={(value) => {
                 handleSetProfile('username', value);
               }}
-              error={touched && !profile.username}
+              error={error}
             />
-            {touched && !profile.username && (
+            {error && (
               <div className="flex items-center space-x-1 pl-2">
                 <SVG
                   src="/icons/error-warning-line.svg"
@@ -81,7 +94,7 @@ export const ProfileInformation = () => {
                   width={12}
                 />
                 <p className="font-sans text-xs text-indigoGray-40">
-                  Username is required
+                  Username already exists
                 </p>
               </div>
             )}
@@ -131,6 +144,7 @@ export const ProfileInformation = () => {
             </div>
 
             <Button
+              type="button"
               onClick={handleRemove}
               variant="tertiary"
               className="w-full !p-0 !font-sans !font-semibold"
@@ -143,10 +157,12 @@ export const ProfileInformation = () => {
       </div>
 
       <Button
-        onClick={handleSubmit}
+        type="submit"
         size="large"
         className="mt-auto w-full"
         disabled={!profile.username}
+        loading={loading}
+        onClick={handleSubmit}
       >
         Continue
       </Button>

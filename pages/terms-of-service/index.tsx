@@ -1,7 +1,12 @@
+import Link from 'next/link';
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
+import SVG from 'react-inlinesvg';
+import { useRouter } from 'next/router';
 
 const TermsOfService = () => {
+  const router = useRouter();
+
   return (
     <>
       <Helmet>
@@ -764,10 +769,30 @@ const TermsOfService = () => {
       }`}
         </style>
       </Helmet>
-      <article id="36ebb78e-1386-4101-b4d6-6da4bfa1412a" className="page sans">
-        <header>
-          <h1 className="page-title">Terms of Service</h1>
-        </header>
+
+      <Link href="/">
+        <a className="fixed top-6 left-4 hidden xl:block">
+          <span className="sr-only">Home</span>
+          <SVG height={40} width={40} src="/icons/mazury-logo.svg" />
+        </a>
+      </Link>
+
+      <div
+        id="36ebb78e-1386-4101-b4d6-6da4bfa1412a"
+        className="page sans px-4 lg:px-0"
+      >
+        <div className="sticky top-0 space-y-4 bg-white pt-4 pb-1 sm:pt-20">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="self-start"
+          >
+            <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+            <span className="sr-only">Go back</span>
+          </button>
+          <h1 className="font-sansMid text-sm font-medium">Terms of Service</h1>
+        </div>
+
         <div className="page-body">
           <p id="946914c9-66ca-472f-8ebc-07924628c3b1" className="">
             <strong>Last updated June 01, 2022</strong>
@@ -2002,7 +2027,7 @@ const TermsOfService = () => {
             support@mazury.xyz
           </p>
         </div>
-      </article>
+      </div>
     </>
   );
 };

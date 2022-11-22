@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
+import Link from 'next/link';
+import SVG from 'react-inlinesvg';
+import { useRouter } from 'next/router';
 
 const PrivacyPolicy = () => {
+  const router = useRouter();
+
   return (
-    <>
+    <div>
       <Helmet>
         <style>
           {`html {
@@ -19,9 +24,10 @@ const PrivacyPolicy = () => {
         margin: 0;
         padding: 0;
       }
+
       @media only screen {
         body {
-          margin: 2em auto;
+          margin: 0 auto;
           max-width: 900px;
           color: rgb(55, 53, 47);
         }
@@ -763,10 +769,30 @@ const PrivacyPolicy = () => {
       }`}
         </style>
       </Helmet>
-      <article id="e926e4db-5c13-4be8-984d-5068640975de" className="page sans">
-        <header>
-          <h1 className="page-title">Privacy Policy</h1>
-        </header>
+
+      <Link href="/">
+        <a className="fixed top-6 left-4 hidden xl:block">
+          <span className="sr-only">Home</span>
+          <SVG height={40} width={40} src="/icons/mazury-logo.svg" />
+        </a>
+      </Link>
+
+      <div
+        id="e926e4db-5c13-4be8-984d-5068640975de"
+        className="page sans px-4 lg:px-0"
+      >
+        <div className="sticky top-0 space-y-4 bg-white pt-4 pb-1 sm:pt-20">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="self-start"
+          >
+            <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+            <span className="sr-only">Go back</span>
+          </button>
+          <h1 className="font-sansMid text-sm font-medium">Privacy Policy</h1>
+        </div>
+
         <div className="page-body">
           <p id="530ca396-3068-4b98-af54-0d66b80d23c5" className="">
             <strong>Last updated June 01, 2022</strong>
@@ -1898,8 +1924,8 @@ const PrivacyPolicy = () => {
             contact privacy@mazury.xyz
           </p>
         </div>
-      </article>
-    </>
+      </div>
+    </div>
   );
 };
 
