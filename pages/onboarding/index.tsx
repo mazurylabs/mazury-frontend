@@ -27,9 +27,9 @@ const OnboardingPage: NextPage = () => {
     <OnboardingProvider>
       <OnboardingContext.Consumer>
         {({ activeStep, viewedSteps, handleStep }) => {
-          const handleGoBack = () => {
-            const currentIndex = viewedSteps.indexOf(activeStep);
+          const currentIndex = viewedSteps.indexOf(activeStep);
 
+          const handleGoBack = () => {
             if (currentIndex) {
               const prevStep = viewedSteps[currentIndex - 1];
               handleStep(prevStep);
@@ -47,23 +47,31 @@ const OnboardingPage: NextPage = () => {
 
               <div className="flex h-full w-full flex-col sm:w-[530px]">
                 <div className="space-y-4 bg-white pt-4 sm:pt-6">
-                  <button
-                    type="button"
-                    onClick={handleGoBack}
-                    className="self-start"
-                  >
-                    <SVG src="/icons/arrow-left.svg" height={24} width={24} />
-                    <span className="sr-only">Go back</span>
-                  </button>
+                  <div className="h-6 w-6">
+                    {!!currentIndex && (
+                      <button
+                        type="button"
+                        onClick={handleGoBack}
+                        className="self-start"
+                      >
+                        <SVG
+                          src="/icons/arrow-left.svg"
+                          height={24}
+                          width={24}
+                        />
+                        <span className="sr-only">Go back</span>
+                      </button>
+                    )}
+                  </div>
 
                   <h1 className="font-sansMid text-sm font-medium text-indigoGray-40">
                     {activeStep.split('-')[0]}
                   </h1>
                 </div>
 
-                <div className="flex grow flex-col sm:grow-0">
+                <form className="flex grow flex-col sm:grow-0">
                   {onboardingSteps[activeStep]}
-                </div>
+                </form>
               </div>
             </div>
           );
