@@ -24,13 +24,24 @@ export const HowDidYouFindUs = () => {
   const { profile: userProfile } = useSelector(userSlice);
 
   const handleCheck = (selectedSource: string) => {
-    handleSetProfile(
-      'how_did_you_find_us',
-      profile.how_did_you_find_us === selectedSource ? '' : selectedSource
-    );
+    const filteredSources = profile.how_did_you_find_us
+      ?.split(';')
+      .filter((source) => source !== selectedSource)
+      .join(';');
+
+    const updatedSources =
+      (profile.how_did_you_find_us ? profile.how_did_you_find_us + ';' : '') +
+      selectedSource;
+
+    const payload = profile.how_did_you_find_us?.includes(selectedSource)
+      ? filteredSources
+      : updatedSources;
+
+    handleSetProfile('how_did_you_find_us', payload);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setLoading(true);
 
     const { error, data } = await updateProfile(
@@ -39,14 +50,14 @@ export const HowDidYouFindUs = () => {
       profile
     );
 
+    setLoading(false);
+
     if (!error) {
       dispatch(login(data));
       handleStep(OnboardingStepsEnum['ALLSET']);
     } else {
       toast.error('Something went wrong');
     }
-
-    setLoading(false);
   };
 
   return (
@@ -64,7 +75,7 @@ export const HowDidYouFindUs = () => {
             <CheckButton
               key={source}
               label={source}
-              checked={profile.how_did_you_find_us === source}
+              checked={!!profile.how_did_you_find_us?.includes(source)}
               onCheck={() => handleCheck(source)}
             />
           ))}
@@ -78,6 +89,7 @@ export const HowDidYouFindUs = () => {
         onClick={handleSubmit}
         className="mt-auto w-full"
         loading={loading}
+        type="submit"
       >
         {profile.how_did_you_find_us ? 'Continue' : 'Skip'}
       </Button>
