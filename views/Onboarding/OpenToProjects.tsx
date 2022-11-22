@@ -7,7 +7,11 @@ import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 export const OpenToProjects = () => {
   const { handleStep, handleSetProfile } = useOnboardingContext();
 
-  const handleNext = (isOpenToProject: boolean) => {
+  const handleNext = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    isOpenToProject: boolean
+  ) => {
+    event.preventDefault();
     handleSetProfile('open_to_opportunities', isOpenToProject);
     handleStep(OnboardingStepsEnum['LOCATION']);
   };
@@ -29,16 +33,18 @@ export const OpenToProjects = () => {
       <div className="mt-auto space-y-4">
         <Button
           size="large"
-          onClick={() => handleNext(false)}
+          onClick={(event) => handleNext(event, false)}
           className="mt-auto w-full !bg-indigoGray-10 !text-indigoGray-90"
           variant="primary"
+          type="submit"
         >
           Skip for now
         </Button>
         <Button
           size="large"
-          onClick={() => handleNext(true)}
+          onClick={(event) => handleNext(event, true)}
           className="mt-auto w-full"
+          type="submit"
         >
           I’m open to opportunities
         </Button>

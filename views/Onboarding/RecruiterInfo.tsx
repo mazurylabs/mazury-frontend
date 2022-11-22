@@ -8,6 +8,11 @@ import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider'
 export const RecruiterInfo = () => {
   const { handleStep } = useOnboardingContext();
 
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    handleStep(OnboardingStepsEnum['SOCIALS']);
+  };
+
   return (
     <>
       <div className="mb-[90px] space-y-8 sm:mb-[128px]">
@@ -52,8 +57,9 @@ export const RecruiterInfo = () => {
       </div>
       <Button
         size="large"
-        onClick={() => handleStep(OnboardingStepsEnum['SOCIALS'])}
+        onClick={handleSubmit}
         className="mt-auto w-full"
+        type="submit"
       >
         Continue
       </Button>

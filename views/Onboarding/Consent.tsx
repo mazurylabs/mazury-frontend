@@ -20,7 +20,8 @@ export const Consent = () => {
     storage.setToken(onboardingData, ONBOARDING_DATA);
   };
 
-  const handleConsent = () => {
+  const handleConsent = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     handleSetProfile('privacy_consent', true);
     handleStep(OnboardingStepsEnum['HOWDIDYOUFINDUS']);
   };
@@ -74,7 +75,12 @@ export const Consent = () => {
           Privacy policy and confirm that you understood these documents.
         </p>
 
-        <Button size="large" onClick={handleConsent} className="mt-auto w-full">
+        <Button
+          type="submit"
+          size="large"
+          onClick={handleConsent}
+          className="mt-auto w-full"
+        >
           I accept
         </Button>
       </div>
