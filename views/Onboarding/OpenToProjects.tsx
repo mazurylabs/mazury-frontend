@@ -13,7 +13,7 @@ export const OpenToProjects = () => {
   ) => {
     event.preventDefault();
     handleSetProfile('open_to_opportunities', isOpenToProject);
-    handleStep(OnboardingStepsEnum['LOCATION']);
+    handleStep(OnboardingStepsEnum[isOpenToProject ? 'LOCATION' : 'SOCIALS']);
   };
 
   return (
