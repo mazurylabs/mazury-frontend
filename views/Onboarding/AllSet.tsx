@@ -8,9 +8,10 @@ import { ROUTE_PATH } from '@/config';
 export const AllSet = () => {
   const router = useRouter();
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     const pathToRoute = storage.getToken(ROUTE_PATH);
-    router.push(pathToRoute || '/');
+    router.replace(pathToRoute || '/');
   };
 
   return (
