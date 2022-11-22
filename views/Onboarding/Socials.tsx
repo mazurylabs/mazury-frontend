@@ -25,6 +25,11 @@ export const Socials = () => {
     storage.setToken(onboardingData, ONBOARDING_DATA);
   }, []);
 
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    handleStep(OnboardingStepsEnum['CONSENT']);
+  };
+
   React.useEffect(() => {
     const username = router.query?.username as string;
     if (username) {
@@ -111,7 +116,7 @@ export const Socials = () => {
             handleConnect={handleConnectGithub}
           />
 
-          <button
+          {/* <button
             disabled={!!profile.linkedIn}
             className={`flex h-[45px] grow items-center justify-center space-x-2 rounded-lg shadow-base ${
               !profile.linkedIn ? 'bg-[#2D64BC]' : 'bg-indigoGray-10'
@@ -129,14 +134,15 @@ export const Socials = () => {
             >
               LinkedIn
             </span>
-          </button>
+          </button> */}
         </div>
       </div>
 
       <Button
         size="large"
-        onClick={() => handleStep(OnboardingStepsEnum['CONSENT'])}
+        onClick={handleSubmit}
         className="mt-auto w-full"
+        type="submit"
       >
         {hasSocial ? 'Continue' : 'Skip'}
       </Button>
