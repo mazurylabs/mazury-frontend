@@ -30,10 +30,10 @@ export const Consent = () => {
     <>
       <div className="flex flex-col space-y-8">
         <div className="space-y-3">
-          <h2 className="font-demi text-4xl text-indigoGray-90">Consent</h2>
+          <h2 className="font-demi text-4xl text-indigoGray-90">Documents</h2>
           <p className="font-sansMid text-sm font-medium text-indigoGray-60">
-            We’re in 2022, so there are some documents you should click through
-            to use Mazury
+            We’re in 2022, so there are some documents you should read before
+            using Mazury.
           </p>
         </div>
 
@@ -48,8 +48,8 @@ export const Consent = () => {
               </a>
             </Link>
             <p className="font-sansMid text-sm font-medium text-indigoGray-60">
-              We’re in 2022, so there are some documents you should click
-              through to use Mazury
+              This document lays out general rules of the service. There is a
+              short summary at the begining.
             </p>
           </div>
 
@@ -63,8 +63,8 @@ export const Consent = () => {
               </a>
             </Link>
             <p className="font-sansMid text-sm font-medium text-indigoGray-60">
-              We’re in 2022, so there are some documents you should click
-              through to use Mazury
+              The policy talks about the data we use and how you can control
+              that data.
             </p>
           </div>
         </div>

@@ -85,6 +85,7 @@ export const ProfileInformation = () => {
                 handleSetProfile('username', value);
               }}
               error={error}
+              onFocus={() => setError(false)}
             />
             {error && (
               <div className="flex items-center space-x-1 pl-2">
@@ -103,7 +104,14 @@ export const ProfileInformation = () => {
           <div>
             <Input
               id="full_name"
-              label="Full name"
+              label={
+                <div className="font-sans text-indigoGray-40">
+                  Full name{' '}
+                  <span className="font-sans font-normal text-indigoGray-30">
+                    (Optional)
+                  </span>
+                </div>
+              }
               value={profile.full_name || ''}
               placeholder="Insert full name"
               onChange={(value) => {

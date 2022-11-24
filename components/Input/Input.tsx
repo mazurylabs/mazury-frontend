@@ -15,6 +15,7 @@ export const Input: FC<InputProps> = ({
   outerClassName,
   disabled = false,
   error = false,
+  ...rest
 }) => {
   return (
     <div className={`flex flex-col ${outerClassName}`}>
@@ -40,6 +41,7 @@ export const Input: FC<InputProps> = ({
           disabled && 'cursor-not-allowed border-indigoGray-30 bg-indigoGray-10'
         } ${error && 'border-red-500'} ${className}`}
         disabled={disabled}
+        {...rest}
       />
     </div>
   );

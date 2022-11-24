@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg';
 import { Button } from '@/components';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
+import Link from 'next/link';
 
 export const RecruiterInfo = () => {
   const { handleStep } = useOnboardingContext();
@@ -31,7 +32,7 @@ export const RecruiterInfo = () => {
 
         <div className="space-y-6">
           <div>
-            <h3 className="font-sans text-base font-medium text-indigoGray-90">
+            <h3 className="font-sans text-base font-semibold text-indigoGray-90">
               Mazury Talent
             </h3>
             <p className="font-sans text-sm font-medium text-indigoGray-60">
@@ -41,16 +42,18 @@ export const RecruiterInfo = () => {
           </div>
 
           <div>
-            <h3 className="font-sans text-base font-medium text-indigoGray-90">
+            <h3 className="font-sans text-base font-semibold text-indigoGray-90">
               Credential search
             </h3>
             <p className="font-sans text-sm font-medium text-indigoGray-60">
               We provide guides about using the platform to recruiters, like
               this
-              <span className="font-semiBold text-indigo-600">
-                {' '}
-                guide to scout using Mazury Search
-              </span>
+              <Link href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773">
+                <a target="_blank" className="font-semiBold text-indigo-600">
+                  {' '}
+                  guide to scout using Mazury Search
+                </a>
+              </Link>
             </p>
           </div>
         </div>
