@@ -34,7 +34,7 @@ export const OpenToProjects = () => {
         <Button
           size="large"
           onClick={(event) => handleNext(event, false)}
-          className="mt-auto w-full !bg-indigoGray-10 !text-indigoGray-90"
+          className="mt-auto w-full !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90"
           variant="primary"
           type="submit"
         >
@@ -43,7 +43,7 @@ export const OpenToProjects = () => {
         <Button
           size="large"
           onClick={(event) => handleNext(event, true)}
-          className="mt-auto w-full"
+          className="mt-auto w-full !font-sans !font-semibold"
           type="submit"
         >
           I’m open to opportunities

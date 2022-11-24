@@ -800,13 +800,12 @@ const PrivacyPolicy = () => {
           <p id="677162e3-4fbf-4aec-9a72-b82ab07b40ac" className=""></p>
           <p id="99ad6783-5c75-4609-8001-52c5f9f29225" className="">
             This privacy notice for Mazury Labs SAS (doing business as Mazury)
-            (&#x27;Mazury&#x27;, &#x27;we&#x27;,
+            (&#x27;Mazury&#x27;, &#x27;we&#x27;,&#x27;us&#x27;, or
+            &#x27;our&#x27;,), describes how and why we might collect, store,
+            use, and/or share (process&#x27;) your information when you use our
+            services (&#x27;Services&#x27;), such as when you:
           </p>
-          <p id="69b4e49f-5761-4b71-aa24-719dd52457b3" className="">
-            &#x27;us&#x27;, or &#x27;our&#x27;,), describes how and why we might
-            collect, store, use, and/or share (process&#x27;) your information
-            when you use our services (&#x27;Services&#x27;), such as when you:
-          </p>
+
           <ul
             id="329f98dc-1d74-4b68-a416-4cb9dc252675"
             className="bulleted-list"
@@ -996,12 +995,12 @@ const PrivacyPolicy = () => {
             className="numbered-list"
             start={12}
           >
-            <li>HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT</li>
+            <li>
+              HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM
+              YOU?
+            </li>
           </ol>
-          <p id="8fc1d614-f8ec-410d-bc96-701b1f8274ed" className="">
-            FROM YOU?
-          </p>
-          <p id="62afe8ac-8235-411e-baf7-a4f44c35ab76" className=""></p>
+
           <h3 id="621dec6d-fd03-42c1-8da5-0fe692fa2d17" className="">
             1. WHAT INFORMATION DO WE COLLECT?
           </h3>
