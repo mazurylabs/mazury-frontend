@@ -89,12 +89,8 @@ export const ProfileInformation = () => {
             />
             {error && (
               <div className="flex items-center space-x-1 pl-2">
-                <SVG
-                  src="/icons/error-warning-line.svg"
-                  height={12}
-                  width={12}
-                />
-                <p className="font-sans text-xs text-indigoGray-40">
+                <SVG src="/icons/error.svg" height={12} width={12} />
+                <p className="font-sans text-xs text-red-500">
                   Username already exists
                 </p>
               </div>

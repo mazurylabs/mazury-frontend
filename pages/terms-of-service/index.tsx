@@ -3,9 +3,11 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
+import { useIsOnboarded } from '@/hooks';
 
 const TermsOfService = () => {
   const router = useRouter();
+  useIsOnboarded();
 
   return (
     <>

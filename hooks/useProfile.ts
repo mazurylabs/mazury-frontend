@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 import { axios } from '../lib/axios';
 import { Profile } from '../types';
 import { login } from '../slices/user';
+import { userSlice } from '@/selectors';
 
 export const useProfile = (
   address: string | undefined,
@@ -40,11 +42,9 @@ export const useProfile = (
   };
 };
 
-export const useIsOnboarded = (address: string) => {
-  const { profile, error } = useProfile(address);
+export const useIsOnboarded = () => {
+  const router = useRouter();
+  const { profile } = useSelector(userSlice);
 
-  return {
-    onboarded: profile?.onboarded,
-    error,
-  };
+  if (profile && !profile?.onboarded) router.push('/onboarding');
 };

@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { Avatar, Button, MobileSidebar, Layout } from 'components';
 import {
   useClickOutside,
+  useIsOnboarded,
   useMobile,
   useProfile,
   useProfileSuggestions,
@@ -83,6 +84,7 @@ const Home: NextPage = () => {
 
   useProfileSuggestions(address as string, apiParams);
   useProfile(address as string, Boolean(address));
+  useIsOnboarded();
 
   const handleLogin = () => {
     setIsOpen(true);

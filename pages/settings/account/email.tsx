@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
 import { getProfile, updateProfile, verifyEmail } from 'utils/api';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { userSlice } from '@/selectors';
@@ -16,6 +16,7 @@ const EmailPage: NextPage = () => {
   const { count, handleStartCounter } = useCountDown(30);
   const dispatch = useDispatch();
   useProtectedRoute();
+  useIsOnboarded();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);

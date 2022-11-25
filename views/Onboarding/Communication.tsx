@@ -67,9 +67,17 @@ export const Communication = () => {
             error={!!error}
           />
           <div className="flex items-center space-x-1 pl-2">
-            <SVG src="/icons/error-warning-line.svg" height={12} width={12} />
-            <p className="font-sans text-xs text-indigoGray-40">
-              {error ? error : 'We will send you a confirmation e-mail'}
+            <SVG
+              src={`/icons/error${!error ? '-warning-line' : ''}.svg`}
+              height={12}
+              width={12}
+            />
+            <p
+              className={`font-sans text-xs text-${
+                error ? 'red-500' : 'indigoGray-40'
+              }`}
+            >
+              {error || 'We will send you a confirmation e-mail'}
             </p>
           </div>
         </div>

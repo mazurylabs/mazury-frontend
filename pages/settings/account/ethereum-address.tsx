@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 
 import { Button, SettingsLayout } from 'components';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 
@@ -10,6 +10,7 @@ type AddressArray = Record<'username' | 'address', string>[];
 
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
+  useIsOnboarded();
 
   const { profile } = useSelector(userSlice);
   const [addresses, setAddresses] = useState<AddressArray>([]);

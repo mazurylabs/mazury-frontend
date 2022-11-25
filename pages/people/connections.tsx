@@ -2,7 +2,7 @@ import { Layout } from '@/components';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 import React from 'react';
-import { useConnections } from '../../hooks';
+import { useConnections, useIsOnboarded } from '../../hooks';
 
 const connectionStatusColor = {
   pending: 'text-yellow-600',
@@ -11,6 +11,7 @@ const connectionStatusColor = {
 };
 
 const Connections = () => {
+  useIsOnboarded();
   const { connections } = useConnections();
 
   return (

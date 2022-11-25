@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 
 import { Button, SettingsLayout } from 'components';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { updateUserProfile } from '@/slices/user';
@@ -13,6 +13,7 @@ type User = Record<'twitter' | 'address', string>;
 const TwitterPage: NextPage = () => {
   const dispatch = useDispatch();
   useProtectedRoute();
+  useIsOnboarded();
   const { address, profile } = useSelector(userSlice);
 
   const [user, setUser] = useState<User>({
