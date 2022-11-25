@@ -24,7 +24,7 @@ export const ProfileType = () => {
           Do you plan to use Mazury for recruiting or as a professional?
         </p>
         <p className="font-sansMid text-sm font-medium text-indigoGray-60">
-          This decision can be change in the future
+          This decision can be changed in the future.
         </p>
       </div>
 
