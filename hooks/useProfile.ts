@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { axios } from '../lib/axios';
 import { Profile } from '../types';
 import { login } from '../slices/user';
-import { userSlice } from '@/selectors';
+import { userSlice } from '../selectors';
 
 export const useProfile = (
   address: string | undefined,
