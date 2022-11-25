@@ -6,7 +6,7 @@ import { Button, Checkbox } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { updateProfile } from '@/utils/api';
 import { userSlice } from '@/selectors';
-import { login } from '@/slices/user';
+import { updateUserProfile } from '@/slices/user';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 
 const howDidYouFindUsSources = [
@@ -53,7 +53,7 @@ export const HowDidYouFindUs = () => {
     setLoading(false);
 
     if (!error) {
-      dispatch(login(data));
+      dispatch(updateUserProfile({ onboarded: true, ...data }));
       handleStep(OnboardingStepsEnum['ALLSET']);
     } else {
       toast.error('Something went wrong');
