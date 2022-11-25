@@ -33,7 +33,9 @@ export const HowDidYouFindUs = () => {
       (profile.how_did_you_find_us ? profile.how_did_you_find_us + ';' : '') +
       selectedSource;
 
-    const payload = profile.how_did_you_find_us?.includes(selectedSource)
+    const payload = profile.how_did_you_find_us
+      ?.split(';')
+      .includes(selectedSource)
       ? filteredSources
       : updatedSources;
 
@@ -75,7 +77,9 @@ export const HowDidYouFindUs = () => {
             <CheckButton
               key={source}
               label={source}
-              checked={!!profile.how_did_you_find_us?.includes(source)}
+              checked={
+                !!profile.how_did_you_find_us?.split(';').includes(source)
+              }
               onCheck={() => handleCheck(source)}
             />
           ))}
