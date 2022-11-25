@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Button, SettingsLayout } from 'components';
 import { updateProfile } from 'utils/api';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { updateUserProfile } from '@/slices/user';
@@ -14,6 +14,7 @@ type Steps = 'idle' | 'success';
 const GithubPage: NextPage = () => {
   const dispatch = useDispatch();
   useProtectedRoute();
+  useIsOnboarded();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const { address, profile } = useSelector(userSlice);

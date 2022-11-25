@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
+import { useIsOnboarded } from '@/hooks';
 
 const PrivacyPolicy = () => {
+  useIsOnboarded();
   const router = useRouter();
 
   return (

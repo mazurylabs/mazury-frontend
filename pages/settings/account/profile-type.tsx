@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { toast, Toaster } from 'react-hot-toast';
 
 import { Button, Checkbox, SettingsLayout } from 'components';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { updateProfile } from '@/utils/api';
@@ -12,6 +12,7 @@ import { updateUserProfile } from '@/slices/user';
 
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
+  useIsOnboarded();
   const dispatch = useDispatch();
   const { profile } = useSelector(userSlice);
   const [loading, setLoading] = React.useState(false);

@@ -51,6 +51,7 @@ import {
   useMobile,
   usePosts,
   useCredentialCount,
+  useIsOnboarded,
 } from 'hooks';
 
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
@@ -94,6 +95,7 @@ const roleFieldToLabel: MappedRoles<string> = {
 };
 
 const Profile: React.FC<Props> = ({ address }) => {
+  useIsOnboarded();
   const router = useRouter();
   const accountData = useSelector(userSlice);
   // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
