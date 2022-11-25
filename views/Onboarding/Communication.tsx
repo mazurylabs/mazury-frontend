@@ -65,6 +65,7 @@ export const Communication = () => {
             placeholder="Insert e-mail"
             onChange={(value) => handleSetProfile('email', value)}
             error={!!error}
+            onFocus={() => setError('')}
           />
           <div className="flex items-center space-x-1 pl-2">
             <SVG
