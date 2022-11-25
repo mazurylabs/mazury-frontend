@@ -10,10 +10,10 @@ import { updateUserProfile } from '@/slices/user';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 
 const howDidYouFindUsSources = [
-  'Search engine',
   'Twitter',
-  'Friends or Family',
-  'Social media',
+  'Friend',
+  'Other social media',
+  'Web3 credential provider',
   'Other',
 ];
 
