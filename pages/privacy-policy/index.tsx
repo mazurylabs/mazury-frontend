@@ -3,9 +3,11 @@ import { Helmet } from 'react-helmet';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
-import { useIsOnboarded } from '@/hooks';
+import { useSelector } from 'react-redux';
+import { userSlice } from '@/selectors';
 
 const PrivacyPolicy = () => {
+  const { profile, isAuthenticated } = useSelector(userSlice);
   const router = useRouter();
 
   return (
@@ -783,14 +785,16 @@ const PrivacyPolicy = () => {
         className="page sans px-4 lg:px-0"
       >
         <div className="sticky top-0 space-y-4 bg-white pt-4 pb-1 sm:pt-20">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="self-start"
-          >
-            <SVG src="/icons/arrow-left.svg" height={24} width={24} />
-            <span className="sr-only">Go back</span>
-          </button>
+          {(!isAuthenticated || profile?.onboarded) && (
+            <button
+              type="button"
+              onClick={() => router.push('/')}
+              className="self-start"
+            >
+              <SVG src="/icons/arrow-left.svg" height={24} width={24} />
+              <span className="sr-only">Go back</span>
+            </button>
+          )}
           <h1 className="font-sansMid text-sm font-medium">Privacy Policy</h1>
         </div>
 

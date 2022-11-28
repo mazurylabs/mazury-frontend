@@ -6,8 +6,10 @@ import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider'
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import storage from '@/utils/storage';
 import { ONBOARDING_DATA } from '@/config';
+import { useDispatch } from 'react-redux';
 
 export const Consent = () => {
+  const dispatch = useDispatch();
   const { handleStep, profile, handleSetProfile, viewedSteps, activeStep } =
     useOnboardingContext();
 
@@ -41,8 +43,9 @@ export const Consent = () => {
           <div>
             <Link href={'/terms-of-service'}>
               <a
+                target="_blank"
                 className="font-sans font-semibold text-blue-800 underline"
-                onClick={handleOnboardingData}
+                // onClick={handleOnboardingData}
               >
                 Terms of service
               </a>
@@ -56,8 +59,9 @@ export const Consent = () => {
           <div>
             <Link href={'/privacy-policy'}>
               <a
+                target="_blank"
                 className="font-sans font-semibold text-blue-800 underline"
-                onClick={handleOnboardingData}
+                // onClick={handleOnboardingData}
               >
                 Privacy policy
               </a>
