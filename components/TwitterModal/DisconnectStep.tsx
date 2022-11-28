@@ -4,7 +4,7 @@ import { Button } from '../Button';
 
 interface DisconnectStepProps {
   handleCancel: () => void;
-  handleDisconnect: () => void;
+  handleDisconnect: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loading: boolean;
 }
 
@@ -33,8 +33,8 @@ export const DisconnectStep: React.FC<DisconnectStepProps> = ({
         <Button
           className="w-[140px] shrink-0"
           variant="primary"
-          onClick={() => {
-            handleDisconnect();
+          onClick={(event) => {
+            handleDisconnect(event);
             handleCancel();
           }}
           loading={loading}

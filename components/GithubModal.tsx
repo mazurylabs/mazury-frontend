@@ -22,13 +22,19 @@ export const GithubModal: React.FC<GithubModalProps> = ({
   const { profile } = useSelector(userSlice);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const handleConnectGithub = async () => {
+  const handleConnectGithub = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
     window.open(githubPopupLink, '_blank');
     handleConnect?.();
   };
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     const { error } = await updateProfile(profile?.eth_address as string, '', {
       github: '',
     });
@@ -40,7 +46,10 @@ export const GithubModal: React.FC<GithubModalProps> = ({
   };
 
   const handleClose = () => setIsOpen(false);
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setIsOpen(true);
+  };
 
   const triggerButton = React.cloneElement(trigger, {
     onClick: isDisconnecting ? handleOpen : handleConnectGithub,
@@ -69,8 +78,8 @@ export const GithubModal: React.FC<GithubModalProps> = ({
             <Button
               className="w-[140px] shrink-0"
               variant="primary"
-              onClick={() => {
-                handleDisconnect();
+              onClick={(event) => {
+                handleDisconnect(event);
                 handleClose();
               }}
             >

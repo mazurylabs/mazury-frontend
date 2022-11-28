@@ -65,6 +65,7 @@ export const Socials = () => {
           <TwitterModal
             trigger={
               <button
+                type="submit"
                 className={`flex h-[45px] grow items-center justify-center space-x-2 rounded-lg shadow-base ${
                   !profile.twitter ? 'bg-[#4A99E9]' : 'bg-indigoGray-10'
                 }`}
@@ -92,6 +93,7 @@ export const Socials = () => {
           <GithubModal
             trigger={
               <button
+                type="submit"
                 className={`flex h-[45px] grow items-center justify-center space-x-2 rounded-lg shadow-base ${
                   !profile.github ? 'bg-[#262626]' : 'bg-indigoGray-10'
                 }`}
