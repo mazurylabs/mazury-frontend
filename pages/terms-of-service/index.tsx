@@ -7,7 +7,6 @@ import { useIsOnboarded } from '@/hooks';
 
 const TermsOfService = () => {
   const router = useRouter();
-  useIsOnboarded();
 
   return (
     <>

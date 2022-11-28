@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { useIsOnboarded } from '@/hooks';
 
 const PrivacyPolicy = () => {
-  useIsOnboarded();
   const router = useRouter();
 
   return (

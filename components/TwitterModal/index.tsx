@@ -43,7 +43,10 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     setLoading(false);
   };
 
-  const disconnectTwitter = async () => {
+  const disconnectTwitter = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     setLoading(true);
 
     const { error } = await updateProfile(profile?.eth_address as string, '', {
@@ -62,7 +65,10 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     setUrl('');
   };
 
-  const handleVerifyTwitter = async () => {
+  const handleVerifyTwitter = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     const twitterPopupLink = getTwitterConnectionPopupLink(
       profile?.eth_address as string
     );
@@ -72,7 +78,10 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     setCurrentStep(Steps.ACTIVE);
   };
 
-  const handleDisconnect = () => setCurrentStep(Steps.DISCONNECT);
+  const handleDisconnect = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setCurrentStep(Steps.DISCONNECT);
+  };
 
   const triggerButton = React.cloneElement(trigger, {
     onClick: isDisconnecting ? handleDisconnect : handleVerifyTwitter,
@@ -99,7 +108,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     disconnect: (
       <DisconnectStep
         handleCancel={() => setCurrentStep(Steps.IDLE)}
-        handleDisconnect={() => disconnectTwitter()}
+        handleDisconnect={disconnectTwitter}
         loading={loading}
       />
     ),
