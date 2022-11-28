@@ -13,13 +13,14 @@ export const ProfileInformation = () => {
   const [error, setError] = React.useState(false);
   const { profile: userProfile } = useSelector(userSlice);
   const { handleStep, handleSetProfile, profile } = useOnboardingContext();
+  const avatar = profile?.avatar
+    ? URL.createObjectURL(profile?.avatar as any)
+    : '';
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (files && files.length !== 0) {
-      const fileUrl = URL.createObjectURL(files[0]);
-
-      handleSetProfile('avatar', fileUrl);
+      handleSetProfile('avatar', files[0]);
       event.target.value = '';
     }
   };
@@ -120,7 +121,7 @@ export const ProfileInformation = () => {
         <div className="flex w-full items-center justify-center space-x-6">
           <div>
             <img
-              src={profile.avatar || '/icons/no-avatar.svg'}
+              src={avatar || '/icons/no-avatar.svg'}
               alt="Profile"
               className="h-[100px] w-[100px] rounded-full object-cover"
             />

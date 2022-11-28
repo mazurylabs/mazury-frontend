@@ -16,7 +16,7 @@ export enum OnboardingStepsEnum {
 export interface Context {
   activeStep: OnboardingStepsEnum;
   viewedSteps: OnboardingStepsEnum[];
-  profile: Profile;
+  profile: Omit<Profile, 'avatar'> & { avatar: File };
   handleSetProfile: (
     key: keyof Context['profile'],
     value: ValueOf<Context['profile']>

@@ -46,10 +46,13 @@ export const HowDidYouFindUs = () => {
     event.preventDefault();
     setLoading(true);
 
+    const { avatar, ...restOfProfile } = profile;
+
     const { error, data } = await updateProfile(
       userProfile?.eth_address as string,
       '',
-      profile
+      restOfProfile,
+      profile?.avatar
     );
 
     setLoading(false);
