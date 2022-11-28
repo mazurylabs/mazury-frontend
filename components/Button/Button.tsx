@@ -29,7 +29,7 @@ export const Button: React.FC<ButtonProps> = ({
       } ${className}`}
       {...rest}
     >
-      <div>{children}</div>
+      <>{children}</>
       {loading && (
         <Spinner
           size={16}
