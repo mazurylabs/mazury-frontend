@@ -16,7 +16,7 @@ export const RecruiterInfo = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px] xl:mb-[128px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             Recruiter info
@@ -61,7 +61,7 @@ export const RecruiterInfo = () => {
       <Button
         size="large"
         onClick={handleSubmit}
-        className="mt-auto w-full"
+        className="w-full"
         type="submit"
       >
         Continue

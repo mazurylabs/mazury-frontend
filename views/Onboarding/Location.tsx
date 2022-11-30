@@ -15,7 +15,7 @@ export const Location = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px] xl:mb-[32px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Location</h2>
           <p className="font-sansMid text-sm font-medium text-indigoGray-60">
@@ -43,7 +43,7 @@ export const Location = () => {
       <Button
         size="large"
         onClick={handleSubmit}
-        className="mt-auto w-full"
+        className="w-full"
         type="submit"
       >
         {profile.location ? 'Continue' : 'Skip'}
