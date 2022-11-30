@@ -67,7 +67,7 @@ export const HowDidYouFindUs = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:space-y-6">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px] sm:space-y-6 xl:mb-[32px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Last step!</h2>
           <p className="font-sansMid text-sm font-medium text-indigoGray-60">
@@ -94,7 +94,7 @@ export const HowDidYouFindUs = () => {
       <Button
         size="large"
         onClick={handleSubmit}
-        className="mt-auto w-full"
+        className="!mb-12 w-full xl:!mb-0"
         loading={loading}
         type="submit"
       >

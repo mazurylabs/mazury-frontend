@@ -18,7 +18,7 @@ export const OpenToProjects = () => {
 
   return (
     <>
-      <div className="mb-[90px] flex flex-col sm:mb-[128px]">
+      <div className="mb-[90px] flex flex-col sm:mb-[128px] xl:mb-[32px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             Open to projects?
@@ -30,11 +30,11 @@ export const OpenToProjects = () => {
         </div>
       </div>
 
-      <div className="mt-auto space-y-4">
+      <div className="space-y-4">
         <Button
           size="large"
           onClick={(event) => handleNext(event, false)}
-          className="mt-auto w-full !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90"
+          className="w-full !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90"
           variant="primary"
           type="submit"
         >
@@ -43,7 +43,7 @@ export const OpenToProjects = () => {
         <Button
           size="large"
           onClick={(event) => handleNext(event, true)}
-          className="mt-auto w-full !font-sans !font-semibold"
+          className="w-full !font-sans !font-semibold"
           type="submit"
         >
           I’m open to opportunities

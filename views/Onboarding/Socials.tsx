@@ -40,7 +40,7 @@ export const Socials = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:mb-[128px]">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px] xl:mb-[32px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">
             Let’s get in touch
@@ -143,7 +143,7 @@ export const Socials = () => {
       <Button
         size="large"
         onClick={handleSubmit}
-        className="mt-auto w-full"
+        className="w-full"
         type="submit"
       >
         {hasSocial ? 'Continue' : 'Skip'}

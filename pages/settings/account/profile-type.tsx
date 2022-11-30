@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { toast, Toaster } from 'react-hot-toast';
 
-import { Button, Checkbox, SettingsLayout } from 'components';
+import { Button, SettingsLayout } from 'components';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector } from 'react-redux';
 import { userSlice } from '@/selectors';
@@ -57,14 +57,8 @@ const EthAddressPage: NextPage = () => {
               <span className="font-sansMid text-base font-medium text-indigoGray-90">
                 I’m a recruiter
               </span>
-              <Checkbox
-                label={<span className="sr-only">recruiter</span>}
-                checked={isRecruiter}
-                setChecked={() => {}}
-                id={'recruiter'}
-                innerClassName="!w-4 !h-4"
-                outerClassName="w-4 h-4"
-              />
+
+              <Radio checked={isRecruiter} label="recruiter" />
             </button>
 
             <button
@@ -74,14 +68,7 @@ const EthAddressPage: NextPage = () => {
               <span className="font-sansMid text-base font-medium text-indigoGray-90">
                 I’m a professional
               </span>
-              <Checkbox
-                label={<span className="sr-only">professional</span>}
-                checked={!isRecruiter}
-                setChecked={() => {}}
-                id={'professional'}
-                innerClassName="!w-4 !h-4"
-                outerClassName="w-4 h-4"
-              />
+              <Radio label={'professional'} checked={!isRecruiter} />
             </button>
           </div>
 
@@ -97,6 +84,25 @@ const EthAddressPage: NextPage = () => {
         </div>
       }
     />
+  );
+};
+
+const Radio: React.FC<{ checked: boolean; label: string }> = ({
+  checked,
+  label,
+}) => {
+  return (
+    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigoGray-10">
+      <div
+        className={`h-[14.86px] w-[14.86px] rounded-full ${
+          checked ? 'bg-indigoGray-90' : 'bg-transparent'
+        }`}
+      />
+      <div className="sr-only">
+        <label htmlFor={label} />
+        <input id={label} type="checkbox" checked={checked} />
+      </div>
+    </div>
   );
 };
 

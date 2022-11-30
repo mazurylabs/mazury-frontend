@@ -47,7 +47,7 @@ export const ProfileInformation = () => {
 
   return (
     <>
-      <div className="mb-[90px] space-y-8 sm:space-y-6">
+      <div className="mb-[90px] space-y-8 sm:mb-[128px] sm:space-y-6 xl:mb-[32px]">
         <div className="space-y-3">
           <h2 className="font-demi text-4xl text-indigoGray-90">Hi there</h2>
           <p className="font-sansSemi text-sm font-medium text-indigoGray-60">
@@ -164,7 +164,7 @@ export const ProfileInformation = () => {
       <Button
         type="submit"
         size="large"
-        className="mt-auto w-full"
+        className="!mb-12 w-full xl:mb-0"
         disabled={!profile.username}
         loading={loading}
         onClick={handleSubmit}

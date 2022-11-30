@@ -73,7 +73,7 @@ export const Consent = () => {
           </div>
         </div>
       </div>
-      <div className="mt-auto mb-4 space-y-4 sm:mt-[128px]">
+      <div className="mt-[90px] mb-4 space-y-4 sm:mt-[128px] xl:mt-[32px]">
         <p className="font-sansMid text-sm font-medium text-indigoGray-60">
           By clicking this button you consent to the Terms of service and
           Privacy policy and confirm that you understood these documents.
@@ -83,7 +83,7 @@ export const Consent = () => {
           type="submit"
           size="large"
           onClick={handleConsent}
-          className="mt-auto w-full"
+          className="w-full"
         >
           I accept
         </Button>
