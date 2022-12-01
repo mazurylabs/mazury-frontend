@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import { SettingsLayout } from 'components';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 
 const SettingsPage: NextPage = () => {
+  useIsOnboarded();
   useProtectedRoute();
 
   return <SettingsLayout />;

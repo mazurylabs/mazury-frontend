@@ -15,11 +15,15 @@ export const Input: FC<InputProps> = ({
   outerClassName,
   disabled = false,
   error = false,
+  ...rest
 }) => {
   return (
     <div className={`flex flex-col ${outerClassName}`}>
       {label && (
-        <label className="text-sm font-medium text-indigoGray-40" htmlFor={id}>
+        <label
+          className="font-sans text-sm font-normal text-indigoGray-40"
+          htmlFor={id}
+        >
           {label}
         </label>
       )}
@@ -33,10 +37,11 @@ export const Input: FC<InputProps> = ({
           }
         }}
         placeholder={placeholder}
-        className={`block rounded-lg border-[1.5px] border-indigoGray-30 px-4 py-3 text-base font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-40 focus:border-indigoGray-50 ${
+        className={`block rounded-lg border border-indigoGray-20 px-4 py-3 font-sansMid text-sm font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-40 focus:border-indigo-600 ${
           disabled && 'cursor-not-allowed border-indigoGray-30 bg-indigoGray-10'
-        } ${error && 'border-red-500'} ${className}`}
+        } ${error && 'border-red-500 text-red-500'} ${className}`}
         disabled={disabled}
+        {...rest}
       />
     </div>
   );

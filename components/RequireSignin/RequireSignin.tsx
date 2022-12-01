@@ -59,7 +59,7 @@ export const RequireSignin = () => {
     }
   };
 
-  const handleGoToSettings = () => router.push('settings/account/email');
+  const handleGoToSettings = () => router.push('/settings/account/email');
 
   const initial = (
     <div
@@ -150,7 +150,7 @@ export const RequireSignin = () => {
         </button>
         <button
           type="button"
-          className="h-[45px] w-[50%] rounded-lg bg-indigoGray-10 bg-indigoGray-90 text-indigoGray-5"
+          className="h-[45px] w-[50%] rounded-lg bg-indigoGray-90 bg-indigoGray-90 font-sans text-sm font-semibold text-indigoGray-5 shadow-base"
           onClick={handleRefresh}
         >
           Refresh
@@ -190,11 +190,12 @@ export const RequireSignin = () => {
     >
       {true && (
         <>
-          {!isAuthenticated
+          {/* {!isAuthenticated
             ? initial
             : !isEmailVerified && profile?.email
             ? verify
-            : email}
+            : email} */}
+          {verify}
         </>
       )}
     </motion.div>

@@ -38,6 +38,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     const isAccessTokenValid = storage.isTokenExpired(accessToken);
 
     const handleProfile = React.useCallback(async () => {
+      if (!accessToken || !refreshToken) return;
+
       if (isRefreshTokenExpired) {
         return dispatch(logout());
       }
@@ -57,6 +59,10 @@ const App = ({ Component, pageProps }: AppProps) => {
       clearWagmiStorage();
       handleProfile();
     }, [handleProfile]);
+
+    React.useEffect(() => {
+      if (!accessToken || !refreshToken) dispatch(logout());
+    }, []);
 
     return <Component {...pageProps} />;
   };

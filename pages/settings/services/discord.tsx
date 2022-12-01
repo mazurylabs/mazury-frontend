@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
 import { Button, SettingsLayout } from 'components';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 
 const DiscordPage: NextPage = () => {
   useProtectedRoute();
+  useIsOnboarded();
 
   return (
     <SettingsLayout

@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { Avatar, Button, MobileSidebar, Layout } from 'components';
 import {
   useClickOutside,
+  useIsOnboarded,
   useMobile,
   useProfile,
   useProfileSuggestions,
@@ -78,11 +79,12 @@ const Home: NextPage = () => {
 
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const { address, isAuthenticated, profile } = useSelector(userSlice);
+  const { isAuthenticated, profile } = useSelector(userSlice);
   const { suggestions } = useSelector(profileSuggestionsSlice);
 
-  useProfileSuggestions(address as string, apiParams);
-  useProfile(address as string, Boolean(address));
+  useProfileSuggestions(profile?.eth_address as string, apiParams);
+  useProfile(profile?.eth_address as string, !!profile?.eth_address);
+  useIsOnboarded();
 
   const handleLogin = () => {
     setIsOpen(true);

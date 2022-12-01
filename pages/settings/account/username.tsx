@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { updateProfile } from 'utils/api';
-import { useProtectedRoute } from 'hooks';
+import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { userSlice } from '@/selectors';
 import { updateUserProfile } from '@/slices/user';
@@ -17,6 +17,7 @@ interface User {
 const UsernamePage: NextPage = () => {
   const dispatch = useDispatch();
   useProtectedRoute();
+  useIsOnboarded();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);

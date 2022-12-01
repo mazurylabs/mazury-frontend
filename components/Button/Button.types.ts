@@ -1,10 +1,8 @@
-export interface ButtonProps {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'tertiary';
-  disabled?: boolean;
   className?: string;
   size?: 'small' | 'large';
+  loading?: boolean;
 }
-
-export interface BaseButtonProps extends Omit<ButtonProps, 'variant'> {}

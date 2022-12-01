@@ -29,7 +29,7 @@ export const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   const [_, disconnect] = useAccount();
   const { pathname } = router;
-  const { profile, address, isAuthenticated } = useSelector(userSlice);
+  const { profile, isAuthenticated } = useSelector(userSlice);
   const { isOpen, signInOpen, setSignInOpen } =
     React.useContext(SidebarContext);
 
@@ -39,8 +39,8 @@ export const Sidebar: React.FC = () => {
   const handleEmailVerification = async () => {
     // setCurrentStep('active');
 
-    if (address) {
-      const { error } = await verifyEmail(address);
+    if (profile?.eth_address) {
+      const { error } = await verifyEmail(profile?.eth_address);
       if (!error) {
         setCurrentStep('idle');
       } else {
@@ -149,7 +149,7 @@ export const Sidebar: React.FC = () => {
                 <>
                   {/* // Profile button */}
                   <SidebarItem
-                    href={`/people/${address}`}
+                    href={`/people/${profile?.eth_address}`}
                     label="Profile"
                     icon={
                       <img

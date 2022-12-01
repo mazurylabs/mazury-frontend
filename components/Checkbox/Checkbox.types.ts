@@ -6,4 +6,5 @@ export interface CheckboxProps {
   setChecked: (checked: boolean) => void;
   id: string;
   outerClassName?: string;
+  innerClassName?: string;
 }

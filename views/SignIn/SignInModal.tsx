@@ -123,13 +123,15 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           className="w-full bg-emerald-600 text-white hover:text-white active:text-white"
           size="large"
         >
-          <SVG
-            src="/icons/lightning.svg"
-            height={16}
-            width={16}
-            className="mr-2"
-          />
-          Remember me
+          <div className="flex items-center">
+            <SVG
+              src="/icons/lightning.svg"
+              height={16}
+              width={16}
+              className="mr-2"
+            />
+            <span>Remember me</span>
+          </div>
         </Button>
 
         <p className="font-sans text-xs font-medium font-semibold text-indigoGray-40">

@@ -22,7 +22,11 @@ export const Toggle: FC<ToggleProps> = ({
 
   return (
     <div className={`${className}`} data-testid="toggle-outer-container">
-      <button type="button" onClick={onClick} className="hover:cursor-pointer">
+      <button
+        type="button"
+        onClick={onClick}
+        className="flex hover:cursor-pointer"
+      >
         <SVG
           src={`/icons/toggle-${isToggled ? 'on' : 'off'}.svg`}
           width="40px"
