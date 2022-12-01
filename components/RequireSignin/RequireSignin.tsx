@@ -59,7 +59,7 @@ export const RequireSignin = () => {
     }
   };
 
-  const handleGoToSettings = () => router.push('settings/account/email');
+  const handleGoToSettings = () => router.push('/settings/account/email');
 
   const initial = (
     <div
