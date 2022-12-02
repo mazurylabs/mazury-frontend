@@ -139,7 +139,7 @@ const UsernamePage: NextPage = () => {
           </div>
 
           <div className="mt-4 flex grow flex-col lg:mt-6">
-            <form className="flex w-full grow flex-col">
+            <div className="flex w-full grow flex-col">
               <div>
                 <Input
                   id="username"
@@ -191,7 +191,7 @@ const UsernamePage: NextPage = () => {
                   Save Changes
                 </Button>
               </div>
-            </form>
+            </div>
           </div>
 
           <Modal
