@@ -127,7 +127,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   );
 
   const eth_address = account?.eth_address || '';
-
+  const currActiveSection = useActiveProfileSection();
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
 
@@ -161,6 +161,36 @@ const Profile: React.FC<Props> = ({ address }) => {
       getBadgeFromRoute(routeCredential[1]);
     }
   }, [getBadgeFromRoute]);
+
+  useEffect(() => {
+    if (currActiveSection) {
+      setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
+    }
+  }, [currActiveSection]);
+
+  // If the user has already referred the receiver, we need to fetch the referral.
+  useEffect(() => {
+    if (referrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        referrals,
+        eth_address, // receiver
+        accountData?.address as string // the user
+      );
+      if (foundExistingReferral) {
+        setExistingReferral(foundExistingReferral);
+      }
+    }
+    if (authoredReferrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        authoredReferrals,
+        accountData?.address as string, // receiver
+        eth_address as string // the user
+      );
+      if (foundExistingReferral) {
+        setReceivedReferral(foundExistingReferral);
+      }
+    }
+  }, [referrals, authoredReferrals, accountData, eth_address]);
 
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
@@ -210,7 +240,6 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const currActiveSection = useActiveProfileSection();
   const isMobile = useMobile();
 
   const hasAnySocial = account?.github || account?.website || account?.twitter;
@@ -289,36 +318,6 @@ const Profile: React.FC<Props> = ({ address }) => {
   const handleCredential = (credential: BadgeIssuer) => {
     setBadgeIssuer(credential);
   };
-
-  useEffect(() => {
-    if (currActiveSection) {
-      setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
-    }
-  }, [currActiveSection]);
-
-  // If the user has already referred the receiver, we need to fetch the referral.
-  useEffect(() => {
-    if (referrals) {
-      const foundExistingReferral = hasAlreadyReferredReceiver(
-        referrals,
-        eth_address, // receiver
-        accountData?.address as string // the user
-      );
-      if (foundExistingReferral) {
-        setExistingReferral(foundExistingReferral);
-      }
-    }
-    if (authoredReferrals) {
-      const foundExistingReferral = hasAlreadyReferredReceiver(
-        authoredReferrals,
-        accountData?.address as string, // receiver
-        eth_address as string // the user
-      );
-      if (foundExistingReferral) {
-        setReceivedReferral(foundExistingReferral);
-      }
-    }
-  }, [referrals, authoredReferrals, accountData, eth_address]);
 
   // console.log(!connectionStatus?.status);
 
@@ -679,6 +678,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                               <a
                                 target="_blank"
                                 href={`https://lenster.xyz/u/${handle}`}
+                                rel="noreferrer"
                               >
                                 {handle}
                               </a>
