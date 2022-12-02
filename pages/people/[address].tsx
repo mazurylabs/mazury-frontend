@@ -122,6 +122,10 @@ const Profile: React.FC<Props> = ({ address }) => {
     accountData.profile?.lens_id as string
   );
 
+  const remainingFollowers = formatNumber(
+    +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
+  );
+
   const eth_address = account?.eth_address || '';
 
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
@@ -668,15 +672,25 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                       <p className="font-sansMid text-xs font-medium text-indigoGray-50">
                         Followed by{' '}
-                        {mutualFollowers?.items?.map(
-                          (followers) => `${followers.handle}, `
-                        )}
-                        and{' '}
-                        {formatNumber(
-                          +mutualFollowers?.pageInfo?.totalCount -
-                            +mutualFollowers?.items?.length
-                        )}{' '}
-                        others
+                        {mutualFollowers?.items?.map(({ handle, id }) => {
+                          const mutuals = mutualFollowers.items;
+                          return (
+                            <>
+                              <a
+                                target="_blank"
+                                href={`https://lenster.xyz/u/${handle}`}
+                              >
+                                {handle}
+                              </a>
+                              {id === mutuals[mutuals.length - 1].id ? '' : ','}
+                            </>
+                          );
+                        })}
+                        {!!remainingFollowers &&
+                          ', and ' +
+                            remainingFollowers +
+                            ' other' +
+                            (+remainingFollowers > 1 ? 's' : '')}
                       </p>
                     </div>
                   )}
