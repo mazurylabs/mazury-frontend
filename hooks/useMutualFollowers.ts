@@ -30,7 +30,7 @@ export const useMutualFollowers = (
     };
 
     getFollowers();
-  }, []);
+  }, [viewingProfileId, yourProfileId]);
 
   return { mutualFollowers };
 };
