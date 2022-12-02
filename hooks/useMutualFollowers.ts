@@ -1,5 +1,5 @@
-import { MutualFollowers } from '@/types';
-import { getMutualFollowers } from '@/utils/api';
+import { MutualFollowers } from '../types';
+import { getMutualFollowers } from '../utils/api';
 import * as React from 'react';
 
 export const useMutualFollowers = (
