@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import { Avatar } from 'components';
 import { useRouter } from 'next/router';
-import { truncateString } from '@/utils';
+import { formatNumber, truncateString } from '@/utils';
 
 import { Badge, Profile } from 'types';
 import {
@@ -98,6 +98,12 @@ export const Talent = ({ result }: Props) => {
                       {(result.credentials_count as number) != 1 && 's'}
                     </p>
                   </div>
+
+                  {result?.followers_count && (
+                    <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50">
+                      {formatNumber(result?.followers_count)} followers on Lens
+                    </p>
+                  )}
                 </div>
                 <div className="mx-[15px] hidden h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05] lg:block" />
 

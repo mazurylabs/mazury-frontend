@@ -1,16 +1,71 @@
 import { SiweMessage } from 'siwe';
+import Axios from 'axios';
 
 import { OnboardingFormDataType } from 'contexts';
 import {
   Activity,
   APIResponse,
+  AxiosResponse,
   Badge,
   ListResponse,
+  MutualFollowers,
   Profile,
   Referral,
 } from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
 import { axios } from '../lib/axios';
+
+export const getMutualFollowers = async (
+  viewingProfileId: string,
+  yourProfileId: string
+): Promise<
+  AxiosResponse<Record<'mutualFollowersProfiles', MutualFollowers>>
+> => {
+  try {
+    const query = {
+      query: `
+      query {
+        mutualFollowersProfiles(
+          request: {
+            viewingProfileId: ${JSON.stringify(viewingProfileId)}
+            yourProfileId: ${JSON.stringify(yourProfileId)}
+            limit: ${JSON.stringify(2)}
+          }
+        ) {
+          items {
+            id
+            name
+            handle
+            picture {
+              ... on NftImage {
+                uri
+              }
+              ... on MediaSet {
+                original {
+                  url
+                }
+              }
+            }
+          }
+          pageInfo {
+            totalCount
+          }
+        }
+      }
+      `,
+    };
+
+    const response = await Axios({
+      url: 'https://api.lens.dev/',
+      method: 'post',
+      data: query,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getProfile: (
   address: string

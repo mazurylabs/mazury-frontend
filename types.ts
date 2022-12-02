@@ -1,4 +1,14 @@
+import { AxiosRequestConfig } from 'axios';
 import type { FC } from 'react';
+
+export interface AxiosResponse<T = never> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  config: AxiosRequestConfig<T>;
+  request?: any;
+}
 
 export type ColorName =
   | 'indigo'
@@ -156,6 +166,21 @@ export interface Profile
   how_did_you_find_us: string;
   location: string;
   privacy_consent?: boolean;
+  followers_count?: number;
+  lens_id?: string;
+  lens_handle?: string;
+}
+
+interface LensProfile {
+  handle: string;
+  id: string;
+  name: string;
+  picture: { original: { url: string } };
+}
+
+export interface MutualFollowers {
+  items: LensProfile[];
+  pageInfo: Record<'totalCount', string>;
 }
 
 export interface ListResponse<T> {
