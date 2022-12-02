@@ -649,9 +649,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                   })}
                 </div>
 
-                {accountData.profile?.lens_id &&
-                  profile?.lens_id &&
-                  !viewingOwnProfile && (
+                {!viewingOwnProfile &&
+                  +mutualFollowers?.pageInfo?.totalCount > 0 && (
                     <div className="!mt-[31px] !mb-4 flex h-[18px] items-center space-x-[3.5px] lg:!mt-5 lg:!mb-[0px]">
                       <div className="flex space-x-[-6px]">
                         {mutualFollowers?.items?.map((follower, index) => {

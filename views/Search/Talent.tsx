@@ -99,7 +99,7 @@ export const Talent = ({ result }: Props) => {
                     </p>
                   </div>
 
-                  {result?.followers_count && (
+                  {!!result?.followers_count && (
                     <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50">
                       {formatNumber(result?.followers_count)} followers on Lens
                     </p>
