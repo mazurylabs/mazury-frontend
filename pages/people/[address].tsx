@@ -108,40 +108,69 @@ const formatIpfsImage = (url: string) => {
 const Profile: React.FC<Props> = ({ address }) => {
   useIsOnboarded();
   const router = useRouter();
+  const isMobile = useMobile();
+  const { profile, error } = useProfile(address);
   const accountData = useSelector(userSlice);
-  // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
+  const currActiveSection = useActiveProfileSection();
 
   const viewingOwnProfile = accountData?.address === address;
-
-  const { profile, error } = useProfile(address);
-
   const account = viewingOwnProfile ? accountData.profile : profile;
-
-  const { mutualFollowers } = useMutualFollowers(
-    profile?.lens_id as string,
-    accountData.profile?.lens_id as string
-  );
-
-  const remainingFollowers = formatNumber(
-    +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
-  );
-
   const eth_address = account?.eth_address || '';
-  const currActiveSection = useActiveProfileSection();
+
+  const { connectionStatus } = useConnectionStatus(eth_address);
+  const { posts } = usePosts(eth_address);
+  const { credentialCount } = useCredentialCount(eth_address);
+  const scrollPos = useScrollPosition();
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
-
-  const { referrals, count: referralsCount } = useReferrals(eth_address);
+  const { referrals } = useReferrals(eth_address);
   const { referrals: authoredReferrals } = useReferrals(eth_address, true);
+  const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
+  const [activeSection, setActiveSection] =
+    React.useState<ProfileSection>('Credentials');
+
+  const [isConnectionRequested, setConnectionRequested] = useState(false);
+
+  const [badgesExpanded, setBadgesExpanded] = useState(false);
+  const [referralsExpanded, setReferralsExpanded] = useState(false);
+  const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
+    'received'
+  );
+  const [postsExpanded, setPostsExpanded] = useState(false);
+
+  // To track whether the 'write referral' modal is open or not
+  const [referralModalOpen, setReferralModalOpen] = useState(false);
+
+  // To track whether the 'edit profile' modal is open or not
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
+  // If the author has already referred the receiver, this holds that referral. Else it's null.
+  const [existingReferral, setExistingReferral] = useState<Referral | null>(
+    null
+  );
+  // If the receiver has already referred the author, this holds that referral. Else it's null.
+  const [receivedReferral, setReceivedReferral] = useState<Referral | null>(
+    null
+  );
 
   const { badges, handleFetchMore, hasMoreData } = useBadges(
     eth_address,
     badgeIssuer
   );
 
-  const { credentialCount } = useCredentialCount(eth_address);
+  const activityRef = useRef<HTMLHeadingElement>(null);
+  const altActivityRef = useRef<HTMLDivElement>(null);
+  const badgesRef = useRef<HTMLHeadingElement>(null);
+  const referralsRef = useRef<HTMLHeadingElement>(null);
+  const writingRef = useRef<HTMLHeadingElement>(null);
+  const headerRef = useRef<HTMLHRElement>(null);
 
-  const { isAuthenticated } = useSelector(userSlice);
+  const { mutualFollowers } = useMutualFollowers(
+    profile?.lens_id as string,
+    accountData.profile?.lens_id as string
+  );
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     try {
@@ -192,55 +221,15 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
 
+  const remainingFollowers = formatNumber(
+    +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
+  );
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
-
-  const { connectionStatus } = useConnectionStatus(eth_address);
-  const { posts } = usePosts(eth_address);
-
-  const scrollPos = useScrollPosition();
-  const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
-  const [activeSection, setActiveSection] =
-    React.useState<ProfileSection>('Credentials');
-
-  const [isConnectionRequested, setConnectionRequested] = useState(false);
-
-  const [badgesExpanded, setBadgesExpanded] = useState(false);
-  const [referralsExpanded, setReferralsExpanded] = useState(false);
-  const [referralsToggle, setReferralsToggle] = useState<'received' | 'given'>(
-    'received'
-  );
-  const [postsExpanded, setPostsExpanded] = useState(false);
-
-  // To track whether the 'write referral' modal is open or not
-  const [referralModalOpen, setReferralModalOpen] = useState(false);
-
-  // To track whether the 'edit profile' modal is open or not
-  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
-
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
-
-  // If the author has already referred the receiver, this holds that referral. Else it's null.
-  const [existingReferral, setExistingReferral] = useState<Referral | null>(
-    null
-  );
-  // If the receiver has already referred the author, this holds that referral. Else it's null.
-  const [receivedReferral, setReceivedReferral] = useState<Referral | null>(
-    null
-  );
 
   const referralsToShow =
     referralsToggle === 'received' ? referrals : authoredReferrals;
 
   // const viewingOwnProfile = accountData?.address === eth_address;
-
-  const activityRef = useRef<HTMLHeadingElement>(null);
-  const altActivityRef = useRef<HTMLDivElement>(null);
-  const badgesRef = useRef<HTMLHeadingElement>(null);
-  const referralsRef = useRef<HTMLHeadingElement>(null);
-  const writingRef = useRef<HTMLHeadingElement>(null);
-  const headerRef = useRef<HTMLHRElement>(null);
-
-  const isMobile = useMobile();
 
   const hasAnySocial = account?.github || account?.website || account?.twitter;
 
@@ -292,7 +281,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         setIsRequestModalOpen(true);
       }
     } catch (error: any) {
-      if (error.message.includes('403') || !isAuthenticated) {
+      if (error.message.includes('403') || !accountData.isAuthenticated) {
         setIsRequestModalOpen(true);
       }
     }
