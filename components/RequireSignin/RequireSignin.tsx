@@ -190,12 +190,11 @@ export const RequireSignin = () => {
     >
       {true && (
         <>
-          {/* {!isAuthenticated
+          {!isAuthenticated
             ? initial
             : !isEmailVerified && profile?.email
             ? verify
-            : email} */}
-          {verify}
+            : email}
         </>
       )}
     </motion.div>
