@@ -71,6 +71,7 @@ import { RequestStatusModal } from '@/components/RequestContactModal/RequestStat
 import { RecruiterModalContent } from '@/components/RequestContactModal/RecruiterModalContent';
 import { NonRecruiterModalContent } from '@/components/RequestContactModal/NonRecruiterModalContent';
 import { RequireSignin } from '@/components/RequireSignin';
+import Link from 'next/link';
 
 interface Props {
   address: string;
@@ -574,9 +575,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                         {account.full_name}
                       </h3>
 
-                      <div className="flex items-center">
+                      <div className="flex items-center space-x-2">
+                        <SVG
+                          src="/icons/browse-wallet.svg"
+                          height="16px"
+                          width="16px"
+                          onClick={copyAddressToClipboard}
+                        />
                         <p
-                          className={`mr-2 text-indigoGray-70 md:block ${
+                          className={`font-sansMid !text-xs font-medium text-indigoGray-70 md:block ${
                             shouldCollapseHeader
                               ? 'hidden text-sm'
                               : 'text-base'
@@ -588,21 +595,48 @@ const Profile: React.FC<Props> = ({ address }) => {
                           </span>
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <SVG
                           src="/icons/clipboard.svg"
                           height="16px"
                           width="16px"
-                          alt="Clipboard icon"
-                          className="hidden hover:cursor-pointer md:block"
+                          className="hover:cursor-pointer"
                           onClick={copyAddressToClipboard}
                         />
                       </div>
 
-                      {account.lens_handle && (
+                      {account?.lens_handle && (
                         <div className="mt-[2px] flex items-center space-x-2">
                           <SVG src="/icons/lens.svg" height={16} width={16} />
                           <p className="font-sansMid text-xs font-medium text-indigoGray-70">
                             {account.lens_handle}
+                          </p>
+                          <Link
+                            href={`https://lenster.xyz/u/${account.lens_handle}`}
+                          >
+                            <a
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex"
+                            >
+                              <SVG
+                                src="/icons/external-link-black.svg"
+                                height={16}
+                                width={16}
+                              />
+                            </a>
+                          </Link>
+                        </div>
+                      )}
+
+                      {account?.location && (
+                        <div className="mt-[2px] flex items-center space-x-2">
+                          <SVG
+                            src="/icons/location.svg"
+                            height={16}
+                            width={16}
+                          />
+                          <p className="font-sansMid text-xs font-medium text-indigoGray-70">
+                            {account.location}
                           </p>
                         </div>
                       )}
@@ -610,13 +644,15 @@ const Profile: React.FC<Props> = ({ address }) => {
                   </div>
                 </div>
 
-                <p
-                  className={`text-indigoGray-70 ${
-                    shouldCollapseHeader ? 'hidden' : 'block'
-                  }`}
-                >
-                  {account.bio}
-                </p>
+                {account?.bio && (
+                  <p
+                    className={`text-indigoGray-70 ${
+                      shouldCollapseHeader ? 'hidden' : 'block'
+                    }`}
+                  >
+                    {account?.bio}
+                  </p>
+                )}
 
                 <div
                   className={`no-scrollbar hidden w-full gap-6 overflow-x-scroll md:flex md:overflow-auto ${
