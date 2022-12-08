@@ -176,6 +176,7 @@ interface LensProfile {
   id: string;
   name: string;
   picture: { original: { url: string } };
+  ownedBy: string;
 }
 
 export interface MutualFollowers {

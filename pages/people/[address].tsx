@@ -695,21 +695,29 @@ const Profile: React.FC<Props> = ({ address }) => {
                       </div>
                       <p className="font-sansMid text-xs font-medium text-indigoGray-50">
                         Followed by{' '}
-                        {mutualFollowers?.items?.map(({ handle, id }) => {
-                          const mutuals = mutualFollowers.items;
-                          return (
-                            <>
-                              <a
-                                target="_blank"
-                                href={`https://lenster.xyz/u/${handle}`}
-                                rel="noreferrer"
-                              >
-                                {handle}
-                              </a>
-                              {id === mutuals[mutuals.length - 1].id ? '' : ','}
-                            </>
-                          );
-                        })}
+                        {mutualFollowers?.items?.map(
+                          ({ handle, id, ownedBy }) => {
+                            const mutuals = mutualFollowers.items;
+                            return (
+                              <>
+                                <a
+                                  {...(ownedBy
+                                    ? {
+                                        onClick: () =>
+                                          router.push(`/people/${ownedBy}`),
+                                        className: 'cursor-pointer',
+                                      }
+                                    : {})}
+                                >
+                                  {handle}
+                                </a>
+                                {id === mutuals[mutuals.length - 1].id
+                                  ? ''
+                                  : `${!!remainingFollowers ? ',' : ' and '}`}
+                              </>
+                            );
+                          }
+                        )}
                         {!!remainingFollowers &&
                           ', and ' +
                             remainingFollowers +

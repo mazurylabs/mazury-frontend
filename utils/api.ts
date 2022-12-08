@@ -46,6 +46,7 @@ export const getMutualFollowers = async (
                 }
               }
             }
+            ownedBy
           }
           pageInfo {
             totalCount
