@@ -91,19 +91,20 @@ export const Talent = ({ result }: Props) => {
                     {returnTruncatedIfEthAddress(result.username)}
                   </p>
 
-                  <div className="flex flex-col lg:flex-row">
+                  <div>
                     <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
                       {/* result.credential_count.length */}
                       {commify(result.credentials_count as number)} credential
                       {(result.credentials_count as number) != 1 && 's'}
                     </p>
-                  </div>
 
-                  {!!result?.followers_count && (
-                    <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50">
-                      {formatNumber(result?.followers_count)} followers on Lens
-                    </p>
-                  )}
+                    {!!result?.followers_count && (
+                      <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50">
+                        {formatNumber(result?.followers_count)} followers on
+                        Lens
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="mx-[15px] hidden h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05] lg:block" />
 

@@ -583,7 +583,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                           onClick={copyAddressToClipboard}
                         />
                         <p
-                          className={`font-sansMid !text-xs font-medium text-indigoGray-70 md:block ${
+                          className={`font-sansMid !text-sm font-medium text-indigoGray-70 md:block ${
                             shouldCollapseHeader
                               ? 'hidden text-sm'
                               : 'text-base'
@@ -607,7 +607,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                       {account?.lens_handle && (
                         <div className="mt-[2px] flex items-center space-x-2">
                           <SVG src="/icons/lens.svg" height={16} width={16} />
-                          <p className="font-sansMid text-xs font-medium text-indigoGray-70">
+                          <p className="font-sansMid text-sm font-medium text-indigoGray-70">
                             {account.lens_handle}
                           </p>
                           <Link
@@ -635,7 +635,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                             height={16}
                             width={16}
                           />
-                          <p className="font-sansMid text-xs font-medium text-indigoGray-70">
+                          <p className="font-sansMid text-sm font-medium text-indigoGray-70">
                             {account.location}
                           </p>
                         </div>
