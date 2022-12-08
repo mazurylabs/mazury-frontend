@@ -86,7 +86,7 @@ export const Talent = ({ result }: Props) => {
                   />
                 </div>
 
-                <div className="ml-3 flex flex-col items-start space-y-2 lg:w-40">
+                <div className="ml-3 flex flex-col items-start space-y-[6px] lg:w-40">
                   <p className="font-serif text-xl font-bold leading-6 text-indigoGray-90">
                     {returnTruncatedIfEthAddress(result.username)}
                   </p>
