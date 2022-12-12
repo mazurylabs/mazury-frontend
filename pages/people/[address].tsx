@@ -168,10 +168,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const { mutualFollowers } = useMutualFollowers(
-    profile?.lens_id as string,
-    accountData.profile?.lens_id as string
-  );
+  const { mutualFollowers } = useMutualFollowers('0x05', '0x290f');
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     try {
@@ -713,7 +710,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                                 </a>
                                 {id === mutuals[mutuals.length - 1].id
                                   ? ''
-                                  : `${!!remainingFollowers ? ',' : ' and '}`}
+                                  : `${!!remainingFollowers ? ', ' : ' and '}`}
                               </>
                             );
                           }
