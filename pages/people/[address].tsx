@@ -168,7 +168,10 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const { mutualFollowers } = useMutualFollowers('0x05', '0x290f');
+  const { mutualFollowers } = useMutualFollowers(
+    profile?.lens_id as string,
+    accountData.profile?.lens_id as string
+  );
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     try {
@@ -577,7 +580,6 @@ const Profile: React.FC<Props> = ({ address }) => {
                           src="/icons/browse-wallet.svg"
                           height="16px"
                           width="16px"
-                          onClick={copyAddressToClipboard}
                         />
                         <p
                           className={`font-sansMid !text-sm font-medium text-indigoGray-70 md:block ${
@@ -587,9 +589,17 @@ const Profile: React.FC<Props> = ({ address }) => {
                           }`}
                         >
                           {account.ens_name && `${account.ens_name} `}
-                          <span className="text-indigoGray-40">
-                            ({returnTruncatedIfEthAddress(account.eth_address)})
-                          </span>
+                          {account.ens_name ? (
+                            <span className="text-indigoGray-40">
+                              (
+                              {returnTruncatedIfEthAddress(account.eth_address)}
+                              )
+                            </span>
+                          ) : (
+                            <span className={'text-indigoGray-70'}>
+                              {returnTruncatedIfEthAddress(account.eth_address)}
+                            </span>
+                          )}
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <SVG
