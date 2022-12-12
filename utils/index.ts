@@ -264,3 +264,35 @@ const wagmiSetupKeys = [
 export const clearWagmiStorage = () => {
   wagmiSetupKeys.forEach((key) => localStorage.removeItem(key));
 };
+
+export const formatNumber = (num: number) => {
+  if (Math.abs(num) < 1000) {
+    return num;
+  }
+
+  let shortNumber;
+  let exponent;
+  let size;
+  const sign = num < 0 ? '-' : '';
+  const suffixes: Record<string, number> = {
+    K: 6,
+    M: 9,
+    B: 12,
+    T: 16,
+  };
+
+  num = Math.abs(num);
+  size = Math.floor(num).toString().length;
+
+  exponent = size % 3 === 0 ? size - 3 : size - (size % 3);
+  shortNumber = `${Math.floor(10 * (num / Math.pow(10, exponent))) / 10}`;
+
+  for (let suffix of Object.keys(suffixes)) {
+    if (exponent < suffixes[suffix]) {
+      shortNumber += suffix;
+      break;
+    }
+  }
+
+  return sign + shortNumber;
+};

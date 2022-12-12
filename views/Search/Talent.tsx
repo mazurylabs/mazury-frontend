@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { FaGithub, FaGlobe, FaTwitter } from 'react-icons/fa';
 import { Avatar } from 'components';
 import { useRouter } from 'next/router';
-import { truncateString } from '@/utils';
+import { formatNumber, truncateString } from '@/utils';
 
 import { Badge, Profile } from 'types';
 import {
@@ -86,17 +86,24 @@ export const Talent = ({ result }: Props) => {
                   />
                 </div>
 
-                <div className="ml-3 flex flex-col items-start space-y-2 lg:w-40">
+                <div className="ml-3 flex flex-col items-start space-y-[6px] lg:w-40">
                   <p className="font-serif text-xl font-bold leading-6 text-indigoGray-90">
                     {returnTruncatedIfEthAddress(result.username)}
                   </p>
 
-                  <div className="flex flex-col lg:flex-row">
+                  <div>
                     <p className="hidden font-sans text-xs font-medium leading-[18px] text-indigoGray-50 lg:flex">
                       {/* result.credential_count.length */}
                       {commify(result.credentials_count as number)} credential
                       {(result.credentials_count as number) != 1 && 's'}
                     </p>
+
+                    {!!result?.followers_count && (
+                      <p className="font-sans text-xs font-medium leading-[18px] text-indigoGray-50">
+                        {formatNumber(result?.followers_count)} followers on
+                        Lens
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="mx-[15px] hidden h-[43px] w-[1px] bg-indigoGray-90 opacity-[0.05] lg:block" />
