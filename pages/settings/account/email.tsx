@@ -142,7 +142,7 @@ const EmailPage: NextPage = () => {
           )}
 
           <div className="mt-8 flex grow flex-col">
-            <form className="flex w-full grow flex-col">
+            <div className="flex w-full grow flex-col">
               <div className="flex items-center pr-6  md:mb-8 md:justify-between">
                 <div className="mr-10 max-w-[83%] shrink grow md:max-w-full">
                   <Input
@@ -183,7 +183,7 @@ const EmailPage: NextPage = () => {
                   Save Changes
                 </Button>
               </div>
-            </form>
+            </div>
           </div>
 
           <WalletRequestModal

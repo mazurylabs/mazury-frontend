@@ -40,6 +40,7 @@ import {
   returnTruncatedIfEthAddress,
   toCapitalizedWord,
   sectionToColor,
+  formatNumber,
 } from 'utils';
 
 import {
@@ -52,6 +53,7 @@ import {
   usePosts,
   useCredentialCount,
   useIsOnboarded,
+  useMutualFollowers,
 } from 'hooks';
 
 import { WriteReferralModal } from 'views/Profile/WriteReferralModal';
@@ -69,6 +71,7 @@ import { RequestStatusModal } from '@/components/RequestContactModal/RequestStat
 import { RecruiterModalContent } from '@/components/RequestContactModal/RecruiterModalContent';
 import { NonRecruiterModalContent } from '@/components/RequestContactModal/NonRecruiterModalContent';
 import { RequireSignin } from '@/components/RequireSignin';
+import Link from 'next/link';
 
 interface Props {
   address: string;
@@ -94,56 +97,35 @@ const roleFieldToLabel: MappedRoles<string> = {
   role_community_manager: 'Community manager',
 };
 
+const formatIpfsImage = (url: string) => {
+  const prefix = 'https://lens.infura-ipfs.io/ipfs/';
+  const urlArray = url.split('//');
+
+  if (urlArray[0].includes('ipfs')) return prefix + url.split('//')[1];
+
+  return url;
+};
+
 const Profile: React.FC<Props> = ({ address }) => {
   useIsOnboarded();
   const router = useRouter();
+  const isMobile = useMobile();
+  const { profile, error } = useProfile(address);
   const accountData = useSelector(userSlice);
-  // we still make use of SWR on the client. This will use fallback data in the beginning but will re-fetch if needed.
+  const currActiveSection = useActiveProfileSection();
 
   const viewingOwnProfile = accountData?.address === address;
-
-  const { profile, error } = useProfile(address);
-
   const account = viewingOwnProfile ? accountData.profile : profile;
-
   const eth_address = account?.eth_address || '';
-
-  const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
-  const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
-
-  const { referrals, count: referralsCount } = useReferrals(eth_address);
-  const { referrals: authoredReferrals } = useReferrals(eth_address, true);
-
-  const { badges, handleFetchMore, hasMoreData } = useBadges(
-    eth_address,
-    badgeIssuer
-  );
-
-  const { credentialCount } = useCredentialCount(eth_address);
-
-  const { isAuthenticated } = useSelector(userSlice);
-
-  const getBadgeFromRoute = useCallback(async (id: string) => {
-    if (badges.find((badge) => badge.id === id)) return;
-    const badge = await getBadgeById(id);
-    setSharedCredential(badge.data);
-  }, []);
-
-  useEffect(() => {
-    let routeCredential = (router?.query?.credential as string)?.split('#');
-
-    if (routeCredential && routeCredential?.length !== 0) {
-      setBadgeIssuer(routeCredential[0] as BadgeIssuer);
-      getBadgeFromRoute(routeCredential[1]);
-    }
-  }, [getBadgeFromRoute]);
-
-  const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
   const { connectionStatus } = useConnectionStatus(eth_address);
   const { posts } = usePosts(eth_address);
-
+  const { credentialCount } = useCredentialCount(eth_address);
   const scrollPos = useScrollPosition();
+  const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
+  const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
+  const { referrals } = useReferrals(eth_address);
+  const { referrals: authoredReferrals } = useReferrals(eth_address, true);
   const shouldCollapseHeader = !!(scrollPos && scrollPos > 0);
   const [activeSection, setActiveSection] =
     React.useState<ProfileSection>('Credentials');
@@ -174,10 +156,10 @@ const Profile: React.FC<Props> = ({ address }) => {
     null
   );
 
-  const referralsToShow =
-    referralsToggle === 'received' ? referrals : authoredReferrals;
-
-  // const viewingOwnProfile = accountData?.address === eth_address;
+  const { badges, handleFetchMore, hasMoreData } = useBadges(
+    eth_address,
+    badgeIssuer
+  );
 
   const activityRef = useRef<HTMLHeadingElement>(null);
   const altActivityRef = useRef<HTMLDivElement>(null);
@@ -186,8 +168,69 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const currActiveSection = useActiveProfileSection();
-  const isMobile = useMobile();
+  const { mutualFollowers } = useMutualFollowers(
+    profile?.lens_id as string,
+    accountData.profile?.lens_id as string
+  );
+
+  const getBadgeFromRoute = useCallback(async (id: string) => {
+    try {
+      if (badges.find((badge) => badge.id === id)) return;
+      const badge = await getBadgeById(id);
+      setSharedCredential(badge.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    let routeCredential = (router?.query?.credential as string)?.split('#');
+
+    if (routeCredential && routeCredential?.length !== 0) {
+      setBadgeIssuer(routeCredential[0] as BadgeIssuer);
+      getBadgeFromRoute(routeCredential[1]);
+    }
+  }, [getBadgeFromRoute]);
+
+  useEffect(() => {
+    if (currActiveSection) {
+      setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
+    }
+  }, [currActiveSection]);
+
+  // If the user has already referred the receiver, we need to fetch the referral.
+  useEffect(() => {
+    if (referrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        referrals,
+        eth_address, // receiver
+        accountData?.address as string // the user
+      );
+      if (foundExistingReferral) {
+        setExistingReferral(foundExistingReferral);
+      }
+    }
+    if (authoredReferrals) {
+      const foundExistingReferral = hasAlreadyReferredReceiver(
+        authoredReferrals,
+        accountData?.address as string, // receiver
+        eth_address as string // the user
+      );
+      if (foundExistingReferral) {
+        setReceivedReferral(foundExistingReferral);
+      }
+    }
+  }, [referrals, authoredReferrals, accountData, eth_address]);
+
+  const remainingFollowers = formatNumber(
+    +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
+  );
+  const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
+
+  const referralsToShow =
+    referralsToggle === 'received' ? referrals : authoredReferrals;
+
+  // const viewingOwnProfile = accountData?.address === eth_address;
 
   const hasAnySocial = account?.github || account?.website || account?.twitter;
 
@@ -239,7 +282,7 @@ const Profile: React.FC<Props> = ({ address }) => {
         setIsRequestModalOpen(true);
       }
     } catch (error: any) {
-      if (error.message.includes('403') || !isAuthenticated) {
+      if (error.message.includes('403') || !accountData.isAuthenticated) {
         setIsRequestModalOpen(true);
       }
     }
@@ -265,36 +308,6 @@ const Profile: React.FC<Props> = ({ address }) => {
   const handleCredential = (credential: BadgeIssuer) => {
     setBadgeIssuer(credential);
   };
-
-  useEffect(() => {
-    if (currActiveSection) {
-      setActiveSection(toCapitalizedWord(currActiveSection) as ProfileSection);
-    }
-  }, [currActiveSection]);
-
-  // If the user has already referred the receiver, we need to fetch the referral.
-  useEffect(() => {
-    if (referrals) {
-      const foundExistingReferral = hasAlreadyReferredReceiver(
-        referrals,
-        eth_address, // receiver
-        accountData?.address as string // the user
-      );
-      if (foundExistingReferral) {
-        setExistingReferral(foundExistingReferral);
-      }
-    }
-    if (authoredReferrals) {
-      const foundExistingReferral = hasAlreadyReferredReceiver(
-        authoredReferrals,
-        accountData?.address as string, // receiver
-        eth_address as string // the user
-      );
-      if (foundExistingReferral) {
-        setReceivedReferral(foundExistingReferral);
-      }
-    }
-  }, [referrals, authoredReferrals, accountData, eth_address]);
 
   // console.log(!connectionStatus?.status);
 
@@ -429,13 +442,13 @@ const Profile: React.FC<Props> = ({ address }) => {
             </div>
 
             <div
-              className="flex w-full items-center gap-8 rounded-none bg-white px-[39.5px] py-6 transition duration-1000 ease-in-out md:rounded-2xl md:py-6"
+              className="flex w-full items-center gap-8 rounded-none bg-white px-4 py-6 transition duration-1000 ease-in-out md:rounded-2xl md:py-6 lg:px-10"
               style={{
                 background:
                   'linear-gradient(72.37deg, rgba(97, 191, 243, 0.2) 18.05%, rgba(244, 208, 208, 0.128) 83.63%), radial-gradient(58.61% 584.5% at 57.29% 41.39%, rgba(233, 209, 204, 0.9) 0%, rgba(236, 219, 212, 0.468) 100%)',
               }}
             >
-              <div className="flex flex-col gap-4 lg:gap-8">
+              <div className="flex flex-col space-y-4 lg:space-y-8">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between gap-4 md:hidden">
                     <div className="flex items-center">
@@ -562,40 +575,91 @@ const Profile: React.FC<Props> = ({ address }) => {
                         {account.full_name}
                       </h3>
 
-                      <div className="flex items-center">
+                      <div className="flex items-center space-x-2">
+                        <SVG
+                          src="/icons/browse-wallet.svg"
+                          height="16px"
+                          width="16px"
+                        />
                         <p
-                          className={`mr-2 text-indigoGray-70 md:block ${
+                          className={`font-sansMid !text-sm font-medium text-indigoGray-70 md:block ${
                             shouldCollapseHeader
                               ? 'hidden text-sm'
                               : 'text-base'
                           }`}
                         >
                           {account.ens_name && `${account.ens_name} `}
-                          <span className="text-indigoGray-40">
-                            ({returnTruncatedIfEthAddress(account.eth_address)})
-                          </span>
+                          {account.ens_name ? (
+                            <span className="text-indigoGray-40">
+                              (
+                              {returnTruncatedIfEthAddress(account.eth_address)}
+                              )
+                            </span>
+                          ) : (
+                            <span className={'text-indigoGray-70'}>
+                              {returnTruncatedIfEthAddress(account.eth_address)}
+                            </span>
+                          )}
                         </p>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <SVG
                           src="/icons/clipboard.svg"
                           height="16px"
                           width="16px"
-                          alt="Clipboard icon"
-                          className="hidden hover:cursor-pointer md:block"
+                          className="hover:cursor-pointer"
                           onClick={copyAddressToClipboard}
                         />
                       </div>
+
+                      {account?.lens_handle && (
+                        <div className="mt-[2px] flex items-center space-x-2">
+                          <SVG src="/icons/lens.svg" height={16} width={16} />
+                          <p className="font-sansMid text-sm font-medium text-indigoGray-70">
+                            {account.lens_handle}
+                          </p>
+                          <Link
+                            href={`https://lenster.xyz/u/${account.lens_handle}`}
+                          >
+                            <a
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex"
+                            >
+                              <SVG
+                                src="/icons/external-link-black.svg"
+                                height={16}
+                                width={16}
+                              />
+                            </a>
+                          </Link>
+                        </div>
+                      )}
+
+                      {account?.location && (
+                        <div className="mt-[2px] flex items-center space-x-2">
+                          <SVG
+                            src="/icons/location.svg"
+                            height={16}
+                            width={16}
+                          />
+                          <p className="font-sansMid text-sm font-medium text-indigoGray-70">
+                            {account.location}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                <p
-                  className={`text-indigoGray-70 ${
-                    shouldCollapseHeader ? 'hidden' : 'block'
-                  }`}
-                >
-                  {account.bio}
-                </p>
+                {account?.bio && (
+                  <p
+                    className={`text-indigoGray-70 ${
+                      shouldCollapseHeader ? 'hidden' : 'block'
+                    }`}
+                  >
+                    {account?.bio}
+                  </p>
+                )}
 
                 <div
                   className={`no-scrollbar hidden w-full gap-6 overflow-x-scroll md:flex md:overflow-auto ${
@@ -617,17 +681,70 @@ const Profile: React.FC<Props> = ({ address }) => {
                   })}
                 </div>
 
+                {!viewingOwnProfile &&
+                  +mutualFollowers?.pageInfo?.totalCount > 0 && (
+                    <div className="!mt-[31px] !mb-4 flex h-[18px] items-center space-x-[3.5px] lg:!mt-5 lg:!mb-[0px]">
+                      <div className="flex space-x-[-6px]">
+                        {mutualFollowers?.items?.map((follower, index) => {
+                          return (
+                            <img
+                              key={follower.id}
+                              src={formatIpfsImage(
+                                follower.picture.original.url
+                              )}
+                              className={`h-6 w-6 rounded-full`}
+                              style={{
+                                zIndex: mutualFollowers.items.length - index,
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                      <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                        Followed by{' '}
+                        {mutualFollowers?.items?.map(
+                          ({ handle, id, ownedBy }) => {
+                            const mutuals = mutualFollowers.items;
+                            return (
+                              <>
+                                <a
+                                  {...(ownedBy
+                                    ? {
+                                        onClick: () =>
+                                          router.push(`/people/${ownedBy}`),
+                                        className: 'cursor-pointer',
+                                      }
+                                    : {})}
+                                >
+                                  {handle}
+                                </a>
+                                {id === mutuals[mutuals.length - 1].id
+                                  ? ''
+                                  : `${!!remainingFollowers ? ', ' : ' and '}`}
+                              </>
+                            );
+                          }
+                        )}
+                        {!!remainingFollowers &&
+                          ', and ' +
+                            remainingFollowers +
+                            ' other' +
+                            (+remainingFollowers > 1 ? 's' : '')}
+                      </p>
+                    </div>
+                  )}
+
                 <div
-                  className={`flex gap-4 lg:hidden ${
+                  className={`flex space-x-4 lg:hidden ${
                     shouldCollapseHeader && 'hidden'
                   }`}
                 >
-                  <div className="flex items-baseline gap-1">
+                  <div className="flex items-baseline space-x-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(referralsCount)}
+                      {formatNumber(account.followers_count || 0)}
                     </span>
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
-                      Referrals
+                      FOLLOWERS ON 🌿
                     </span>
                   </div>
 
@@ -652,8 +769,8 @@ const Profile: React.FC<Props> = ({ address }) => {
                 </div>
               </div>
 
-              <div className="ml-auto flex flex-col">
-                {viewingOwnProfile && !isMobile && (
+              <div className="ml-auto hidden flex-col lg:flex">
+                {viewingOwnProfile && (
                   <Button
                     className="ml-auto mr-24 w-fit"
                     onClick={handleEditProfileClick}
@@ -662,18 +779,18 @@ const Profile: React.FC<Props> = ({ address }) => {
                   </Button>
                 )}
 
-                <div className="mt-8 hidden gap-16 pr-24 lg:flex">
-                  <div className="flex flex-col items-center gap-0">
+                <div className="mt-8 hidden space-x-16 pr-20 lg:flex">
+                  <div className="flex shrink-0 flex-col items-center gap-0">
                     <motion.span
                       style={{
                         fontSize: shouldCollapseHeader ? '24px' : '36px',
                       }}
                       className="font-serif font-bold"
                     >
-                      {getMetricDisplayValue(referralsCount)}
+                      {formatNumber(account.followers_count || 0)}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
-                      Referrals
+                      FOLLOWERS ON 🌿
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-0">

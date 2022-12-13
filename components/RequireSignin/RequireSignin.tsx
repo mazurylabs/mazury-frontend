@@ -188,14 +188,13 @@ export const RequireSignin = () => {
           : 'fixed before:bg-indigoGray-90'
       } top-0 left-0 flex h-full w-full items-center justify-center  before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50`}
     >
-      {true && (
+      {isSignInRequired && (
         <>
-          {/* {!isAuthenticated
+          {!isAuthenticated
             ? initial
             : !isEmailVerified && profile?.email
             ? verify
-            : email} */}
-          {verify}
+            : email}
         </>
       )}
     </motion.div>

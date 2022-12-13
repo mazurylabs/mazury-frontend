@@ -12,8 +12,10 @@ export const usePosts = (address?: string) => {
   React.useEffect(() => {
     const getMirrorPost = async () => {
       try {
-        const { data } = await axios.get(`/writing/mirror/${address || ''}`);
-        setMirror(data);
+        if (address) {
+          const { data } = await axios.get(`/writing/mirror/${address}`);
+          setMirror(data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -25,8 +27,10 @@ export const usePosts = (address?: string) => {
   React.useEffect(() => {
     const getGmPost = async () => {
       try {
-        const { data } = await axios.get(`/writing/gm/${address || ''}`);
-        setGm(data);
+        if (address) {
+          const { data } = await axios.get(`/writing/gm/${address}`);
+          setGm(data);
+        }
       } catch (error) {
         console.log(error);
       }
