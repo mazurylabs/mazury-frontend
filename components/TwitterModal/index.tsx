@@ -14,7 +14,7 @@ import { DisconnectStep } from './DisconnectStep';
 
 interface TwitterModalProps {
   trigger: React.ReactElement;
-  handleSubmit: (twitterUsername: string) => void;
+  handleSubmit?: (twitterUsername: string) => void;
   isDisconnecting?: boolean;
 }
 
@@ -36,7 +36,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     if (error) {
       setCurrentStep(Steps.ERROR);
     } else {
-      handleSubmit(data.username);
+      handleSubmit?.(data.username);
       setCurrentStep(Steps.IDLE);
     }
 
@@ -57,7 +57,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
       return alert('Error disconnecting profile.');
     }
     setLoading(false);
-    handleSubmit('');
+    handleSubmit?.('');
   };
 
   const handleSkip = () => {

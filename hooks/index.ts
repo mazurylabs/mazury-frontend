@@ -19,3 +19,4 @@ export { useCredentialCount } from './useCredentialCount';
 export { useConnections } from './useConnections';
 export { useCountDown } from './useCountDown';
 export { useMutualFollowers } from './useMutualFollowers';
+export { useAccount } from './useAccount';

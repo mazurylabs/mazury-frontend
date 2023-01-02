@@ -1,6 +1,7 @@
 import { MutualFollowers } from '../types';
 import { getMutualFollowers } from '../utils/api';
 import * as React from 'react';
+import { formatNumber } from '@/utils';
 
 export const useMutualFollowers = (
   viewingProfileId: string,
@@ -10,14 +11,19 @@ export const useMutualFollowers = (
     {} as MutualFollowers
   );
 
+  const hasValidData =
+    viewingProfileId && yourProfileId && viewingProfileId !== yourProfileId;
+
+  const remainingFollowers = hasValidData
+    ? formatNumber(
+        +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
+      )
+    : 0;
+
   React.useEffect(() => {
     const getFollowers = async () => {
       try {
-        if (
-          viewingProfileId &&
-          yourProfileId &&
-          viewingProfileId !== yourProfileId
-        ) {
+        if (hasValidData) {
           const { data } = await getMutualFollowers(
             viewingProfileId,
             yourProfileId
@@ -32,5 +38,5 @@ export const useMutualFollowers = (
     getFollowers();
   }, [viewingProfileId, yourProfileId]);
 
-  return { mutualFollowers };
+  return { mutualFollowers, remainingFollowers };
 };

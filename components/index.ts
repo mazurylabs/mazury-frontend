@@ -14,6 +14,7 @@ export { BadgeModal } from './BadgeModal';
 export { BadgeDetail } from './BadgeDetail';
 export { WalletRequestModal } from './WalletRequestModal';
 export { Portal } from './Portal';
+export { Progress } from './Progress';
 export * from './Tags';
 export * from './Icons';
 export { Sidebar } from './Sidebar';

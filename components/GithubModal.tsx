@@ -8,7 +8,7 @@ import { Button } from './Button';
 
 interface GithubModalProps {
   trigger: React.ReactElement;
-  handleSubmit: (value: string) => void;
+  handleSubmit?: (value: string) => void;
   handleConnect?: () => void;
   isDisconnecting: boolean;
 }
@@ -42,7 +42,7 @@ export const GithubModal: React.FC<GithubModalProps> = ({
     if (error) {
       return alert('Error disconnecting profile.');
     }
-    handleSubmit('');
+    handleSubmit?.('');
   };
 
   const handleClose = () => setIsOpen(false);

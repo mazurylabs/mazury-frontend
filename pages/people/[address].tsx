@@ -41,6 +41,8 @@ import {
   toCapitalizedWord,
   sectionToColor,
   formatNumber,
+  formatIpfsImage,
+  plurify,
 } from 'utils';
 
 import {
@@ -97,15 +99,6 @@ const roleFieldToLabel: MappedRoles<string> = {
   role_community_manager: 'Community manager',
 };
 
-const formatIpfsImage = (url: string) => {
-  const prefix = 'https://lens.infura-ipfs.io/ipfs/';
-  const urlArray = url.split('//');
-
-  if (urlArray[0].includes('ipfs')) return prefix + url.split('//')[1];
-
-  return url;
-};
-
 const Profile: React.FC<Props> = ({ address }) => {
   useIsOnboarded();
   const router = useRouter();
@@ -114,7 +107,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const accountData = useSelector(userSlice);
   const currActiveSection = useActiveProfileSection();
 
-  const viewingOwnProfile = accountData?.address === address;
+  const viewingOwnProfile = false;
   const account = viewingOwnProfile ? accountData.profile : profile;
   const eth_address = account?.eth_address || '';
 
@@ -168,10 +161,7 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const { mutualFollowers } = useMutualFollowers(
-    profile?.lens_id as string,
-    accountData.profile?.lens_id as string
-  );
+  const { mutualFollowers } = useMutualFollowers('0x05', '0x290f');
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     try {
@@ -390,9 +380,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                   width={16}
                   height={16}
                 />
-                <p className="ml-2 font-demi">
+                {/* <p className="ml-2 font-demi">
                   {returnTruncatedIfEthAddress(account.username)}
-                </p>
+                </p> */}
               </div>
 
               {/* Write referral button, large screens */}
@@ -728,8 +718,7 @@ const Profile: React.FC<Props> = ({ address }) => {
                         {!!remainingFollowers &&
                           ', and ' +
                             remainingFollowers +
-                            ' other' +
-                            (+remainingFollowers > 1 ? 's' : '')}
+                            plurify(+remainingFollowers, ' other')}
                       </p>
                     </div>
                   )}
