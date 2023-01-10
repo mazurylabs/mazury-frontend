@@ -59,7 +59,9 @@ const Profile = ({ address }: ProfileProps) => {
     },
     highlight: {
       title: 'Highlight credentials',
-      view: <HighlightCredentials />,
+      view: (
+        <HighlightCredentials address={accountInView?.eth_address as string} />
+      ),
       handleSave: () => console.log('saving'),
     },
     social: {
@@ -70,6 +72,7 @@ const Profile = ({ address }: ProfileProps) => {
       view: (
         <Idle
           address={address}
+          isOwnProfile={isOwnProfile}
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
@@ -95,6 +98,7 @@ const Profile = ({ address }: ProfileProps) => {
             profile={accountInView}
             user={user.profile as Profile}
             isOwnProfile={isOwnProfile}
+            loading={!accountInView}
           />
         }
       >

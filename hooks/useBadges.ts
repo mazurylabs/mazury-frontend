@@ -3,13 +3,17 @@ import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import type { ListResponse, Badge, BadgeIssuer } from '../types';
 
-export const useBadges = (address: string, issuer: BadgeIssuer = 'mazury') => {
+export const useBadges = (
+  address: string,
+  issuer: BadgeIssuer = 'mazury',
+  limit: number = 4
+) => {
   const [fetchMore, setFetchMore] = useState(false);
   const [badges, setBadges] = useState<Badge[]>([]);
   const [nextEndpoint, setNextEndpoint] = useState('');
 
   const { data, error } = useSWR<ListResponse<Badge>>(
-    `/badges/?owner=${address}&issuer=${issuer}&limit=4`
+    `/badges/?owner=${address}&issuer=${issuer}&limit=${limit}`
   );
 
   const handleFetchMore = () => setFetchMore(true);

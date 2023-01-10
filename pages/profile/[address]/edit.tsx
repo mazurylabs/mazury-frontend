@@ -343,10 +343,10 @@ const Edit = ({ address }: EditProps) => {
 
             <div className="flex space-x-2">
               <Button
-                // onClick={(event) => handleNext(event, false)}
+                onClick={(event) => console.log('sdf')}
                 className="w-full !border !border-[1.5px] !border-indigoGray-20 !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90 !shadow-base"
                 variant="primary"
-                type="submit"
+                type="button"
               >
                 Cancel
               </Button>

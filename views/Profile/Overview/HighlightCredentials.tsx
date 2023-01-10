@@ -1,87 +1,31 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 
-import { Checkbox } from 'components';
+import { Spinner } from 'components';
+import { Credential } from '../Credential';
+import { useBadges } from 'hooks';
+import { BadgeIssuer } from 'types';
 
-const dummyCredentials = [
-  {
-    id: 1,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 2,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 3,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 4,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 5,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 6,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 7,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 8,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 9,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 10,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: '1234',
-    image: '/icons/dummyCredential.svg',
-  },
-];
+interface HighlightCredentialsProps {
+  address: string;
+}
 
-export const HighlightCredentials = () => {
+const skeletons = Array(20).fill('skeleton');
+
+export const HighlightCredentials: React.FC<HighlightCredentialsProps> = ({
+  address,
+}) => {
+  const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer>('mazury');
+  const { badges, handleFetchMore, hasMoreData } = useBadges(
+    address,
+    badgeIssuer,
+    10
+  );
   const [selectedCredentials, setSelectedCredentials] = React.useState<
-    number[]
+    string[]
   >([]);
 
-  const handleSelectCredential = (id: number) =>
+  const handleSelectCredential = (id: string) => {
     setSelectedCredentials((credentials) => {
       if (credentials.length === 8 && !credentials.includes(id))
         return credentials;
@@ -92,6 +36,7 @@ export const HighlightCredentials = () => {
 
       return [...credentials, id];
     });
+  };
 
   return (
     <div className="space-y-6">
@@ -107,6 +52,7 @@ export const HighlightCredentials = () => {
             aria-label="Search"
             className="hidden h-full w-full bg-transparent lg:block"
             value={''}
+            onChange={() => {}}
           />
         </div>
       </form>
@@ -121,65 +67,33 @@ export const HighlightCredentials = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-8">
-        {dummyCredentials.map((credential) => (
-          <Credential
-            key={credential.id}
-            imageSrc={credential.image}
-            title={credential.title}
-            ownedBy={credential.ownedBy}
-            description={credential.description}
-            isSelected={selectedCredentials.includes(credential.id)}
-            onSelect={() => handleSelectCredential(credential.id)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Credential = ({
-  isSelected,
-  imageSrc,
-  title,
-  description,
-  ownedBy,
-  onSelect,
-}: {
-  isSelected?: boolean;
-  imageSrc: string;
-  title: string;
-  description: string;
-  ownedBy?: string;
-  onSelect: () => void;
-}) => {
-  return (
-    <div
-      className={`flex cursor-pointer items-center space-x-4 px-4 py-2 ${
-        isSelected
-          ? 'rounded-lg border border-indigoGray-20 bg-indigoGray-5'
-          : ''
-      }`}
-      onClick={onSelect}
-    >
-      <Checkbox
-        innerClassName="h-4 w-4"
-        outerClassName="h-4 w-4"
-        checked={!!isSelected}
-        setChecked={onSelect}
-        label=""
-        id={''}
-      />
-      <img src={imageSrc} className="h-12 w-12 shrink-0" />
-      <div className="space-y-1">
-        <p className="font-sans text-sm font-semibold text-indigoGray-90">
-          {title}
-        </p>
-        <p className="font-sans text-xs font-medium text-indigoGray-50">
-          {description}
-        </p>
-        <p className="font-sans text-xs font-medium text-indigo-500">
-          {ownedBy || 0} people have this
-        </p>
+        {badges?.length > 0
+          ? badges?.map(({ badge_type }) => {
+              const { title, id, total_supply, description, image, issuer } =
+                badge_type;
+              return (
+                <Credential
+                  key={id}
+                  imageSrc={image}
+                  title={title}
+                  variant={issuer.name}
+                  totalSupply={total_supply}
+                  description={description}
+                  showCheckbox={true}
+                  isSelected={selectedCredentials.includes(id)}
+                  onSelect={() => handleSelectCredential(id)}
+                  className={`${
+                    selectedCredentials.length >= 8 &&
+                    !selectedCredentials.includes(id)
+                      ? 'cursor-not-allowed'
+                      : ''
+                  } `}
+                />
+              );
+            })
+          : skeletons.map((item, index) => (
+              <Credential.Skeleton key={index + item} />
+            ))}
       </div>
     </div>
   );

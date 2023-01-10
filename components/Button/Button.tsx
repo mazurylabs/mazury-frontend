@@ -28,6 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
         variants[variant]
       } ${className}`}
       {...rest}
+      type={type}
     >
       <>{children}</>
       {loading && (
