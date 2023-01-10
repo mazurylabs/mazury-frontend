@@ -1,7 +1,7 @@
 import { MutualFollowers } from '../types';
 import { getMutualFollowers } from '../utils/api';
 import * as React from 'react';
-import { formatNumber } from '@/utils';
+import { formatNumber } from 'utils';
 
 export const useMutualFollowers = (
   viewingProfileId: string,
