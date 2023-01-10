@@ -93,8 +93,8 @@ const Edit = ({ address }: EditProps) => {
     let isUsernameInvalid = false;
 
     for (let field in restOfProfile) {
-      if (user.profile[field] !== userProfile[field]) {
-        payload = { ...payload, [field]: userProfile[field] };
+      if ((user.profile as any)[field] !== (userProfile as any)[field]) {
+        payload = { ...payload, [field]: (userProfile as any)[field] };
       }
     }
 
@@ -127,7 +127,7 @@ const Edit = ({ address }: EditProps) => {
     const { error, data } = await updateProfile(
       profile?.eth_address as string,
       '',
-      payload,
+      payload as any,
       userProfile?.avatar
     );
 
@@ -398,7 +398,7 @@ const ImageButton = ({
         id={id}
         accept="image/*"
         type="file"
-        onInput={(event) => onClick(event)}
+        onInput={(event) => onClick(event as any)}
         className="sr-only"
         name="avatar"
       />
