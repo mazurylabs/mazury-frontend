@@ -1,23 +1,18 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
 
-import { Button, Layout } from 'components';
+import { Layout } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
-import {
-  DiscoverCredentials,
-  HighlightCredentials,
-  Idle,
-  SocialMedia,
-} from 'views/Profile/Overview';
+import { DiscoverCredentials, Idle, SocialMedia } from 'views/Profile/Overview';
 import { Profile } from 'types';
 
 interface ProfileProps {
   address: string;
 }
 
-export type OverviewViews = 'idle' | 'discover' | 'highlight' | 'social';
+export type OverviewViews = 'idle' | 'discover' | 'social';
 
 const Profile = ({ address }: ProfileProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
@@ -31,21 +26,21 @@ const Profile = ({ address }: ProfileProps) => {
       isActive: false,
       value: '0',
       icon: '/icons/credentials.svg',
-      href: `/profile/${address}/credentials`,
+      href: `/people/${address}/credentials`,
     },
     {
       label: 'Writing',
       isActive: false,
       value: '0',
       icon: '/icons/writing-black.svg',
-      href: `/profile/${address}/writing`,
+      href: `/people/${address}/writing`,
     },
     {
       label: 'Socials',
       isActive: false,
       value: '0',
       icon: '/icons/dao.svg',
-      href: `/profile/${address}/socials`,
+      href: `/people/${address}/socials`,
     },
   ];
 
@@ -56,13 +51,6 @@ const Profile = ({ address }: ProfileProps) => {
     discover: {
       title: 'Discover web3 credentials',
       view: <DiscoverCredentials />,
-    },
-    highlight: {
-      title: 'Highlight credentials',
-      view: (
-        <HighlightCredentials address={accountInView?.eth_address as string} />
-      ),
-      handleSave: () => console.log('saving'),
     },
     social: {
       title: 'Social media',

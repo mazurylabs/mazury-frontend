@@ -52,6 +52,8 @@ export const Credential: React.FC<Credential> & {
   showCheckbox,
   variant = 'mazury',
 }) => {
+  const supply = +(totalSupply || '0');
+
   return (
     <div
       className={`flex cursor-pointer items-center space-x-4 border ${
@@ -88,7 +90,7 @@ export const Credential: React.FC<Credential> & {
           {truncateString(description, 41)}
         </p>
         <p className="font-sans text-xs font-medium text-indigo-500">
-          {commify(+(totalSupply || '0'))} people have this
+          {commify(supply)} {supply === 1 ? 'person has' : 'people have'} this
         </p>
       </div>
     </div>

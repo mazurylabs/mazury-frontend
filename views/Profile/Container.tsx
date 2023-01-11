@@ -92,7 +92,6 @@ export const Container: React.FC<ContainerProps> = ({
             </div>
           </div>
         </Modal>
-        ˝
       </div>
     </div>
   );

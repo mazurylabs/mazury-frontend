@@ -174,7 +174,7 @@ export const ProfileSummary = ({
             }
             onClick={() =>
               isOwnProfile
-                ? router.push(`/profile/${address}/edit`)
+                ? router.push(`/people/${address}/edit`)
                 : console.log('connecting')
             }
             className={`grow ${

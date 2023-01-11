@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 
-import { OverviewViews } from 'pages/profile/[address]';
+import { OverviewViews } from 'pages/people/[address]';
 import { Progress } from 'components';
 import { Credential } from '../Credential';
 
@@ -93,7 +93,9 @@ export const Idle = ({
               </button>
               <button
                 className="!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90"
-                onClick={() => handleNavigateViews('highlight')}
+                onClick={() =>
+                  router.push(`${router.asPath}/credentials/highlight`)
+                }
               >
                 Highlight credentials
               </button>
