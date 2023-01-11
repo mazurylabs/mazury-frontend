@@ -14,7 +14,7 @@ interface HighlightProps {
 
 const credentialClass: Record<BadgeIssuer, string> = {
   '101': 'h-[230px] w-[230px] rounded bg-gray-100 mb-4',
-  buildspace: 'h-[230px] w-[130px] rounded mb-4',
+  buildspace: 'h-[200px] w-[120px] rounded mb-4',
   gitpoap: 'h-[230px] w-[230px] rounded-full mb-4',
   kudos: 'h-[230px] w-[230px] rounded mb-4',
   mazury:
@@ -186,10 +186,44 @@ const CredentialDetails = ({ address }: HighlightProps) => {
             </div>
           </div>
 
-          <div></div>
+          <div className="flex max-w-[598px] flex-wrap gap-3">
+            <ActionButton
+              icon="/icons/search-white.svg"
+              label="Search using this credential"
+              className="bg-indigoGray-90 text-indigoGray-5"
+            />
+            <ActionButton
+              icon="/icons/heart-black.svg"
+              label="Highlight credential"
+            />
+            <ActionButton icon="/icons/hide.svg" label="Hide" />
+            <ActionButton icon="/icons/mint.svg" label="Mint NFT" />
+
+            <ActionButton icon="/icons/share.svg" label="Copy link" />
+          </div>
         </div>
       </Container>
     </Layout>
+  );
+};
+
+const ActionButton = ({
+  icon,
+  label,
+  className,
+}: {
+  icon: string;
+  label: string;
+  className?: string;
+}) => {
+  return (
+    <button
+      type="button"
+      className={`flex shrink-0 items-center rounded-lg border border-[1.5px] border-indigoGray-20 px-6 py-2 font-sansSemi text-sm font-semibold text-indigoGray-90 ${className}`}
+    >
+      <SVG src={icon} height={16} width={16} className="mr-2" />
+      {label}
+    </button>
   );
 };
 
