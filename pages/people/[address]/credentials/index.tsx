@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
+import SVG from 'react-inlinesvg';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Layout } from 'components';
-import { Container, ProfileSummary } from 'views/Profile';
+import { Container, ProfileSummary, Dropdown, Credential } from 'views/Profile';
 import { useAccount } from 'hooks';
 import { Profile } from 'types';
 
@@ -10,7 +13,39 @@ interface CredentialsProps {
   address: string;
 }
 
+const dummyCredentials = [
+  {
+    id: 1,
+    title: 'Hardhat OSS Contributor 2022',
+    description: 'The holder of this badge has successfully finished',
+    ownedBy: 1234,
+    image: '/icons/dummyCredential.svg',
+  },
+  {
+    id: 2,
+    title: 'Hardhat OSS Contributor 2022',
+    description: 'The holder of this badge has successfully finished',
+    ownedBy: 1234,
+    image: '/icons/dummyCredential.svg',
+  },
+  {
+    id: 3,
+    title: 'Hardhat OSS Contributor 2022',
+    description: 'The holder of this badge has successfully finished',
+    ownedBy: 1234,
+    image: '/icons/dummyCredential.svg',
+  },
+  {
+    id: 4,
+    title: 'Hardhat OSS Contributor 2022',
+    description: 'The holder of this badge has successfully finished',
+    ownedBy: 1234,
+    image: '/icons/dummyCredential.svg',
+  },
+];
+
 const Credentials = ({ address }: CredentialsProps) => {
+  const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
 
   const navItems = [
@@ -50,7 +85,51 @@ const Credentials = ({ address }: CredentialsProps) => {
             isOwnProfile={isOwnProfile}
           />
         }
-      ></Container>
+      >
+        <div className="space-y-6">
+          <div className="flex w-full items-center space-x-4">
+            <Dropdown
+              onSelect={() => {}}
+              options={[]}
+              label="credentials"
+              className="grow"
+            />
+            <button
+              aria-label="search"
+              className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigoGray-5"
+            >
+              <SVG src="/icons/search-black.svg" height={24} width={24} />
+            </button>
+            <Link href={`/people/${address}/credentials/highlight`}>
+              <a className="flex items-center space-x-2 py-3 px-6 font-sansSemi text-sm font-semibold text-indigo-600">
+                <SVG
+                  src="/icons/heart-colored.svg"
+                  height={16}
+                  width={16}
+                  className="mr-2"
+                />
+                Highlight
+              </a>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-8">
+            {dummyCredentials.map((credential) => (
+              <Credential
+                key={credential.id}
+                title={credential.title}
+                description={credential.description}
+                onSelect={() =>
+                  router.push(`/people/${address}/credentials/${credential.id}`)
+                }
+                imageSrc={credential.image}
+                totalSupply={credential.ownedBy}
+                isSelected={true}
+                className="px-4 py-2"
+              />
+            ))}
+          </div>
+        </div>
+      </Container>
     </Layout>
   );
 };
