@@ -12,7 +12,7 @@ interface HighlightProps {
   address: string;
 }
 
-const skeletons = Array(20).fill('skeleton');
+const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address }: HighlightProps) => {
   const router = useRouter();
@@ -41,36 +41,10 @@ const Credentials = ({ address }: HighlightProps) => {
     });
   };
 
-  const navItems = [
-    { label: 'Overview', isActive: false, href: `/profile/${address}` },
-    {
-      label: 'Credentials',
-      isActive: true,
-      value: '0',
-      icon: '/icons/credentials-active.svg',
-      href: `/profile/${address}/credentials`,
-    },
-    {
-      label: 'Writing',
-      isActive: false,
-      value: '0',
-      icon: '/icons/writing-black.svg',
-      href: `/profile/${address}/writing`,
-    },
-    {
-      label: 'Socials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/dao.svg',
-      href: `/profile/${address}/socials`,
-    },
-  ];
-
   return (
     <Layout variant="plain">
       <Container
         title="Highlight credentials"
-        navItems={navItems}
         handleGoBack={router.back}
         summary={
           <ProfileSummary
