@@ -2,9 +2,9 @@ import * as React from 'react';
 import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
 
-import { Button, Layout } from 'components';
-import { Container, Credential, ProfileSummary } from 'views/Profile';
-import { useAccount, useBadges } from 'hooks';
+import { Layout } from 'components';
+import { ActionButton, Container, ProfileSummary } from 'views/Profile';
+import { useAccount } from 'hooks';
 import { BadgeIssuer, Profile } from 'types';
 import { useRouter } from 'next/router';
 
@@ -57,36 +57,10 @@ const CredentialDetails = ({ address }: HighlightProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
   const loading = false;
 
-  const navItems = [
-    { label: 'Overview', isActive: false, href: `/profile/${address}` },
-    {
-      label: 'Credentials',
-      isActive: true,
-      value: '0',
-      icon: '/icons/credentials-active.svg',
-      href: `/profile/${address}/credentials`,
-    },
-    {
-      label: 'Writing',
-      isActive: false,
-      value: '0',
-      icon: '/icons/writing-black.svg',
-      href: `/profile/${address}/writing`,
-    },
-    {
-      label: 'Socials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/dao.svg',
-      href: `/profile/${address}/socials`,
-    },
-  ];
-
   return (
     <Layout variant="plain">
       <Container
         title="Credential details"
-        navItems={navItems}
         summary={
           <ProfileSummary
             address={address}
@@ -219,7 +193,7 @@ const CredentialDetails = ({ address }: HighlightProps) => {
               <ActionButton
                 icon="/icons/search-white.svg"
                 label="Search using this credential"
-                className="bg-indigoGray-90 text-indigoGray-5"
+                className="border-indigoGray-90 bg-indigoGray-90 text-indigoGray-5"
               />
               <ActionButton
                 icon="/icons/heart-black.svg"
@@ -234,26 +208,6 @@ const CredentialDetails = ({ address }: HighlightProps) => {
         )}
       </Container>
     </Layout>
-  );
-};
-
-const ActionButton = ({
-  icon,
-  label,
-  className,
-}: {
-  icon: string;
-  label: string;
-  className?: string;
-}) => {
-  return (
-    <button
-      type="button"
-      className={`flex shrink-0 items-center rounded-lg border border-[1.5px] border-indigoGray-20 px-6 py-2 font-sansSemi text-sm font-semibold text-indigoGray-90 ${className}`}
-    >
-      <SVG src={icon} height={16} width={16} className="mr-2" />
-      {label}
-    </button>
   );
 };
 
