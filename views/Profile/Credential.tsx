@@ -77,7 +77,10 @@ export const Credential: React.FC<Credential> & {
       <div className={`min-w-[40px]`}>
         <img
           src={imageSrc}
-          onError={() => console.log('error')}
+          onError={(event) => {
+            event.currentTarget.src = '/icons/brokenImage.svg';
+            event.currentTarget.classList.add('h-[48px]', 'w-[48px]');
+          }}
           className={`shrink-0 overflow-hidden ${credentialClass[variant]}`}
         />
       </div>
