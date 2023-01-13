@@ -15,28 +15,28 @@ interface CredentialsProps {
 
 const dummyCredentials = [
   {
-    id: 1,
+    id: 123,
     title: 'Hardhat OSS Contributor 2022',
     description: 'The holder of this badge has successfully finished',
     ownedBy: 1234,
     image: '/icons/dummyCredential.svg',
   },
   {
-    id: 2,
+    id: 456,
     title: 'Hardhat OSS Contributor 2022',
     description: 'The holder of this badge has successfully finished',
     ownedBy: 1234,
     image: '/icons/dummyCredential.svg',
   },
   {
-    id: 3,
+    id: 789,
     title: 'Hardhat OSS Contributor 2022',
     description: 'The holder of this badge has successfully finished',
     ownedBy: 1234,
     image: '/icons/dummyCredential.svg',
   },
   {
-    id: 4,
+    id: 101112,
     title: 'Hardhat OSS Contributor 2022',
     description: 'The holder of this badge has successfully finished',
     ownedBy: 1234,
@@ -49,27 +49,27 @@ const Credentials = ({ address }: CredentialsProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
 
   const navItems = [
-    { label: 'Overview', isActive: false, href: `/profile/${address}` },
+    { label: 'Overview', isActive: false, href: `/people/${address}` },
     {
       label: 'Credentials',
       isActive: true,
       value: '0',
       icon: '/icons/credentials-active.svg',
-      href: `/profile/${address}/credentials`,
+      href: `/people/${address}/credentials`,
     },
     {
       label: 'Writing',
       isActive: false,
       value: '0',
       icon: '/icons/writing-black.svg',
-      href: `/profile/${address}/writing`,
+      href: `/people/${address}/writing`,
     },
     {
       label: 'Socials',
       isActive: false,
       value: '0',
       icon: '/icons/dao.svg',
-      href: `/profile/${address}/socials`,
+      href: `/people/${address}/socials`,
     },
   ];
 

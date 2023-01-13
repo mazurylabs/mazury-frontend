@@ -20,7 +20,7 @@ const Profile = ({ address }: ProfileProps) => {
     React.useState<OverviewViews>('idle');
 
   const navItems = [
-    { label: 'Overview', isActive: true, href: `/profile/${address}` },
+    { label: 'Overview', isActive: true, href: `/people/${address}` },
     {
       label: 'Credentials',
       isActive: false,

@@ -14,27 +14,27 @@ const Socials = ({ address }: SocialsProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
 
   const navItems = [
-    { label: 'Overview', isActive: false, href: `/profile/${address}` },
+    { label: 'Overview', isActive: false, href: `/people/${address}` },
     {
       label: 'Credentials',
       isActive: false,
       value: '0',
       icon: '/icons/credentials.svg',
-      href: `/profile/${address}/credentials`,
+      href: `/people/${address}/credentials`,
     },
     {
       label: 'Writing',
       isActive: false,
       value: '0',
       icon: '/icons/writing-black.svg',
-      href: `/profile/${address}/writing`,
+      href: `/people/${address}/writing`,
     },
     {
       label: 'Socials',
       isActive: true,
       value: '0',
       icon: '/icons/dao.svg',
-      href: `/profile/${address}/socials`,
+      href: `/people/${address}/socials`,
     },
   ];
 
