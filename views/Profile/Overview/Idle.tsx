@@ -73,7 +73,7 @@ export const Idle = ({
               className="m-0 p-0 font-sansMid text-sm font-medium text-indigoGray-5"
               onClick={() => setShowLess(!showLess)}
             >
-              {showLess ? 'Show less' : 'Show more'}
+              {showLess ? 'Show more' : 'Show less'}
             </button>
           </div>
 
