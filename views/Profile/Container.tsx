@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import { Button, Modal } from 'components';
 import { Navbar } from './Navbar';
@@ -62,7 +61,7 @@ export const Container: React.FC<ContainerProps> = ({
             <Navbar links={navItems || []} />
           )}
         </div>
-        <div className="grow overflow-scroll">{children}</div>
+        <div className="max-w-[826.6px] grow overflow-scroll">{children}</div>
         <Modal
           isOpen={toggleSaveModal}
           onClose={() => setToggleSaveModal(false)}

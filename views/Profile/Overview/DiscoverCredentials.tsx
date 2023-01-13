@@ -34,7 +34,7 @@ export const DiscoverCredentials = () => {
         />
       </div>
 
-      <div className="flex flex-wrap">
+      <div className="grid grid-cols-3">
         <Credential
           title="Sismo"
           description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
