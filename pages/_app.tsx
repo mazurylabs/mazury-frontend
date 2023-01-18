@@ -61,6 +61,8 @@ const App = ({ Component, pageProps }: AppProps) => {
       <NextHead>
         <title>Mazury</title>
         <link rel="icon" href="/new-logo.svg" />
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </NextHead>
 
       <Authenticator />

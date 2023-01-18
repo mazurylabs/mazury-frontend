@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -8,13 +10,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        sansSemi: ['Inter-SemiBold', 'sans-serif'],
-        sansMid: ['Inter-Medium', 'sans-serif'],
-        sansBold: ['Inter-Bold', 'sans-serif'],
-        sansThin: ['Inter-Thin', 'sans-serif'],
-        serif: ['Masqualero', 'serif'],
-        demi: ['Masqualero DemiBold', 'serif'],
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansSemi: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansMid: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansBold: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansThin: ['Inter var', ...defaultTheme.fontFamily.sans],
+        serif: ['Masqualero', ...defaultTheme.fontFamily.serif],
+        demi: ['Masqualero DemiBold', ...defaultTheme.fontFamily.serif],
       },
       colors: {
         indigoGray: {
