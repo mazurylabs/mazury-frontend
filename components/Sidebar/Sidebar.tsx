@@ -182,7 +182,9 @@ export const Sidebar: React.FC = () => {
               onClick={() => {}}
               className={`flex h-[40px] w-full items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
             >
-              <UserIcon color={'#110F2A'} />
+              <span className="shrink-0">
+                <UserIcon color={'#110F2A'} />
+              </span>
               {isOpen && <p>Connect</p>}
             </motion.button>
           )}
