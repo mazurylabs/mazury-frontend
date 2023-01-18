@@ -16,52 +16,18 @@ interface LayoutProps {
 }
 
 export const Layout: FC<LayoutProps> = ({
-  sidebarContent = <Sidebar />,
   innerLeftContent,
   innerRightContent,
   headerContent,
   variant = 'three-part',
   children,
 }) => {
-  const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
-
-  const variants = {
-    open: {
-      width: 225,
-      transition: { duration: 0.2 },
-    },
-    signInOpen: {
-      width: 335,
-      transition: { duration: 0.2 },
-    },
-    closed: {
-      width: 75,
-      transition: { duration: 0.2 },
-    },
-  };
-
   return (
     <div
       className="flex min-h-screen w-full flex-col"
       data-testid="layout-container"
     >
-      <motion.aside
-        variants={variants}
-        animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
-        className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => !signInOpen && setIsOpen(false)}
-        role="menu"
-      >
-        <Link href="/">
-          <a className="h-[32px] w-[32px] cursor-pointer">
-            <SVG src="/new-logo.svg" height="32px" width="32px" />
-          </a>
-        </Link>
-
-        <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
-        {sidebarContent}
-      </motion.aside>
+      <Sidebar />
 
       <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
         {variant === 'three-part' && (

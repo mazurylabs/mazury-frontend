@@ -5,15 +5,15 @@ import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SVG from 'react-inlinesvg';
+import { motion } from 'framer-motion';
 
 import { userSlice } from '@/selectors';
 import { logout } from '@/slices/user';
-import { SignIn } from '@/views/SignIn';
 import { colors } from '@/utils';
 import { verifyEmail } from '@/utils/api';
 import { WalletRequestModal } from '@/components/WalletRequestModal';
 import { SlidersIcon } from '@/components/Icons';
-import { HomeIcon, SearchIcon } from '@/components';
+import { HomeIcon, SearchIcon, UserIcon } from '@/components';
 import { useAccount } from 'wagmi';
 
 const iconColors = {
@@ -23,6 +23,28 @@ const iconColors = {
 
 type Steps = 'idle' | 'active' | 'error';
 
+const sidebarItemVariants = {
+  open: {
+    width: 182,
+    transition: { duration: 0.2 },
+  },
+  closed: {
+    width: 42,
+    transition: { duration: 0.2 },
+  },
+};
+
+const variants = {
+  open: {
+    width: 225,
+    transition: { duration: 0.2 },
+  },
+  closed: {
+    width: 75,
+    transition: { duration: 0.2 },
+  },
+};
+
 export const Sidebar: React.FC = () => {
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const router = useRouter();
@@ -30,15 +52,9 @@ export const Sidebar: React.FC = () => {
   const [_, disconnect] = useAccount();
   const { pathname } = router;
   const { profile, isAuthenticated } = useSelector(userSlice);
-  const { isOpen, signInOpen, setSignInOpen } =
-    React.useContext(SidebarContext);
-
-  const openSignIn = () => setSignInOpen(true);
-  const closeSignIn = () => setSignInOpen(false);
+  const { isOpen, setIsOpen } = React.useContext(SidebarContext);
 
   const handleEmailVerification = async () => {
-    // setCurrentStep('active');
-
     if (profile?.eth_address) {
       const { error } = await verifyEmail(profile?.eth_address);
       if (!error) {
@@ -57,170 +73,160 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      <menu
-        className={`flex min-w-[200px] flex-col text-xl font-bold ${
-          isOpen ? 'justify-center' : 'items-center'
-        } grow`}
+      <motion.aside
+        variants={variants}
+        animate={isOpen ? 'open' : 'closed'}
+        className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        role="menu"
       >
-        {signInOpen ? (
-          <div className="flex flex-col">
-            <button
+        <Link href="/">
+          <a className="h-[32px] w-[32px] cursor-pointer">
+            <SVG src="/new-logo.svg" height="32px" width="32px" />
+          </a>
+        </Link>
+
+        <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
+        <SidebarItem
+          href="/search"
+          label="Search"
+          icon={
+            <SearchIcon
+              color={
+                pathname.startsWith('/search')
+                  ? iconColors.active
+                  : iconColors.inactive
+              }
+            />
+          }
+          isOpen={isOpen}
+          active={pathname.startsWith('/search')}
+        />
+        <SidebarItem
+          href="/"
+          label="Home"
+          icon={
+            <HomeIcon
+              color={pathname === '/' ? iconColors.active : iconColors.inactive}
+            />
+          }
+          isOpen={isOpen}
+          active={pathname === '/'}
+          className="mt-4"
+        />
+
+        <WalletRequestModal
+          step={currentStep}
+          handleSkip={() => setCurrentStep('idle')}
+          handleRequestSignature={handleEmailVerification}
+        />
+
+        <div className="mt-auto flex flex-col">
+          {/* Email not verified alert */}
+          {isOpen &&
+            isAuthenticated &&
+            profile?.email &&
+            !profile?.email_verified && (
+              <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
+                <img
+                  src="/icons/info.svg"
+                  width="16px"
+                  height="16px"
+                  alt="Info icon"
+                />
+
+                <p className="ml-3 text-sm font-medium text-indigoGray-90">
+                  <span className="font-bold">
+                    Your e-mail is not verified.
+                  </span>{' '}
+                  Check your mailbox or{' '}
+                  <button
+                    type="button"
+                    className="underline hover:cursor-pointer"
+                    onClick={handleEmailVerification}
+                  >
+                    click here
+                  </button>{' '}
+                  to resend the message.
+                </p>
+              </div>
+            )}
+
+          <hr className={`my-8 w-full border border-indigoGray-20`} />
+
+          {isAuthenticated ? (
+            <>
+              {/* // Profile button */}
+              <SidebarItem
+                href={`/people/${profile?.eth_address}`}
+                label="Profile"
+                icon={
+                  <img
+                    src={profile?.avatar || '/profile-active.svg'}
+                    alt="Profile icon"
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                }
+                isOpen={isOpen}
+                active={pathname.startsWith('/people')}
+                className="mt-8"
+              />
+            </>
+          ) : (
+            // Sign in button
+            <motion.button
+              variants={sidebarItemVariants}
+              animate={isOpen ? 'open' : 'closed'}
               type="button"
-              className="justify-start hover:cursor-pointer"
-              aria-label="back"
-              onClick={closeSignIn}
+              onClick={() => {}}
+              className={`flex h-[40px] w-full items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
             >
-              <SVG src="/icons/arrow-left.svg" height={24} width={24} />
-            </button>
-            <SignIn />
-          </div>
-        ) : (
-          <>
+              <UserIcon color={'#110F2A'} />
+              {isOpen && <p>Connect</p>}
+            </motion.button>
+          )}
+
+          {isAuthenticated && (
             <SidebarItem
-              href="/search"
-              label="Search"
+              href="/settings"
+              label="Settings"
               icon={
-                <SearchIcon
+                <SlidersIcon
                   color={
-                    pathname.startsWith('/search')
+                    pathname.startsWith('/settings')
                       ? iconColors.active
                       : iconColors.inactive
                   }
                 />
               }
               isOpen={isOpen}
-              active={pathname.startsWith('/search')}
+              className="mb-4 mt-4"
+              active={pathname.startsWith('/settings')}
             />
-            <SidebarItem
-              href="/"
-              label="Home"
-              icon={
-                <HomeIcon
-                  color={
-                    pathname === '/' ? iconColors.active : iconColors.inactive
-                  }
-                />
-              }
-              isOpen={isOpen}
-              active={pathname === '/'}
-              className="mt-4"
-            />
+          )}
 
-            <WalletRequestModal
-              step={currentStep}
-              handleSkip={() => setCurrentStep('idle')}
-              handleRequestSignature={handleEmailVerification}
-            />
-
-            <div className="mt-auto flex flex-col">
-              {/* Email not verified alert */}
-              {isOpen &&
-                isAuthenticated &&
-                profile?.email &&
-                !profile?.email_verified && (
-                  <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
-                    <img
-                      src="/icons/info.svg"
-                      width="16px"
-                      height="16px"
-                      alt="Info icon"
-                    />
-
-                    <p className="ml-3 text-sm font-medium text-indigoGray-90">
-                      <span className="font-bold">
-                        Your e-mail is not verified.
-                      </span>{' '}
-                      Check your mailbox or{' '}
-                      <button
-                        type="button"
-                        className="underline hover:cursor-pointer"
-                        onClick={handleEmailVerification}
-                      >
-                        click here
-                      </button>{' '}
-                      to resend the message.
-                    </p>
-                  </div>
-                )}
-
-              <hr className={`my-8 w-full border border-indigoGray-20`} />
-
-              {isAuthenticated ? (
-                <>
-                  {/* // Profile button */}
-                  <SidebarItem
-                    href={`/people/${profile?.eth_address}`}
-                    label="Profile"
-                    icon={
-                      <img
-                        src={profile?.avatar || '/profile-active.svg'}
-                        alt="Profile icon"
-                        className="h-5 w-5 rounded-full object-cover"
-                      />
-                    }
-                    isOpen={isOpen}
-                    active={pathname.startsWith('/people')}
-                    className="mt-8"
-                  />
-                </>
-              ) : (
-                // Sign in button
-                <button
-                  type="button"
-                  onClick={openSignIn}
-                  className={`flex h-[40px] hover:cursor-pointer ${
-                    isOpen && 'w-full'
-                  } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
-                >
-                  <SVG width="16px" height="16px" src="/icons/user-black.svg" />{' '}
-                  {isOpen && (
-                    <span className="w-[fit-content] shrink-0">Sign in</span>
-                  )}
-                </button>
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={handleLogOut}
+              className={`mt-4 flex h-[40px] hover:cursor-pointer ${
+                isOpen && 'w-full'
+              } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
+            >
+              <img
+                width="16px"
+                height="16px"
+                src="/icons/sign-out.svg"
+                alt="Sign out icon"
+              />{' '}
+              {isOpen && (
+                <span className="w-[fit-content] shrink-0">Sign out</span>
               )}
-
-              {isAuthenticated && (
-                <SidebarItem
-                  href="/settings"
-                  label="Settings"
-                  icon={
-                    <SlidersIcon
-                      color={
-                        pathname.startsWith('/settings')
-                          ? iconColors.active
-                          : iconColors.inactive
-                      }
-                    />
-                  }
-                  isOpen={isOpen}
-                  className="mb-4 mt-4"
-                  active={pathname.startsWith('/settings')}
-                />
-              )}
-
-              {isAuthenticated && (
-                <button
-                  type="button"
-                  onClick={handleLogOut}
-                  className={`mt-4 flex h-[40px] hover:cursor-pointer ${
-                    isOpen && 'w-full'
-                  } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
-                >
-                  <img
-                    width="16px"
-                    height="16px"
-                    src="/icons/sign-out.svg"
-                    alt="Sign out icon"
-                  />{' '}
-                  {isOpen && (
-                    <span className="w-[fit-content] shrink-0">Sign out</span>
-                  )}
-                </button>
-              )}
-            </div>
-          </>
-        )}
-      </menu>
+            </button>
+          )}
+        </div>
+      </motion.aside>
     </>
   );
 };
@@ -250,10 +256,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => {
   return (
     <Link href={href} passHref>
-      <a
-        className={`flex h-[40px] ${
-          isOpen && 'w-full'
-        } items-center gap-4 rounded-md border ${
+      <motion.a
+        variants={sidebarItemVariants}
+        animate={isOpen ? 'open' : 'closed'}
+        className={`flex h-[40px] w-full items-center gap-4 rounded-md border ${
           !active &&
           'border-hidden hover:bg-indigoGray-10 hover:text-indigoGray-50'
         } p-3 text-sm font-medium text-indigoGray-90 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80 ${
@@ -262,7 +268,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         } ${className}`}
       >
         <span className="shrink-0">{icon}</span> {isOpen && label}
-      </a>
+      </motion.a>
     </Link>
   );
 };
