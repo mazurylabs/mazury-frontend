@@ -215,7 +215,7 @@ export const ProfileSummary = ({
             <div className="flex items-center space-x-2">
               <SVG src="/icons/browse-wallet.svg" height={16} width={16} />
               <div>
-                <p className="font-semi font-sansSemi text-xs text-indigoGray-90">
+                <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
                   {profile?.username}
                 </p>
 
@@ -246,7 +246,7 @@ export const ProfileSummary = ({
               <div className="flex space-x-2">
                 <SVG src="/icons/lens.svg" height={16} width={16} />
                 <div>
-                  <p className="font-semi font-sansSemi text-xs text-indigoGray-90">
+                  <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
                     {profile?.lens_handle}
                   </p>
                 </div>

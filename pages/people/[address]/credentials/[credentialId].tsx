@@ -146,7 +146,9 @@ const CredentialDetails = ({ address }: HighlightProps) => {
             </div>
 
             <div className="space-y-2">
-              <p>What does this credential mean?</p>
+              <p className="font-sans text-sm text-indigoGray-50">
+                What does this credential mean?
+              </p>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="flex w-[60px] justify-end">
@@ -154,10 +156,10 @@ const CredentialDetails = ({ address }: HighlightProps) => {
                     <SVG src="/icons/star.svg" height={17} width={18} />
                     <SVG src="/icons/star.svg" height={17} width={18} />
                   </div>
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
                     Expert at
                   </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
                     Frontend development
                   </p>
                 </div>
@@ -167,10 +169,10 @@ const CredentialDetails = ({ address }: HighlightProps) => {
                     <SVG src="/icons/star.svg" height={17} width={18} />
                     <SVG src="/icons/star.svg" height={17} width={18} />
                   </div>
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
                     Intermediate at
                   </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
                     Frontend development
                   </p>
                 </div>
@@ -179,10 +181,10 @@ const CredentialDetails = ({ address }: HighlightProps) => {
                   <div className="flex w-[60px] justify-end">
                     <SVG src="/icons/star.svg" height={17} width={18} />
                   </div>
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
                     Basic at
                   </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-semibold text-indigoGray-90">
+                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
                     Frontend development
                   </p>
                 </div>
