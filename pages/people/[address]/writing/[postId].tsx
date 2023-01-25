@@ -86,11 +86,11 @@ const PostDetail = ({ address }: PostDetailsProps) => {
               label="See on Mirror"
               className="border-blue-600 bg-blue-600 text-indigoGray-5"
             />
-            <ActionButton
+            {/* <ActionButton
               icon="/icons/heart-black.svg"
               label="Highlight credential"
-            />
-            <ActionButton icon="/icons/hide.svg" label="Hide" />
+            /> */}
+            {/* <ActionButton icon="/icons/hide.svg" label="Hide" /> */}
 
             <ActionButton icon="/icons/share.svg" label="Copy link" />
           </div>

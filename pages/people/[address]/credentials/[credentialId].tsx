@@ -203,11 +203,15 @@ const CredentialDetails = ({ address }: HighlightProps) => {
                 label="Search using this credential"
                 className="border-indigoGray-90 bg-indigoGray-90 text-indigoGray-5"
               />
-              <ActionButton
-                icon="/icons/heart-black.svg"
-                label="Highlight credential"
-              />
-              <ActionButton icon="/icons/hide.svg" label="Hide" />
+              {isOwnProfile && (
+                <ActionButton
+                  icon="/icons/heart-black.svg"
+                  label="Highlight credential"
+                />
+              )}
+              {isOwnProfile && (
+                <ActionButton icon="/icons/hide.svg" label="Hide" />
+              )}
               <ActionButton icon="/icons/mint.svg" label="Mint NFT" />
 
               <ActionButton icon="/icons/share.svg" label="Copy link" />
