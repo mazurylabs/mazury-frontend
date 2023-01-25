@@ -79,6 +79,12 @@ const CredentialDetails = ({ address }: HighlightProps) => {
                 <img
                   src={dummyImageLink}
                   className={`${credentialClass.buildspace}`}
+                  onError={(event) => {
+                    event.currentTarget.src = '/icons/brokenImage.svg';
+                    event.currentTarget.classList.add(
+                      credentialClass.buildspace.split(' ').join(',')
+                    );
+                  }}
                   alt={'title' + ' badge'}
                 />
               </div>
