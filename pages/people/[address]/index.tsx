@@ -6,16 +6,18 @@ import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
 import { DiscoverCredentials, Idle, SocialMedia } from 'views/Profile/Overview';
-import { Profile } from 'types';
+import { Badge, Profile } from 'types';
+import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
 interface ProfileProps {
   address: string;
+  highlightedCredentials: Badge[];
 }
 
 export type OverviewViews = 'idle' | 'discover' | 'social';
 
-const Profile = ({ address }: ProfileProps) => {
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
+  const { user, accountInView, isOwnProfile } = useAccount(address);
   const [selectedOverviewViews, setSelectedOverviewViews] =
     React.useState<OverviewViews>('idle');
 
@@ -61,6 +63,7 @@ const Profile = ({ address }: ProfileProps) => {
         <Idle
           address={address}
           isOwnProfile={isOwnProfile}
+          credentials={highlightedCredentials}
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
@@ -99,9 +102,14 @@ const Profile = ({ address }: ProfileProps) => {
 export default Profile;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const highlightedCredentials = await getHighlightedCredentials(
+    context.query.address as string
+  );
+
   return {
     props: {
       address: context.query.address,
+      highlightedCredentials,
     },
   };
 };

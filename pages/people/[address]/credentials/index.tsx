@@ -124,7 +124,7 @@ const Credentials = ({ address }: CredentialsProps) => {
                 imageSrc={credential.image}
                 totalSupply={credential.ownedBy}
                 isSelected={true}
-                className="px-4 py-2"
+                className="border-transparent px-4 py-2"
               />
             ))}
           </div>

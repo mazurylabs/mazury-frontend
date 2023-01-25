@@ -1,15 +1,21 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
+import { useQuery, useQueryClient } from 'react-query';
+import clsx from 'clsx';
 
 import { OverviewViews } from 'pages/people/[address]';
 import { Progress } from 'components';
 import { Credential } from '../Credential';
+import { axios } from 'lib/axios';
+import { Badge } from 'types';
+import Axios from 'axios';
 
 interface IdleProps {
   handleNavigateViews: (view: OverviewViews) => void;
-  address?: string;
+  address: string;
   isOwnProfile: boolean;
+  credentials?: Badge[];
 }
 
 type DummyCrendential = {
@@ -20,37 +26,30 @@ type DummyCrendential = {
   image: string;
 };
 
-const dummyCredentials = [
-  {
-    id: 1,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 2,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 3,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-];
-
 export const Idle = ({
   handleNavigateViews,
   address,
   isOwnProfile,
+  credentials,
 }: IdleProps) => {
   const router = useRouter();
   const [showLess, setShowLess] = React.useState(false);
+
+  const profileCompletion = useQuery({
+    queryKey: 'profileCompletion',
+    queryFn: () => getProfileCompletion(address),
+    enabled: isOwnProfile,
+  });
+
+  // const highlightedCredentialsQuery = useQuery({
+  //   queryKey: ['highlightedCredentials'],
+  //   queryFn: () => getHighlightedCredentials(address),
+  //   initialData: credentials,
+  // });
+
+  const highlightedCredentials = credentials;
+
+  const profileCompletionData = profileCompletion.data;
 
   return (
     <div className="space-y-6">
@@ -80,19 +79,36 @@ export const Idle = ({
           {!showLess && (
             <div className="border-t-none flex rounded-b-lg border border-indigoGray-20 py-3 px-6">
               <button
-                className="m-0 shrink-0 p-0 pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90"
+                disabled={!!profileCompletionData?.['personal_information']}
+                className={clsx(
+                  'm-0 shrink-0 p-0 pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
+                  profileCompletionData?.['personal_information'] &&
+                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                )}
                 onClick={() => router.push(`${router.asPath}/edit`)}
               >
                 Add personal information
               </button>
               <button
-                className="!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90"
+                disabled={
+                  !!profileCompletionData?.['discover_web3_credentials']
+                }
+                className={clsx(
+                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
+                  profileCompletionData?.['discover_web3_credentials'] &&
+                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                )}
                 onClick={() => handleNavigateViews('discover')}
               >
                 Discover web3 credentials
               </button>
               <button
-                className="!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90"
+                disabled={!!profileCompletionData?.['highlight_credentials']}
+                className={clsx(
+                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
+                  profileCompletionData?.['highlight_credentials'] &&
+                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                )}
                 onClick={() =>
                   router.push(`${router.asPath}/credentials/highlight`)
                 }
@@ -100,7 +116,12 @@ export const Idle = ({
                 Highlight credentials
               </button>
               <button
-                className="!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90"
+                disabled={!!profileCompletionData?.['connect_social_media']}
+                className={clsx(
+                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
+                  profileCompletionData?.['connect_social_media'] &&
+                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                )}
                 onClick={() => handleNavigateViews('social')}
               >
                 Connect social media
@@ -109,9 +130,13 @@ export const Idle = ({
                 target="_blank"
                 rel="noreferrer"
                 href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
-                className="!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90"
+                className={clsx(
+                  '!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90',
+                  profileCompletionData?.['sign_up_mazury_talent'] &&
+                    'pointer-events-none font-medium text-indigoGray-40 line-through'
+                )}
               >
-                Sign up for Mazury Talent
+                Learn about Mazury Talent
               </a>
             </div>
           )}
@@ -119,12 +144,13 @@ export const Idle = ({
       )}
       <div className="flex space-x-6">
         <CredentialsSection
-          credentials={dummyCredentials}
+          credentials={highlightedCredentials || []}
           handleNavigateViews={handleNavigateViews}
           isOwnProfile={isOwnProfile}
-          commonCredentials={
-            isOwnProfile ? undefined : dummyCredentials.slice(0, 2)
-          }
+          loading={false}
+          // commonCredentials={
+          //   isOwnProfile ? undefined : dummyCredentials.slice(0, 2)
+          // }
         />
         <WritingSection />
       </div>
@@ -152,34 +178,71 @@ const SectionWrapper: React.FC<{ title: string; icon: string }> = ({
 };
 
 const CredentialsSection: React.FC<{
-  credentials: DummyCrendential[];
+  credentials: Badge[];
   handleNavigateViews: (view: OverviewViews) => void;
   isOwnProfile: boolean;
   commonCredentials?: DummyCrendential[];
+  loading?: boolean;
 }> = ({
   credentials,
   handleNavigateViews,
   isOwnProfile,
   commonCredentials,
+  loading,
 }) => {
+  // const queryClient = useQueryClient();
+  const hasCredentials = !!credentials?.length;
+
+  // React.useEffect(() => {
+  //   queryClient.setQueryData('highlightedCredentials', dummy);
+  // }, [dummy]);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <SectionWrapper icon="/icons/credentials-grey.svg" title="Top credentials">
+    <SectionWrapper
+      icon="/icons/credentials-grey.svg"
+      title={isOwnProfile ? 'Top credentials' : 'Highlighted credentials'}
+    >
       <div className="space-y-10">
-        <div className="flex flex-col">
-          <div className="space-y-4">
-            {credentials.map((credential) => (
-              <Credential
-                key={credential.id}
-                title={credential.title}
-                description={credential.description}
-                onSelect={() => {}}
-                imageSrc={credential.image}
-                totalSupply={credential.ownedBy}
+        <div
+          className={clsx(
+            'flex flex-col items-center justify-center',
+            !hasCredentials && 'min-h-[331px] pt-8'
+          )}
+        >
+          {hasCredentials ? (
+            <div className="space-y-4">
+              {credentials.map(({ badge_type, id }) => (
+                <Credential
+                  key={id}
+                  title={badge_type.title}
+                  description={badge_type.description}
+                  onSelect={() => {}}
+                  imageSrc={badge_type.image}
+                  totalSupply={badge_type.total_supply}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <SVG
+                src="/icons/empty-credentials-listing.svg"
+                width={225}
+                height={91}
               />
-            ))}
-          </div>
+              <p className="font-sans text-sm text-indigoGray-90">
+                For now this user doesn’t have any credentials
+              </p>
+            </div>
+          )}
           {isOwnProfile && (
-            <div className="mb-[85px] mt-9 w-fit self-center">
+            <div
+              className={clsx(
+                'mt-5 w-fit self-center',
+                hasCredentials && 'mb-[85px] mt-9'
+              )}
+            >
               <button
                 type="button"
                 onClick={() => handleNavigateViews('discover')}
@@ -252,4 +315,26 @@ const WritingSection = () => {
       </div>
     </SectionWrapper>
   );
+};
+
+export const getProfileCompletion = async (address: string): Promise<any> => {
+  //write proper types
+  const { data } = await axios.get(`/profiles/${address}/completion`);
+  return data;
+};
+
+export const getHighlightedCredentials = async (
+  address: string
+): Promise<any> => {
+  //write proper types
+  const { data } = await Axios.get(
+    'https://mazury-staging.herokuapp.com/badges',
+    {
+      params: {
+        highlighted: true,
+        owner: address,
+      },
+    }
+  );
+  return data.results;
 };

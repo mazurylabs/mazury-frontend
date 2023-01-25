@@ -12,6 +12,7 @@ interface ContainerProps {
   navItems?: NavItem[];
   handleGoBack?: () => void;
   handleSave?: () => void;
+  isSaving?: boolean;
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -21,6 +22,7 @@ export const Container: React.FC<ContainerProps> = ({
   navItems,
   handleGoBack,
   handleSave,
+  isSaving,
 }) => {
   const [toggleSaveModal, setToggleSaveModal] = React.useState(false);
   const router = useRouter();
@@ -55,7 +57,15 @@ export const Container: React.FC<ContainerProps> = ({
                 </p>
               </div>
 
-              {handleSave && <Button className="w-[200px]">Save</Button>}
+              {handleSave && (
+                <Button
+                  className="w-[200px]"
+                  onClick={handleSave}
+                  loading={!toggleSaveModal && isSaving}
+                >
+                  Save
+                </Button>
+              )}
             </div>
           ) : (
             <Navbar links={navItems || []} />
@@ -85,6 +95,8 @@ export const Container: React.FC<ContainerProps> = ({
               <Button
                 className="w-[140px] shrink-0 !px-0 !font-semibold"
                 variant="primary"
+                onClick={handleSave}
+                loading={isSaving}
               >
                 Save changes
               </Button>
