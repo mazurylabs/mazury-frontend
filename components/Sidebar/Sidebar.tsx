@@ -8,13 +8,16 @@ import SVG from 'react-inlinesvg';
 import { motion } from 'framer-motion';
 
 import { userSlice } from '@/selectors';
-import { logout } from '@/slices/user';
+import { logout, setAddress } from '@/slices/user';
 import { colors } from '@/utils';
 import { verifyEmail } from '@/utils/api';
 import { WalletRequestModal } from '@/components/WalletRequestModal';
 import { SlidersIcon } from '@/components/Icons';
 import { HomeIcon, SearchIcon, UserIcon } from '@/components';
+import { disconnect } from '@wagmi/core';
 import { useAccount } from 'wagmi';
+import { ConnectKitButton } from 'connectkit';
+import { SignInModal } from '../../views/SignIn/SignInModal';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -49,10 +52,19 @@ export const Sidebar: React.FC = () => {
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const router = useRouter();
   const dispatch = useDispatch();
-  const [_, disconnect] = useAccount();
   const { pathname } = router;
   const { profile, isAuthenticated } = useSelector(userSlice);
   const { isOpen, setIsOpen } = React.useContext(SidebarContext);
+
+  const { address } = useAccount();
+
+  React.useEffect(() => {
+    if (address) {
+      dispatch(setAddress(address));
+    } else {
+      // showErrorPopup();
+    }
+  }, [address]);
 
   const handleEmailVerification = async () => {
     if (profile?.eth_address) {
@@ -65,8 +77,8 @@ export const Sidebar: React.FC = () => {
     }
   };
 
-  const handleLogOut = () => {
-    disconnect();
+  const handleLogOut = async () => {
+    await disconnect();
     router.push('/');
     dispatch(logout());
   };
@@ -175,18 +187,27 @@ export const Sidebar: React.FC = () => {
             </>
           ) : (
             // Sign in button
-            <motion.button
-              variants={sidebarItemVariants}
-              animate={isOpen ? 'open' : 'closed'}
-              type="button"
-              onClick={() => {}}
-              className={`flex h-[40px] w-full items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
-            >
-              <span className="shrink-0">
-                <UserIcon color={'#110F2A'} />
-              </span>
-              {isOpen && <p>Connect</p>}
-            </motion.button>
+            <ConnectKitButton.Custom>
+              {({ isConnected, show, truncatedAddress, ensName }) => {
+                return (
+                  <>
+                    <motion.button
+                      variants={sidebarItemVariants}
+                      animate={isOpen ? 'open' : 'closed'}
+                      type="button"
+                      onClick={show}
+                      className={`flex h-[40px] w-full items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
+                    >
+                      <span className="shrink-0">
+                        <UserIcon color={'#110F2A'} />
+                      </span>
+                      {isOpen && <p>Connect</p>}
+                    </motion.button>
+                    {isConnected && <SignInModal onClose={() => {}} />}
+                  </>
+                );
+              }}
+            </ConnectKitButton.Custom>
           )}
 
           {isAuthenticated && (

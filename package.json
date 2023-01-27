@@ -21,6 +21,7 @@
     "@types/react-helmet": "^6.1.5",
     "axios": "^0.25.0",
     "clsx": "^1.1.1",
+    "connectkit": "^1.1.1",
     "date-fns": "^2.28.0",
     "ethers": "^5.5.3",
     "framer-motion": "^6.2.3",
@@ -29,6 +30,7 @@
     "jwt-decode": "^3.1.2",
     "lodash.debounce": "^4.0.8",
     "next": "12.0.8",
+    "package": "1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "^6.1.0",
@@ -43,7 +45,7 @@
     "redux-persist": "^6.0.0",
     "siwe": "^1.1.6",
     "swr": "^1.1.2",
-    "wagmi": "^0.1.6"
+    "wagmi": "0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",

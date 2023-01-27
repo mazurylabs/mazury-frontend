@@ -24,7 +24,6 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile } = useSelector(userSlice);
-  const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
 
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
@@ -40,19 +39,22 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
       'Sign in with Ethereum to the app.'
     );
 
-    const { data: signature, error: signatureError } = await signMessage({
-      message,
+    const { data, isError, signMessage } = useSignMessage({
+      onSuccess(data, variables) {
+        // Verify signature when sign message succeeds
+        console.log(data);
+      },
     });
 
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
+    console.log('testsets');
 
-    return { signature, message };
+    signMessage({ message });
+
+    return { data, message };
   };
 
   const handleSignIn = async () => {
+    // address is currently null
     try {
       if (address) {
         const credentials = await handleAuthCredentials();
