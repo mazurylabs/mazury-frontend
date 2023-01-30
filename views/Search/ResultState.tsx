@@ -500,9 +500,9 @@ export const ResultState = () => {
 
       <div className="relative flex grow flex-col">
         {resultStates[currentStep]}
-        <AnimatePresence>
+        {/* <AnimatePresence>
           <RequireSignin />
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </div>
   );
