@@ -42,7 +42,7 @@ const SearchPage: NextPage = () => {
     : {};
 
   const handleFocusBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (!shouldQuerySearch) return;
+    // if (!shouldQuerySearch) return;
     setIsFocused(() => (event.type === 'focus' ? true : false));
   };
 
