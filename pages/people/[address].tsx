@@ -1363,9 +1363,9 @@ const Profile: React.FC<Props> = ({ address }) => {
         )}
       </RequestStatusModal>
 
-      <AnimatePresence>
+      {/* <AnimatePresence>
         <RequireSignin />
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

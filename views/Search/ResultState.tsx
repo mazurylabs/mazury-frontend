@@ -194,8 +194,8 @@ export const ResultState = () => {
     );
   };
 
-  const shouldQuerySearch =
-    isAuthenticated && profile?.email && profile.email_verified;
+  const shouldQuerySearch = true;
+  // isAuthenticated && profile?.email && profile.email_verified;
 
   const resultStates = {
     loading: <LoadingState />,
@@ -500,9 +500,9 @@ export const ResultState = () => {
 
       <div className="relative flex grow flex-col">
         {resultStates[currentStep]}
-        <AnimatePresence>
+        {/* <AnimatePresence>
           <RequireSignin />
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </div>
   );
