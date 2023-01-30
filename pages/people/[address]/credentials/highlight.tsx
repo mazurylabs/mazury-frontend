@@ -3,8 +3,9 @@ import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { Button, Layout } from 'components';
+import { Button, Checkbox, Layout } from 'components';
 import { Container, Credential, ProfileSummary } from 'views/Profile';
 import { useAccount, useBadges } from 'hooks';
 import { Badge, BadgeIssuer, Profile } from 'types';
@@ -25,12 +26,21 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
     onComplete: router.back,
   });
 
-  const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer>('mazury');
-  const { badges, handleFetchMore, hasMoreData } = useBadges(
-    address,
-    badgeIssuer,
-    10
-  );
+  const [isFocused, setIsFocused] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  const [credentialsFilter, setCredentialsFilter] = React.useState({
+    query: '',
+    issuer: '',
+  });
+
+  const {
+    badges,
+    handleFetchMore,
+    hasMoreData,
+    isFetchingNextPage,
+    isLoading,
+  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
 
   const prevHighlightedCredentials = highlightedCredentials.map(
     (credential) => credential.id
@@ -53,6 +63,11 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
 
       return [...credentials, id];
     });
+  };
+
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCredentialsFilter((prev) => ({ ...prev, query: searchTerm }));
   };
 
   return (
@@ -80,7 +95,10 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
         isSaving={useHighlightCredentialsMutation.isLoading}
       >
         <div className="space-y-6">
-          <form className="flex w-full items-center rounded-lg bg-indigoGray-5 py-3 pl-[14px] pr-2">
+          <form
+            className="flex w-full items-center rounded-lg bg-indigoGray-5 py-3 pl-[14px] pr-2"
+            onSubmit={handleSearch}
+          >
             <div className="flex h-6 w-6">
               <SVG height={24} width={24} src={`/icons/search-black.svg`} />
             </div>
@@ -91,9 +109,26 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                 placeholder="Paradign CTF 2022, ETHAmsterdam 2022 Finalist Hacker..."
                 aria-label="Search"
                 className="hidden h-full w-full bg-transparent lg:block"
-                value={''}
-                onChange={() => {}}
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
               />
+            </div>
+
+            <div className="h-8 w-8">
+              {isFocused && (
+                <button type="submit" className="border-none !p-0">
+                  <SVG
+                    height={32}
+                    width={32}
+                    src={`/icons/search-forward${
+                      searchTerm ? '' : '-inactive'
+                    }.svg`}
+                  />
+                  <span className="sr-only">Submit</span>
+                </button>
+              )}
             </div>
           </form>
 
@@ -103,12 +138,20 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                 {selectedCredentials.length} selected out of 8 possible
               </p>
             </div>
-            <div></div>
+
+            <CredentialsFilter
+              onApply={(issuer) =>
+                setCredentialsFilter((prev) => ({ ...prev, issuer }))
+              }
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-8">
-            {badges?.length > 0
-              ? badges?.map(({ id: badgeId, badge_type }) => {
+            {isLoading
+              ? skeletons.map((item, index) => (
+                  <Credential.Skeleton key={index + item} />
+                ))
+              : badges?.map(({ id: badgeId, badge_type }) => {
                   const {
                     title,
                     id,
@@ -137,10 +180,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                       } `}
                     />
                   );
-                })
-              : skeletons.map((item, index) => (
-                  <Credential.Skeleton key={index + item} />
-                ))}
+                })}
           </div>
 
           {hasMoreData && (
@@ -148,7 +188,8 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
               <Button
                 className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90 !shadow-base"
                 variant="secondary"
-                onClick={handleFetchMore}
+                onClick={() => handleFetchMore()}
+                loading={isFetchingNextPage}
               >
                 Load more
               </Button>
@@ -193,4 +234,127 @@ export const useHighlightCredentials = ({ config, onComplete }: any = {}) => {
     ...config,
     mutationFn: highlightCredentials,
   });
+};
+
+const CredentialsFilter = ({
+  onApply,
+}: {
+  onApply: (issuer: string) => void;
+}) => {
+  const [toggleFilters, setToggleFilters] = React.useState(false);
+  const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer[]>([]);
+
+  return (
+    <div className="relative w-fit">
+      <button
+        type="button"
+        className="flex items-center rounded-md bg-indigoGray-10 p-3 font-sans text-sm font-medium"
+        onClick={() => setToggleFilters(!toggleFilters)}
+      >
+        All credentials
+        <SVG
+          src="/icons/chevron-down-black.svg"
+          width={24}
+          height={24}
+          className="ml-3"
+        />
+      </button>
+      <AnimatePresence>
+        {toggleFilters && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="border-[#e2e6f60] absolute top-[100%] z-10 mt-1 flex h-[257px] w-[400px] flex-col rounded-3xl border bg-white p-6 pb-2"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Checkbox
+                  innerClassName="h-4 w-4"
+                  outerClassName="h-4 w-4"
+                  checked={false}
+                  setChecked={() => {}}
+                  label=""
+                  id={''}
+                />
+                <p className="font-sans text-lg font-medium text-indigoGray-90">
+                  Mazury badges{' '}
+                  <span className="text-base font-normal text-indigoGray-40">
+                    (13 056)
+                  </span>
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <Checkbox
+                  innerClassName="h-4 w-4"
+                  outerClassName="h-4 w-4"
+                  checked={false}
+                  setChecked={() => {}}
+                  label=""
+                  id={''}
+                />
+                <p className="font-sans text-lg font-medium text-indigoGray-90">
+                  Mazury badges{' '}
+                  <span className="text-base font-normal text-indigoGray-40">
+                    (13 056)
+                  </span>
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <Checkbox
+                  innerClassName="h-4 w-4"
+                  outerClassName="h-4 w-4"
+                  checked={false}
+                  setChecked={() => {}}
+                  label=""
+                  id={''}
+                />
+                <p className="font-sans text-lg font-medium text-indigoGray-90">
+                  Mazury badges{' '}
+                  <span className="text-base font-normal text-indigoGray-40">
+                    (13 056)
+                  </span>
+                </p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Checkbox
+                  innerClassName="h-4 w-4"
+                  outerClassName="h-4 w-4"
+                  checked={false}
+                  setChecked={() => {}}
+                  label=""
+                  id={''}
+                />
+                <p className="font-sans text-lg font-medium text-indigoGray-90">
+                  Mazury badges{' '}
+                  <span className="text-base font-normal text-indigoGray-40">
+                    (13 056)
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-auto flex justify-end space-x-3">
+              <Button
+                onClick={() => setBadgeIssuer([])}
+                className="w-[144px] !border !border-[1.5px] !border-indigoGray-20 !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90 !shadow-base"
+                variant="primary"
+                type="button"
+              >
+                Reset
+              </Button>
+              <Button
+                className="w-[144px] !font-sans !font-semibold"
+                type="submit"
+                onClick={() => onApply(badgeIssuer.join(';'))}
+              >
+                Apply
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };

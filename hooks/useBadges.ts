@@ -1,49 +1,70 @@
-import { axios } from '../lib/axios';
-import { useEffect, useRef, useState } from 'react';
-import useSWR from 'swr';
-import type { ListResponse, Badge, BadgeIssuer } from '../types';
+import { useInfiniteQuery } from 'react-query';
+
+import type { ListResponse, Badge } from 'types';
+import { axios } from 'lib/axios';
+
+export const fetchBadges = async ({
+  issuer,
+  address,
+  limit = 4,
+  nextPage,
+  query,
+}: {
+  address: string;
+  issuer?: string;
+  limit: number;
+  nextPage?: string;
+  query?: string;
+}): Promise<ListResponse<Badge>> => {
+  const { data } = await axios.get(
+    nextPage ||
+      `/search/badges?owner=${address}&size=${limit}${
+        query ? `&query=${query}` : ''
+      }${issuer ? `&filters=${issuer}` : ''}`
+  );
+
+  return data;
+};
 
 export const useBadges = (
   address: string,
-  issuer: BadgeIssuer = 'mazury',
-  limit: number = 4
+  issuer?: string,
+  limit: number = 4,
+  query?: string
 ) => {
-  const [fetchMore, setFetchMore] = useState(false);
-  const [badges, setBadges] = useState<Badge[]>([]);
-  const [nextEndpoint, setNextEndpoint] = useState('');
-
-  const { data, error } = useSWR<ListResponse<Badge>>(
-    `/badges/?owner=${address}&issuer=${issuer}&limit=${limit}`
+  const {
+    isLoading,
+    error,
+    data,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    query ? ['badges', query] : ['badges'],
+    ({ pageParam }) =>
+      fetchBadges({ address, issuer, limit, nextPage: pageParam, query }),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage.next;
+      },
+    }
   );
 
-  const handleFetchMore = () => setFetchMore(true);
-
-  useEffect(() => {
-    setBadges(data?.results as Badge[]);
-    data?.next ? setNextEndpoint(data?.next) : setNextEndpoint('');
-  }, [data]);
-
-  useEffect(() => {
-    const fetchMoreBadges = async () => {
-      if (fetchMore && nextEndpoint) {
-        const { data } = await axios.get(nextEndpoint);
-
-        if (data?.results.length !== 0) {
-          setBadges((badges) => badges.concat(data?.results));
-          setFetchMore(false);
-          setNextEndpoint(data?.next);
-        }
-      }
+  const queryResponse = data?.pages.reduce((prev, next) => {
+    return {
+      ...prev,
+      ...next,
+      results: [...(prev?.results || []), ...next.results],
     };
-
-    fetchMoreBadges();
-  }, [fetchMore, nextEndpoint]);
+  }, {} as ListResponse<Badge>);
 
   return {
-    badges,
+    badges: queryResponse?.results || [],
     error,
-    count: data?.count,
-    handleFetchMore,
-    hasMoreData: Boolean(nextEndpoint),
+    count: queryResponse?.results?.length,
+    handleFetchMore: fetchNextPage,
+    hasMoreData: hasNextPage,
+    isLoading: isLoading,
+    isFetchingNextPage,
   };
 };
