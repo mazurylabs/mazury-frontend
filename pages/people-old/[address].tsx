@@ -1188,7 +1188,7 @@ const Profile: React.FC<Props> = ({ address }) => {
               {badges?.length !== 0 && hasMoreData && (
                 <div className="xl:w-10/12">
                   <Button
-                    onClick={handleFetchMore}
+                    onClick={() => handleFetchMore()}
                     variant="secondary"
                     className="mx-auto mt-6"
                   >
