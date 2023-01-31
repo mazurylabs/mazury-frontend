@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button, Checkbox, Layout } from 'components';
 import { Container, Credential, ProfileSummary } from 'views/Profile';
-import { useAccount, useBadges } from 'hooks';
+import { useAccount, useBadges, useClickOutside } from 'hooks';
 import { Badge, BadgeIssuer, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
@@ -18,6 +18,16 @@ interface HighlightProps {
 }
 
 const skeletons = Array(12).fill('skeleton');
+
+const credentials = [
+  'GitPOAP',
+  'Mazury',
+  'POAP',
+  'Buildspace',
+  'Sismo',
+  '101',
+  'Kudos',
+];
 
 const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
   const router = useRouter();
@@ -140,6 +150,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
             </div>
 
             <CredentialsFilter
+              credentials={credentials}
               onApply={(issuer) =>
                 setCredentialsFilter((prev) => ({ ...prev, issuer }))
               }
@@ -238,18 +249,50 @@ export const useHighlightCredentials = ({ config, onComplete }: any = {}) => {
 
 const CredentialsFilter = ({
   onApply,
+  credentials,
 }: {
   onApply: (issuer: string) => void;
+  credentials: string[];
 }) => {
-  const [toggleFilters, setToggleFilters] = React.useState(false);
-  const [badgeIssuer, setBadgeIssuer] = React.useState<BadgeIssuer[]>([]);
+  const containerRef = React.useRef<HTMLDivElement>(null!);
+  const [isToggled, setIsToggled] = React.useState(false);
+  const prevIssuers = React.useRef<string[]>([]);
+  const [badgeIssuer, setBadgeIssuer] = React.useState<string[]>([]);
+
+  useClickOutside(containerRef, () => {
+    setIsToggled(false);
+    setBadgeIssuer(prevIssuers.current);
+  });
+
+  const handleApply = () => {
+    onApply(badgeIssuer.join(';'));
+    setIsToggled(false);
+    prevIssuers.current = badgeIssuer;
+  };
+
+  const handleReset = () => {
+    setBadgeIssuer([]);
+    prevIssuers.current = [];
+    onApply('');
+    setIsToggled(false);
+  };
+
+  const handleCheck = (selected: string) => {
+    const selectedItem = selected.toLowerCase();
+
+    if (badgeIssuer.includes(selectedItem)) {
+      setBadgeIssuer((prev) => prev.filter((item) => item !== selectedItem));
+      return;
+    }
+    setBadgeIssuer((prev) => [...prev, selectedItem]);
+  };
 
   return (
-    <div className="relative w-fit">
+    <div className="relative w-fit" ref={containerRef}>
       <button
         type="button"
         className="flex items-center rounded-md bg-indigoGray-10 p-3 font-sans text-sm font-medium"
-        onClick={() => setToggleFilters(!toggleFilters)}
+        onClick={() => setIsToggled(!isToggled)}
       >
         All credentials
         <SVG
@@ -260,84 +303,40 @@ const CredentialsFilter = ({
         />
       </button>
       <AnimatePresence>
-        {toggleFilters && (
+        {isToggled && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="border-[#e2e6f60] absolute top-[100%] z-10 mt-1 flex h-[257px] w-[400px] flex-col rounded-3xl border bg-white p-6 pb-2"
+            className="border-[#e2e6f60] absolute top-[100%] z-10 mt-1 flex h-fit w-[400px] flex-col rounded-3xl border bg-white p-6 pb-2"
           >
             <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <Checkbox
-                  innerClassName="h-4 w-4"
-                  outerClassName="h-4 w-4"
-                  checked={false}
-                  setChecked={() => {}}
-                  label=""
-                  id={''}
-                />
-                <p className="font-sans text-lg font-medium text-indigoGray-90">
-                  Mazury badges{' '}
-                  <span className="text-base font-normal text-indigoGray-40">
-                    (13 056)
-                  </span>
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <Checkbox
-                  innerClassName="h-4 w-4"
-                  outerClassName="h-4 w-4"
-                  checked={false}
-                  setChecked={() => {}}
-                  label=""
-                  id={''}
-                />
-                <p className="font-sans text-lg font-medium text-indigoGray-90">
-                  Mazury badges{' '}
-                  <span className="text-base font-normal text-indigoGray-40">
-                    (13 056)
-                  </span>
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <Checkbox
-                  innerClassName="h-4 w-4"
-                  outerClassName="h-4 w-4"
-                  checked={false}
-                  setChecked={() => {}}
-                  label=""
-                  id={''}
-                />
-                <p className="font-sans text-lg font-medium text-indigoGray-90">
-                  Mazury badges{' '}
-                  <span className="text-base font-normal text-indigoGray-40">
-                    (13 056)
-                  </span>
-                </p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Checkbox
-                  innerClassName="h-4 w-4"
-                  outerClassName="h-4 w-4"
-                  checked={false}
-                  setChecked={() => {}}
-                  label=""
-                  id={''}
-                />
-                <p className="font-sans text-lg font-medium text-indigoGray-90">
-                  Mazury badges{' '}
-                  <span className="text-base font-normal text-indigoGray-40">
-                    (13 056)
-                  </span>
-                </p>
-              </div>
+              {credentials.map((credential) => (
+                <div
+                  className="flex cursor-pointer items-center space-x-4"
+                  key={credential}
+                  onClick={() => handleCheck(credential)}
+                >
+                  <Checkbox
+                    innerClassName="h-4 w-4"
+                    outerClassName="h-4 w-4"
+                    checked={badgeIssuer.includes(credential.toLowerCase())}
+                    setChecked={() => {}}
+                    label=""
+                    id={credential}
+                  />
+                  <p className="font-sans text-lg font-medium text-indigoGray-90">
+                    {credential}
+                    {/* <span className="text-base font-normal text-indigoGray-40">
+                      (13 056)
+                    </span> */}
+                  </p>
+                </div>
+              ))}
             </div>
 
-            <div className="mt-auto flex justify-end space-x-3">
+            <div className="mt-6 flex justify-end space-x-3">
               <Button
-                onClick={() => setBadgeIssuer([])}
+                onClick={handleReset}
                 className="w-[144px] !border !border-[1.5px] !border-indigoGray-20 !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90 !shadow-base"
                 variant="primary"
                 type="button"
@@ -347,7 +346,7 @@ const CredentialsFilter = ({
               <Button
                 className="w-[144px] !font-sans !font-semibold"
                 type="submit"
-                onClick={() => onApply(badgeIssuer.join(';'))}
+                onClick={handleApply}
               >
                 Apply
               </Button>
