@@ -76,6 +76,8 @@ export const Credential: React.FC<Credential> & {
 
       <div className={`min-w-[40px]`}>
         <img
+          loading="lazy"
+          decoding="async"
           src={imageSrc}
           onError={(event) => {
             event.currentTarget.src = '/icons/brokenImage.svg';
