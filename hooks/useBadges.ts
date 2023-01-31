@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from 'react-query';
+import clsx from 'clsx';
 
 import type { ListResponse, Badge } from 'types';
 import { axios } from 'lib/axios';
@@ -40,7 +41,7 @@ export const useBadges = (
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    query ? ['badges', query] : ['badges'],
+    clsx('badges', query && query, issuer && issuer).split(' '),
     ({ pageParam }) =>
       fetchBadges({ address, issuer, limit, nextPage: pageParam, query }),
     {
