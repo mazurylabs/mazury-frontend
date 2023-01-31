@@ -44,6 +44,7 @@ export const Idle = ({
   const highlightedCredentials = credentials;
 
   const profileCompletionData = profileCompletion.data;
+  const completionDataArray = Object.values(profileCompletionData || {});
 
   return (
     <div className="space-y-6">
@@ -55,8 +56,8 @@ export const Idle = ({
                 Complete your profile
               </p>
               <Progress
-                total={4}
-                current={3}
+                total={completionDataArray.length}
+                current={completionDataArray.filter(Boolean).length}
                 label="complete"
                 size="small"
                 variant="dark"
