@@ -4,49 +4,31 @@ import SVG from 'react-inlinesvg';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Layout } from 'components';
+import { Button, Layout } from 'components';
 import { Container, ProfileSummary, Dropdown, Credential } from 'views/Profile';
-import { useAccount } from 'hooks';
-import { Profile } from 'types';
+import { useAccount, useBadges } from 'hooks';
+import { Badge, Profile } from 'types';
+import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
 interface CredentialsProps {
   address: string;
+  highlightedCredentials: Badge[];
 }
 
-const dummyCredentials = [
-  {
-    id: 123,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 456,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 789,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-  {
-    id: 101112,
-    title: 'Hardhat OSS Contributor 2022',
-    description: 'The holder of this badge has successfully finished',
-    ownedBy: 1234,
-    image: '/icons/dummyCredential.svg',
-  },
-];
+const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address }: CredentialsProps) => {
+const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const [credentialIssuer, setCredentialIssuer] = React.useState<string>('');
+
+  const {
+    badges,
+    handleFetchMore,
+    hasMoreData,
+    isFetchingNextPage,
+    isLoading,
+  } = useBadges(address, credentialIssuer, 10);
 
   const navItems = [
     { label: 'Overview', isActive: false, href: `/people/${address}` },
@@ -112,21 +94,81 @@ const Credentials = ({ address }: CredentialsProps) => {
               </a>
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-8">
-            {dummyCredentials.map((credential) => (
-              <Credential
-                key={credential.id}
-                title={credential.title}
-                description={credential.description}
-                onSelect={() =>
-                  router.push(`/people/${address}/credentials/${credential.id}`)
-                }
-                imageSrc={credential.image}
-                totalSupply={credential.ownedBy}
-                isSelected={true}
-                className="border-transparent px-4 py-2"
-              />
-            ))}
+
+          {!!highlightedCredentials?.length && (
+            <div className="space-y-2">
+              <p className="font-sans text-sm text-indigoGray-50">
+                Highlighted credentials
+              </p>
+              <div className="grid grid-cols-2 gap-8">
+                {highlightedCredentials.map(({ badge_type, id }) => (
+                  <Credential
+                    key={id + 'highlighted'}
+                    title={badge_type.title}
+                    description={badge_type.description}
+                    onSelect={() => {}}
+                    imageSrc={badge_type.image}
+                    totalSupply={badge_type.total_supply}
+                    isSelected={true}
+                    className="border-indigo-400 px-4 py-2"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <p className="mb-2 font-sans text-sm text-indigoGray-50">
+              All credentials
+            </p>
+
+            <div className="mb-6 grid grid-cols-2 gap-8">
+              {isLoading
+                ? skeletons.map((item, index) => (
+                    <Credential.Skeleton key={index + item} />
+                  ))
+                : badges?.map(({ id: badgeId, badge_type }) => {
+                    const {
+                      title,
+                      id,
+                      total_supply,
+                      description,
+                      image,
+                      issuer,
+                    } = badge_type;
+
+                    return (
+                      <Credential
+                        key={badgeId + 'all_credentials'}
+                        imageSrc={image}
+                        title={title}
+                        variant={issuer.name}
+                        totalSupply={total_supply}
+                        description={description}
+                        isSelected={true}
+                        className="border-transparent px-4 py-2"
+                        onSelect={() =>
+                          router.push(
+                            `/people/${address}/credentials/${badgeId}`
+                          )
+                        }
+                      />
+                    );
+                  })}
+            </div>
+
+            {hasMoreData && (
+              <div className="flex justify-center">
+                <Button
+                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90 !shadow-base"
+                  variant="secondary"
+                  onClick={() => handleFetchMore()}
+                  loading={isFetchingNextPage}
+                >
+                  Load more
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </Container>
@@ -137,9 +179,14 @@ const Credentials = ({ address }: CredentialsProps) => {
 export default Credentials;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const highlightedCredentials = await getHighlightedCredentials(
+    context.query.address as string
+  );
+
   return {
     props: {
       address: context.query.address,
+      highlightedCredentials,
     },
   };
 };
