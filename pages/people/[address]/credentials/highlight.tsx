@@ -2,13 +2,13 @@ import * as React from 'react';
 import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button, Checkbox, Layout } from 'components';
 import { Container, Credential, ProfileSummary } from 'views/Profile';
 import { useAccount, useBadges, useClickOutside } from 'hooks';
-import { Badge, BadgeIssuer, Profile } from 'types';
+import { Badge, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
@@ -238,9 +238,12 @@ export const highlightCredentials = ({
 };
 
 export const useHighlightCredentials = ({ config, onComplete }: any = {}) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     onSuccess: () => {
       onComplete?.();
+      queryClient.invalidateQueries(['badges']);
     },
     ...config,
     mutationFn: highlightCredentials,
@@ -325,10 +328,10 @@ const CredentialsFilter = ({
                     id={credential}
                   />
                   <p className="font-sans text-lg font-medium text-indigoGray-90">
-                    {credential}
-                    {/* <span className="text-base font-normal text-indigoGray-40">
+                    {credential}{' '}
+                    <span className="text-base font-normal text-indigoGray-40">
                       (13 056)
-                    </span> */}
+                    </span>
                   </p>
                 </div>
               ))}
