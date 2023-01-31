@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import clsx from 'clsx';
 
 import { OverviewViews } from 'pages/people/[address]';
@@ -40,12 +40,6 @@ export const Idle = ({
     queryFn: () => getProfileCompletion(address),
     enabled: isOwnProfile,
   });
-
-  // const highlightedCredentialsQuery = useQuery({
-  //   queryKey: ['highlightedCredentials'],
-  //   queryFn: () => getHighlightedCredentials(address),
-  //   initialData: credentials,
-  // });
 
   const highlightedCredentials = credentials;
 
@@ -107,6 +101,7 @@ export const Idle = ({
                 className={clsx(
                   'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
                   profileCompletionData?.['highlight_credentials'] &&
+                    !!highlightedCredentials?.length &&
                     'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                 )}
                 onClick={() =>
@@ -190,12 +185,7 @@ const CredentialsSection: React.FC<{
   commonCredentials,
   loading,
 }) => {
-  // const queryClient = useQueryClient();
   const hasCredentials = !!credentials?.length;
-
-  // React.useEffect(() => {
-  //   queryClient.setQueryData('highlightedCredentials', dummy);
-  // }, [dummy]);
 
   if (loading) return <p>Loading...</p>;
 

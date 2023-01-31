@@ -106,7 +106,9 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                     key={id + 'highlighted'}
                     title={badge_type.title}
                     description={badge_type.description}
-                    onSelect={() => {}}
+                    onSelect={() =>
+                      router.push(`/people/${address}/credentials/${id}`)
+                    }
                     imageSrc={badge_type.image}
                     totalSupply={badge_type.total_supply}
                     isSelected={true}
