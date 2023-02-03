@@ -1,22 +1,37 @@
+import { Spinner } from '@/components';
+import clsx from 'clsx';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 
-export const ActionButton = ({
+interface ActionButtonProps {
+  icon: string;
+  label?: string;
+  className?: string;
+  onClick: () => void;
+  loading?: boolean;
+}
+
+export const ActionButton: React.FC<ActionButtonProps> = ({
   icon,
   label,
   className,
-}: {
-  icon: string;
-  label: string;
-  className?: string;
+  onClick,
+  loading,
 }) => {
   return (
     <button
       type="button"
       className={`flex shrink-0 items-center rounded-lg border border-[1.5px] border-indigoGray-20 px-6 py-2 font-sansSemi text-sm font-semibold text-indigoGray-90 ${className}`}
+      onClick={onClick}
     >
-      <SVG src={icon} height={16} width={16} className="mr-2" />
+      <SVG
+        src={icon}
+        height={16}
+        width={16}
+        className={clsx(label && 'mr-2')}
+      />
       {label}
+      {loading && <Spinner size={16} className="ml-2" variant="dark" />}
     </button>
   );
 };
