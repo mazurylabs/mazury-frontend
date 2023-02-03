@@ -45,7 +45,7 @@ export const Container: React.FC<ContainerProps> = ({
       {summary}
 
       <div className="relative flex grow flex-col">
-        <div className="sticky top-0 z-10 bg-white pt-10 pb-6">
+        <div className="sticky top-0 z-20 bg-white pt-10 pb-6">
           {title ? (
             <div className="flex justify-between">
               <div className="flex space-x-2">
