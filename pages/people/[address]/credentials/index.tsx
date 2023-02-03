@@ -5,7 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Button, Layout } from 'components';
-import { Container, ProfileSummary, Dropdown, Credential } from 'views/Profile';
+import {
+  Container,
+  ProfileSummary,
+  FilterSearch,
+  Credential,
+} from 'views/Profile';
 import { useAccount, useBadges } from 'hooks';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
@@ -20,7 +25,11 @@ const skeletons = Array(12).fill('skeleton');
 const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
-  const [credentialIssuer, setCredentialIssuer] = React.useState<string>('');
+
+  const [credentialsFilter, setCredentialsFilter] = React.useState({
+    query: '',
+    issuer: '',
+  });
 
   const {
     badges,
@@ -28,7 +37,11 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     hasMoreData,
     isFetchingNextPage,
     isLoading,
-  } = useBadges(address, credentialIssuer, 10);
+  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
+
+  const handleSearch = (query: string) => {
+    setCredentialsFilter((prev) => ({ ...prev, query }));
+  };
 
   const navItems = [
     { label: 'Overview', isActive: false, href: `/people/${address}` },
@@ -70,29 +83,30 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
       >
         <div className="space-y-6">
           <div className="flex w-full items-center space-x-4">
-            <Dropdown
-              onSelect={() => {}}
-              options={[]}
-              label="credentials"
-              className="grow"
+            <FilterSearch
+              dropdown={{
+                onSelect: () => {},
+                options: [],
+                label: 'credentials',
+                className: 'grow',
+              }}
+              search={{ onSearch: handleSearch }}
+              defaultView="dropdown"
             />
-            <button
-              aria-label="search"
-              className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigoGray-5"
-            >
-              <SVG src="/icons/search-black.svg" height={24} width={24} />
-            </button>
-            <Link href={`/people/${address}/credentials/highlight`}>
-              <a className="flex items-center space-x-2 py-3 px-6 font-sansSemi text-sm font-semibold text-indigo-600">
-                <SVG
-                  src="/icons/heart-colored.svg"
-                  height={16}
-                  width={16}
-                  className="mr-2"
-                />
-                Highlight
-              </a>
-            </Link>
+
+            {isOwnProfile && (
+              <Link href={`/people/${address}/credentials/highlight`}>
+                <a className="flex items-center space-x-2 py-3 px-6 font-sansSemi text-sm font-semibold text-indigo-600">
+                  <SVG
+                    src="/icons/heart-colored.svg"
+                    height={16}
+                    width={16}
+                    className="mr-2"
+                  />
+                  Highlight
+                </a>
+              </Link>
+            )}
           </div>
 
           {!!highlightedCredentials?.length && (
@@ -129,7 +143,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                 ? skeletons.map((item, index) => (
                     <Credential.Skeleton key={index + item} />
                   ))
-                : badges?.map(({ id: badgeId, badge_type }) => {
+                : badges?.map(({ id: badgeId, badge_type, hidden }) => {
                     const {
                       title,
                       id,
@@ -149,6 +163,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                         description={description}
                         isSelected={true}
                         className="border-transparent px-4 py-2"
+                        isHidden={hidden}
                         onSelect={() =>
                           router.push(
                             `/people/${address}/credentials/${badgeId}`

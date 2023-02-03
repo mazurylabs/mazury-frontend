@@ -6,7 +6,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button, Checkbox, Layout } from 'components';
-import { Container, Credential, ProfileSummary } from 'views/Profile';
+import {
+  Container,
+  Credential,
+  FilterSearch,
+  ProfileSummary,
+} from 'views/Profile';
 import { useAccount, useBadges, useClickOutside } from 'hooks';
 import { Badge, Profile } from 'types';
 import { axios } from 'lib/axios';
@@ -35,9 +40,6 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
   const useHighlightCredentialsMutation = useHighlightCredentials({
     onComplete: router.back,
   });
-
-  const [isFocused, setIsFocused] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState('');
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
     query: '',
@@ -75,9 +77,8 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
     });
   };
 
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setCredentialsFilter((prev) => ({ ...prev, query: searchTerm }));
+  const handleSearch = (query: string) => {
+    setCredentialsFilter((prev) => ({ ...prev, query }));
   };
 
   return (
@@ -105,42 +106,12 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
         isSaving={useHighlightCredentialsMutation.isLoading}
       >
         <div className="space-y-6">
-          <form
-            className="flex w-full items-center rounded-lg bg-indigoGray-5 py-3 pl-[14px] pr-2"
-            onSubmit={handleSearch}
-          >
-            <div className="flex h-6 w-6">
-              <SVG height={24} width={24} src={`/icons/search-black.svg`} />
-            </div>
-
-            <div className="ml-4 mr-10 grow font-sans  text-base font-medium">
-              <input
-                type="text"
-                placeholder="Paradign CTF 2022, ETHAmsterdam 2022 Finalist Hacker..."
-                aria-label="Search"
-                className="hidden h-full w-full bg-transparent lg:block"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-              />
-            </div>
-
-            <div className="h-8 w-8">
-              {isFocused && (
-                <button type="submit" className="border-none !p-0">
-                  <SVG
-                    height={32}
-                    width={32}
-                    src={`/icons/search-forward${
-                      searchTerm ? '' : '-inactive'
-                    }.svg`}
-                  />
-                  <span className="sr-only">Submit</span>
-                </button>
-              )}
-            </div>
-          </form>
+          <FilterSearch
+            defaultView="search"
+            search={{
+              onSearch: handleSearch,
+            }}
+          />
 
           <div className="flex space-x-6">
             <div className="rounded-md bg-indigoGray-10 p-3">
@@ -163,23 +134,14 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                   <Credential.Skeleton key={index + item} />
                 ))
               : badges?.map(({ id: badgeId, badge_type }) => {
-                  const {
-                    title,
-                    id,
-                    total_supply,
-                    description,
-                    image,
-                    issuer,
-                  } = badge_type;
-
                   return (
                     <Credential
-                      key={id}
-                      imageSrc={image}
-                      title={title}
-                      variant={issuer.name}
-                      totalSupply={total_supply}
-                      description={description}
+                      key={badge_type.id}
+                      imageSrc={badge_type.image}
+                      title={badge_type.title}
+                      variant={badge_type.issuer.name}
+                      totalSupply={badge_type.total_supply}
+                      description={badge_type.description}
                       showCheckbox={true}
                       isSelected={selectedCredentials.includes(badgeId)}
                       onSelect={() => handleSelectCredential(badgeId)}
@@ -227,17 +189,17 @@ export const getServerSideProps = async (context: NextPageContext) => {
   };
 };
 
-export const highlightCredentials = ({
-  data,
-}: {
-  data: string[];
-}): Promise<any> => {
+export const highlightCredentials = ({ data }: { data: string[] }) => {
   return axios.patch(`/badges/highlight`, {
     ids: data,
   });
 };
 
-export const useHighlightCredentials = ({ config, onComplete }: any = {}) => {
+export const useHighlightCredentials = ({
+  onComplete,
+}: {
+  onComplete?: () => void;
+}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -245,7 +207,6 @@ export const useHighlightCredentials = ({ config, onComplete }: any = {}) => {
       onComplete?.();
       queryClient.invalidateQueries(['badges']);
     },
-    ...config,
     mutationFn: highlightCredentials,
   });
 };

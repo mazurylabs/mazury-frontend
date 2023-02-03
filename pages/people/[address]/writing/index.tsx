@@ -4,7 +4,7 @@ import SVG from 'react-inlinesvg';
 import Link from 'next/link';
 
 import { Layout } from 'components';
-import { Container, Dropdown, ProfileSummary } from 'views/Profile';
+import { Container, FilterSearch, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 import { Profile } from 'types';
 
@@ -129,11 +129,14 @@ const Writing = ({ address }: WritingProps) => {
       >
         <div className="space-y-6">
           <div className="flex w-full items-center space-x-4">
-            <Dropdown
-              onSelect={() => {}}
-              options={[]}
-              label="credentials"
-              className="grow"
+            <FilterSearch
+              dropdown={{
+                onSelect: () => {},
+                options: [],
+                label: 'credentials',
+                className: 'grow',
+              }}
+              defaultView="dropdown"
             />
             <button
               aria-label="search"

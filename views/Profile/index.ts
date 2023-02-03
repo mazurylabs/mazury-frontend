@@ -1,5 +1,5 @@
 export { ProfileSummary } from './ProfileSummary';
 export { Container } from './Container';
 export { Credential } from './Credential';
-export { Dropdown } from './Dropdown';
+export { FilterSearch } from './FilterSearch';
 export { ActionButton } from './ActionButton';
