@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
         <Spinner
           size={16}
           className="ml-2"
-          variant={variant === 'primary' ? 'light' : 'primary'}
+          variant={variant === 'primary' ? 'light' : 'dark'}
         />
       )}
     </button>

@@ -3,6 +3,7 @@ import * as React from 'react';
 const variants = {
   light: 'text-white',
   primary: 'text-[#4338CA]',
+  dark: 'text-indigoGray-90',
 };
 
 interface SpinnerProps {
