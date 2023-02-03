@@ -85,6 +85,7 @@ const PostDetail = ({ address }: PostDetailsProps) => {
               icon="/icons/mirror-white-icon.svg"
               label="See on Mirror"
               className="border-blue-600 bg-blue-600 text-indigoGray-5"
+              onClick={() => {}}
             />
             {/* <ActionButton
               icon="/icons/heart-black.svg"
@@ -92,7 +93,11 @@ const PostDetail = ({ address }: PostDetailsProps) => {
             /> */}
             {/* <ActionButton icon="/icons/hide.svg" label="Hide" /> */}
 
-            <ActionButton icon="/icons/share.svg" label="Copy link" />
+            <ActionButton
+              icon="/icons/share.svg"
+              label="Copy link"
+              onClick={() => {}}
+            />
           </div>
         </div>
       </Container>

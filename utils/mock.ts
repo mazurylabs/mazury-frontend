@@ -12,6 +12,8 @@ export const mockProfile: Profile = {
         avatar:
           'https://mazurylabs-staging.s3.eu-central-1.amazonaws.com/gradient4.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYEYJ2JINA57WRDY7%2F20220419%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20220419T021718Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=1b2bc3606f3ade788e6759ac305f2b6ccaf0afb8abce0bf4505021b9588165cb',
       },
+      hidden: false,
+      highlighted: false,
       badge_type: {
         id: '0046d0cf-2a66-4235-a8f3-062a0514253a',
         created_at: '2021-11-07T21:03:03.245105Z',
@@ -24,6 +26,7 @@ export const mockProfile: Profile = {
         issuer: { name: 'mazury' },
         poap_badge_extra_data: null,
         video: '',
+        tags: ['sdf'],
       },
       created_at: '2021-11-28T21:16:23.817772Z',
       updated_at: '2021-11-28T21:16:23.817784Z',
