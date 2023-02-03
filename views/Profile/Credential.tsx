@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SVG from 'react-inlinesvg';
 
 import { Checkbox } from 'components';
 import { commify, truncateString } from 'utils';
@@ -14,6 +15,7 @@ interface Credential {
   onSelect: () => void;
   className?: string;
   showCheckbox?: boolean;
+  isHidden?: boolean;
 }
 
 const credentialClass: Record<BadgeIssuer, string> = {
@@ -51,6 +53,7 @@ export const Credential: React.FC<Credential> & {
   className,
   showCheckbox,
   variant = 'mazury',
+  isHidden,
 }) => {
   const supply = +(totalSupply || '0');
 
@@ -97,6 +100,15 @@ export const Credential: React.FC<Credential> & {
         <p className="font-sans text-xs font-medium text-indigo-500">
           {commify(supply)} {supply === 1 ? 'person has' : 'people have'} this
         </p>
+
+        {isHidden && (
+          <div className="flex w-fit items-center space-x-2 rounded-md bg-indigoGray-90 py-[2px] px-2 ">
+            <SVG src="/icons/eye-slash-white.svg" height={16} width={16} />
+            <p className="font-sans text-xs font-medium text-indigoGray-5">
+              Hidden
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
