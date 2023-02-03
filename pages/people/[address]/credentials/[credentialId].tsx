@@ -1,15 +1,28 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
+import { useRouter } from 'next/router';
+
+import {
+  InfiniteData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 
 import { Layout } from 'components';
 import { ActionButton, Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
-import { BadgeIssuer, Profile } from 'types';
-import { useRouter } from 'next/router';
+import { Badge, BadgeIssuer, ListResponse, Profile } from 'types';
+import { axios } from 'lib/axios';
+import { commify } from 'utils';
+import { useHighlightCredentials } from './highlight';
+import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
 interface HighlightProps {
   address: string;
+  credentialId: string;
+  highlightedCredentials: Badge[];
 }
 
 const credentialClass: Record<BadgeIssuer, string> = {
@@ -22,9 +35,6 @@ const credentialClass: Record<BadgeIssuer, string> = {
   poap: 'h-[230px] w-[230px] rounded-full mb-4',
   sismo: 'h-[230px] w-[230px] rounded-sm bg-gray-100 mb-4',
 };
-
-const dummyImageLink =
-  'https://mazury-staging.s3.amazonaws.com/badges/images/mazury_early_adopter.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUV5WL77G5SO2Y7UV%2F20230111%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20230111T070912Z&X-Amz-Expires=604799&X-Amz-SignedHeaders=host&X-Amz-Signature=6541942053d53ceef3b7deb8a74a76a60b0b8c7607af2c9157d6f85ae5947401';
 
 const Skeleton = () => {
   return (
@@ -52,10 +62,77 @@ const Skeleton = () => {
   );
 };
 
-const CredentialDetails = ({ address }: HighlightProps) => {
+const CredentialDetails = ({
+  address,
+  credentialId,
+  highlightedCredentials,
+}: HighlightProps) => {
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
-  const loading = false;
+  const queryClient = useQueryClient();
+
+  const cachedData = queryClient.getQueryData(['badges']) as
+    | InfiniteData<ListResponse<Badge>>
+    | undefined;
+
+  const cachedBadge = cachedData?.pages
+    .reduce((prev, next) => {
+      return [...prev, ...next.results];
+    }, [] as Badge[])
+    .find((badge) => badge.id === credentialId);
+
+  const { isLoading, data } = useQuery({
+    queryKey: ['badge', credentialId],
+    queryFn: () => getBadge({ id: credentialId }),
+    enabled: !!!cachedBadge,
+    initialData: cachedBadge,
+  });
+
+  const useHighlightCredentialsMutation = useHighlightCredentials({
+    onComplete: () => {
+      queryClient.setQueryData(['badge', credentialId], (prev: any) => ({
+        ...prev,
+        highlighted: !data?.highlighted,
+      }));
+    },
+  });
+
+  const useHideCredentialMutation = useHideCredential({
+    onComplete: () => {
+      queryClient.setQueryData(['badge', credentialId], (prev: any) => ({
+        ...prev,
+        hidden: !data?.hidden,
+      }));
+    },
+  });
+
+  const handleSearch = () => {
+    const queryParam =
+      'badges=' + encodeURIComponent(data?.badge_type.slug as string);
+
+    router.push(`/search?${queryParam}`);
+  };
+
+  const handleHide = async () => {
+    await useHideCredentialMutation.mutateAsync({
+      id: credentialId,
+      payload: !data?.hidden,
+    });
+  };
+
+  const handleHighlight = async () => {
+    await useHighlightCredentialsMutation.mutateAsync({
+      data: data?.highlighted
+        ? highlightedCredentials.reduce((prev, next) => {
+            if (next.id === data?.id) return prev;
+            return [...prev, next.id];
+          }, [] as string[])
+        : [
+            ...highlightedCredentials.map((credential) => credential.id),
+            credentialId,
+          ],
+    } as any);
+  };
 
   return (
     <Layout variant="plain">
@@ -70,14 +147,14 @@ const CredentialDetails = ({ address }: HighlightProps) => {
           />
         }
       >
-        {loading ? (
+        {isLoading ? (
           <Skeleton />
         ) : (
           <div className="space-y-8 rounded-lg bg-indigoGray-5 p-6">
             <div className="flex space-x-6">
               <div className="shrink-0 px-9">
                 <img
-                  src={dummyImageLink}
+                  src={data?.badge_type.image}
                   className={`${credentialClass.buildspace}`}
                   onError={(event) => {
                     event.currentTarget.src = '/icons/brokenImage.svg';
@@ -91,130 +168,153 @@ const CredentialDetails = ({ address }: HighlightProps) => {
 
               <div className="space-y-4">
                 <p className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm text-indigoGray-60">
-                  1289 people have this credential
+                  {commify(+(data?.badge_type.total_supply || '0'))} people have
+                  this credential
                 </p>
                 <div className="space-y-3">
                   <h2 className="font-serif text-4xl font-semibold text-indigoGray-90">
-                    Buildspace alumni
+                    {data?.badge_type.title}
                   </h2>
                   <p className="font-sans text-sm text-indigoGray-90">
-                    Voted in an Developer DAO governance snapshot. Voted in an
-                    Developer DAO governance snapshot. Voted in an Developer DAO
-                    governance snapshot. Voted in an Developer DAO governance
-                    snapshot
+                    {data?.badge_type.description}
                   </p>
 
                   <div className="flex space-x-6">
-                    <a
-                      rel="noreferrer"
-                      target="_blank"
-                      className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
-                    >
-                      <SVG
-                        src={`/icons/opensea.svg`}
-                        height={16}
-                        width={16}
-                        className="mr-2"
-                      />
-                      See on Opensea
-                    </a>
+                    {data?.external_links.opensea && (
+                      <a
+                        href={data.external_links.opensea}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                      >
+                        <SVG
+                          src={`/icons/opensea.svg`}
+                          height={16}
+                          width={16}
+                          className="mr-2"
+                        />
+                        See on Opensea
+                      </a>
+                    )}
 
-                    <a
-                      rel="noreferrer"
-                      target="_blank"
-                      className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
-                    >
-                      <SVG
-                        src={`/icons/rainbow.svg`}
-                        height={16}
-                        width={16}
-                        className="mr-2"
-                      />
-                      See on Rainbow
-                    </a>
+                    {data?.external_links.rainbow && (
+                      <a
+                        href={data.external_links.rainbow}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                      >
+                        <SVG
+                          src={`/icons/rainbow.svg`}
+                          height={16}
+                          width={16}
+                          className="mr-2"
+                        />
+                        See on Rainbow
+                      </a>
+                    )}
 
-                    <a
-                      rel="noreferrer"
-                      target="_blank"
-                      className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
-                    >
-                      <SVG
-                        src={`/icons/gitpoap.svg`}
-                        height={16}
-                        width={16}
-                        className="mr-2"
-                      />
-                      See on GitPOAP
-                    </a>
+                    {data?.external_links.poap && (
+                      <a
+                        href={data?.external_links.poap}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                      >
+                        <SVG
+                          src={`/icons/gitpoap.svg`}
+                          height={16}
+                          width={16}
+                          className="mr-2"
+                        />
+                        See on GitPOAP
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <p className="font-sans text-sm text-indigoGray-50">
-                What does this credential mean?
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <div className="flex w-[60px] justify-end">
-                    <SVG src="/icons/star.svg" height={17} width={18} />
-                    <SVG src="/icons/star.svg" height={17} width={18} />
-                    <SVG src="/icons/star.svg" height={17} width={18} />
+            {!!data?.badge_type.tags.length && (
+              <div className="space-y-2">
+                <p className="font-sans text-sm text-indigoGray-50">
+                  What does this credential mean?
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex w-[60px] justify-end">
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                    </div>
+                    <p className="font-sans text-sm font-medium text-indigoGray-90">
+                      Expert at
+                    </p>
+                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
+                      Frontend development
+                    </p>
                   </div>
-                  <p className="font-sans text-sm font-medium text-indigoGray-90">
-                    Expert at
-                  </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                    Frontend development
-                  </p>
-                </div>
 
-                <div className="flex items-center space-x-4">
-                  <div className="flex w-[60px] justify-end">
-                    <SVG src="/icons/star.svg" height={17} width={18} />
-                    <SVG src="/icons/star.svg" height={17} width={18} />
+                  <div className="flex items-center space-x-4">
+                    <div className="flex w-[60px] justify-end">
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                    </div>
+                    <p className="font-sans text-sm font-medium text-indigoGray-90">
+                      Intermediate at
+                    </p>
+                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
+                      Frontend development
+                    </p>
                   </div>
-                  <p className="font-sans text-sm font-medium text-indigoGray-90">
-                    Intermediate at
-                  </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                    Frontend development
-                  </p>
-                </div>
 
-                <div className="flex items-center space-x-4">
-                  <div className="flex w-[60px] justify-end">
-                    <SVG src="/icons/star.svg" height={17} width={18} />
+                  <div className="flex items-center space-x-4">
+                    <div className="flex w-[60px] justify-end">
+                      <SVG src="/icons/star.svg" height={17} width={18} />
+                    </div>
+                    <p className="font-sans text-sm font-medium text-indigoGray-90">
+                      Basic at
+                    </p>
+                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
+                      Frontend development
+                    </p>
                   </div>
-                  <p className="font-sans text-sm font-medium text-indigoGray-90">
-                    Basic at
-                  </p>
-                  <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                    Frontend development
-                  </p>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="flex max-w-[598px] flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3">
               <ActionButton
                 icon="/icons/search-white.svg"
                 label="Search using this credential"
                 className="border-indigoGray-90 bg-indigoGray-90 text-indigoGray-5"
+                onClick={handleSearch}
               />
               {isOwnProfile && (
                 <ActionButton
-                  icon="/icons/heart-black.svg"
-                  label="Highlight credential"
+                  icon={`/icons/${
+                    data?.highlighted ? 'remove-heart' : 'heart-black'
+                  }.svg`}
+                  label={
+                    data?.highlighted
+                      ? 'Remove highlight'
+                      : 'Highlight credential'
+                  }
+                  onClick={handleHighlight}
+                  loading={useHighlightCredentialsMutation.isLoading}
                 />
               )}
               {isOwnProfile && (
-                <ActionButton icon="/icons/hide.svg" label="Hide" />
+                <ActionButton
+                  icon={`/icons/${data?.hidden ? 'eye-open' : 'hide'}.svg`}
+                  label={data?.hidden ? 'Unhide' : 'Hide'}
+                  onClick={handleHide}
+                  loading={useHideCredentialMutation.isLoading}
+                />
               )}
-              <ActionButton icon="/icons/mint.svg" label="Mint NFT" />
+              {/* <ActionButton icon="/icons/mint.svg" label="Mint NFT" /> */}
 
-              <ActionButton icon="/icons/share.svg" label="Copy link" />
+              <ActionButton icon="/icons/share.svg" onClick={() => {}} />
             </div>
           </div>
         )}
@@ -226,9 +326,39 @@ const CredentialDetails = ({ address }: HighlightProps) => {
 export default CredentialDetails;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const highlightedCredentials = await getHighlightedCredentials(
+    context.query.address as string
+  );
+
   return {
     props: {
       address: context.query.address,
+      credentialId: context.query.credentialId,
+      highlightedCredentials,
     },
   };
+};
+
+const getBadge = async ({ id }: { id: string }): Promise<Badge> => {
+  const { data } = await axios.get(`/badges/${id}`);
+  return data;
+};
+
+export const hideCredential = ({
+  id,
+  payload,
+}: {
+  id: string;
+  payload: boolean;
+}) => {
+  return axios.patch(`/badges/${id}/hide/?value=${payload}`, {});
+};
+
+const useHideCredential = ({ onComplete }: { onComplete?: () => void }) => {
+  return useMutation({
+    onSuccess: () => {
+      onComplete?.();
+    },
+    mutationFn: hideCredential,
+  });
 };

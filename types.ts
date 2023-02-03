@@ -81,17 +81,20 @@ export interface BadgeType {
   rainbowUrl?: string;
   poapUrl?: string;
   kudosUrl?: string;
+  tags: string[];
 }
 
 export interface Badge {
   id: string;
   owner: PersonBasicDetails;
   badge_type: BadgeType;
+  highlighted: boolean;
   created_at: string;
   updated_at: string;
   minted: boolean;
   minted_at: string;
   external_links?: any;
+  hidden: boolean;
 }
 
 export type MappedSkills<T> = {
