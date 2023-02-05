@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useAccount } from 'wagmi';
+import { disconnect } from '@wagmi/core';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
@@ -14,15 +14,14 @@ interface MobileSidebarProps {
 }
 
 export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
-  const [_, disconnect] = useAccount();
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile, isAuthenticated } = useSelector(userSlice);
 
   // const isSignedIn = !!accountData;
 
-  const handleLogOut = () => {
-    disconnect();
+  const handleLogOut = async () => {
+    await disconnect();
     dispatch(logout());
     router.push('/');
   };

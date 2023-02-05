@@ -14,7 +14,7 @@ import { verifyEmail } from '@/utils/api';
 import { WalletRequestModal } from '@/components/WalletRequestModal';
 import { SlidersIcon } from '@/components/Icons';
 import { HomeIcon, SearchIcon } from '@/components';
-import { useAccount } from 'wagmi';
+import { disconnect } from '@wagmi/core';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -27,7 +27,6 @@ export const Sidebar: React.FC = () => {
   const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
   const router = useRouter();
   const dispatch = useDispatch();
-  const [_, disconnect] = useAccount();
   const { pathname } = router;
   const { profile, isAuthenticated } = useSelector(userSlice);
   const { isOpen, signInOpen, setSignInOpen } =
@@ -49,8 +48,8 @@ export const Sidebar: React.FC = () => {
     }
   };
 
-  const handleLogOut = () => {
-    disconnect();
+  const handleLogOut = async () => {
+    await disconnect();
     router.push('/');
     dispatch(logout());
   };

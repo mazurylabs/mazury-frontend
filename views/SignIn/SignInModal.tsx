@@ -24,53 +24,33 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile } = useSelector(userSlice);
-  const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
-
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const handleAuthCredentials = async () => {
-    if (!address) {
-      alert('Please connect your wallet first');
-      return;
-    }
+  const { data, signMessage } = useSignMessage({
+    onSuccess(data, variables) {
+      // Verify signature when sign message succeeds
+      // const address = verifyMessage(variables.message, data)
+      handleSignIn(variables.message as string, data);
+    },
+  });
 
+  const handleSignMessage = async () => {
     const message = await createSiweMessage(
-      address,
+      address as string,
       'Sign in with Ethereum to the app.'
     );
 
-    const { data: signature, error: signatureError } = await signMessage({
-      message,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return { signature, message };
+    signMessage({ message });
   };
 
-  const handleSignIn = async () => {
-    try {
-      if (address) {
-        const credentials = await handleAuthCredentials();
+  const handleSignIn = async (message: string, signature: string) => {
+    const tokens = await getTokens(message, signature, address as string);
 
-        const tokens = await getTokens(
-          credentials?.message,
-          credentials?.signature,
-          address
-        );
+    storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
+    storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
 
-        storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
-        storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
-
-        await handleUser();
-      }
-    } catch (error) {
-      setActiveStep('error');
-    }
+    await handleUser();
   };
 
   const handleUser = async () => {
@@ -101,7 +81,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
 
   const handleInitialise = () => {
     setActiveStep('loading');
-    handleSignIn();
+    handleSignMessage();
   };
 
   const initialise = (
@@ -134,7 +114,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           </div>
         </Button>
 
-        <p className="font-sans text-xs font-medium font-semibold text-indigoGray-40">
+        <p className="font-sans text-xs font-medium text-indigoGray-40">
           Signing is an authentication method and doesn't authorize us to access
           your funds or control your identity
         </p>
