@@ -159,12 +159,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     }
   };
 
-  const handleMinting = (event: any) => {
-    setIsBadgeMinted(true);
-    setIsNewlyMinted(true);
-    setCurrentStep('idle');
-  };
-
   const handleGoToTwitter = () => {
     const twitterLink = `https://twitter.com/intent/tweet?text=Just%20minted%20a%20new%20badge%20on%20@mazuryxyz!%20Check%20out%20my%20profile%20at%20mzry.me/${address}`;
     window.open(twitterLink, '_blank');
@@ -180,16 +174,22 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     ? '0xf2f00C34c2607b6F68Cb5abcedC845A2dCCe8d3b'
     : '0x2a44dd7ff860a93cb8f31c3b4104ba8a7d1c0b64';
 
-  const contractConfig = {
-    addressOrName,
-    contractInterface,
-  };
-
   React.useEffect(() => {
     setIsBadgeMinted(!canBeMinted);
   }, [canBeMinted]);
 
-  useContractEvent(contractConfig, 'Mint', handleMinting);
+  // minting badges may be broken but we dont care about that
+  useContractEvent({
+    address: addressOrName,
+    abi: contractInterface,
+    eventName: 'Mint',
+    listener(node, label, owner) {
+      console.log(node, label, owner);
+      setIsBadgeMinted(true);
+      setIsNewlyMinted(true);
+      setCurrentStep('idle');
+    },
+  });
   useClickOutside(containerRef, handleClose);
 
   const idle = (
