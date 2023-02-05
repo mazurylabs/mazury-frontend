@@ -13,7 +13,6 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/config';
 import { login, logout } from '@/slices/user';
 import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
-import FeedbackFishButton from '@/components/FeedbackFishButton';
 import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -77,7 +76,6 @@ const App = ({ Component, pageProps }: AppProps) => {
       <AnnouncementModal />
 
       <Authenticator />
-      <FeedbackFishButton />
 
       <Script
         strategy="afterInteractive"
