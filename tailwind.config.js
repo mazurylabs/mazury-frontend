@@ -251,6 +251,9 @@ module.exports = {
           800: '#1E1E3B',
           900: '#110F2A',
         },
+        coinbase: '#1652f0',
+        walletconnect: '#3B99FC',
+        metamask: '#F6851B',
       },
       opacity: {
         3: '.03',

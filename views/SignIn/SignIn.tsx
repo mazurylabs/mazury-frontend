@@ -17,6 +17,9 @@ export const SignIn = () => {
   const metamaskConnector = connectors.find(
     (connector) => connector.id === 'metaMask'
   );
+  const coinbaseWalletConnector = connectors.find(
+    (connector) => connector.id === 'coinbaseWallet'
+  );
   const walletConnectConnector = connectors.find(
     (connector) => connector.id === 'walletConnect'
   );
@@ -44,9 +47,9 @@ export const SignIn = () => {
       </h1>
 
       <SocialButton
-        backgroundColor={colors.blue[600]}
-        label="QR Code"
-        iconSrc="/icons/qrcode-scan.svg"
+        backgroundColor={colors.walletconnect}
+        label="WalletConnect"
+        iconSrc="/icons/walletconnect-logo.svg"
         className="mt-3"
         disabled={!walletConnectConnector}
         onClick={() => {
@@ -54,8 +57,18 @@ export const SignIn = () => {
         }}
       />
       <SocialButton
-        backgroundColor={colors.amber[600]}
-        label="Browser wallet"
+        backgroundColor={colors.coinbase}
+        label="Coinbase"
+        iconSrc="/icons/coinbase-logo.svg"
+        className="mt-3"
+        disabled={!coinbaseWalletConnector}
+        onClick={() => {
+          handleConnect(coinbaseWalletConnector);
+        }}
+      />
+      <SocialButton
+        backgroundColor={colors.metamask}
+        label="MetaMask"
         iconSrc="/icons/wallet.svg"
         className="mt-4"
         disabled={!metamaskConnector}
@@ -65,7 +78,7 @@ export const SignIn = () => {
       />
 
       <span className="mx-auto mt-2 text-xs text-indigoGray-50">
-        Use this option for physical devices
+        Use this option for hardware wallets
       </span>
 
       <hr className="mt-12 w-full border border-indigoGray-20" />
