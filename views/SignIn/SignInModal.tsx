@@ -86,6 +86,11 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
     handleSignMessage();
   };
 
+  const handleCancel = () => {
+    window.localStorage.clear();
+    onClose();
+  };
+
   const initialise = (
     <div className="space-y-4 bg-white">
       <div className="space-y-2">
@@ -135,11 +140,8 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
       </div>
 
       <div className="mt-4 flex w-full justify-around gap-4 space-x-2">
-        <Button variant="secondary" onClick={onClose} className="grow">
-          SKIP
-        </Button>
-        <Button onClick={handleInitialise} variant="primary" className="grow">
-          RETRY
+        <Button variant="secondary" onClick={handleCancel} className="grow">
+          CANCEL
         </Button>
       </div>
     </div>
