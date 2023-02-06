@@ -184,7 +184,6 @@ export const BadgeDetail: React.FC<BadgeDetailProps> = ({
     abi: contractInterface,
     eventName: 'Mint',
     listener(node, label, owner) {
-      console.log(node, label, owner);
       setIsBadgeMinted(true);
       setIsNewlyMinted(true);
       setCurrentStep('idle');
