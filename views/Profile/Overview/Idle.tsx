@@ -105,7 +105,7 @@ export const Idle = ({
                   profileCompletionData?.['discover_web3_credentials'] &&
                     'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                 )}
-                onClick={() => handleNavigateViews('discover')}
+                onClick={() => router.push(`${router.asPath}/discover`)}
               >
                 Discover web3 credentials
               </button>
@@ -153,7 +153,6 @@ export const Idle = ({
       <div className="flex space-x-6">
         <CredentialsSection
           credentials={credentials}
-          handleNavigateViews={handleNavigateViews}
           isOwnProfile={isOwnProfile}
           loading={isLoading}
           hasHighlightedCredentials={hasHighlightedCredentials}
@@ -188,19 +187,18 @@ const SectionWrapper: React.FC<{ title: string; icon: string }> = ({
 
 const CredentialsSection: React.FC<{
   credentials: Badge[];
-  handleNavigateViews: (view: OverviewViews) => void;
   isOwnProfile: boolean;
   commonCredentials?: DummyCrendential[];
   loading?: boolean;
   hasHighlightedCredentials: boolean;
 }> = ({
   credentials,
-  handleNavigateViews,
   isOwnProfile,
   commonCredentials,
   loading,
   hasHighlightedCredentials,
 }) => {
+  const router = useRouter();
   const hasCredentials = !!credentials?.length;
 
   if (loading) return <p>Loading...</p>;
@@ -255,7 +253,7 @@ const CredentialsSection: React.FC<{
             >
               <button
                 type="button"
-                onClick={() => handleNavigateViews('discover')}
+                onClick={() => router.push(`${router.asPath}/discover`)}
                 className="text-center font-sans text-xs font-semibold text-indigo-600"
               >
                 Discover web3 credentials

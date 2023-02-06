@@ -2,10 +2,12 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
+import { capitalize } from 'lodash';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { useClickOutside } from 'hooks';
 import { CredentialsCount } from '@/types';
-import { capitalize } from 'lodash';
 
 interface SearchProps {
   onSearch: (searchTerm: string) => void;
@@ -31,6 +33,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
   search,
   defaultView = 'dropdown',
 }) => {
+  const router = useRouter();
   const containerRef = React.useRef<HTMLDivElement>(null!);
   const formRef = React.useRef<HTMLFormElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
@@ -139,16 +142,18 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                     <span>{option.value}</span>
                   </li>
                 ))}
-                <div className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
-                  <p className="font-sans text-sm font-medium text-indigoGray-90">
-                    Discover web3 credentials
-                  </p>
-                  <SVG
-                    height={24}
-                    width={24}
-                    src="/icons/chevron-right-black.svg"
-                  />
-                </div>
+                <Link href={`/people/${router.query.address}/discover`}>
+                  <a className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
+                    <p className="font-sans text-sm font-medium text-indigoGray-90">
+                      Discover web3 credentials
+                    </p>
+                    <SVG
+                      height={24}
+                      width={24}
+                      src="/icons/chevron-right-black.svg"
+                    />
+                  </a>
+                </Link>
               </motion.ul>
             )}
           </AnimatePresence>

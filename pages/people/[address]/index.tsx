@@ -14,7 +14,7 @@ interface ProfileProps {
   highlightedCredentials: Badge[];
 }
 
-export type OverviewViews = 'idle' | 'discover' | 'social';
+export type OverviewViews = 'idle' | 'social';
 
 const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
@@ -25,10 +25,6 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
     OverviewViews,
     { title?: string; view: JSX.Element; handleSave?: () => void }
   > = {
-    discover: {
-      title: 'Discover web3 credentials',
-      view: <DiscoverCredentials />,
-    },
     social: {
       title: 'Social media',
       view: <SocialMedia address={address} />,
