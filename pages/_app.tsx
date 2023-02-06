@@ -16,16 +16,6 @@ import { clearWagmiStorage } from '@/utils';
 import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  React.useEffect(() => {
-    console.log(`                                                   
- ____   _____  _____  _   _   ____  _   _ 
- |    \ (____ |(___  )| | | | / ___)| | | |
- | | | |/ ___ | / __/ | |_| || |    | |_| |
- |_|_|_|\_____|(_____)|____/ |_|     \__  |
-                                    (____/ 
-  `);
-  }, []);
-
   const Authenticator = () => {
     const isMounted = React.useRef(false);
     const dispatch = useDispatch();
@@ -72,8 +62,6 @@ const App = ({ Component, pageProps }: AppProps) => {
         <title>Mazury</title>
         <link rel="icon" href="/new-logo.svg" />
       </NextHead>
-
-      <AnnouncementModal />
 
       <Authenticator />
 
