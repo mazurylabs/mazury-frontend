@@ -68,7 +68,7 @@ export const SignIn = () => {
       />
       <SocialButton
         backgroundColor={colors.metamask}
-        label="MetaMask"
+        label="Browser wallet"
         iconSrc="/icons/wallet.svg"
         className="mt-4"
         disabled={!metamaskConnector}
