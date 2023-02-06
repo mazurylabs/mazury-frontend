@@ -32,8 +32,8 @@ const client = createClient({
       chains,
       options: {
         qrcode: true,
-        version: '2',
-        projectId: 'd1ee6e60454412a6f78208b621f621b2',
+        // version: '2',
+        // projectId: 'd1ee6e60454412a6f78208b621f621b2',
       },
     }),
   ],
