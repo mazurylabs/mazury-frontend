@@ -29,9 +29,11 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
 
   const { data, signMessage } = useSignMessage({
     onSuccess(data, variables) {
-      // Verify signature when sign message succeeds
-      // const address = verifyMessage(variables.message, data)
       handleSignIn(variables.message as string, data);
+    },
+    onError(error) {
+      window.localStorage.clear();
+      setActiveStep('error');
     },
   });
 
@@ -148,16 +150,14 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Connection failed
       </h3>
-      <span className="mt-2 text-sm text-indigoGray-60">
-        Something went wrong.
+      <span className="mt-2 flex-grow text-sm text-indigoGray-60">
+        We couldn't read your wallet signature.<br></br>
+        Please refresh and try again.
       </span>
 
       <div className="mt-4 flex w-full justify-around gap-4 space-x-2">
         <Button variant="secondary" onClick={onClose}>
-          SKIP
-        </Button>
-        <Button onClick={handleInitialise} variant="primary">
-          RETRY
+          GO BACK
         </Button>
       </div>
     </div>
