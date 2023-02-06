@@ -3,52 +3,42 @@ import { useDispatch } from 'react-redux';
 import { SocialButton } from 'components';
 import { colors } from 'utils';
 
-import { Connector, useConnect } from 'wagmi';
+import { Connector, useConnect, useAccount } from 'wagmi';
 import { SignInModal } from './SignInModal';
 import { setAddress } from '@/slices/user';
 
 export const SignIn = () => {
-  const [{ data }, connect] = useConnect();
+  const { address, connector, isConnected } = useAccount();
+  const { connect, connectors, error, isLoading, pendingConnector } =
+    useConnect();
   const dispatch = useDispatch();
   const [showSignInModal, setShowSigninModal] = React.useState(false);
 
-  const metamaskConnector = data.connectors.find(
-    (connector) => connector.id === 'injected'
+  const metamaskConnector = connectors.find(
+    (connector) => connector.id === 'metaMask'
   );
-  const walletConnectConnector = data.connectors.find(
+  const coinbaseWalletConnector = connectors.find(
+    (connector) => connector.id === 'coinbaseWallet'
+  );
+  const walletConnectConnector = connectors.find(
     (connector) => connector.id === 'walletConnect'
   );
-
-  const showErrorPopup = () => {
-    alert(
-      'There was an error while trying to connect your wallet. Please try again later.'
-    );
-  };
 
   const handleCloseSignInModal = () => {
     setShowSigninModal(false);
   };
 
   const handleConnect = async (connector: Connector | undefined) => {
-    if (!connector) {
-      return showErrorPopup();
-    }
-    const res = await connect(connector);
-
-    if (!res || res.error) {
-      return showErrorPopup();
-    }
-
-    setShowSigninModal(true);
-
-    const address = res.data.account;
-
-    if (address) {
-      dispatch(setAddress(address));
-    } else {
-      showErrorPopup();
-    }
+    connect({ connector });
   };
+
+  React.useEffect(() => {
+    if (isConnected) {
+      // this is problematic if the connection is cached
+      setShowSigninModal(true);
+      dispatch(setAddress(address as string));
+    }
+  }, [isConnected]);
 
   return (
     <div className="flex min-h-screen flex-col overflow-hidden py-6 lg:w-[300px]">
@@ -57,9 +47,9 @@ export const SignIn = () => {
       </h1>
 
       <SocialButton
-        backgroundColor={colors.blue[600]}
-        label="QR Code"
-        iconSrc="/icons/qrcode-scan.svg"
+        backgroundColor={colors.walletconnect}
+        label="WalletConnect"
+        iconSrc="/icons/walletconnect-logo.svg"
         className="mt-3"
         disabled={!walletConnectConnector}
         onClick={() => {
@@ -67,7 +57,17 @@ export const SignIn = () => {
         }}
       />
       <SocialButton
-        backgroundColor={colors.amber[600]}
+        backgroundColor={colors.coinbase}
+        label="Coinbase"
+        iconSrc="/icons/coinbase-logo.svg"
+        className="mt-3"
+        disabled={!coinbaseWalletConnector}
+        onClick={() => {
+          handleConnect(coinbaseWalletConnector);
+        }}
+      />
+      <SocialButton
+        backgroundColor={colors.metamask}
         label="Browser wallet"
         iconSrc="/icons/wallet.svg"
         className="mt-4"
@@ -78,7 +78,7 @@ export const SignIn = () => {
       />
 
       <span className="mx-auto mt-2 text-xs text-indigoGray-50">
-        Use this option for physical devices
+        Use this option for hardware wallets
       </span>
 
       <hr className="mt-12 w-full border border-indigoGray-20" />

@@ -24,53 +24,35 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile } = useSelector(userSlice);
-  const [_, signMessage] = useSignMessage();
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
-
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const handleAuthCredentials = async () => {
-    if (!address) {
-      alert('Please connect your wallet first');
-      return;
-    }
+  const { data, signMessage } = useSignMessage({
+    onSuccess(data, variables) {
+      handleSignIn(variables.message as string, data);
+    },
+    onError(error) {
+      window.localStorage.clear();
+      setActiveStep('error');
+    },
+  });
 
+  const handleSignMessage = async () => {
     const message = await createSiweMessage(
-      address,
+      address as string,
       'Sign in with Ethereum to the app.'
     );
 
-    const { data: signature, error: signatureError } = await signMessage({
-      message,
-    });
-
-    if (!signature || signatureError) {
-      alert('Error signing message');
-      return;
-    }
-
-    return { signature, message };
+    signMessage({ message });
   };
 
-  const handleSignIn = async () => {
-    try {
-      if (address) {
-        const credentials = await handleAuthCredentials();
+  const handleSignIn = async (message: string, signature: string) => {
+    const tokens = await getTokens(message, signature, address as string);
 
-        const tokens = await getTokens(
-          credentials?.message,
-          credentials?.signature,
-          address
-        );
+    storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
+    storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
 
-        storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
-        storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
-
-        await handleUser();
-      }
-    } catch (error) {
-      setActiveStep('error');
-    }
+    await handleUser();
   };
 
   const handleUser = async () => {
@@ -101,7 +83,12 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
 
   const handleInitialise = () => {
     setActiveStep('loading');
-    handleSignIn();
+    handleSignMessage();
+  };
+
+  const handleCancel = () => {
+    window.localStorage.clear();
+    onClose();
   };
 
   const initialise = (
@@ -134,7 +121,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
           </div>
         </Button>
 
-        <p className="font-sans text-xs font-medium font-semibold text-indigoGray-40">
+        <p className="font-sans text-xs font-medium text-indigoGray-40">
           Signing is an authentication method and doesn't authorize us to access
           your funds or control your identity
         </p>
@@ -153,11 +140,8 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
       </div>
 
       <div className="mt-4 flex w-full justify-around gap-4 space-x-2">
-        <Button variant="secondary" onClick={onClose} className="grow">
-          SKIP
-        </Button>
-        <Button onClick={handleInitialise} variant="primary" className="grow">
-          RETRY
+        <Button variant="secondary" onClick={handleCancel} className="grow">
+          CANCEL
         </Button>
       </div>
     </div>
@@ -168,16 +152,14 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
       <h3 className="font-demi text-3xl text-indigoGray-90">
         Connection failed
       </h3>
-      <span className="mt-2 text-sm text-indigoGray-60">
-        Something went wrong.
+      <span className="mt-2 flex-grow text-sm text-indigoGray-60">
+        We couldn't read your wallet signature.<br></br>
+        Please refresh and try again.
       </span>
 
       <div className="mt-4 flex w-full justify-around gap-4 space-x-2">
         <Button variant="secondary" onClick={onClose}>
-          SKIP
-        </Button>
-        <Button onClick={handleInitialise} variant="primary">
-          RETRY
+          GO BACK
         </Button>
       </div>
     </div>

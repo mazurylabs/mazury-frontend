@@ -15,7 +15,6 @@ export { useProfileSuggestions } from './useProfileSuggestions';
 export * from './useSearch';
 export { useProtectedRoute } from './useProtectedRoute';
 export { usePosts } from './usePosts';
-export { useSignature } from './useSignature';
 export { useCredentialCount } from './useCredentialCount';
 export { useConnections } from './useConnections';
 export { useCountDown } from './useCountDown';

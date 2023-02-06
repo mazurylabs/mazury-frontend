@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import { disconnect } from '@wagmi/core';
 import SVG from 'react-inlinesvg';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toaster, toast } from 'react-hot-toast';
@@ -112,7 +112,6 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { profile } = useSelector(userSlice);
-  const [_, disconnect] = useAccount();
 
   const handleOpenToOpportunities = async () => {
     const payload = {
@@ -136,8 +135,8 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
     setLoading(false);
   };
 
-  const handleLogOut = () => {
-    disconnect();
+  const handleLogOut = async () => {
+    await disconnect();
     router.push('/');
     dispatch(logout());
   };
