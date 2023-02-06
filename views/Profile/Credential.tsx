@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg';
 import { Checkbox } from 'components';
 import { commify, truncateString } from 'utils';
 import { BadgeIssuer } from 'types';
+import clsx from 'clsx';
 
 interface Credential {
   isSelected?: boolean;
@@ -17,16 +18,6 @@ interface Credential {
   showCheckbox?: boolean;
   isHidden?: boolean;
 }
-
-const credentialClass: Record<BadgeIssuer, string> = {
-  '101': 'rounded h-[65px] min-w-[65px] max-w-[65px] bg-gray-100',
-  buildspace: 'rounded h-[65px] min-w-[65px] max-w-[65px] bg-gray-100',
-  gitpoap: 'rounded-full h-[65px] min-w-[65px] max-w-[65px]',
-  kudos: 'rounded h-[65px] min-w-[65px] max-w-[65px]',
-  mazury: 'h-[65px] max-w-[42]',
-  poap: 'rounded-full h-[65px] min-w-[65px] max-w-[65px]',
-  sismo: ' h-[65px] min-w-[65px] max-w-[65px]',
-};
 
 const Skeleton = () => {
   return (
@@ -77,22 +68,24 @@ export const Credential: React.FC<Credential> & {
         />
       )}
 
-      <div className={`min-w-[40px]`}>
+      <div className={`w-[48px]`}>
         <img
           loading="lazy"
           decoding="async"
-          src={imageSrc}
+          src={imageSrc || '/icons/brokenImage.svg'}
           onError={(event) => {
             event.currentTarget.src = '/icons/brokenImage.svg';
-            event.currentTarget.classList.add('h-[48px]', 'w-[48px]');
           }}
-          className={`shrink-0 overflow-hidden ${credentialClass[variant]}`}
+          className={clsx(
+            'h-[48px] w-full shrink-0 overflow-hidden object-contain',
+            (variant === 'gitpoap' || variant === 'poap') && 'rounded-full'
+          )}
         />
       </div>
 
       <div className="space-y-1">
         <p className="font-sans text-sm font-semibold text-indigoGray-90">
-          {title}
+          {truncateString(title, 35)}
         </p>
         <p className="font-sans text-xs font-medium text-indigoGray-50">
           {truncateString(description, 41)}
