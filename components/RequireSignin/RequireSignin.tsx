@@ -177,7 +177,7 @@ export const RequireSignin = () => {
       initial={{ opacity: 0, zIndex: '-1' }}
       animate={{
         opacity: 1,
-        zIndex: signInOpen ? '10' : '30',
+        zIndex: signInOpen ? '20' : '30',
         transition: {
           delay: prevPath.current ? 0.01 : isSearchPage ? 0 : 20,
         },
