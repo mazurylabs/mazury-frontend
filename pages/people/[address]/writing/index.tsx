@@ -107,7 +107,6 @@ const Writing = ({ address }: WritingProps) => {
             <FilterSearch
               dropdown={{
                 onSelect: () => {},
-                options: [],
                 label: 'credentials',
                 className: 'grow',
               }}
