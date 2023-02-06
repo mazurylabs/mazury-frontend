@@ -5,7 +5,7 @@ import { Layout } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
-import { DiscoverCredentials, Idle, SocialMedia } from 'views/Profile/Overview';
+import { Idle, SocialMedia } from 'views/Profile/Overview';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
