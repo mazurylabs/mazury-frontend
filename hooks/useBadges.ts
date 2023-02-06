@@ -31,7 +31,8 @@ export const useBadges = (
   address: string,
   issuer?: string,
   limit: number = 4,
-  query?: string
+  query?: string,
+  enabled: boolean = true
 ) => {
   const {
     isLoading,
@@ -41,13 +42,14 @@ export const useBadges = (
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    clsx('badges', query && query, issuer && issuer).split(' '),
+    clsx('badges', address, query && query, issuer && issuer).split(' '),
     ({ pageParam }) =>
       fetchBadges({ address, issuer, limit, nextPage: pageParam, query }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.next;
       },
+      enabled,
     }
   );
 

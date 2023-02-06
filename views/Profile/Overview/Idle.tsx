@@ -10,12 +10,13 @@ import { Credential } from '../Credential';
 import { axios } from 'lib/axios';
 import { Badge } from 'types';
 import Axios from 'axios';
+import { useBadges } from '@/hooks';
 
 interface IdleProps {
   handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
-  credentials?: Badge[];
+  highlightedCredentials?: Badge[];
 }
 
 type DummyCrendential = {
@@ -30,8 +31,9 @@ export const Idle = ({
   handleNavigateViews,
   address,
   isOwnProfile,
-  credentials,
+  highlightedCredentials,
 }: IdleProps) => {
+  const hasHighlightedCredentials = !!highlightedCredentials?.length;
   const router = useRouter();
   const [showLess, setShowLess] = React.useState(false);
 
@@ -41,7 +43,17 @@ export const Idle = ({
     enabled: isOwnProfile,
   });
 
-  const highlightedCredentials = credentials;
+  const { badges, isLoading } = useBadges(
+    address,
+    undefined,
+    8,
+    undefined,
+    !hasHighlightedCredentials
+  );
+
+  const credentials = hasHighlightedCredentials
+    ? highlightedCredentials
+    : badges;
 
   const profileCompletionData = profileCompletion.data;
   const completionDataArray = Object.values(profileCompletionData || {});
@@ -140,10 +152,11 @@ export const Idle = ({
       )}
       <div className="flex space-x-6">
         <CredentialsSection
-          credentials={highlightedCredentials || []}
+          credentials={credentials}
           handleNavigateViews={handleNavigateViews}
           isOwnProfile={isOwnProfile}
-          loading={false}
+          loading={isLoading}
+          hasHighlightedCredentials={hasHighlightedCredentials}
           // commonCredentials={
           //   isOwnProfile ? undefined : dummyCredentials.slice(0, 2)
           // }
@@ -179,12 +192,14 @@ const CredentialsSection: React.FC<{
   isOwnProfile: boolean;
   commonCredentials?: DummyCrendential[];
   loading?: boolean;
+  hasHighlightedCredentials: boolean;
 }> = ({
   credentials,
   handleNavigateViews,
   isOwnProfile,
   commonCredentials,
   loading,
+  hasHighlightedCredentials,
 }) => {
   const hasCredentials = !!credentials?.length;
 
@@ -193,7 +208,11 @@ const CredentialsSection: React.FC<{
   return (
     <SectionWrapper
       icon="/icons/credentials-grey.svg"
-      title={isOwnProfile ? 'Top credentials' : 'Highlighted credentials'}
+      title={
+        hasHighlightedCredentials
+          ? 'Highlighted credentials'
+          : 'Top credentials'
+      }
     >
       <div className="space-y-10">
         <div
@@ -275,7 +294,7 @@ const WritingSection = () => {
     <SectionWrapper icon="/icons/writing-grey.svg" title="Highlighted writing">
       <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
         <SVG width={149} height={53} src="/icons/credentials-listing.svg" />
-        <p className="text-center font-sans text-indigoGray-90">
+        <p className="text-center font-sans text-sm text-indigoGray-90">
           Discover Mirror and Lenster to show off your web3 network and
           knowledge
         </p>
@@ -284,6 +303,7 @@ const WritingSection = () => {
             target="_blank"
             rel="noreferrer"
             className="flex cursor-pointer items-center space-x-2"
+            href="https://www.lens.xyz"
           >
             <SVG src="/icons/lens-green.svg" height={16} width={16} />
             <span className="font-sans text-xs font-semibold text-[#01501F]">
@@ -295,6 +315,7 @@ const WritingSection = () => {
             target="_blank"
             rel="noreferrer"
             className="flex cursor-pointer items-center space-x-2"
+            href="https://www.mirror.xyz"
           >
             <SVG src="/icons/mirror-icon-blue.svg" height={16} width={16} />
             <span className="font-sans text-xs font-semibold text-blue-600">
