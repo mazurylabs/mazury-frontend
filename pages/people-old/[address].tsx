@@ -113,7 +113,7 @@ const Profile: React.FC<Props> = ({ address }) => {
 
   const { connectionStatus } = useConnectionStatus(eth_address);
   const { posts } = usePosts(eth_address);
-  const { credentialCount } = useCredentialCount(eth_address);
+  const data = useCredentialCount(eth_address);
   const scrollPos = useScrollPosition();
   const [badgeIssuer, setBadgeIssuer] = useState<BadgeIssuer>('mazury');
   const [sharedCredential, setSharedCredential] = useState<Badge | null>(null!);
@@ -739,7 +739,9 @@ const Profile: React.FC<Props> = ({ address }) => {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-bold text-indigoGray-50">
-                      {getMetricDisplayValue(credentialCount?.total)}
+                      {getMetricDisplayValue(
+                        (data.data?.credentials?.total as any) || 0
+                      )}
                     </span>
 
                     <span className="text-xs font-medium uppercase text-indigoGray-40">
@@ -789,7 +791,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                       }}
                       className="font-serif font-bold"
                     >
-                      {getMetricDisplayValue(credentialCount?.total)}
+                      {getMetricDisplayValue(
+                        data.data?.credentials?.total as any
+                      )}
                     </motion.span>
                     <div className="text-sm uppercase text-indigoGray-60 opacity-60">
                       Credentials
@@ -945,7 +949,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.mazury)}
+                          {getMetricDisplayValue(
+                            data.data?.credentials?.mazury as any
+                          )}
                         </span>
                       </div>
                     }
@@ -965,7 +971,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.poap)}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.poap || '0')
+                          )}
                         </span>
                       </div>
                     }
@@ -985,7 +993,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.gitpoap)}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.gitpoap || '0')
+                          )}
                         </span>
                       </div>
                     }
@@ -1005,7 +1015,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.buildspace)}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.buildspace || '0')
+                          )}
                         </span>
                       </div>
                     }
@@ -1025,7 +1037,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.sismo)}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.sismo || '0')
+                          )}
                         </span>
                       </div>
                     }
@@ -1045,7 +1059,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.[101])}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.[101] || '0')
+                          )}
                         </span>
                       </div>
                     }
@@ -1065,7 +1081,9 @@ const Profile: React.FC<Props> = ({ address }) => {
                               : 'text-indigoGray-40'
                           }`}
                         >
-                          {getMetricDisplayValue(credentialCount?.kudos)}
+                          {getMetricDisplayValue(
+                            Number(data.data?.credentials?.kudos || '0')
+                          )}
                         </span>
                       </div>
                     }
