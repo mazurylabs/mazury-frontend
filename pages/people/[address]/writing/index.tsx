@@ -89,35 +89,10 @@ interface Post {
 const Writing = ({ address }: WritingProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
 
-  const navItems = [
-    { label: 'Overview', isActive: false, href: `/people/${address}` },
-    {
-      label: 'Credentials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/credentials.svg',
-      href: `/people/${address}/credentials`,
-    },
-    {
-      label: 'Writing',
-      isActive: true,
-      value: '0',
-      icon: '/icons/writing-active.svg',
-      href: `/people/${address}/writing`,
-    },
-    {
-      label: 'Socials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/dao.svg',
-      href: `/people/${address}/socials`,
-    },
-  ];
-
   return (
     <Layout variant="plain">
       <Container
-        navItems={navItems}
+        navItems={Container.useNavItems({ address, activeItem: 'Writing' })}
         summary={
           <ProfileSummary
             address={address}

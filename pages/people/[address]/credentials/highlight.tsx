@@ -39,6 +39,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
   const useHighlightCredentialsMutation = useHighlightCredentials({
     onComplete: router.back,
+    address,
   });
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -197,15 +198,17 @@ export const highlightCredentials = ({ data }: { data: string[] }) => {
 
 export const useHighlightCredentials = ({
   onComplete,
+  address,
 }: {
   onComplete?: () => void;
+  address: string;
 }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     onSuccess: () => {
       onComplete?.();
-      queryClient.invalidateQueries(['badges']);
+      queryClient.invalidateQueries(['badges', address]);
     },
     mutationFn: highlightCredentials,
   });

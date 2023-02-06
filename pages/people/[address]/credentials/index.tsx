@@ -11,7 +11,7 @@ import {
   FilterSearch,
   Credential,
 } from 'views/Profile';
-import { useAccount, useBadges } from 'hooks';
+import { useAccount, useBadges, useCredentialCount } from 'hooks';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
@@ -39,39 +39,20 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     isLoading,
   } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
 
+  const credentialCount = useCredentialCount(address);
+
   const handleSearch = (query: string) => {
     setCredentialsFilter((prev) => ({ ...prev, query }));
   };
 
-  const navItems = [
-    { label: 'Overview', isActive: false, href: `/people/${address}` },
-    {
-      label: 'Credentials',
-      isActive: true,
-      value: '0',
-      icon: '/icons/credentials-active.svg',
-      href: `/people/${address}/credentials`,
-    },
-    {
-      label: 'Writing',
-      isActive: false,
-      value: '0',
-      icon: '/icons/writing-black.svg',
-      href: `/people/${address}/writing`,
-    },
-    {
-      label: 'Socials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/dao.svg',
-      href: `/people/${address}/socials`,
-    },
-  ];
+  const handleSelect = (issuer?: string) => {
+    setCredentialsFilter((prev) => ({ ...prev, issuer: issuer || '' }));
+  };
 
   return (
     <Layout variant="plain">
       <Container
-        navItems={navItems}
+        navItems={Container.useNavItems({ address, activeItem: 'Credentials' })}
         summary={
           <ProfileSummary
             address={address}
@@ -85,8 +66,8 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
           <div className="flex w-full items-center space-x-4">
             <FilterSearch
               dropdown={{
-                onSelect: () => {},
-                options: [],
+                onSelect: handleSelect,
+                options: credentialCount.data?.credentials,
                 label: 'credentials',
                 className: 'grow',
               }}

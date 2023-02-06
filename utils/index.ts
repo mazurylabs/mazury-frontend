@@ -32,7 +32,7 @@ export const goToLink = (link: string) => {
   window.open(link, '_blank');
 };
 
-function capitalize(word: string) {
+export function capitalize(word: string) {
   return word.charAt(0).toUpperCase() + word.substring(1);
 }
 

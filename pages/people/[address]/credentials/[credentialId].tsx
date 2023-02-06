@@ -95,6 +95,7 @@ const CredentialDetails = ({
         highlighted: !data?.highlighted,
       }));
     },
+    address,
   });
 
   const useHideCredentialMutation = useHideCredential({

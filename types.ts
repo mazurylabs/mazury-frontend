@@ -335,3 +335,19 @@ export type CredentialCount = {
   '101': number;
   sismo: number;
 };
+
+export interface CredentialsCount {
+  credentials: {
+    101: string;
+    buildspace: string;
+    gitpoap: string;
+    kudos: string;
+    mazury: string;
+    poap: string;
+    sismo: string;
+    total: string;
+  };
+  post: {
+    total: string;
+  };
+}
