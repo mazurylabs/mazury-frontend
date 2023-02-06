@@ -1,10 +1,14 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
+import { useQuery } from 'react-query';
 
 import { Button, Modal } from 'components';
 import { Navbar } from './Navbar';
 import { NavItem } from './type';
+import { axios } from 'lib/axios';
+import { Badge, CredentialsCount } from 'types';
+import { useCredentialCount } from 'hooks';
 
 interface ContainerProps {
   summary: React.ReactElement;
@@ -15,7 +19,9 @@ interface ContainerProps {
   isSaving?: boolean;
 }
 
-export const Container: React.FC<ContainerProps> = ({
+export const Container: React.FC<ContainerProps> & {
+  useNavItems: typeof useNavItems;
+} = ({
   summary,
   title,
   children,
@@ -107,3 +113,39 @@ export const Container: React.FC<ContainerProps> = ({
     </div>
   );
 };
+
+const useNavItems = ({
+  address,
+  activeItem,
+}: {
+  address: string;
+  activeItem: string;
+}) => {
+  const credentialCount = useCredentialCount(address);
+
+  const navItems = [
+    { label: 'Overview', isActive: false, href: `/people/${address}` },
+    {
+      label: 'Credentials',
+      isActive: false,
+      value: credentialCount.data?.credentials?.total || '0',
+      icon: '/icons/credentials.svg',
+      href: `/people/${address}/credentials`,
+    },
+    {
+      label: 'Writing',
+      isActive: false,
+      value: credentialCount.data?.post?.total || '0',
+      icon: '/icons/writing-black.svg',
+      href: `/people/${address}/writing`,
+    },
+  ];
+
+  return navItems.map((item) =>
+    item.label === activeItem
+      ? { ...item, isActive: true, icon: `/icons/${activeItem}-active.svg` }
+      : item
+  );
+};
+
+Container.useNavItems = useNavItems;

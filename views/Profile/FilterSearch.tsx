@@ -1,7 +1,11 @@
-import { useClickOutside } from '@/hooks';
 import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
+
+import { useClickOutside } from 'hooks';
+import { CredentialsCount } from '@/types';
+import { capitalize } from 'lodash';
 
 interface SearchProps {
   onSearch: (searchTerm: string) => void;
@@ -9,8 +13,8 @@ interface SearchProps {
 
 interface DropdownProps {
   label: string;
-  options: string[];
-  onSelect: (option: string) => void;
+  options?: CredentialsCount['credentials'];
+  onSelect: (option?: string) => void;
   className?: string;
 }
 
@@ -22,38 +26,27 @@ interface FilterSearchProps {
   defaultView?: View;
 }
 
-const credentials = [
-  'GitPOAP',
-  'Mazury',
-  'POAP',
-  'Buildspace',
-  'Sismo',
-  '101',
-  'Kudos',
-];
-
 export const FilterSearch: React.FC<FilterSearchProps> = ({
   dropdown,
   search,
   defaultView = 'dropdown',
 }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null!);
   const formRef = React.useRef<HTMLFormElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
   const [view, setView] = React.useState<View>(() => defaultView);
   const [toggleDropdown, setToggleDropdown] = React.useState(false);
-  const [selectedOption, setSelectedOption] = React.useState<string>();
+  const [selectedOption, setSelectedOption] = React.useState<string>(
+    `All ${dropdown?.label.toLowerCase()}`
+  );
   const [isFocused, setIsFocused] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
 
+  useClickOutside(containerRef, () => setToggleDropdown(false));
   useClickOutside(formRef, () => {
     setIsFocused(false);
     !searchTerm && setView(defaultView);
   });
-
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    dropdown?.onSelect(option);
-  };
 
   const handleView = () => {
     setView('search');
@@ -65,31 +58,101 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
     search?.onSearch(searchTerm);
   };
 
+  const defaultOption = `All ${dropdown?.label.toLowerCase()}`;
+
+  const handleSelectOption = (option?: string) => {
+    setSelectedOption(option || defaultOption);
+    dropdown?.onSelect(option);
+    setToggleDropdown(false);
+  };
+
+  const formattedOptions = dropdown?.options
+    ? Object.keys(dropdown.options)
+        .filter((item) => item !== 'total')
+        .map((item) => ({
+          title: item,
+          value: (dropdown.options as any)[item],
+        }))
+    : [];
+
   return (
     <div className="relative h-12 w-full">
       <div
         className={clsx(
-          'absolute inset-0 flex h-full grow items-center space-x-4',
+          'absolute inset-0 z-10 flex h-full grow items-center space-x-4',
           view === 'dropdown' ? 'visible' : 'invisible'
         )}
       >
-        <button
-          type="button"
-          className={clsx(
-            'relative flex h-full items-center justify-between rounded-lg  bg-indigoGray-5 px-4',
-            dropdown?.className
-          )}
-          //   onClick={() => setToggleDropdown(!toggleDropdown)}
+        <div
+          className={clsx('relative flex h-full', dropdown?.className)}
+          ref={containerRef}
         >
-          <p className="font-sansMid text-sm font-medium text-indigoGray-50">
-            {selectedOption || `All ${dropdown?.label.toLowerCase()}`}
-          </p>
-          <SVG src="/icons/chevron-down.svg" height={24} width={24} />
+          <button
+            type="button"
+            className={clsx(
+              'flex h-full items-center justify-between rounded-lg  bg-indigoGray-5 px-4',
+              dropdown?.className
+            )}
+            onClick={() => setToggleDropdown(!toggleDropdown)}
+          >
+            <p className="font-sansMid text-sm font-medium text-indigoGray-50">
+              {capitalize(selectedOption)}
+            </p>
+            <SVG
+              src="/icons/chevron-down.svg"
+              height={24}
+              width={24}
+              className={clsx(toggleDropdown && 'rotate-180')}
+            />
+          </button>
 
-          {toggleDropdown && (
-            <div className="absolute top-0 left-0 z-10 h-[400px] w-full bg-red-200"></div>
-          )}
-        </button>
+          <AnimatePresence>
+            {toggleDropdown && (
+              <motion.ul
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute top-[100%] left-0 z-10 h-[432px] w-full overflow-hidden rounded-lg bg-indigoGray-5"
+              >
+                <li
+                  className={clsx(
+                    'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium text-indigoGray-90',
+                    selectedOption === defaultOption && 'text-indigo-600'
+                  )}
+                  onClick={() => handleSelectOption()}
+                >
+                  All {dropdown?.label.toLowerCase()}
+                  <span>{dropdown?.options?.total || 0}</span>
+                </li>
+                {formattedOptions.map((option) => (
+                  <li
+                    key={option.title}
+                    className={clsx(
+                      'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium',
+                      selectedOption === option.title
+                        ? 'text-indigo-600'
+                        : 'text-indigoGray-30'
+                    )}
+                    onClick={() => handleSelectOption(option.title)}
+                  >
+                    {capitalize(option.title)}
+                    <span>{option.value}</span>
+                  </li>
+                ))}
+                <div className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
+                    Discover web3 credentials
+                  </p>
+                  <SVG
+                    height={24}
+                    width={24}
+                    src="/icons/chevron-right-black.svg"
+                  />
+                </div>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </div>
 
         <button
           type="button"

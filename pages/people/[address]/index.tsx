@@ -21,31 +21,6 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
   const [selectedOverviewViews, setSelectedOverviewViews] =
     React.useState<OverviewViews>('idle');
 
-  const navItems = [
-    { label: 'Overview', isActive: true, href: `/people/${address}` },
-    {
-      label: 'Credentials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/credentials.svg',
-      href: `/people/${address}/credentials`,
-    },
-    {
-      label: 'Writing',
-      isActive: false,
-      value: '0',
-      icon: '/icons/writing-black.svg',
-      href: `/people/${address}/writing`,
-    },
-    {
-      label: 'Socials',
-      isActive: false,
-      value: '0',
-      icon: '/icons/dao.svg',
-      href: `/people/${address}/socials`,
-    },
-  ];
-
   const overviewViews: Record<
     OverviewViews,
     { title?: string; view: JSX.Element; handleSave?: () => void }
@@ -63,7 +38,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
         <Idle
           address={address}
           isOwnProfile={isOwnProfile}
-          credentials={highlightedCredentials}
+          highlightedCredentials={highlightedCredentials}
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
@@ -82,7 +57,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
             : undefined
         }
         handleSave={overviewViews[selectedOverviewViews].handleSave}
-        navItems={navItems}
+        navItems={Container.useNavItems({ address, activeItem: 'Overview' })}
         summary={
           <ProfileSummary
             address={address}
