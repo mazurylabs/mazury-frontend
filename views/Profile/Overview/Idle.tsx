@@ -3,14 +3,15 @@ import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
+import Axios from 'axios';
+import Link from 'next/link';
 
 import { OverviewViews } from 'pages/people/[address]';
 import { Progress } from 'components';
 import { Credential } from '../Credential';
 import { axios } from 'lib/axios';
 import { Badge } from 'types';
-import Axios from 'axios';
-import { useBadges } from '@/hooks';
+import { useBadges } from 'hooks';
 
 interface IdleProps {
   handleNavigateViews: (view: OverviewViews) => void;
@@ -257,13 +258,11 @@ const CredentialsSection: React.FC<{
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
-              <button
-                type="button"
-                onClick={() => router.push(`${router.asPath}/discover`)}
-                className="text-center font-sans text-xs font-semibold text-indigo-600"
-              >
-                Discover web3 credentials
-              </button>
+              <Link href={`/people/${router.query.address}/discover`}>
+                <a className="text-center font-sans text-xs font-semibold text-indigo-600">
+                  Discover web3 credentials
+                </a>
+              </Link>
             </div>
           )}
         </div>
