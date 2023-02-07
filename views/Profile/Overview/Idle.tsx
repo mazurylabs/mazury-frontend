@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import clsx from 'clsx';
 import Axios from 'axios';
 import Link from 'next/link';
@@ -39,6 +39,7 @@ export const Idle = ({
   const hasHighlightedCredentials = !!highlightedCredentials?.length;
   const router = useRouter();
   const [showLess, setShowLess] = React.useState(false);
+  const queryClient = new QueryClient();
 
   const profileCompletion = useQuery({
     queryKey: 'profileCompletion',
@@ -53,6 +54,11 @@ export const Idle = ({
     undefined,
     !hasHighlightedCredentials
   );
+
+  const handleMazuryTalent = async () => {
+    await axios.post(`/profiles/${address}/mazury_talent/`, {});
+    queryClient.invalidateQueries('profileCompletion');
+  };
 
   const credentials = hasHighlightedCredentials
     ? highlightedCredentials
@@ -146,6 +152,7 @@ export const Idle = ({
                   profileCompletionData?.['sign_up_mazury_talent'] &&
                     'pointer-events-none font-medium text-indigoGray-40 line-through'
                 )}
+                onClick={handleMazuryTalent}
               >
                 Learn about Mazury Talent
               </a>
