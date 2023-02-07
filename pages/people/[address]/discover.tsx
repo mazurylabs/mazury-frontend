@@ -32,7 +32,6 @@ const Discover = ({ address }: ProfileProps) => {
       <Container
         title={'Discover web3 credentials'}
         handleGoBack={router.back}
-        navItems={Container.useNavItems({ address, activeItem: 'Overview' })}
         summary={
           <ProfileSummary
             address={address}
