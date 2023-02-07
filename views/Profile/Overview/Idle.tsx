@@ -27,6 +27,8 @@ type DummyCrendential = {
   image: string;
 };
 
+const skeletons = Array(5).fill('skeleton');
+
 export const Idle = ({
   handleNavigateViews,
   address,
@@ -201,8 +203,6 @@ const CredentialsSection: React.FC<{
   const router = useRouter();
   const hasCredentials = !!credentials?.length;
 
-  if (loading) return <p>Loading...</p>;
-
   return (
     <SectionWrapper
       icon="/icons/credentials-grey.svg"
@@ -219,7 +219,13 @@ const CredentialsSection: React.FC<{
             !hasCredentials && 'min-h-[331px] pt-8'
           )}
         >
-          {hasCredentials ? (
+          {loading ? (
+            <div className="mb-[85px] w-full space-y-4">
+              {skeletons.map((item, index) => (
+                <Credential.Skeleton key={index + item} />
+              ))}
+            </div>
+          ) : hasCredentials ? (
             <div className="space-y-4">
               {credentials.map(({ badge_type, id }) => (
                 <Credential
@@ -244,7 +250,7 @@ const CredentialsSection: React.FC<{
               </p>
             </div>
           )}
-          {isOwnProfile && (
+          {isOwnProfile && !loading && (
             <div
               className={clsx(
                 'mt-5 w-fit self-center',
