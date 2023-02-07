@@ -18,23 +18,13 @@ import { axios } from 'lib/axios';
 import { commify } from 'utils';
 import { useHighlightCredentials } from './highlight';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import clsx from 'clsx';
 
 interface HighlightProps {
   address: string;
   credentialId: string;
   highlightedCredentials: Badge[];
 }
-
-const credentialClass: Record<BadgeIssuer, string> = {
-  '101': 'h-[230px] w-[230px] rounded bg-gray-100 mb-4',
-  buildspace: 'h-[200px] w-[120px] rounded mb-4',
-  gitpoap: 'h-[230px] w-[230px] rounded-full mb-4',
-  kudos: 'h-[230px] w-[230px] rounded mb-4',
-  mazury:
-    'h-[260px] w-[175px] md:h-[320px] md:w-[215px] lg:h-[300px] lg:w-[189px] mb-4',
-  poap: 'h-[230px] w-[230px] rounded-full mb-4',
-  sismo: 'h-[230px] w-[230px] rounded-sm bg-gray-100 mb-4',
-};
 
 const Skeleton = () => {
   return (
@@ -135,6 +125,8 @@ const CredentialDetails = ({
     } as any);
   };
 
+  const variant = data?.badge_type.issuer.name;
+
   return (
     <Layout variant="plain">
       <Container
@@ -153,15 +145,18 @@ const CredentialDetails = ({
         ) : (
           <div className="space-y-8 rounded-lg bg-indigoGray-5 p-6">
             <div className="flex space-x-6">
-              <div className="shrink-0 px-9">
+              <div className="h-[200px] w-[200px] shrink-0">
                 <img
                   src={data?.badge_type.image}
-                  className={`${credentialClass.buildspace}`}
+                  className={clsx(
+                    'h-full w-full rounded object-contain',
+                    (variant === 'gitpoap' || variant === 'poap') &&
+                      'rounded-full',
+                    (variant === 'sismo' || variant === '101') &&
+                      'rounded-sm bg-gray-100'
+                  )}
                   onError={(event) => {
                     event.currentTarget.src = '/icons/brokenImage.svg';
-                    event.currentTarget.classList.add(
-                      credentialClass.buildspace.split(' ').join(',')
-                    );
                   }}
                   alt={'title' + ' badge'}
                 />
