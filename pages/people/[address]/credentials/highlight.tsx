@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
+import { capitalize } from 'lodash';
 
 import { Button, Checkbox, Layout } from 'components';
 import {
@@ -12,8 +13,13 @@ import {
   FilterSearch,
   ProfileSummary,
 } from 'views/Profile';
-import { useAccount, useBadges, useClickOutside } from 'hooks';
-import { Badge, Profile } from 'types';
+import {
+  useAccount,
+  useBadges,
+  useClickOutside,
+  useCredentialCount,
+} from 'hooks';
+import { Badge, CredentialsCount, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
@@ -24,19 +30,10 @@ interface HighlightProps {
 
 const skeletons = Array(12).fill('skeleton');
 
-const credentials = [
-  'GitPOAP',
-  'Mazury',
-  'POAP',
-  'Buildspace',
-  'Sismo',
-  '101',
-  'Kudos',
-];
-
 const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const credentialCount = useCredentialCount(address);
   const useHighlightCredentialsMutation = useHighlightCredentials({
     onComplete: router.back,
     address,
@@ -122,7 +119,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
             </div>
 
             <CredentialsFilter
-              credentials={credentials}
+              credentials={credentialCount.data?.credentials}
               onApply={(issuer) =>
                 setCredentialsFilter((prev) => ({ ...prev, issuer }))
               }
@@ -219,7 +216,7 @@ const CredentialsFilter = ({
   credentials,
 }: {
   onApply: (issuer: string) => void;
-  credentials: string[];
+  credentials?: CredentialsCount['credentials'];
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null!);
   const [isToggled, setIsToggled] = React.useState(false);
@@ -254,6 +251,15 @@ const CredentialsFilter = ({
     setBadgeIssuer((prev) => [...prev, selectedItem]);
   };
 
+  const formattedOptions = credentials
+    ? Object.keys(credentials)
+        .filter((item) => item !== 'total')
+        .map((item) => ({
+          title: item,
+          value: (credentials as any)[item],
+        }))
+    : [];
+
   return (
     <div className="relative w-fit" ref={containerRef}>
       <button
@@ -277,24 +283,26 @@ const CredentialsFilter = ({
             className="border-[#e2e6f60] absolute top-[100%] z-10 mt-1 flex h-fit w-[400px] flex-col rounded-3xl border bg-white p-6 pb-2"
           >
             <div className="space-y-4">
-              {credentials.map((credential) => (
+              {formattedOptions.map((credential) => (
                 <div
                   className="flex cursor-pointer items-center space-x-4"
-                  key={credential}
-                  onClick={() => handleCheck(credential)}
+                  key={credential.title}
+                  onClick={() => handleCheck(credential.title)}
                 >
                   <Checkbox
                     innerClassName="h-4 w-4"
                     outerClassName="h-4 w-4"
-                    checked={badgeIssuer.includes(credential.toLowerCase())}
+                    checked={badgeIssuer.includes(
+                      credential.title.toLowerCase()
+                    )}
                     setChecked={() => {}}
                     label=""
-                    id={credential}
+                    id={credential.title}
                   />
                   <p className="font-sans text-lg font-medium text-indigoGray-90">
-                    {credential}{' '}
+                    {capitalize(credential.title)}{' '}
                     <span className="text-base font-normal text-indigoGray-40">
-                      (13 056)
+                      ({credential.value})
                     </span>
                   </p>
                 </div>
