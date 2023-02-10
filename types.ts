@@ -262,6 +262,9 @@ export interface Activity {
 export interface MirrorPost {
   author: {
     address: string;
+    avatar: string;
+    ens_name: string;
+    username: string;
   };
   body: string;
   digest: string;
@@ -279,6 +282,9 @@ export interface Post {
   id: string;
   author: {
     eth_address: string;
+    avatar: string;
+    username: string;
+    ens_name: string;
   };
   posted_at: string;
   title: string;
@@ -347,7 +353,7 @@ export interface CredentialsCount {
     sismo: string;
     total: string;
   };
-  post: {
+  posts: {
     total: string;
   };
 }
