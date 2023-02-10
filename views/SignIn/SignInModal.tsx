@@ -14,6 +14,8 @@ import { userSlice } from '@/selectors';
 import { login } from '@/slices/user';
 import { SidebarContext } from '@/contexts';
 
+import * as Sentry from '@sentry/nextjs';
+
 type Steps = 'initialise' | 'loading' | 'error';
 
 interface SignInModalProps {
@@ -34,6 +36,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
     onError(error) {
       window.localStorage.clear();
       setActiveStep('error');
+      Sentry.captureException(error);
     },
   });
 
