@@ -64,7 +64,7 @@ export const useBadges = (
   return {
     badges: queryResponse?.results || [],
     error,
-    count: queryResponse?.results?.length,
+    count: queryResponse?.count || 0,
     handleFetchMore: fetchNextPage,
     hasMoreData: hasNextPage,
     isLoading: isLoading,
