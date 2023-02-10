@@ -140,7 +140,7 @@ const useNavItems = ({
     {
       label: 'Writing',
       isActive: false,
-      value: credentialCount.data?.post?.total || '0',
+      value: credentialCount.data?.posts?.total || '0',
       icon: '/icons/writing-black.svg',
       href: `/people/${address}/writing`,
     },
