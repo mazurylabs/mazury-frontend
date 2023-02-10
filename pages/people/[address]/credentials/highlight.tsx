@@ -5,11 +5,13 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { capitalize } from 'lodash';
+import clsx from 'clsx';
 
 import { Button, Checkbox, Layout } from 'components';
 import {
   Container,
   Credential,
+  EmptyState,
   FilterSearch,
   ProfileSummary,
 } from 'views/Profile';
@@ -31,6 +33,7 @@ interface HighlightProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
+  const [resetFilters, setResetFilters] = React.useState(false);
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
   const credentialCount = useCredentialCount(address);
@@ -77,6 +80,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
 
   const handleSearch = (query: string) => {
     setCredentialsFilter((prev) => ({ ...prev, query }));
+    setResetFilters(false);
   };
 
   return (
@@ -109,6 +113,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
             search={{
               onSearch: handleSearch,
             }}
+            resetFilters={resetFilters}
           />
 
           <div className="flex space-x-6">
@@ -120,38 +125,50 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
 
             <CredentialsFilter
               credentials={credentialCount.data?.credentials}
-              onApply={(issuer) =>
-                setCredentialsFilter((prev) => ({ ...prev, issuer }))
-              }
+              onApply={(issuer) => {
+                setCredentialsFilter((prev) => ({ ...prev, issuer }));
+                setResetFilters(false);
+              }}
+              resetFilters={resetFilters}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-8">
-            {isLoading
-              ? skeletons.map((item, index) => (
-                  <Credential.Skeleton key={index + item} />
-                ))
-              : badges?.map(({ id: badgeId, badge_type }) => {
-                  return (
-                    <Credential
-                      key={badge_type.id}
-                      imageSrc={badge_type.image}
-                      title={badge_type.title}
-                      variant={badge_type.issuer.name}
-                      totalSupply={badge_type.total_supply}
-                      description={badge_type.description}
-                      showCheckbox={true}
-                      isSelected={selectedCredentials.includes(badgeId)}
-                      onSelect={() => handleSelectCredential(badgeId)}
-                      className={`${
-                        selectedCredentials.length >= 8 &&
-                        !selectedCredentials.includes(badgeId)
-                          ? 'cursor-not-allowed'
-                          : ''
-                      } `}
-                    />
-                  );
-                })}
+          <div
+            className={clsx(
+              badges.length || isLoading
+                ? 'grid grid-cols-2 gap-6'
+                : 'flex items-center justify-center'
+            )}
+          >
+            {isLoading ? (
+              skeletons.map((item, index) => (
+                <Credential.Skeleton key={index + item} />
+              ))
+            ) : badges.length ? (
+              badges?.map(({ id: badgeId, badge_type }) => {
+                return (
+                  <Credential
+                    key={badge_type.id}
+                    imageSrc={badge_type.image}
+                    title={badge_type.title}
+                    variant={badge_type.issuer.name}
+                    totalSupply={badge_type.total_supply}
+                    description={badge_type.description}
+                    showCheckbox={true}
+                    isSelected={selectedCredentials.includes(badgeId)}
+                    onSelect={() => handleSelectCredential(badgeId)}
+                    className={`${
+                      selectedCredentials.length >= 8 &&
+                      !selectedCredentials.includes(badgeId)
+                        ? 'cursor-not-allowed'
+                        : ''
+                    } `}
+                  />
+                );
+              })
+            ) : (
+              <EmptyState onReset={() => setResetFilters(true)} />
+            )}
           </div>
 
           {hasMoreData && (
@@ -214,9 +231,11 @@ export const useHighlightCredentials = ({
 const CredentialsFilter = ({
   onApply,
   credentials,
+  resetFilters,
 }: {
   onApply: (issuer: string) => void;
   credentials?: CredentialsCount['credentials'];
+  resetFilters: boolean;
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null!);
   const [isToggled, setIsToggled] = React.useState(false);
@@ -259,6 +278,12 @@ const CredentialsFilter = ({
           value: (credentials as any)[item],
         }))
     : [];
+
+  React.useEffect(() => {
+    if (resetFilters) {
+      handleReset();
+    }
+  }, [resetFilters]);
 
   return (
     <div className="relative w-fit" ref={containerRef}>

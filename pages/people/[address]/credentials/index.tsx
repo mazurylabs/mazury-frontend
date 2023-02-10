@@ -3,6 +3,7 @@ import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 
 import { Button, Layout } from 'components';
 import {
@@ -10,6 +11,7 @@ import {
   ProfileSummary,
   FilterSearch,
   Credential,
+  EmptyState,
 } from 'views/Profile';
 import { useAccount, useBadges, useCredentialCount } from 'hooks';
 import { Badge, Profile } from 'types';
@@ -23,6 +25,7 @@ interface CredentialsProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
+  const [resetFilters, setResetFilters] = React.useState(false);
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
 
@@ -73,6 +76,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
               }}
               search={{ onSearch: handleSearch }}
               defaultView="dropdown"
+              resetFilters={resetFilters}
             />
 
             {isOwnProfile && (
@@ -95,7 +99,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
               <p className="font-sans text-sm text-indigoGray-50">
                 Highlighted credentials
               </p>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-2 gap-6">
                 {highlightedCredentials.map(({ badge_type, id }) => (
                   <Credential
                     key={id + 'highlighted'}
@@ -119,46 +123,54 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
               All credentials
             </p>
 
-            <div className="mb-6 grid grid-cols-2 gap-8">
-              {isLoading
-                ? skeletons.map((item, index) => (
-                    <Credential.Skeleton key={index + item} />
-                  ))
-                : badges?.map(({ id: badgeId, badge_type, hidden }) => {
-                    const {
-                      title,
-                      id,
-                      total_supply,
-                      description,
-                      image,
-                      issuer,
-                    } = badge_type;
+            <div
+              className={clsx(
+                badges.length || isLoading
+                  ? 'grid grid-cols-2 gap-6'
+                  : 'flex items-center justify-center'
+              )}
+            >
+              {isLoading ? (
+                skeletons.map((item, index) => (
+                  <Credential.Skeleton key={index + item} />
+                ))
+              ) : badges.length ? (
+                badges?.map(({ id: badgeId, badge_type, hidden }) => {
+                  const {
+                    title,
+                    id,
+                    total_supply,
+                    description,
+                    image,
+                    issuer,
+                  } = badge_type;
 
-                    return (
-                      <Credential
-                        key={badgeId + 'all_credentials'}
-                        imageSrc={image}
-                        title={title}
-                        variant={issuer.name}
-                        totalSupply={total_supply}
-                        description={description}
-                        isSelected={true}
-                        className="border-transparent px-4 py-2"
-                        isHidden={hidden}
-                        onSelect={() =>
-                          router.push(
-                            `/people/${address}/credentials/${badgeId}`
-                          )
-                        }
-                      />
-                    );
-                  })}
+                  return (
+                    <Credential
+                      key={badgeId + 'all_credentials'}
+                      imageSrc={image}
+                      title={title}
+                      variant={issuer.name}
+                      totalSupply={total_supply}
+                      description={description}
+                      isSelected={true}
+                      className="border-transparent px-4 py-2"
+                      isHidden={hidden}
+                      onSelect={() =>
+                        router.push(`/people/${address}/credentials/${badgeId}`)
+                      }
+                    />
+                  );
+                })
+              ) : (
+                <EmptyState onReset={() => setResetFilters(true)} />
+              )}
             </div>
 
             {hasMoreData && (
-              <div className="flex justify-center">
+              <div className="mt-6 flex justify-center">
                 <Button
-                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90 !shadow-base"
+                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90"
                   variant="secondary"
                   onClick={() => handleFetchMore()}
                   loading={isFetchingNextPage}
