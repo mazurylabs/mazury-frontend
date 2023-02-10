@@ -10,6 +10,8 @@ import { userSlice } from '@/selectors';
 import { updateProfile } from '@/utils/api';
 import { updateUserProfile } from '@/slices/user';
 
+import * as Sentry from '@sentry/nextjs';
+
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
   useIsOnboarded();
@@ -29,6 +31,7 @@ const EthAddressPage: NextPage = () => {
     if (!error) {
       dispatch(updateUserProfile({ is_recruiter: isRecruiter }));
     } else {
+      Sentry.captureException(error);
       toast.error('Something went wrong');
     }
 

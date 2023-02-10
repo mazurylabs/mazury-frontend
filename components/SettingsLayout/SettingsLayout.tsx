@@ -17,6 +17,8 @@ import { userSlice } from '@/selectors';
 import { updateProfile } from '@/utils/api';
 import { logout, updateUserProfile } from '@/slices/user';
 
+import * as Sentry from '@sentry/nextjs';
+
 const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
   const nestedRoute = title.includes('services')
     ? title.split(' ')[1].toLowerCase()
@@ -129,6 +131,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
     if (!error) {
       dispatch(updateUserProfile(payload));
     } else {
+      Sentry.captureException(error);
       toast.error('Something went wrong');
     }
 
