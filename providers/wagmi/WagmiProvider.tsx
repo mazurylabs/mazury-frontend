@@ -14,7 +14,9 @@ import { polygon } from 'wagmi/chains';
 const { chains, provider, webSocketProvider } = configureChains(
   [polygon],
   [
-    alchemyProvider({ apiKey: process.env.NEXT_ALCHEMY_API_KEY as string }),
+    alchemyProvider({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+    }),
     publicProvider(),
   ]
 );
