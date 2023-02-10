@@ -303,7 +303,7 @@ const WritingSection = () => {
   return (
     <SectionWrapper icon="/icons/writing-grey.svg" title="Highlighted writing">
       <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
-        <SVG width={149} height={53} src="/icons/credentials-listing.svg" />
+        <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
         <p className="text-center font-sans text-sm text-indigoGray-90">
           Discover Mirror and Lenster to show off your web3 network and
           knowledge
