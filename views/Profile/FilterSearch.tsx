@@ -26,22 +26,25 @@ interface FilterSearchProps {
   search?: SearchProps;
   dropdown?: DropdownProps;
   defaultView?: View;
+  resetFilters: boolean;
 }
 
 export const FilterSearch: React.FC<FilterSearchProps> = ({
   dropdown,
   search,
   defaultView = 'dropdown',
+  resetFilters,
 }) => {
+  const defaultOption = `All ${dropdown?.label.toLowerCase()}`;
+
   const router = useRouter();
   const containerRef = React.useRef<HTMLDivElement>(null!);
   const formRef = React.useRef<HTMLFormElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
   const [view, setView] = React.useState<View>(() => defaultView);
   const [toggleDropdown, setToggleDropdown] = React.useState(false);
-  const [selectedOption, setSelectedOption] = React.useState<string>(
-    `All ${dropdown?.label.toLowerCase()}`
-  );
+  const [selectedOption, setSelectedOption] =
+    React.useState<string>(defaultOption);
   const [isFocused, setIsFocused] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -61,8 +64,6 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
     search?.onSearch(searchTerm);
   };
 
-  const defaultOption = `All ${dropdown?.label.toLowerCase()}`;
-
   const handleSelectOption = (option?: string) => {
     setSelectedOption(option || defaultOption);
     dropdown?.onSelect(option);
@@ -77,6 +78,21 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
           value: (dropdown.options as any)[item],
         }))
     : [];
+
+  React.useEffect(() => {
+    if (resetFilters) {
+      if (view === 'search' && !isFocused) {
+        setSearchTerm('');
+        search?.onSearch('');
+        return;
+      }
+
+      if (selectedOption !== defaultOption) {
+        dropdown?.onSelect();
+        setSelectedOption(defaultOption);
+      }
+    }
+  }, [resetFilters, view, isFocused, dropdown?.onSelect]);
 
   return (
     <div className="relative h-12 w-full">
