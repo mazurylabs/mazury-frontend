@@ -4,7 +4,7 @@ import { ButtonProps } from './Button.types';
 
 const variants = {
   primary:
-    'bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30',
+    'bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 shadow-base',
   secondary:
     'border-[1.5px] border-indigoGray-90 bg-white text-indigoGray-90 hover:border-indigoGray-70 hover:text-indigoGray-70 active:border-indigoGray-80 active:text-indigoGray-80 disabled:border-indigoGray-30 disabled:text-indigoGray-30',
   tertiary:
@@ -24,7 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       className={`flex items-center justify-center gap-2 rounded-[8px] ${
         size === 'small' ? 'py-2' : 'py-3'
-      } px-6 font-sans text-sm font-bold shadow-base disabled:cursor-not-allowed disabled:shadow-none ${
+      } px-6 font-sans text-sm font-bold disabled:cursor-not-allowed disabled:shadow-none ${
         variants[variant]
       } ${className}`}
       {...rest}
