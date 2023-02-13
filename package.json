@@ -37,6 +37,7 @@
     "react-inlinesvg": "^3.0.0",
     "react-modal": "^3.14.4",
     "react-number-format": "^4.9.1",
+    "react-query": "^3.39.2",
     "react-redux": "^7.2.6",
     "react-scrolllock": "^5.0.1",
     "redux": "^4.1.2",

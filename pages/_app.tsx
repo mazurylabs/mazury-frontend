@@ -1,6 +1,8 @@
 import * as React from 'react';
 import type { AppProps } from 'next/app';
 import NextHead from 'next/head';
+import { DefaultOptions, Hydrate } from 'react-query';
+import { QueryClient } from 'react-query';
 
 import 'styles/globals.css';
 
@@ -15,7 +17,19 @@ import { AnnouncementModal } from '@/components/Announcement';
 import { clearWagmiStorage } from '@/utils';
 import Script from 'next/script';
 
+const queryConfig: DefaultOptions = {
+  queries: {
+    useErrorBoundary: true,
+    refetchOnWindowFocus: false,
+    retry: false,
+  },
+};
+
 const App = ({ Component, pageProps }: AppProps) => {
+  const [queryClient] = React.useState<QueryClient>(
+    () => new QueryClient({ defaultOptions: queryConfig })
+  );
+
   const Authenticator = () => {
     const isMounted = React.useRef(false);
     const dispatch = useDispatch();
@@ -53,11 +67,15 @@ const App = ({ Component, pageProps }: AppProps) => {
       if (!accessToken || !refreshToken) dispatch(logout());
     }, []);
 
-    return <Component {...pageProps} />;
+    return (
+      <Hydrate state={pageProps.dehydratedState}>
+        <Component {...pageProps} />
+      </Hydrate>
+    );
   };
 
   return (
-    <AppProvider>
+    <AppProvider queryClient={queryClient}>
       <NextHead>
         <title>Mazury</title>
         <link rel="icon" href="/new-logo.svg" />
