@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
-import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
-import { AnimatePresence, motion } from 'framer-motion';
-import { capitalize } from 'lodash';
 import clsx from 'clsx';
 
-import { Button, Checkbox, Layout } from 'components';
+import { Button, Layout } from 'components';
+import { useAccount, useBadges, useCredentialCount } from 'hooks';
+import { Badge, Profile } from 'types';
+import { axios } from 'lib/axios';
+import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+
 import {
   Container,
   Credential,
@@ -15,15 +17,6 @@ import {
   FilterSearch,
   ProfileSummary,
 } from 'views/Profile';
-import {
-  useAccount,
-  useBadges,
-  useClickOutside,
-  useCredentialCount,
-} from 'hooks';
-import { Badge, CredentialsCount, Profile } from 'types';
-import { axios } from 'lib/axios';
-import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
 interface HighlightProps {
   address: string;
@@ -33,18 +26,19 @@ interface HighlightProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
-  const [resetFilters, setResetFilters] = React.useState(false);
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
   const credentialCount = useCredentialCount(address);
-  const useHighlightCredentialsMutation = useHighlightCredentials({
-    onComplete: router.back,
-    address,
-  });
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
     query: '',
     issuer: '',
+  });
+
+  const useHighlightCredentialsMutation = useHighlightCredentials({
+    onComplete: router.back,
+    address,
   });
 
   const {
@@ -78,9 +72,21 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
     });
   };
 
-  const handleSearch = (query: string) => {
-    setCredentialsFilter((prev) => ({ ...prev, query }));
-    setResetFilters(false);
+  const handleSearch = () => {
+    setCredentialsFilter((prev) => ({ ...prev, query: searchTerm }));
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSelect = (issuer?: string) => {
+    setCredentialsFilter((prev) => ({ ...prev, issuer: issuer || '' }));
+  };
+
+  const handleResetFilters = () => {
+    setCredentialsFilter({ issuer: '', query: '' });
+    setSearchTerm('');
   };
 
   return (
@@ -109,11 +115,18 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
       >
         <div className="space-y-6">
           <FilterSearch
-            defaultView="search"
+            dropdown={{
+              onSelect: handleSelect,
+              options: credentialCount.data?.credentials,
+              label: 'credentials',
+              className: 'grow',
+              selectedOption: credentialsFilter.issuer,
+            }}
             search={{
               onSearch: handleSearch,
+              searchTerm,
+              onChange: handleChange,
             }}
-            resetFilters={resetFilters}
           />
 
           <div className="flex space-x-6">
@@ -122,15 +135,6 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                 {selectedCredentials.length} selected out of 8 possible
               </p>
             </div>
-
-            <CredentialsFilter
-              credentials={credentialCount.data?.credentials}
-              onApply={(issuer) => {
-                setCredentialsFilter((prev) => ({ ...prev, issuer }));
-                setResetFilters(false);
-              }}
-              resetFilters={resetFilters}
-            />
           </div>
 
           <div
@@ -167,7 +171,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
                 );
               })
             ) : (
-              <EmptyState onReset={() => setResetFilters(true)} />
+              <EmptyState onReset={handleResetFilters} />
             )}
           </div>
 
@@ -226,134 +230,4 @@ export const useHighlightCredentials = ({
     },
     mutationFn: highlightCredentials,
   });
-};
-
-const CredentialsFilter = ({
-  onApply,
-  credentials,
-  resetFilters,
-}: {
-  onApply: (issuer: string) => void;
-  credentials?: CredentialsCount['credentials'];
-  resetFilters: boolean;
-}) => {
-  const containerRef = React.useRef<HTMLDivElement>(null!);
-  const [isToggled, setIsToggled] = React.useState(false);
-  const prevIssuers = React.useRef<string[]>([]);
-  const [badgeIssuer, setBadgeIssuer] = React.useState<string[]>([]);
-
-  useClickOutside(containerRef, () => {
-    setIsToggled(false);
-    setBadgeIssuer(prevIssuers.current);
-  });
-
-  const handleApply = () => {
-    onApply(badgeIssuer.join(';'));
-    setIsToggled(false);
-    prevIssuers.current = badgeIssuer;
-  };
-
-  const handleReset = () => {
-    setBadgeIssuer([]);
-    prevIssuers.current = [];
-    onApply('');
-    setIsToggled(false);
-  };
-
-  const handleCheck = (selected: string) => {
-    const selectedItem = selected.toLowerCase();
-
-    if (badgeIssuer.includes(selectedItem)) {
-      setBadgeIssuer((prev) => prev.filter((item) => item !== selectedItem));
-      return;
-    }
-    setBadgeIssuer((prev) => [...prev, selectedItem]);
-  };
-
-  const formattedOptions = credentials
-    ? Object.keys(credentials)
-        .filter((item) => item !== 'total')
-        .map((item) => ({
-          title: item,
-          value: (credentials as any)[item],
-        }))
-    : [];
-
-  React.useEffect(() => {
-    if (resetFilters) {
-      handleReset();
-    }
-  }, [resetFilters]);
-
-  return (
-    <div className="relative w-fit" ref={containerRef}>
-      <button
-        type="button"
-        className="flex items-center rounded-md bg-indigoGray-10 p-3 font-sans text-sm font-medium"
-        onClick={() => setIsToggled(!isToggled)}
-      >
-        All credentials
-        <SVG
-          src="/icons/chevron-down-black.svg"
-          width={24}
-          height={24}
-          className="ml-3"
-        />
-      </button>
-      <AnimatePresence>
-        {isToggled && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="border-[#e2e6f60] absolute top-[100%] z-10 mt-1 flex h-fit w-[400px] flex-col rounded-3xl border bg-white p-6 pb-2"
-          >
-            <div className="space-y-4">
-              {formattedOptions.map((credential) => (
-                <div
-                  className="flex cursor-pointer items-center space-x-4"
-                  key={credential.title}
-                  onClick={() => handleCheck(credential.title)}
-                >
-                  <Checkbox
-                    innerClassName="h-4 w-4"
-                    outerClassName="h-4 w-4"
-                    checked={badgeIssuer.includes(
-                      credential.title.toLowerCase()
-                    )}
-                    setChecked={() => {}}
-                    label=""
-                    id={credential.title}
-                  />
-                  <p className="font-sans text-lg font-medium text-indigoGray-90">
-                    {capitalize(credential.title)}{' '}
-                    <span className="text-base font-normal text-indigoGray-40">
-                      ({credential.value})
-                    </span>
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex justify-end space-x-3">
-              <Button
-                onClick={handleReset}
-                className="w-[144px] !border !border-[1.5px] !border-indigoGray-20 !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90 !shadow-base"
-                variant="primary"
-                type="button"
-              >
-                Reset
-              </Button>
-              <Button
-                className="w-[144px] !font-sans !font-semibold"
-                type="submit"
-                onClick={handleApply}
-              >
-                Apply
-              </Button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
 };

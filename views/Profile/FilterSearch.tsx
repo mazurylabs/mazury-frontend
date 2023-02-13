@@ -10,7 +10,9 @@ import { useClickOutside } from 'hooks';
 import { CredentialsCount } from '@/types';
 
 interface SearchProps {
-  onSearch: (searchTerm: string) => void;
+  onSearch: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchTerm: string;
 }
 
 interface DropdownProps {
@@ -18,40 +20,34 @@ interface DropdownProps {
   options?: CredentialsCount['credentials'];
   onSelect: (option?: string) => void;
   className?: string;
+  selectedOption: string;
 }
 
 type View = 'search' | 'dropdown';
 
 interface FilterSearchProps {
-  search?: SearchProps;
-  dropdown?: DropdownProps;
-  defaultView?: View;
-  resetFilters: boolean;
+  search: SearchProps;
+  dropdown: DropdownProps;
 }
 
 export const FilterSearch: React.FC<FilterSearchProps> = ({
   dropdown,
   search,
-  defaultView = 'dropdown',
-  resetFilters,
 }) => {
-  const defaultOption = `All ${dropdown?.label.toLowerCase()}`;
+  const defaultOption = `All ${dropdown.label.toLowerCase()}`;
 
   const router = useRouter();
   const containerRef = React.useRef<HTMLDivElement>(null!);
   const formRef = React.useRef<HTMLFormElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
-  const [view, setView] = React.useState<View>(() => defaultView);
+  const [view, setView] = React.useState<View>('dropdown');
   const [toggleDropdown, setToggleDropdown] = React.useState(false);
-  const [selectedOption, setSelectedOption] =
-    React.useState<string>(defaultOption);
   const [isFocused, setIsFocused] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState('');
 
   useClickOutside(containerRef, () => setToggleDropdown(false));
   useClickOutside(formRef, () => {
     setIsFocused(false);
-    !searchTerm && setView(defaultView);
+    !search?.searchTerm && setView('dropdown');
   });
 
   const handleView = () => {
@@ -61,16 +57,15 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    search?.onSearch(searchTerm);
+    search?.onSearch();
   };
 
   const handleSelectOption = (option?: string) => {
-    setSelectedOption(option || defaultOption);
-    dropdown?.onSelect(option);
+    dropdown.onSelect(option);
     setToggleDropdown(false);
   };
 
-  const formattedOptions = dropdown?.options
+  const formattedOptions = dropdown.options
     ? Object.keys(dropdown.options)
         .filter((item) => item !== 'total')
         .map((item) => ({
@@ -78,21 +73,6 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
           value: (dropdown.options as any)[item],
         }))
     : [];
-
-  React.useEffect(() => {
-    if (resetFilters) {
-      if (view === 'search' && !isFocused) {
-        setSearchTerm('');
-        search?.onSearch('');
-        return;
-      }
-
-      if (selectedOption !== defaultOption) {
-        dropdown?.onSelect();
-        setSelectedOption(defaultOption);
-      }
-    }
-  }, [resetFilters, view, isFocused, dropdown?.onSelect]);
 
   return (
     <div className="relative h-12 w-full">
@@ -103,19 +83,19 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
         )}
       >
         <div
-          className={clsx('relative flex h-full', dropdown?.className)}
+          className={clsx('relative flex h-full', dropdown.className)}
           ref={containerRef}
         >
           <button
             type="button"
             className={clsx(
               'flex h-full items-center justify-between rounded-lg  bg-indigoGray-5 px-4',
-              dropdown?.className
+              dropdown.className
             )}
             onClick={() => setToggleDropdown(!toggleDropdown)}
           >
             <p className="font-sansMid text-sm font-medium text-indigoGray-50">
-              {capitalize(selectedOption)}
+              {capitalize(dropdown.selectedOption) || defaultOption}
             </p>
             <SVG
               src="/icons/chevron-down.svg"
@@ -136,23 +116,28 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                 <li
                   className={clsx(
                     'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium text-indigoGray-90',
-                    selectedOption === defaultOption && 'text-indigo-600'
+                    !dropdown.selectedOption && 'text-indigo-600',
+                    !dropdown.options?.total &&
+                      'cursor-not-allowed text-indigoGray-30'
                   )}
                   onClick={() => handleSelectOption()}
                 >
-                  All {dropdown?.label.toLowerCase()}
-                  <span>{dropdown?.options?.total || 0}</span>
+                  {defaultOption}
+                  <span>{dropdown.options?.total || 0}</span>
                 </li>
                 {formattedOptions.map((option) => (
                   <li
                     key={option.title}
                     className={clsx(
                       'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium',
-                      selectedOption === option.title
+                      dropdown.selectedOption === option.title
                         ? 'text-indigo-600'
-                        : 'text-indigoGray-30'
+                        : 'text-indigoGray-90',
+                      !option.value && 'cursor-not-allowed text-indigoGray-30'
                     )}
-                    onClick={() => handleSelectOption(option.title)}
+                    onClick={() =>
+                      option.value && handleSelectOption(option.title)
+                    }
                   >
                     {capitalize(option.title)}
                     <span>{option.value}</span>
@@ -204,8 +189,8 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
             placeholder="Paradign CTF 2022, ETHAmsterdam 2022 Finalist Hacker..."
             aria-label="Search"
             className="hidden h-full w-full bg-transparent lg:block"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            value={search?.searchTerm}
+            onChange={search?.onChange}
             onFocus={() => setIsFocused(true)}
             autoFocus={true}
           />
@@ -218,7 +203,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                 height={32}
                 width={32}
                 src={`/icons/search-forward${
-                  searchTerm ? '' : '-inactive'
+                  search?.searchTerm ? '' : '-inactive'
                 }.svg`}
               />
               <span className="sr-only">Submit</span>

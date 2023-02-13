@@ -25,9 +25,9 @@ interface CredentialsProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
-  const [resetFilters, setResetFilters] = React.useState(false);
   const router = useRouter();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
     query: '',
@@ -44,12 +44,21 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
 
   const credentialCount = useCredentialCount(address);
 
-  const handleSearch = (query: string) => {
-    setCredentialsFilter((prev) => ({ ...prev, query }));
+  const handleSearch = () => {
+    setCredentialsFilter((prev) => ({ ...prev, query: searchTerm }));
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   const handleSelect = (issuer?: string) => {
     setCredentialsFilter((prev) => ({ ...prev, issuer: issuer || '' }));
+  };
+
+  const handleResetFilters = () => {
+    setCredentialsFilter({ issuer: '', query: '' });
+    setSearchTerm('');
   };
 
   return (
@@ -73,10 +82,13 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                 options: credentialCount.data?.credentials,
                 label: 'credentials',
                 className: 'grow',
+                selectedOption: credentialsFilter.issuer,
               }}
-              search={{ onSearch: handleSearch }}
-              defaultView="dropdown"
-              resetFilters={resetFilters}
+              search={{
+                onSearch: handleSearch,
+                searchTerm,
+                onChange: handleChange,
+              }}
             />
 
             {isOwnProfile && (
@@ -136,14 +148,8 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                 ))
               ) : badges.length ? (
                 badges?.map(({ id: badgeId, badge_type, hidden }) => {
-                  const {
-                    title,
-                    id,
-                    total_supply,
-                    description,
-                    image,
-                    issuer,
-                  } = badge_type;
+                  const { title, total_supply, description, image, issuer } =
+                    badge_type;
 
                   return (
                     <Credential
@@ -163,7 +169,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
                   );
                 })
               ) : (
-                <EmptyState onReset={() => setResetFilters(true)} />
+                <EmptyState onReset={handleResetFilters} />
               )}
             </div>
 
