@@ -64,7 +64,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
   return (
     <Layout variant="plain">
       <Container
-        navItems={Container.useNavItems({ address, activeItem: 'Credentials' })}
+        navItems={Container.useNavItems({ address, activeItem: 'credentials' })}
         summary={
           <ProfileSummary
             address={address}

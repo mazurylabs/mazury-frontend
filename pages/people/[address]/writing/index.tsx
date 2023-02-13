@@ -41,7 +41,7 @@ const Writing = ({ address }: WritingProps) => {
   return (
     <Layout variant="plain">
       <Container
-        navItems={Container.useNavItems({ address, activeItem: 'Writing' })}
+        navItems={Container.useNavItems({ address, activeItem: 'writing' })}
         summary={
           <ProfileSummary
             address={address}

@@ -147,8 +147,12 @@ const useNavItems = ({
   ];
 
   return navItems.map((item) =>
-    item.label === activeItem
-      ? { ...item, isActive: true, icon: `/icons/${activeItem}-active.svg` }
+    item.label.toLowerCase() === activeItem
+      ? {
+          ...item,
+          isActive: true,
+          ...(item.icon ? { icon: `/icons/${activeItem}-active.svg` } : {}),
+        }
       : item
   );
 };

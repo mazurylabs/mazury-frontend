@@ -53,7 +53,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
             : undefined
         }
         handleSave={overviewViews[selectedOverviewViews].handleSave}
-        navItems={Container.useNavItems({ address, activeItem: 'Overview' })}
+        navItems={Container.useNavItems({ address, activeItem: 'overview' })}
         summary={
           <ProfileSummary
             address={address}
