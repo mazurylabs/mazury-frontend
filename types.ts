@@ -61,6 +61,11 @@ export interface ConnectionType {
   status: 'pending' | 'accepted' | 'declined';
 }
 
+export type Tag = {
+  name: string;
+  level: '1' | '2' | '3';
+};
+
 export interface BadgeType {
   id: string;
   total_supply?: number;
@@ -81,7 +86,7 @@ export interface BadgeType {
   rainbowUrl?: string;
   poapUrl?: string;
   kudosUrl?: string;
-  tags: string[];
+  tags: Tag[];
 }
 
 export interface Badge {

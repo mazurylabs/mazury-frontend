@@ -13,7 +13,7 @@ import {
 import { Layout } from 'components';
 import { ActionButton, Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
-import { Badge, BadgeIssuer, ListResponse, Profile } from 'types';
+import { Badge, ListResponse, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { commify } from 'utils';
 import { useHighlightCredentials } from './highlight';
@@ -127,8 +127,15 @@ const CredentialDetails = ({
 
   const variant = data?.badge_type.issuer.name;
 
+  const tags = data?.badge_type.tags.reduce((prev, next) => {
+    return {
+      ...prev,
+      [next?.level]: [...(prev?.[next.level] || []), next.name],
+    };
+  }, {} as Record<'1' | '2' | '3', string[]>);
+
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title="Credential details"
         summary={
@@ -143,9 +150,9 @@ const CredentialDetails = ({
         {isLoading ? (
           <Skeleton />
         ) : (
-          <div className="space-y-8 rounded-lg bg-indigoGray-5 p-6">
-            <div className="flex space-x-6">
-              <div className="h-[200px] w-[200px] shrink-0">
+          <div className="space-y-8 rounded-lg px-4 py-6 lg:bg-indigoGray-5 lg:p-6">
+            <div className="flex flex-col lg:flex-row lg:space-x-6">
+              <div className="mb-6 h-[200px] w-[200px] shrink-0 self-center lg:mb-0 lg:self-start">
                 <img
                   src={data?.badge_type.image}
                   className={clsx(
@@ -163,10 +170,24 @@ const CredentialDetails = ({
               </div>
 
               <div className="space-y-4">
-                <p className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm text-indigoGray-60">
-                  {commify(+(data?.badge_type.total_supply || '0'))} people have
-                  this credential
-                </p>
+                <div className="space-y-2">
+                  {data?.hidden && (
+                    <div className="flex w-fit items-center space-x-2 rounded-md bg-indigoGray-90 py-[2px] px-2 lg:hidden ">
+                      <SVG
+                        src="/icons/eye-slash-white.svg"
+                        height={16}
+                        width={16}
+                      />
+                      <p className="font-sans text-xs font-medium text-indigoGray-5">
+                        Hidden
+                      </p>
+                    </div>
+                  )}
+                  <p className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm text-indigoGray-60">
+                    {commify(+(data?.badge_type.total_supply || '0'))} people
+                    have this credential
+                  </p>
+                </div>
                 <div className="space-y-3">
                   <h2 className="font-serif text-4xl font-semibold text-indigoGray-90">
                     {data?.badge_type.title}
@@ -237,44 +258,77 @@ const CredentialDetails = ({
                   What does this credential mean?
                 </p>
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex w-[60px] justify-end">
-                      <SVG src="/icons/star.svg" height={17} width={18} />
-                      <SVG src="/icons/star.svg" height={17} width={18} />
-                      <SVG src="/icons/star.svg" height={17} width={18} />
+                  {tags?.[3] && (
+                    <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex justify-end lg:w-[60px]">
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                        </div>
+                        <p className="font-sans text-sm font-medium text-indigoGray-90">
+                          Expert at
+                        </p>
+                      </div>
+                      <>
+                        {tags?.[3].map((tag) => (
+                          <p
+                            key={tag + 'level-3'}
+                            className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90"
+                          >
+                            {tag}
+                          </p>
+                        ))}
+                      </>
                     </div>
-                    <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      Expert at
-                    </p>
-                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                      Frontend development
-                    </p>
-                  </div>
+                  )}
 
-                  <div className="flex items-center space-x-4">
-                    <div className="flex w-[60px] justify-end">
-                      <SVG src="/icons/star.svg" height={17} width={18} />
-                      <SVG src="/icons/star.svg" height={17} width={18} />
+                  {tags?.[2] && (
+                    <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex justify-end lg:w-[60px]">
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                        </div>
+                        <p className="font-sans text-sm font-medium text-indigoGray-90">
+                          Intermediate at
+                        </p>
+                      </div>
+                      <>
+                        {tags?.[2].map((tag) => (
+                          <p
+                            key={tag + 'level-2'}
+                            className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90"
+                          >
+                            {tag}
+                          </p>
+                        ))}
+                      </>
                     </div>
-                    <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      Intermediate at
-                    </p>
-                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                      Frontend development
-                    </p>
-                  </div>
+                  )}
 
-                  <div className="flex items-center space-x-4">
-                    <div className="flex w-[60px] justify-end">
-                      <SVG src="/icons/star.svg" height={17} width={18} />
+                  {tags?.[1] && (
+                    <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex justify-end lg:w-[60px]">
+                          <SVG src="/icons/star.svg" height={17} width={18} />
+                        </div>
+                        <p className="font-sans text-sm font-medium text-indigoGray-90">
+                          Basic at
+                        </p>
+                      </div>
+                      <>
+                        {tags?.[1].map((tag) => (
+                          <p
+                            key={tag + 'level-1'}
+                            className="w-fit rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90"
+                          >
+                            {tag}
+                          </p>
+                        ))}
+                      </>
                     </div>
-                    <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      Basic at
-                    </p>
-                    <p className="rounded-md bg-indigoGray-10 py-1 px-2 font-sans text-sm font-medium text-indigoGray-90">
-                      Frontend development
-                    </p>
-                  </div>
+                  )}
                 </div>
               </div>
             )}
@@ -310,7 +364,11 @@ const CredentialDetails = ({
               )}
               {/* <ActionButton icon="/icons/mint.svg" label="Mint NFT" /> */}
 
-              <ActionButton icon="/icons/share.svg" onClick={() => {}} />
+              <ActionButton
+                icon="/icons/share.svg"
+                label="Copy link"
+                onClick={() => {}}
+              />
             </div>
           </div>
         )}
