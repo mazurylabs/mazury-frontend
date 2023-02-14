@@ -161,7 +161,8 @@ const Profile: React.FC<Props> = ({ address }) => {
   const writingRef = useRef<HTMLHeadingElement>(null);
   const headerRef = useRef<HTMLHRElement>(null);
 
-  const { mutualFollowers } = useMutualFollowers('0x05', '0x290f');
+  const { mutualFollowers, remainingFollowers, lensFollowers } =
+    useMutualFollowers('0x05', '0x290f');
 
   const getBadgeFromRoute = useCallback(async (id: string) => {
     try {
@@ -212,9 +213,6 @@ const Profile: React.FC<Props> = ({ address }) => {
     }
   }, [referrals, authoredReferrals, accountData, eth_address]);
 
-  const remainingFollowers = formatNumber(
-    +mutualFollowers?.pageInfo?.totalCount - +mutualFollowers?.items?.length
-  );
   const badgeCount = 0; // just a hack that you can easily remove after badgeCount is removed from types
 
   const referralsToShow =
@@ -671,57 +669,54 @@ const Profile: React.FC<Props> = ({ address }) => {
                   })}
                 </div>
 
-                {!viewingOwnProfile &&
-                  +mutualFollowers?.pageInfo?.totalCount > 0 && (
-                    <div className="!mt-[31px] !mb-4 flex h-[18px] items-center space-x-[3.5px] lg:!mt-5 lg:!mb-[0px]">
-                      <div className="flex space-x-[-6px]">
-                        {mutualFollowers?.items?.map((follower, index) => {
-                          return (
-                            <img
-                              key={follower.id}
-                              src={formatIpfsImage(
-                                follower.picture.original.url
-                              )}
-                              className={`h-6 w-6 rounded-full`}
-                              style={{
-                                zIndex: mutualFollowers.items.length - index,
-                              }}
-                            />
-                          );
-                        })}
-                      </div>
-                      <p className="font-sansMid text-xs font-medium text-indigoGray-50">
-                        Followed by{' '}
-                        {mutualFollowers?.items?.map(
-                          ({ handle, id, ownedBy }) => {
-                            const mutuals = mutualFollowers.items;
-                            return (
-                              <>
-                                <a
-                                  {...(ownedBy
-                                    ? {
-                                        onClick: () =>
-                                          router.push(`/people/${ownedBy}`),
-                                        className: 'cursor-pointer',
-                                      }
-                                    : {})}
-                                >
-                                  {handle}
-                                </a>
-                                {id === mutuals[mutuals.length - 1].id
-                                  ? ''
-                                  : `${!!remainingFollowers ? ', ' : ' and '}`}
-                              </>
-                            );
-                          }
-                        )}
-                        {!!remainingFollowers &&
-                          ', and ' +
-                            remainingFollowers +
-                            plurify(+remainingFollowers, ' other')}
-                      </p>
+                {!viewingOwnProfile && lensFollowers > 0 && (
+                  <div className="!mt-[31px] !mb-4 flex h-[18px] items-center space-x-[3.5px] lg:!mt-5 lg:!mb-[0px]">
+                    <div className="flex space-x-[-6px]">
+                      {mutualFollowers?.items?.map((follower, index) => {
+                        return (
+                          <img
+                            key={follower.id}
+                            src={formatIpfsImage(follower.picture.original.url)}
+                            className={`h-6 w-6 rounded-full`}
+                            style={{
+                              zIndex: mutualFollowers.items.length - index,
+                            }}
+                          />
+                        );
+                      })}
                     </div>
-                  )}
+                    <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                      Followed by{' '}
+                      {mutualFollowers?.items?.map(
+                        ({ handle, id, ownedBy }) => {
+                          const mutuals = mutualFollowers.items;
+                          return (
+                            <>
+                              <a
+                                {...(ownedBy
+                                  ? {
+                                      onClick: () =>
+                                        router.push(`/people/${ownedBy}`),
+                                      className: 'cursor-pointer',
+                                    }
+                                  : {})}
+                              >
+                                {handle}
+                              </a>
+                              {id === mutuals[mutuals.length - 1].id
+                                ? ''
+                                : `${!!remainingFollowers ? ', ' : ' and '}`}
+                            </>
+                          );
+                        }
+                      )}
+                      {!!remainingFollowers &&
+                        ', and ' +
+                          remainingFollowers +
+                          plurify(+remainingFollowers, ' other')}
+                    </p>
+                  </div>
+                )}
 
                 <div
                   className={`flex space-x-4 lg:hidden ${

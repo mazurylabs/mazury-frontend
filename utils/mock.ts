@@ -26,7 +26,7 @@ export const mockProfile: Profile = {
         issuer: { name: 'mazury' },
         poap_badge_extra_data: null,
         video: '',
-        tags: ['sdf'],
+        tags: [{ level: '1', name: '' }],
       },
       created_at: '2021-11-28T21:16:23.817772Z',
       updated_at: '2021-11-28T21:16:23.817784Z',
