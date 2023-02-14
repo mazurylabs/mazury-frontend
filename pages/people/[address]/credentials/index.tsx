@@ -74,7 +74,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
           />
         }
       >
-        <div className="space-y-6">
+        <div className="space-y-3 lg:space-y-6">
           <div className="flex w-full items-center space-x-4">
             <FilterSearch
               dropdown={{
@@ -94,13 +94,8 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
             {isOwnProfile && (
               <Link href={`/people/${address}/credentials/highlight`}>
                 <a className="flex items-center space-x-2 py-3 px-6 font-sansSemi text-sm font-semibold text-indigo-600">
-                  <SVG
-                    src="/icons/heart-colored.svg"
-                    height={16}
-                    width={16}
-                    className="mr-2"
-                  />
-                  Highlight
+                  <SVG src="/icons/heart-colored.svg" height={16} width={16} />
+                  <span className="hidden lg:block">Highlight</span>
                 </a>
               </Link>
             )}
@@ -111,7 +106,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
               <p className="font-sans text-sm text-indigoGray-50">
                 Highlighted credentials
               </p>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {highlightedCredentials.map(({ badge_type, id }) => (
                   <Credential
                     key={id + 'highlighted'}
@@ -138,7 +133,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
             <div
               className={clsx(
                 badges.length || isLoading
-                  ? 'grid grid-cols-2 gap-6'
+                  ? 'grid grid-cols-1 gap-6 lg:grid-cols-2'
                   : 'flex items-center justify-center'
               )}
             >

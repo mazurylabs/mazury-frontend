@@ -66,26 +66,27 @@ export const Idle = ({
 
   const profileCompletionData = profileCompletion.data;
   const completionDataArray = Object.values(profileCompletionData || {});
+  const completedData = completionDataArray.filter(Boolean).length;
 
   return (
     <div className="space-y-6">
       {isOwnProfile && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
-          <div className="flex w-full items-center justify-between bg-indigoGray-90 py-3 px-6">
-            <div className="flex items-center space-x-8">
+          <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
+            <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
               <p className="font-sans text-sm font-semibold text-indigoGray-5">
                 Complete your profile
               </p>
               <Progress
                 total={completionDataArray.length}
-                current={completionDataArray.filter(Boolean).length}
+                current={completedData}
                 label="complete"
                 size="small"
                 variant="dark"
               />
             </div>
             <button
-              className="m-0 p-0 font-sansMid text-sm font-medium text-indigoGray-5"
+              className="m-0 h-fit p-0 font-sansMid text-sm font-medium text-indigoGray-5"
               onClick={() => setShowLess(!showLess)}
             >
               {showLess ? 'Show more' : 'Show less'}
@@ -93,74 +94,84 @@ export const Idle = ({
           </div>
 
           {!showLess && (
-            <div className="border-t-none flex rounded-b-lg border border-indigoGray-20 py-3 px-6">
-              <button
-                disabled={!!profileCompletionData?.['personal_information']}
-                className={clsx(
-                  'm-0 shrink-0 p-0 pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
-                  profileCompletionData?.['personal_information'] &&
-                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
-                )}
-                onClick={() => router.push(`${router.asPath}/edit`)}
-              >
-                Add personal information
-              </button>
-              <button
-                disabled={
-                  !!profileCompletionData?.['discover_web3_credentials']
-                }
-                className={clsx(
-                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
-                  profileCompletionData?.['discover_web3_credentials'] &&
-                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
-                )}
-                onClick={() => router.push(`${router.asPath}/discover`)}
-              >
-                Discover web3 credentials
-              </button>
-              <button
-                disabled={!!profileCompletionData?.['highlight_credentials']}
-                className={clsx(
-                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
-                  profileCompletionData?.['highlight_credentials'] &&
-                    !!highlightedCredentials?.length &&
-                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
-                )}
-                onClick={() =>
-                  router.push(`${router.asPath}/credentials/highlight`)
-                }
-              >
-                Highlight credentials
-              </button>
-              <button
-                disabled={!!profileCompletionData?.['connect_social_media']}
-                className={clsx(
-                  'm-0 shrink-0 border-l border-l-indigoGray-20 p-0 pl-[10px] pr-[10px] font-sansSemi text-xs font-semibold text-indigoGray-90',
-                  profileCompletionData?.['connect_social_media'] &&
-                    'cursor-not-allowed font-medium text-indigoGray-40 line-through'
-                )}
-                onClick={() => handleNavigateViews('social')}
-              >
-                Connect social media
-              </button>
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
-                className={clsx(
-                  '!m-0 shrink-0 border-l border-l-indigoGray-20 !p-0 !pl-[10px] !pr-[10px] font-sansSemi  !text-xs !font-semibold text-indigoGray-90',
-                  profileCompletionData?.['sign_up_mazury_talent'] &&
-                    'pointer-events-none font-medium text-indigoGray-40 line-through'
-                )}
-                onClick={handleMazuryTalent}
-              >
-                Learn about Mazury Talent
-              </a>
+            <div className="border-t-none flex flex-col rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row">
+              {completedData !== 5 ? (
+                <>
+                  <button
+                    disabled={!!profileCompletionData?.['personal_information']}
+                    className={clsx(
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-transparent lg:pr-[10px] lg:pb-0 lg:font-semibold',
+                      profileCompletionData?.['personal_information'] &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                    )}
+                    onClick={() => router.push(`${router.asPath}/edit`)}
+                  >
+                    Add personal information
+                  </button>
+                  <button
+                    disabled={
+                      !!profileCompletionData?.['discover_web3_credentials']
+                    }
+                    className={clsx(
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      profileCompletionData?.['discover_web3_credentials'] &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                    )}
+                    onClick={() => router.push(`${router.asPath}/discover`)}
+                  >
+                    Discover web3 credentials
+                  </button>
+                  <button
+                    disabled={
+                      !!profileCompletionData?.['highlight_credentials']
+                    }
+                    className={clsx(
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      profileCompletionData?.['highlight_credentials'] &&
+                        !!highlightedCredentials?.length &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                    )}
+                    onClick={() =>
+                      router.push(`${router.asPath}/credentials/highlight`)
+                    }
+                  >
+                    Highlight credentials
+                  </button>
+                  <button
+                    disabled={!!profileCompletionData?.['connect_social_media']}
+                    className={clsx(
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      profileCompletionData?.['connect_social_media'] &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
+                    )}
+                    onClick={() => handleNavigateViews('social')}
+                  >
+                    Connect social media
+                  </button>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
+                    className={clsx(
+                      '!m-0 shrink-0 border-l-indigoGray-20 !p-0 !pt-3 font-sans !text-xs !font-medium text-indigoGray-90 lg:border-l lg:!pt-0 lg:!pl-[10px] lg:!pr-[10px] lg:!font-semibold',
+                      profileCompletionData?.['sign_up_mazury_talent'] &&
+                        'pointer-events-none font-medium text-indigoGray-40 line-through'
+                    )}
+                    onClick={handleMazuryTalent}
+                  >
+                    Learn about Mazury Talent
+                  </a>
+                </>
+              ) : (
+                <p className="font-sans text-xs text-indigoGray-90">
+                  Congrats, you just created your first web3 native resume!
+                </p>
+              )}
             </div>
           )}
         </div>
       )}
-      <div className="flex space-x-6">
+      <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:space-y-0">
         <CredentialsSection
           credentials={credentials}
           isOwnProfile={isOwnProfile}
@@ -182,7 +193,7 @@ const SectionWrapper: React.FC<{ title: string; icon: string }> = ({
   children,
 }) => {
   return (
-    <div className="h-fit max-w-[50%] grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6">
+    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 lg:max-w-[50%]">
       <div className="flex items-center space-x-2">
         <SVG src={icon} height={16} width={16} />
         <p className="font-sansMid text-sm font-medium text-indigoGray-50">

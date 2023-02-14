@@ -85,7 +85,7 @@ export const Credential: React.FC<Credential> & {
 
       <div className="space-y-1">
         <p className="font-sans text-sm font-semibold text-indigoGray-90">
-          {truncateString(title, 35)}
+          {truncateString(title, 30)}
         </p>
         <p className="font-sans text-xs font-medium text-indigoGray-50">
           {truncateString(description, 41)}

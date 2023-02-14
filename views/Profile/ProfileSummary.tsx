@@ -1,20 +1,12 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 
-import { userSlice } from 'selectors';
 import { useMutualFollowers } from 'hooks';
-import {
-  formatIpfsImage,
-  formatNumber,
-  plurify,
-  returnTruncatedIfEthAddress,
-} from 'utils';
 import { MutualFollowers, Profile } from 'types';
-import { Button, Tags } from 'components';
-import { updateUserProfile } from '@/slices/user';
+import { Button } from 'components';
+import { formatIpfsImage, plurify, returnTruncatedIfEthAddress } from 'utils';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -26,7 +18,7 @@ interface ProfileSummaryProps {
 
 const Skeleton = () => {
   return (
-    <div className="sticky top-10 z-10 mt-10 h-fit w-[350px] overflow-hidden rounded-lg bg-white lg:shrink-0">
+    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
       <div className="h-[114px] w-full animate-pulse bg-indigoGray-30" />
       <div className="relative bg-indigoGray-5 px-4 pb-6">
         <div className="relative top-[-26px] mb-[-10px] flex items-center space-x-2">
@@ -68,25 +60,17 @@ export const ProfileSummary = ({
   const router = useRouter();
   const isEditPage = router.asPath?.includes('edit');
 
-  const { mutualFollowers, remainingFollowers } = useMutualFollowers(
-    profile?.lens_id as string,
-    user?.lens_id as string
-  );
-
-  const lensFollowers = formatNumber(+mutualFollowers?.pageInfo?.totalCount);
+  const { mutualFollowers, remainingFollowers, lensFollowers } =
+    useMutualFollowers(profile?.lens_id as string, user?.lens_id as string);
 
   if (loading) return <Skeleton />;
 
   return (
-    <div className="sticky top-10 z-10 mt-10 h-fit w-[350px] overflow-hidden rounded-lg bg-white lg:shrink-0">
-      <img
-        src={'/icons/no-banner.svg'}
-        alt="Banner"
-        className="h-[114px] w-full"
-      />
+    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
+      <div className="h-[114px] w-full bg-gradient-3" />
 
       <div className="relative bg-indigoGray-5 px-4 pb-6">
-        <div className="relative top-[-26px] mb-[-10px] flex items-center space-x-2">
+        <div className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]">
           <div>
             <img
               src={profile?.avatar || '/icons/no-avatar.svg'}
@@ -108,7 +92,7 @@ export const ProfileSummary = ({
         </div>
 
         <div>
-          {!isOwnProfile && !!mutualFollowers.items?.length && (
+          {!isOwnProfile && !!mutualFollowers?.items?.length && (
             <div className="mb-[19px] hidden space-y-[6px] md:block">
               {!!lensFollowers && (
                 <p className="font-indigoGray-50 font-sans text-xs">
@@ -167,7 +151,7 @@ export const ProfileSummary = ({
           )}
         </div>
 
-        <div className="mb-6 mt-4 flex space-x-2">
+        <div className="mb-6 mt-[6px] flex space-x-2 lg:mt-4">
           <Button
             variant={
               !isOwnProfile && !user?.is_recruiter ? 'tertiary' : 'primary'

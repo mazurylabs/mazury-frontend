@@ -8,6 +8,7 @@ import { Navbar } from './Navbar';
 import { NavItem } from './type';
 import { useCredentialCount } from 'hooks';
 import { RequireSignin } from '@/components/RequireSignin';
+import clsx from 'clsx';
 
 interface ContainerProps {
   summary: React.ReactElement;
@@ -47,13 +48,13 @@ export const Container: React.FC<ContainerProps> & {
 
   return (
     <>
-      <div className="flex grow space-x-6 pb-10">
-        {summary}
+      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6">
+        <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col">
-          <div className="sticky top-0 z-20 bg-white pt-10 pb-6">
+          <div className="sticky top-0 z-20 bg-white pb-4 lg:pt-10 lg:pb-6">
             {title ? (
-              <div className="flex justify-between">
+              <div className="flex justify-between pt-4 pl-4 lg:pt-0 lg:pl-0">
                 <div className="flex space-x-2">
                   <button aria-label="back" onClick={handleBack}>
                     <SVG height={24} width={24} src="/icons/chevron-left.svg" />
@@ -65,7 +66,7 @@ export const Container: React.FC<ContainerProps> & {
 
                 {handleSave && (
                   <Button
-                    className="w-[200px]"
+                    className="hidden w-[200px] lg:flex"
                     onClick={handleSave}
                     loading={!toggleSaveModal && isSaving}
                   >
@@ -77,7 +78,9 @@ export const Container: React.FC<ContainerProps> & {
               <Navbar links={navItems || []} />
             )}
           </div>
-          <div className="max-w-[826.6px] grow overflow-scroll">{children}</div>
+          <div className="max-w-[826.6px] grow overflow-scroll px-4 lg:px-0">
+            {children}
+          </div>
           <Modal
             isOpen={toggleSaveModal}
             onClose={() => setToggleSaveModal(false)}

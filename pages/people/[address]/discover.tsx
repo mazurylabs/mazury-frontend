@@ -28,7 +28,7 @@ const Discover = ({ address }: ProfileProps) => {
   const router = useRouter();
 
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title={'Discover web3 credentials'}
         handleGoBack={router.back}
@@ -44,7 +44,7 @@ const Discover = ({ address }: ProfileProps) => {
       >
         <div>
           <div className="mb-7 space-y-7">
-            <div className="flex space-x-5">
+            <div className="flex space-x-5 overflow-x-auto">
               <FilterButton isSelected={true} title="All" />
               <FilterButton title="Work" value="3" />
               <FilterButton title="Education" value="3" />
@@ -61,7 +61,7 @@ const Discover = ({ address }: ProfileProps) => {
             />
           </div>
 
-          <div className="grid grid-cols-3">
+          <div className="lg:grid lg:grid-cols-3">
             <Credential
               title="Sismo"
               description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
@@ -116,7 +116,7 @@ const FilterButton = ({
   return (
     <button
       type="button"
-      className={`flex space-x-2 rounded-md bg-${
+      className={`flex shrink-0 space-x-2 rounded-md bg-${
         isSelected ? 'indigoGray-90' : 'transparent'
       } py-2 px-3`}
     >
@@ -147,7 +147,7 @@ const Credential = ({
 }: CredentialProps) => {
   return (
     <div
-      className={`relative mr-6 mb-8 flex flex-col items-center rounded-lg border text-center lg:max-w-[259px] ${
+      className={`relative mr-6 mb-8 flex w-full flex-col items-center rounded-lg border text-center lg:max-w-[259px] ${
         isViewed ? 'border-2 border-green-600' : 'border-indigoGray-20'
       } p-4`}
     >

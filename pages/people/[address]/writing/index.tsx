@@ -64,8 +64,8 @@ const Writing = ({ address }: WritingProps) => {
 
           <div
             className={clsx(
-              isLoading && 'grid grid-cols-2 gap-6',
-              writings.length && 'columns-2 gap-6',
+              isLoading && 'grid grid-cols-1 gap-6 lg:grid-cols-2',
+              writings.length && 'columns-1 gap-6 lg:columns-2',
               !writings.length && 'flex items-center justify-center'
             )}
           >
@@ -215,7 +215,7 @@ const Mirror = ({
       href={url}
       className="mb-6 flex w-full flex-col space-y-3 overflow-hidden rounded-lg bg-indigoGray-5"
     >
-      <div className="flex h-[200px] w-[401.3px] items-center justify-center bg-indigoGray-10">
+      <div className="flex h-[200px] w-full items-center justify-center bg-indigoGray-10 lg:w-[401.3px]">
         <img
           src={background_image || '/icons/brokenImage.svg'}
           className={clsx(

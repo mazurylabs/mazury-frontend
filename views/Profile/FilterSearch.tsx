@@ -111,7 +111,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute top-[100%] left-0 z-10 h-[432px] w-full overflow-hidden rounded-lg bg-indigoGray-5"
+                className="absolute top-[100%] left-0 z-10 mt-1 h-[432px] w-[91.4vw] max-w-[672px] overflow-hidden rounded-lg bg-indigoGray-5 lg:mt-0 lg:w-full lg:max-w-[100%]"
               >
                 <li
                   className={clsx(
@@ -188,7 +188,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
             type="text"
             placeholder="Paradign CTF 2022, ETHAmsterdam 2022 Finalist Hacker..."
             aria-label="Search"
-            className="hidden h-full w-full bg-transparent lg:block"
+            className="block h-full w-full bg-transparent"
             value={search?.searchTerm}
             onChange={search?.onChange}
             onFocus={() => setIsFocused(true)}

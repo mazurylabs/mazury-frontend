@@ -158,7 +158,7 @@ const Edit = ({ address }: EditProps) => {
   }, [user]);
 
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title="Edit profile"
         summary={

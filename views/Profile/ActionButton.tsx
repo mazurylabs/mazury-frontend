@@ -21,7 +21,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   return (
     <button
       type="button"
-      className={`flex shrink-0 items-center rounded-lg border border-[1.5px] border-indigoGray-20 px-6 py-2 font-sansSemi text-sm font-semibold text-indigoGray-90 ${className}`}
+      className={`flex h-[45px] w-full shrink-0 items-center rounded-lg border border-[1.5px] border-indigoGray-20 px-6 py-2 font-sansSemi text-sm font-semibold text-indigoGray-90 lg:h-fit lg:w-fit ${className}`}
       onClick={onClick}
     >
       <SVG

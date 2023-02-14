@@ -90,7 +90,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
   };
 
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title="Highlight credentials"
         handleGoBack={
@@ -113,7 +113,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
         }
         isSaving={useHighlightCredentialsMutation.isLoading}
       >
-        <div className="space-y-6">
+        <div className="space-y-3 lg:space-y-6">
           <FilterSearch
             dropdown={{
               onSelect: handleSelect,
@@ -140,7 +140,7 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
           <div
             className={clsx(
               badges.length || isLoading
-                ? 'grid grid-cols-2 gap-6'
+                ? 'grid grid-cols-1 gap-6 lg:grid-cols-2'
                 : 'flex items-center justify-center'
             )}
           >
