@@ -59,9 +59,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
                   <img
                     src={profile?.avatar || '/profile-active.svg'}
                     alt="Profile icon"
-                    width="24px"
-                    height="24px"
-                    className="rounded-full"
+                    className="h-6 w-6 rounded-full object-cover"
                   />{' '}
                 </a>
               </Link>
