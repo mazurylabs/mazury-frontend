@@ -13,6 +13,7 @@ interface LayoutProps {
   headerContent?: React.ReactNode;
   variant?: 'three-part' | 'plain';
   children?: React.ReactNode;
+  showMobileSidebar?: boolean;
 }
 
 export const Layout: FC<LayoutProps> = ({
@@ -22,6 +23,7 @@ export const Layout: FC<LayoutProps> = ({
   headerContent,
   variant = 'three-part',
   children,
+  showMobileSidebar = true,
 }) => {
   const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
 
@@ -83,7 +85,7 @@ export const Layout: FC<LayoutProps> = ({
         {variant === 'plain' && <>{children}</>}
       </main>
 
-      <MobileSidebar />
+      {showMobileSidebar && <MobileSidebar />}
     </div>
   );
 };
