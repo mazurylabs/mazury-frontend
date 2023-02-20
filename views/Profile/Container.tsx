@@ -52,21 +52,21 @@ export const Container: React.FC<ContainerProps> & {
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col">
-          <div className="sticky top-0 z-20 bg-white pb-4 lg:pt-10 lg:pb-6">
+          <div className="sticky top-[40px] z-20 bg-white pb-4 lg:top-0 lg:pt-10 lg:pb-6">
             {title ? (
-              <div className="flex justify-between pt-4 pl-4 lg:pt-0 lg:pl-0">
+              <div className="flex items-center justify-between pt-4 pl-4 lg:pt-0 lg:pl-0">
                 <div className="flex space-x-2">
                   <button aria-label="back" onClick={handleBack}>
                     <SVG height={24} width={24} src="/icons/chevron-left.svg" />
                   </button>
-                  <p className="font-sansMid text-2xl font-medium text-indigoGray-90">
+                  <p className="font-sansMid text-xl font-medium text-indigoGray-90 lg:text-2xl">
                     {title}
                   </p>
                 </div>
 
                 {handleSave && (
                   <Button
-                    className="hidden w-[200px] lg:flex"
+                    className="mr-2 w-fit !px-5 lg:mr-0 lg:w-[200px]"
                     onClick={handleSave}
                     loading={!toggleSaveModal && isSaving}
                   >
@@ -78,6 +78,7 @@ export const Container: React.FC<ContainerProps> & {
               <Navbar links={navItems || []} />
             )}
           </div>
+
           <div className="max-w-[826.6px] grow overflow-scroll px-4 lg:px-0">
             {children}
           </div>

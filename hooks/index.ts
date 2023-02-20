@@ -20,3 +20,4 @@ export { useConnections } from './useConnections';
 export { useCountDown } from './useCountDown';
 export { useMutualFollowers } from './useMutualFollowers';
 export { useAccount } from './useAccount';
+export { useAnimateOnScroll } from './useAnimateOnScroll';

@@ -8,6 +8,7 @@ import { useAccount } from 'hooks';
 import { Idle, SocialMedia } from 'views/Profile/Overview';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import { ProfileSummaryAccordion } from '@/views/Profile/ProfileSummaryAccordion';
 
 interface ProfileProps {
   address: string;
@@ -20,6 +21,15 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const [selectedOverviewViews, setSelectedOverviewViews] =
     React.useState<OverviewViews>('idle');
+
+  const profileSummaryAccordion = (
+    <ProfileSummaryAccordion
+      address={address}
+      profile={accountInView}
+      user={user.profile as Profile}
+      isOwnProfile={isOwnProfile}
+    />
+  );
 
   const overviewViews: Record<
     OverviewViews,
@@ -38,6 +48,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
+          profileSummaryAccordion={profileSummaryAccordion}
         />
       ),
     },

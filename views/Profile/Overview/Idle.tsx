@@ -18,6 +18,7 @@ interface IdleProps {
   address: string;
   isOwnProfile: boolean;
   highlightedCredentials?: Badge[];
+  profileSummaryAccordion: React.ReactNode;
 }
 
 type DummyCrendential = {
@@ -35,6 +36,7 @@ export const Idle = ({
   address,
   isOwnProfile,
   highlightedCredentials,
+  profileSummaryAccordion,
 }: IdleProps) => {
   const hasHighlightedCredentials = !!highlightedCredentials?.length;
   const router = useRouter();
@@ -69,7 +71,7 @@ export const Idle = ({
   const completedData = completionDataArray.filter(Boolean).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {isOwnProfile && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
           <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
@@ -171,6 +173,9 @@ export const Idle = ({
           )}
         </div>
       )}
+
+      <div className="lg:hidden">{profileSummaryAccordion}</div>
+
       <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:space-y-0">
         <CredentialsSection
           credentials={credentials}

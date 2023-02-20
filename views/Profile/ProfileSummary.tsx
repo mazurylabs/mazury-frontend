@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import SVG from 'react-inlinesvg';
+import { motion } from 'framer-motion';
 
-import { useMutualFollowers } from 'hooks';
-import { MutualFollowers, Profile } from 'types';
+import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
+import { Profile } from 'types';
 import { Button } from 'components';
-import { formatIpfsImage, plurify, returnTruncatedIfEthAddress } from 'utils';
+import { returnTruncatedIfEthAddress } from 'utils';
+import { LensFollowers } from './LensFollowers';
+import { ProfileTag } from './ProfileTag';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -59,6 +61,9 @@ export const ProfileSummary = ({
 }: ProfileSummaryProps) => {
   const router = useRouter();
   const isEditPage = router.asPath?.includes('edit');
+  const isMobile = useMobile();
+  const { avatarHeight, height, fontSize, top, opacity, backgroundColor } =
+    useAnimateOnScroll();
 
   const { mutualFollowers, remainingFollowers, lensFollowers } =
     useMutualFollowers(profile?.lens_id as string, user?.lens_id as string);
@@ -67,73 +72,78 @@ export const ProfileSummary = ({
 
   return (
     <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
-      <div className="h-[114px] w-full bg-gradient-3" />
+      <motion.div
+        className="h-[114px] w-full bg-gradient-3"
+        style={isMobile ? { opacity } : undefined}
+      />
 
-      <div className="relative bg-indigoGray-5 px-4 pb-6">
-        <div className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]">
+      <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
+        <motion.div
+          className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]"
+          style={isMobile ? { top, height, backgroundColor } : undefined}
+        >
           <div>
-            <img
+            <motion.img
               src={profile?.avatar || '/icons/no-avatar.svg'}
               alt="Profile"
               className="h-[100px] w-[100px] rounded-full object-cover"
+              style={
+                isMobile
+                  ? { height: avatarHeight, width: avatarHeight }
+                  : undefined
+              }
             />
           </div>
 
           <div>
-            <h1 className="font-demi text-2xl !font-bold text-indigoGray-90">
+            <motion.h1
+              className="font-demi text-2xl !font-bold text-indigoGray-90"
+              style={{ fontSize }}
+            >
               {profile?.full_name}
-            </h1>
+            </motion.h1>
             {profile?.username && (
               <p className="font-sans text-xs text-indigoGray-50">
                 @{profile?.username}
               </p>
             )}
           </div>
-        </div>
+        </motion.div>
 
         <div>
           {!isOwnProfile && !!mutualFollowers?.items?.length && (
-            <div className="mb-[19px] hidden space-y-[6px] md:block">
-              {!!lensFollowers && (
-                <p className="font-indigoGray-50 font-sans text-xs">
-                  <span className="font-sansSemi font-semibold text-indigoGray-90">
-                    {lensFollowers}
-                  </span>{' '}
-                  followers on Lens
-                </p>
-              )}
-
-              <Followers
-                remainder={+remainingFollowers}
-                mutuals={mutualFollowers.items}
-              />
-            </div>
+            <LensFollowers
+              remainder={+remainingFollowers}
+              mutuals={mutualFollowers.items}
+              lensFollowers={lensFollowers}
+              className="mb-[19px] hidden lg:block"
+            />
           )}
 
           {profile?.bio && (
-            <p className="font-sans text-sm text-indigoGray-90">
+            <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
               {profile.bio}
             </p>
           )}
 
           {!isOwnProfile &&
             (profile?.is_recruiter || profile?.open_to_opportunities) && (
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 hidden space-y-2 lg:block">
                 {profile?.is_recruiter && (
-                  <Tag
+                  <ProfileTag
                     icon="/icons/user-white.svg"
                     title="Recruiter"
                     className="bg-indigoGray-90"
                   />
                 )}
                 {profile?.open_to_opportunities && (
-                  <Tag
+                  <ProfileTag
                     icon="/icons/openToOpportunities.svg"
                     title="Open to opportunities"
                     className="bg-indigoGray-90"
                   />
                 )}
-                <Tag
+                <ProfileTag
                   icon="/icons/mazuryTalent.svg"
                   title="Mazury Talent"
                   className="bg-emerald-600"
@@ -151,7 +161,7 @@ export const ProfileSummary = ({
           )}
         </div>
 
-        <div className="mb-6 mt-[6px] flex space-x-2 lg:mt-4">
+        <div className="mb-6 mt-3 flex space-x-2 lg:mt-[6px] lg:mt-4">
           <Button
             variant={
               !isOwnProfile && !user?.is_recruiter ? 'tertiary' : 'primary'
@@ -194,7 +204,7 @@ export const ProfileSummary = ({
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="hidden space-y-2 lg:block">
           <div className="flex justify-between">
             <div className="flex items-center space-x-2">
               <SVG src="/icons/browse-wallet.svg" height={16} width={16} />
@@ -253,7 +263,7 @@ export const ProfileSummary = ({
         {isOwnProfile && (
           <Button
             variant="tertiary"
-            className="mt-6 h-[29px] w-full border-[1.5px] border-indigoGray-20"
+            className="mt-6 hidden h-[29px] w-full border-[1.5px] border-indigoGray-20 lg:block"
           >
             <div className="flex items-center space-x-2">
               <SVG height={16} width={16} src="/icons/plus.svg" />
@@ -264,71 +274,6 @@ export const ProfileSummary = ({
           </Button>
         )}
       </div>
-    </div>
-  );
-};
-
-const Followers = ({
-  remainder,
-  mutuals,
-}: {
-  remainder: number;
-  mutuals: MutualFollowers['items'];
-}) => {
-  if (!mutuals || mutuals.length === 0) return null;
-
-  return (
-    <div className="flex items-center space-x-[3.5px]">
-      <div className="flex space-x-[-6px]">
-        {mutuals?.map((follower, index) => {
-          return (
-            <img
-              key={follower.id}
-              src={formatIpfsImage(follower.picture.original.url)}
-              className={`h-6 w-6 rounded-full`}
-              style={{
-                zIndex: mutuals.length - index,
-              }}
-            />
-          );
-        })}
-      </div>
-
-      <p className="font-sansMid text-xs font-medium text-indigoGray-50">
-        {mutuals?.map(({ handle, id, ownedBy }) => {
-          const noMutuals = id === mutuals[mutuals.length - 1].id;
-          return (
-            <span key={handle + id}>
-              <Link href={`/people/${ownedBy}`}>
-                <a className="cursor-pointer">{handle}</a>
-              </Link>
-              {noMutuals ? '' : `${!!remainder ? ', ' : ' and '}`}
-            </span>
-          );
-        })}
-        {!!remainder && ', and ' + remainder + plurify(+remainder, ' other')}
-      </p>
-    </div>
-  );
-};
-
-const Tag = ({
-  title,
-  icon,
-  className,
-}: {
-  title: string;
-  icon: string;
-  className: string;
-}) => {
-  return (
-    <div
-      className={`flex w-fit items-center space-x-2 rounded-md px-2 py-[2px] ${className}`}
-    >
-      <SVG height={16} width={16} src={icon} />
-      <p className="font-sansMid text-xs font-medium text-emerald-50">
-        {title}
-      </p>
     </div>
   );
 };
