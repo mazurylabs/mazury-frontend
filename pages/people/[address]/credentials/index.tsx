@@ -40,7 +40,12 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     hasMoreData,
     isFetchingNextPage,
     isLoading,
-  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
+  } = useBadges(
+    accountInView?.eth_address || '',
+    credentialsFilter.issuer,
+    10,
+    credentialsFilter.query
+  );
 
   const credentialCount = useCredentialCount(address);
 

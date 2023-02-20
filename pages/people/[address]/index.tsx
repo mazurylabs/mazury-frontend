@@ -42,7 +42,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
     idle: {
       view: (
         <Idle
-          address={address}
+          address={accountInView?.eth_address || ''}
           isOwnProfile={isOwnProfile}
           highlightedCredentials={highlightedCredentials}
           handleNavigateViews={(view: OverviewViews) =>

@@ -54,7 +54,7 @@ export const Idle = ({
     undefined,
     8,
     undefined,
-    !hasHighlightedCredentials
+    !hasHighlightedCredentials && !!address
   );
 
   const handleMazuryTalent = async () => {

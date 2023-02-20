@@ -9,6 +9,7 @@ import { Button } from 'components';
 import { returnTruncatedIfEthAddress } from 'utils';
 import { LensFollowers } from './LensFollowers';
 import { ProfileTag } from './ProfileTag';
+import clsx from 'clsx';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -73,9 +74,20 @@ export const ProfileSummary = ({
   return (
     <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
       <motion.div
-        className="h-[114px] w-full bg-gradient-3"
+        className={clsx(
+          'h-[114px] w-full',
+          !profile?.banner && 'bg-gradient-3'
+        )}
         style={isMobile ? { opacity } : undefined}
-      />
+      >
+        {profile?.banner && (
+          <img
+            src={profile?.banner}
+            alt="Banner"
+            className="h-[100px] w-full"
+          />
+        )}
+      </motion.div>
 
       <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
         <motion.div

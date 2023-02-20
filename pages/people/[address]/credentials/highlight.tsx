@@ -47,7 +47,12 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
     hasMoreData,
     isFetchingNextPage,
     isLoading,
-  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
+  } = useBadges(
+    user.profile?.eth_address || '',
+    credentialsFilter.issuer,
+    10,
+    credentialsFilter.query
+  );
 
   const prevHighlightedCredentials = highlightedCredentials.map(
     (credential) => credential.id
