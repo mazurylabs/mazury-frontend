@@ -196,9 +196,13 @@ export const updateProfile: (
     }
     // @ts-expect-error passing in a boolean to formdata
     formData.append('onboarded', true);
-    const res = await axios.patch(`/profiles/${address}/`, formData);
+    const { data: Profile } = await axios.patch(
+      `/profiles/${address}/`,
+      formData
+    );
+
     return {
-      data,
+      data: Profile,
       error: null,
     };
   } catch (err) {

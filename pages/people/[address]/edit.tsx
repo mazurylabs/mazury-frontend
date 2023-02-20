@@ -139,9 +139,6 @@ const Edit = ({ address }: EditProps) => {
     if (!error) {
       dispatch(
         updateUserProfile({
-          onboarded: true,
-          avatar: userProfile?.avatar,
-          banner: userProfile?.banner,
           ...data,
         })
       );
