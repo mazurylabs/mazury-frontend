@@ -177,6 +177,7 @@ export interface Profile
   followers_count?: number;
   lens_id?: string;
   lens_handle?: string;
+  banner?: string;
 }
 
 interface LensProfile {

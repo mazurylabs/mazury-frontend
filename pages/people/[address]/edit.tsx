@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import { Button, Input, Layout } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
-import { useAccount } from 'hooks';
+import { useAccount, useMobile } from 'hooks';
 import { updateProfile, isValid } from 'utils/api';
 import { updateUserProfile } from 'slices/user';
 import { Profile, ValueOf } from 'types';
@@ -28,6 +28,7 @@ interface UserProfile {
 }
 
 const Edit = ({ address }: EditProps) => {
+  const isMobile = useMobile(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const { user, profile, accountInView, isOwnProfile } = useAccount(address);
@@ -125,16 +126,25 @@ const Edit = ({ address }: EditProps) => {
     }
 
     const { error, data } = await updateProfile(
-      profile?.eth_address as string,
+      address,
       '',
       payload as any,
-      userProfile?.avatar
+      userProfile?.avatar,
+      false,
+      userProfile?.banner
     );
 
     setLoading(false);
 
     if (!error) {
-      dispatch(updateUserProfile({ onboarded: true, ...data }));
+      dispatch(
+        updateUserProfile({
+          onboarded: true,
+          avatar: userProfile?.avatar,
+          banner: userProfile?.banner,
+          ...data,
+        })
+      );
     } else {
       toast.error('Something went wrong');
     }
@@ -151,7 +161,6 @@ const Edit = ({ address }: EditProps) => {
         username: user.profile?.username || '',
         full_name: user.profile?.full_name || '',
         email: user.profile?.email || '',
-        // avatar: profile.avatar,
         bio: user.profile?.bio || '',
       });
     }
@@ -161,6 +170,7 @@ const Edit = ({ address }: EditProps) => {
     <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title="Edit profile"
+        handleSave={isMobile ? () => {} : undefined}
         summary={
           <ProfileSummary
             address={address}
@@ -179,9 +189,9 @@ const Edit = ({ address }: EditProps) => {
             <div className="relative h-[238px] overflow-hidden rounded-lg lg:w-[350px]">
               <div className="relative">
                 <img
-                  src={banner || '/icons/no-banner.svg'}
+                  src={banner || user.profile?.banner || '/icons/no-banner.svg'}
                   alt="Banner"
-                  className="h-[114px] w-full"
+                  className="h-[114px] w-full object-cover"
                 />
                 <ImageButton
                   label={
@@ -203,7 +213,7 @@ const Edit = ({ address }: EditProps) => {
 
               <div className="absolute bottom-0 left-4 w-fit">
                 <img
-                  src={avatar || '/icons/no-avatar.svg'}
+                  src={avatar || user.profile?.avatar || '/icons/no-avatar.svg'}
                   alt="Avatar"
                   className="h-[150px] w-[150px] rounded-full object-cover"
                 />
@@ -341,9 +351,9 @@ const Edit = ({ address }: EditProps) => {
               />
             </div>
 
-            <div className="flex space-x-2">
+            <div className="hidden space-x-2 lg:flex">
               <Button
-                onClick={(event) => console.log('sdf')}
+                onClick={router.back}
                 className="w-full !border !border-[1.5px] !border-indigoGray-20 !bg-indigoGray-10 !font-sans !font-semibold !text-indigoGray-90 !shadow-base"
                 variant="primary"
                 type="button"
