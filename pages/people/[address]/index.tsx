@@ -23,7 +23,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
   const isMobile = useMobile();
 
   const { ref, entry } = useIntersect({
-    rootMargin: '56px',
+    rootMargin: '0px',
     enabled: isMobile,
   });
 

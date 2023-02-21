@@ -5,6 +5,7 @@ import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
+import clsx from 'clsx';
 
 interface LayoutProps {
   sidebarContent?: React.ReactNode;
@@ -85,7 +86,7 @@ export const Layout: FC<LayoutProps> = ({
         {variant === 'plain' && <>{children}</>}
       </main>
 
-      {showMobileSidebar && <MobileSidebar />}
+      <MobileSidebar className={clsx(!showMobileSidebar && 'hidden')} />
     </div>
   );
 };

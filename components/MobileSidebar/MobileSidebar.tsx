@@ -7,13 +7,17 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { disconnect } from '@wagmi/core';
+import clsx from 'clsx';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
-  // TODO: Implement active state
+  className?: string;
 }
 
-export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
+export const MobileSidebar: React.FC<MobileSidebarProps> = ({
+  children,
+  className,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { address, profile, isAuthenticated } = useSelector(userSlice);
@@ -27,7 +31,12 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
   };
 
   return (
-    <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] py-4 lg:hidden">
+    <div
+      className={clsx(
+        'sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] py-4 lg:hidden',
+        className
+      )}
+    >
       {children || (
         <>
           <Link href="/" passHref>
