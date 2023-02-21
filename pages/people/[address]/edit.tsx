@@ -31,7 +31,7 @@ const Edit = ({ address }: EditProps) => {
   const isMobile = useMobile(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(address);
   const [loading, setLoading] = React.useState(false);
   const [usernameError, setUsernameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');

@@ -12,8 +12,9 @@ import {
   EmptyState,
   FilterSearch,
   ProfileSummary,
+  ProfileSummaryMobile,
 } from 'views/Profile';
-import { useAccount } from 'hooks';
+import { useAccount, useIntersect, useMobile } from 'hooks';
 
 interface WritingProps {
   address: string;
@@ -28,7 +29,13 @@ interface Writing {
 const skeletons = Array(3).fill('skeleton');
 
 const Writing = ({ address }: WritingProps) => {
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const isMobile = useMobile();
+
+  const { ref, entry } = useIntersect({
+    rootMargin: '56px',
+    enabled: isMobile,
+  });
 
   const {
     writings,
@@ -38,19 +45,27 @@ const Writing = ({ address }: WritingProps) => {
     isLoading,
   } = useWriting({ address });
 
+  const navItems = Container.useNavItems({ address, activeItem: 'writing' });
+
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
-        navItems={Container.useNavItems({ address, activeItem: 'writing' })}
+        navItems={navItems}
         summary={
           <ProfileSummary
             address={address}
             profile={accountInView}
             user={user.profile as Profile}
             isOwnProfile={isOwnProfile}
+            intersectionRef={ref}
           />
         }
       >
+        <ProfileSummaryMobile
+          navItems={navItems}
+          isVisible={!entry?.isIntersecting}
+          profile={accountInView}
+        />
         <div className="space-y-6">
           {/* <FilterSearch
             dropdown={{

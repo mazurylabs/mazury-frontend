@@ -2,14 +2,17 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 
 import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
+
 import { Profile } from 'types';
 import { Button } from 'components';
 import { returnTruncatedIfEthAddress } from 'utils';
+
 import { LensFollowers } from './LensFollowers';
 import { ProfileTag } from './ProfileTag';
-import clsx from 'clsx';
+import { NavItem } from './type';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -17,9 +20,13 @@ interface ProfileSummaryProps {
   address?: string;
   isOwnProfile: boolean;
   loading?: boolean;
+  navItems?: NavItem[];
+  intersectionRef?: React.MutableRefObject<HTMLDivElement>;
 }
 
-const Skeleton = () => {
+const Skeleton: React.FC<{
+  intersectionRef?: React.MutableRefObject<HTMLDivElement>;
+}> = ({ intersectionRef }) => {
   return (
     <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
       <div className="h-[114px] w-full animate-pulse bg-indigoGray-30" />
@@ -41,7 +48,10 @@ const Skeleton = () => {
         </div>
 
         <div className="mt-6 space-y-2">
-          <div className="h-3 w-[100%] animate-pulse rounded-lg bg-indigoGray-30" />
+          <div
+            ref={intersectionRef}
+            className="h-3 w-[100%] animate-pulse rounded-lg bg-indigoGray-30"
+          />
           <div className="h-9 w-[100%] animate-pulse rounded-lg bg-indigoGray-30" />
         </div>
 
@@ -59,17 +69,19 @@ export const ProfileSummary = ({
   address,
   isOwnProfile,
   loading,
+  intersectionRef,
 }: ProfileSummaryProps) => {
   const router = useRouter();
   const isEditPage = router.asPath?.includes('edit');
   const isMobile = useMobile();
+
   const { avatarHeight, height, fontSize, top, opacity, backgroundColor } =
     useAnimateOnScroll();
 
   const { mutualFollowers, remainingFollowers, lensFollowers } =
     useMutualFollowers(profile?.lens_id as string, user?.lens_id as string);
 
-  if (loading) return <Skeleton />;
+  if (loading) return <Skeleton intersectionRef={intersectionRef} />;
 
   return (
     <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
@@ -173,7 +185,10 @@ export const ProfileSummary = ({
           )}
         </div>
 
-        <div className="mb-6 mt-3 flex space-x-2 lg:mt-[6px] lg:mt-4">
+        <div
+          ref={intersectionRef}
+          className="mb-6 mt-3 flex space-x-2 lg:mt-[6px] lg:mt-4"
+        >
           <Button
             variant={
               !isOwnProfile && !user?.is_recruiter ? 'tertiary' : 'primary'

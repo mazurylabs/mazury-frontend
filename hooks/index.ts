@@ -21,3 +21,4 @@ export { useCountDown } from './useCountDown';
 export { useMutualFollowers } from './useMutualFollowers';
 export { useAccount } from './useAccount';
 export { useAnimateOnScroll } from './useAnimateOnScroll';
+export { useIntersect } from './useIntersect';

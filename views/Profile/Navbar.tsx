@@ -5,7 +5,7 @@ import { NavItem } from './type';
 
 export const Navbar = ({ links }: { links: NavItem[] }) => {
   return (
-    <div className="flex space-x-4 overflow-y-auto px-4 lg:px-0">
+    <div className="flex space-x-4 overflow-x-auto px-4 lg:px-0">
       {links.map((link) => (
         <NavLink
           key={link.label}

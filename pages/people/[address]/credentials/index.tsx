@@ -12,10 +12,18 @@ import {
   FilterSearch,
   Credential,
   EmptyState,
+  ProfileSummaryMobile,
 } from 'views/Profile';
-import { useAccount, useBadges, useCredentialCount } from 'hooks';
+import {
+  useAccount,
+  useBadges,
+  useCredentialCount,
+  useIntersect,
+  useMobile,
+} from 'hooks';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import { ethers } from 'ethers';
 
 interface CredentialsProps {
   address: string;
@@ -26,8 +34,18 @@ const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
   const router = useRouter();
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(address);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const isMobile = useMobile();
+
+  const { ref, entry } = useIntersect({
+    rootMargin: '56px',
+    enabled: isMobile,
+  });
+
+  const ethAddress = ethers.utils.isAddress(address)
+    ? address
+    : accountInView?.eth_address || '';
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
     query: '',
@@ -41,7 +59,7 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     isFetchingNextPage,
     isLoading,
   } = useBadges(
-    accountInView?.eth_address || '',
+    ethAddress,
     credentialsFilter.issuer,
     10,
     credentialsFilter.query
@@ -66,19 +84,31 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     setSearchTerm('');
   };
 
+  const navItems = Container.useNavItems({
+    address,
+    activeItem: 'credentials',
+  });
+
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
-        navItems={Container.useNavItems({ address, activeItem: 'credentials' })}
+        navItems={navItems}
         summary={
           <ProfileSummary
             address={address}
             profile={accountInView}
             user={user.profile as Profile}
             isOwnProfile={isOwnProfile}
+            intersectionRef={ref}
           />
         }
       >
+        <ProfileSummaryMobile
+          navItems={navItems}
+          isVisible={!entry?.isIntersecting}
+          profile={accountInView}
+        />
+
         <div className="space-y-3 lg:space-y-6">
           <div className="flex w-full items-center space-x-4">
             <FilterSearch

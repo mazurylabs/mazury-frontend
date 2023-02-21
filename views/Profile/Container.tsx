@@ -52,7 +52,12 @@ export const Container: React.FC<ContainerProps> & {
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col">
-          <div className="sticky top-[40px] z-20 bg-white pb-4 lg:top-0 lg:pt-10 lg:pb-6">
+          <div
+            className={clsx(
+              'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:pt-10 lg:pb-6',
+              title && 'sticky'
+            )}
+          >
             {title ? (
               <div className="flex items-center justify-between pt-4 pl-4 lg:pt-0 lg:pl-0">
                 <div className="flex space-x-2">

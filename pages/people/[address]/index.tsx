@@ -2,13 +2,14 @@ import * as React from 'react';
 import { NextPageContext } from 'next';
 
 import { Layout } from 'components';
-import { Container, ProfileSummary } from 'views/Profile';
-import { useAccount } from 'hooks';
+import { Container, ProfileSummary, ProfileSummaryMobile } from 'views/Profile';
+import { useAccount, useIntersect, useMobile } from 'hooks';
 
 import { Idle, SocialMedia } from 'views/Profile/Overview';
 import { Badge, Profile } from 'types';
 import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import { ProfileSummaryAccordion } from '@/views/Profile/ProfileSummaryAccordion';
+import { ethers } from 'ethers';
 
 interface ProfileProps {
   address: string;
@@ -19,6 +20,17 @@ export type OverviewViews = 'idle' | 'social';
 
 const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
+  const isMobile = useMobile();
+
+  const { ref, entry } = useIntersect({
+    rootMargin: '56px',
+    enabled: isMobile,
+  });
+
+  const ethAddress = ethers.utils.isAddress(address)
+    ? address
+    : accountInView?.eth_address || '';
+
   const [selectedOverviewViews, setSelectedOverviewViews] =
     React.useState<OverviewViews>('idle');
 
@@ -42,7 +54,7 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
     idle: {
       view: (
         <Idle
-          address={accountInView?.eth_address || ''}
+          address={ethAddress}
           isOwnProfile={isOwnProfile}
           highlightedCredentials={highlightedCredentials}
           handleNavigateViews={(view: OverviewViews) =>
@@ -54,17 +66,20 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
     },
   };
 
+  const navItems = Container.useNavItems({ address, activeItem: 'overview' });
+
+  const handleGoBack =
+    selectedOverviewViews !== 'idle'
+      ? () => setSelectedOverviewViews('idle')
+      : undefined;
+
   return (
-    <Layout variant="plain">
+    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
         title={overviewViews[selectedOverviewViews].title}
-        handleGoBack={
-          selectedOverviewViews !== 'idle'
-            ? () => setSelectedOverviewViews('idle')
-            : undefined
-        }
+        handleGoBack={handleGoBack}
         handleSave={overviewViews[selectedOverviewViews].handleSave}
-        navItems={Container.useNavItems({ address, activeItem: 'overview' })}
+        navItems={navItems}
         summary={
           <ProfileSummary
             address={address}
@@ -72,9 +87,15 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
             user={user.profile as Profile}
             isOwnProfile={isOwnProfile}
             loading={!accountInView}
+            intersectionRef={ref}
           />
         }
       >
+        <ProfileSummaryMobile
+          navItems={navItems}
+          isVisible={!entry?.isIntersecting}
+          profile={accountInView}
+        />
         {overviewViews[selectedOverviewViews].view}
       </Container>
     </Layout>
