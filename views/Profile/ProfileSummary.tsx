@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
 
@@ -81,194 +82,181 @@ export const ProfileSummary = ({
   const { mutualFollowers, remainingFollowers, lensFollowers } =
     useMutualFollowers(profile?.lens_id as string, user?.lens_id as string);
 
+  const handleCopy = async (value: string) => {
+    await navigator.clipboard.writeText(value);
+    toast.success('Copied to clipboard!');
+  };
+
   if (loading) return <Skeleton intersectionRef={intersectionRef} />;
 
   return (
-    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
-      <motion.div
-        className={clsx(
-          'h-[114px] w-full',
-          !profile?.banner && 'bg-gradient-3'
-        )}
-        style={isMobile ? { opacity } : undefined}
-      >
-        {profile?.banner && (
-          <img
-            src={profile?.banner}
-            alt="Banner"
-            className="h-[100px] w-full"
-          />
-        )}
-      </motion.div>
-
-      <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
+    <>
+      <Toaster />
+      <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
         <motion.div
-          className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]"
-          style={isMobile ? { top, height, backgroundColor } : undefined}
+          className={clsx(
+            'h-[114px] w-full',
+            !profile?.banner && 'bg-gradient-3'
+          )}
+          style={isMobile ? { opacity } : undefined}
         >
-          <div>
-            <motion.img
-              src={profile?.avatar || '/icons/no-avatar.svg'}
-              alt="Profile"
-              className="h-[100px] w-[100px] rounded-full object-cover"
-              style={
-                isMobile
-                  ? { height: avatarHeight, width: avatarHeight }
-                  : undefined
-              }
+          {profile?.banner && (
+            <img
+              src={profile?.banner}
+              alt="Banner"
+              className="h-[100px] w-full"
             />
-          </div>
-
-          <div>
-            <motion.h1
-              className="font-demi text-2xl !font-bold text-indigoGray-90"
-              style={{ fontSize }}
-            >
-              {profile?.full_name}
-            </motion.h1>
-            {profile?.username && (
-              <p className="font-sans text-xs text-indigoGray-50">
-                @{profile?.username}
-              </p>
-            )}
-          </div>
+          )}
         </motion.div>
 
-        <div>
-          {!isOwnProfile && !!mutualFollowers?.items?.length && (
-            <LensFollowers
-              remainder={+remainingFollowers}
-              mutuals={mutualFollowers.items}
-              lensFollowers={lensFollowers}
-              className="mb-[19px] hidden lg:block"
-            />
-          )}
-
-          {profile?.bio && (
-            <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
-              {profile.bio}
-            </p>
-          )}
-
-          {!isOwnProfile &&
-            (profile?.is_recruiter || profile?.open_to_opportunities) && (
-              <div className="mt-2 hidden space-y-2 lg:block">
-                {profile?.is_recruiter && (
-                  <ProfileTag
-                    icon="/icons/user-white.svg"
-                    title="Recruiter"
-                    className="bg-indigoGray-90"
-                  />
-                )}
-                {profile?.open_to_opportunities && (
-                  <ProfileTag
-                    icon="/icons/openToOpportunities.svg"
-                    title="Open to opportunities"
-                    className="bg-indigoGray-90"
-                  />
-                )}
-                <ProfileTag
-                  icon="/icons/mazuryTalent.svg"
-                  title="Mazury Talent"
-                  className="bg-emerald-600"
-                />
-              </div>
-            )}
-
-          {profile?.location && (
-            <div className="mt-4 flex items-center space-x-2">
-              <SVG src="/icons/location.svg" height={16} width={16} />
-              <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
-                {profile.location}
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div
-          ref={intersectionRef}
-          className="mb-6 mt-3 flex space-x-2 lg:mt-[6px] lg:mt-4"
-        >
-          <Button
-            variant={
-              !isOwnProfile && !user?.is_recruiter ? 'tertiary' : 'primary'
-            }
-            onClick={() =>
-              isOwnProfile
-                ? router.push(`/people/${address}/edit`)
-                : console.log('connecting')
-            }
-            className={`grow ${
-              !isOwnProfile && !user?.is_recruiter
-                ? 'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold'
-                : ''
-            }`}
-            disabled={isEditPage}
+        <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
+          <motion.div
+            className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]"
+            style={isMobile ? { top, height, backgroundColor } : undefined}
           >
-            {!isOwnProfile && (
-              <SVG
-                src={`/icons/${user?.is_recruiter ? 'connect' : 'share'}.svg`}
-                height={16}
-                width={16}
-                className="mr-2"
+            <div>
+              <motion.img
+                src={profile?.avatar || '/icons/no-avatar.svg'}
+                alt="Profile"
+                className="h-[100px] w-[100px] rounded-full object-cover"
+                style={
+                  isMobile
+                    ? { height: avatarHeight, width: avatarHeight }
+                    : undefined
+                }
+              />
+            </div>
+
+            <div>
+              <motion.h1
+                className="font-demi text-2xl !font-bold text-indigoGray-90"
+                style={{ fontSize }}
+              >
+                {profile?.full_name}
+              </motion.h1>
+              {profile?.username && (
+                <p className="font-sans text-xs text-indigoGray-50">
+                  @{profile?.username}
+                </p>
+              )}
+            </div>
+          </motion.div>
+
+          <div>
+            {!isOwnProfile && !!mutualFollowers?.items?.length && (
+              <LensFollowers
+                remainder={+remainingFollowers}
+                mutuals={mutualFollowers.items}
+                lensFollowers={lensFollowers}
+                className="mb-[19px] hidden lg:block"
               />
             )}
 
-            {!isOwnProfile && user?.is_recruiter
-              ? 'Request contact'
-              : isOwnProfile
-              ? 'Edit profile'
-              : 'Share profile'}
-          </Button>
+            {profile?.bio && (
+              <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
+                {profile.bio}
+              </p>
+            )}
 
-          {(isOwnProfile || user?.is_recruiter) && (
-            <Button
-              variant="tertiary"
-              className="min-w-16 border-[1.5px] border-indigoGray-20"
-            >
-              <SVG height={16} width={16} src="/icons/share.svg" />
-            </Button>
-          )}
-        </div>
+            {!isOwnProfile &&
+              (profile?.is_recruiter || profile?.open_to_opportunities) && (
+                <div className="mt-2 hidden space-y-2 lg:block">
+                  {profile?.is_recruiter && (
+                    <ProfileTag
+                      icon="/icons/user-white.svg"
+                      title="Recruiter"
+                      className="bg-indigoGray-90"
+                    />
+                  )}
+                  {profile?.open_to_opportunities && (
+                    <ProfileTag
+                      icon="/icons/openToOpportunities.svg"
+                      title="Open to opportunities"
+                      className="bg-indigoGray-90"
+                    />
+                  )}
+                  <ProfileTag
+                    icon="/icons/mazuryTalent.svg"
+                    title="Mazury Talent"
+                    className="bg-emerald-600"
+                  />
+                </div>
+              )}
 
-        <div className="hidden space-y-2 lg:block">
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-2">
-              <SVG src="/icons/browse-wallet.svg" height={16} width={16} />
-              <div>
+            {profile?.location && (
+              <div className="mt-4 flex items-center space-x-2">
+                <SVG src="/icons/location.svg" height={16} width={16} />
                 <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
-                  {profile?.username}
-                </p>
-
-                <p
-                  className={`font-sans text-xs text-indigoGray-${
-                    profile?.ens_name ? '70' : '50'
-                  }`}
-                >
-                  {returnTruncatedIfEthAddress(profile?.eth_address as string)}
+                  {profile.location}
                 </p>
               </div>
-            </div>
-
-            <div className="flex space-x-2">
-              {isOwnProfile && (
-                <button>
-                  <SVG src="/icons/chevron-down.svg" height={24} width={24} />
-                </button>
-              )}
-              <button aria-label="copy to clipboard">
-                <SVG src="/icons/copy.svg" height={24} width={24} />
-              </button>
-            </div>
+            )}
           </div>
 
-          {profile?.lens_handle && (
-            <div className="flex items-center justify-between">
-              <div className="flex space-x-2">
-                <SVG src="/icons/lens.svg" height={16} width={16} />
+          <div
+            ref={intersectionRef}
+            className="mb-6 mt-3 flex space-x-2 lg:mt-[6px] lg:mt-4"
+          >
+            <Button
+              variant={
+                !isOwnProfile && !user?.is_recruiter ? 'tertiary' : 'primary'
+              }
+              onClick={() =>
+                isOwnProfile
+                  ? router.push(`/people/${address}/edit`)
+                  : handleCopy(window.location.href)
+              }
+              className={`grow ${
+                !isOwnProfile && !user?.is_recruiter
+                  ? 'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold'
+                  : ''
+              }`}
+              disabled={isEditPage}
+            >
+              {!isOwnProfile && (
+                <SVG
+                  src={`/icons/${user?.is_recruiter ? 'connect' : 'share'}.svg`}
+                  height={16}
+                  width={16}
+                  className="mr-2"
+                />
+              )}
+
+              {!isOwnProfile && user?.is_recruiter
+                ? 'Request contact'
+                : isOwnProfile
+                ? 'Edit profile'
+                : 'Share profile'}
+            </Button>
+
+            {(isOwnProfile || user?.is_recruiter) && (
+              <Button
+                variant="tertiary"
+                className="min-w-16 border-[1.5px] border-indigoGray-20"
+                onClick={() => handleCopy(window.location.href)}
+              >
+                <SVG height={16} width={16} src="/icons/share.svg" />
+              </Button>
+            )}
+          </div>
+
+          <div className="hidden space-y-2 lg:block">
+            <div className="flex justify-between">
+              <div className="flex items-center space-x-2">
+                <SVG src="/icons/browse-wallet.svg" height={16} width={16} />
                 <div>
                   <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
-                    {profile?.lens_handle}
+                    {profile?.username}
+                  </p>
+
+                  <p
+                    className={`font-sans text-xs text-indigoGray-${
+                      profile?.ens_name ? '70' : '50'
+                    }`}
+                  >
+                    {returnTruncatedIfEthAddress(
+                      profile?.eth_address as string
+                    )}
                   </p>
                 </div>
               </div>
@@ -279,28 +267,62 @@ export const ProfileSummary = ({
                     <SVG src="/icons/chevron-down.svg" height={24} width={24} />
                   </button>
                 )}
-                <button aria-label="copy to clipboard">
-                  <SVG src="/icons/lenster.svg" height={24} width={24} />
+                <button
+                  aria-label="copy to clipboard"
+                  onClick={() => handleCopy(profile?.eth_address || '')}
+                >
+                  <SVG src="/icons/copy.svg" height={24} width={24} />
                 </button>
               </div>
             </div>
+
+            {profile?.lens_handle && (
+              <div className="flex items-center justify-between">
+                <div className="flex space-x-2">
+                  <SVG src="/icons/lens.svg" height={16} width={16} />
+                  <div>
+                    <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
+                      {profile?.lens_handle}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex space-x-2">
+                  {isOwnProfile && (
+                    <button>
+                      <SVG
+                        src="/icons/chevron-down.svg"
+                        height={24}
+                        width={24}
+                      />
+                    </button>
+                  )}
+                  <button
+                    aria-label="copy to clipboard"
+                    onClick={() => handleCopy(profile?.lens_handle || '')}
+                  >
+                    <SVG src="/icons/lenster.svg" height={24} width={24} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {isOwnProfile && (
+            <Button
+              variant="tertiary"
+              className="mt-6 hidden h-[29px] w-full border-[1.5px] border-indigoGray-20 lg:block"
+            >
+              <div className="flex items-center space-x-2">
+                <SVG height={16} width={16} src="/icons/plus.svg" />
+                <span className="font-sansMid text-sm font-medium text-indigoGray-90">
+                  Add links
+                </span>
+              </div>
+            </Button>
           )}
         </div>
-
-        {isOwnProfile && (
-          <Button
-            variant="tertiary"
-            className="mt-6 hidden h-[29px] w-full border-[1.5px] border-indigoGray-20 lg:block"
-          >
-            <div className="flex items-center space-x-2">
-              <SVG height={16} width={16} src="/icons/plus.svg" />
-              <span className="font-sansMid text-sm font-medium text-indigoGray-90">
-                Add links
-              </span>
-            </div>
-          </Button>
-        )}
       </div>
-    </div>
+    </>
   );
 };
