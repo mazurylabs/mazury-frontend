@@ -244,7 +244,7 @@ const CredentialDetails = ({
                           width={16}
                           className="mr-2"
                         />
-                        See on GitPOAP
+                        See on POAP
                       </a>
                     )}
                   </div>
