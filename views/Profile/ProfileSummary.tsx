@@ -128,14 +128,23 @@ export const ProfileSummary = ({
             </div>
 
             <div>
-              <motion.h1
-                className="font-demi text-2xl !font-bold text-indigoGray-90"
-                style={{ fontSize }}
-              >
-                {profile?.full_name}
-              </motion.h1>
+              {profile?.full_name && (
+                <motion.h1
+                  className="font-demi text-2xl !font-bold text-indigoGray-90"
+                  style={{ fontSize }}
+                >
+                  {profile?.full_name}
+                </motion.h1>
+              )}
+
               {profile?.username && (
-                <p className="font-sans text-xs text-indigoGray-50">
+                <p
+                  className={clsx(
+                    'font-sans text-xs text-indigoGray-50',
+                    !profile.full_name &&
+                      'font-demi text-2xl !font-bold text-indigoGray-90'
+                  )}
+                >
                   @{profile?.username}
                 </p>
               )}

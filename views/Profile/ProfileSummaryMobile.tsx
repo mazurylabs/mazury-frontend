@@ -37,9 +37,16 @@ export const ProfileSummaryMobile: React.FC<Props> = ({
           <h1 className="font-demi text-lg !font-bold text-indigoGray-90">
             {profile?.full_name}
           </h1>
+
           {profile?.username && (
-            <p className="font-sans text-xs text-indigoGray-50">
-              @{profile.username}
+            <p
+              className={clsx(
+                'font-sans text-xs text-indigoGray-50',
+                !profile.full_name &&
+                  'font-demi text-2xl !font-bold text-indigoGray-90'
+              )}
+            >
+              @{profile?.username}
             </p>
           )}
         </div>
