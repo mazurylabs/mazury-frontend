@@ -3,21 +3,19 @@ import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 import { QueryClient, useQuery } from 'react-query';
 import clsx from 'clsx';
-import Axios from 'axios';
 import Link from 'next/link';
+import { Progress } from 'components';
+import { axios } from 'lib/axios';
+import { Badge, ListResponse } from 'types';
+import { useBadges } from 'hooks';
 
 import { OverviewViews } from 'pages/people/[address]';
-import { Progress } from 'components';
 import { Credential } from '../Credential';
-import { axios } from 'lib/axios';
-import { Badge } from 'types';
-import { useBadges } from 'hooks';
 
 interface IdleProps {
   handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
-  highlightedCredentials?: Badge[];
   profileSummaryAccordion: React.ReactNode;
 }
 
@@ -35,10 +33,8 @@ export const Idle = ({
   handleNavigateViews,
   address,
   isOwnProfile,
-  highlightedCredentials,
   profileSummaryAccordion,
 }: IdleProps) => {
-  const hasHighlightedCredentials = !!highlightedCredentials?.length;
   const router = useRouter();
   const [showLess, setShowLess] = React.useState(false);
   const queryClient = new QueryClient();
@@ -48,6 +44,10 @@ export const Idle = ({
     queryFn: () => getProfileCompletion(address),
     enabled: isOwnProfile,
   });
+
+  const highlightedCredentials = useHighlightedCredentials(address);
+
+  const hasHighlightedCredentials = !!highlightedCredentials.data?.length;
 
   const { badges, isLoading } = useBadges(
     address,
@@ -63,7 +63,7 @@ export const Idle = ({
   };
 
   const credentials = hasHighlightedCredentials
-    ? highlightedCredentials
+    ? highlightedCredentials.data || []
     : badges;
 
   const profileCompletionData = profileCompletion.data;
@@ -130,7 +130,7 @@ export const Idle = ({
                     className={clsx(
                       'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
                       profileCompletionData?.['highlight_credentials'] &&
-                        !!highlightedCredentials?.length &&
+                        !!highlightedCredentials.data?.length &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
                     onClick={() =>
@@ -180,7 +180,7 @@ export const Idle = ({
         <CredentialsSection
           credentials={credentials}
           isOwnProfile={isOwnProfile}
-          loading={isLoading}
+          loading={isLoading || highlightedCredentials.isLoading}
           hasHighlightedCredentials={hasHighlightedCredentials}
           // commonCredentials={
           //   isOwnProfile ? undefined : dummyCredentials.slice(0, 2)
@@ -361,18 +361,20 @@ export const getProfileCompletion = async (address: string): Promise<any> => {
   return data;
 };
 
-export const getHighlightedCredentials = async (
-  address: string
-): Promise<any> => {
-  //write proper types
-  const { data } = await Axios.get(
-    'https://mazury-staging.herokuapp.com/badges',
-    {
-      params: {
-        highlighted: true,
-        owner: address,
-      },
-    }
-  );
+const getHighlightedCredentials = async (address: string) => {
+  const { data } = await axios.get<ListResponse<Badge>>('/badges', {
+    params: {
+      highlighted: true,
+      owner: address,
+    },
+  });
   return data.results;
+};
+
+export const useHighlightedCredentials = (address: string) => {
+  return useQuery({
+    queryKey: clsx('highlightedCredentials', address).split(' '),
+    queryFn: () => getHighlightedCredentials(address),
+    enabled: !!address,
+  });
 };

@@ -17,13 +17,12 @@ import { Badge, ListResponse, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { commify } from 'utils';
 import { useHighlightCredentials } from './highlight';
-import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import clsx from 'clsx';
 
 interface HighlightProps {
   address: string;
   credentialId: string;
-  highlightedCredentials: Badge[];
 }
 
 const Skeleton = () => {
@@ -52,16 +51,14 @@ const Skeleton = () => {
   );
 };
 
-const CredentialDetails = ({
-  address,
-  credentialId,
-  highlightedCredentials,
-}: HighlightProps) => {
+const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
   const router = useRouter();
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(address);
   const queryClient = useQueryClient();
 
-  const cachedData = queryClient.getQueryData(['badges']) as
+  const highlightedCredentials = useHighlightedCredentials(address);
+
+  const cachedData = queryClient.getQueryData(['badges', address]) as
     | InfiniteData<ListResponse<Badge>>
     | undefined;
 
@@ -84,8 +81,16 @@ const CredentialDetails = ({
         ...prev,
         highlighted: !data?.highlighted,
       }));
+      queryClient.setQueryData(
+        ['highlightedCredentials', address],
+        (prev: any) =>
+          data?.highlighted
+            ? prev?.filter(
+                (credential: Badge) => credential.id !== credentialId
+              )
+            : [...prev, { ...data, highlighted: true }]
+      );
     },
-    address,
   });
 
   const useHideCredentialMutation = useHideCredential({
@@ -114,12 +119,14 @@ const CredentialDetails = ({
   const handleHighlight = async () => {
     await useHighlightCredentialsMutation.mutateAsync({
       data: data?.highlighted
-        ? highlightedCredentials.reduce((prev, next) => {
+        ? highlightedCredentials.data?.reduce((prev, next) => {
             if (next.id === data?.id) return prev;
             return [...prev, next.id];
           }, [] as string[])
         : [
-            ...highlightedCredentials.map((credential) => credential.id),
+            ...(highlightedCredentials.data?.map(
+              (credential) => credential.id
+            ) || []),
             credentialId,
           ],
     } as any);
@@ -380,15 +387,10 @@ const CredentialDetails = ({
 export default CredentialDetails;
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const highlightedCredentials = await getHighlightedCredentials(
-    context.query.address as string
-  );
-
   return {
     props: {
       address: context.query.address,
       credentialId: context.query.credentialId,
-      highlightedCredentials,
     },
   };
 };

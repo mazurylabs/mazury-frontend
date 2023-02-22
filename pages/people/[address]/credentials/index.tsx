@@ -21,18 +21,18 @@ import {
   useIntersect,
   useMobile,
 } from 'hooks';
-import { Badge, Profile } from 'types';
-import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+
+import { Profile } from 'types';
+import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import { ethers } from 'ethers';
 
 interface CredentialsProps {
   address: string;
-  highlightedCredentials: Badge[];
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
+const Credentials = ({ address }: CredentialsProps) => {
   const router = useRouter();
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -51,6 +51,8 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
     query: '',
     issuer: '',
   });
+
+  const highlightedCredentials = useHighlightedCredentials(address);
 
   const {
     badges,
@@ -136,13 +138,13 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
             )}
           </div>
 
-          {!!highlightedCredentials?.length && (
+          {!!highlightedCredentials?.data?.length && (
             <div className="space-y-2">
               <p className="font-sans text-sm text-indigoGray-50">
                 Highlighted credentials
               </p>
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {highlightedCredentials.map(({ badge_type, id }) => (
+                {highlightedCredentials.data?.map(({ badge_type, id }) => (
                   <Credential
                     key={id + 'highlighted'}
                     title={badge_type.title}
@@ -225,14 +227,9 @@ const Credentials = ({ address, highlightedCredentials }: CredentialsProps) => {
 export default Credentials;
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const highlightedCredentials = await getHighlightedCredentials(
-    context.query.address as string
-  );
-
   return {
     props: {
       address: context.query.address,
-      highlightedCredentials,
     },
   };
 };

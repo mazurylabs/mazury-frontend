@@ -6,19 +6,17 @@ import { Container, ProfileSummary, ProfileSummaryMobile } from 'views/Profile';
 import { useAccount, useIntersect, useMobile } from 'hooks';
 
 import { Idle, SocialMedia } from 'views/Profile/Overview';
-import { Badge, Profile } from 'types';
-import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import { Profile } from 'types';
 import { ProfileSummaryAccordion } from '@/views/Profile/ProfileSummaryAccordion';
 import { ethers } from 'ethers';
 
 interface ProfileProps {
   address: string;
-  highlightedCredentials: Badge[];
 }
 
 export type OverviewViews = 'idle' | 'social';
 
-const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
+const Profile = ({ address }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const isMobile = useMobile();
 
@@ -56,7 +54,6 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
         <Idle
           address={ethAddress}
           isOwnProfile={isOwnProfile}
-          highlightedCredentials={highlightedCredentials}
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
@@ -105,14 +102,9 @@ const Profile = ({ address, highlightedCredentials }: ProfileProps) => {
 export default Profile;
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const highlightedCredentials = await getHighlightedCredentials(
-    context.query.address as string
-  );
-
   return {
     props: {
       address: context.query.address,
-      highlightedCredentials,
     },
   };
 };

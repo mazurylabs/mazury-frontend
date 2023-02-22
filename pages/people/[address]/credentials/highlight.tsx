@@ -8,7 +8,7 @@ import { Button, Layout } from 'components';
 import { useAccount, useBadges, useCredentialCount } from 'hooks';
 import { Badge, Profile } from 'types';
 import { axios } from 'lib/axios';
-import { getHighlightedCredentials } from 'views/Profile/Overview/Idle';
+import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 
 import {
   Container,
@@ -20,26 +20,23 @@ import {
 
 interface HighlightProps {
   address: string;
-  highlightedCredentials: Badge[];
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
+const Credentials = ({ address }: HighlightProps) => {
   const router = useRouter();
-  const { user, profile, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(address);
   const credentialCount = useCredentialCount(address);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const queryClient = useQueryClient();
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
     query: '',
     issuer: '',
   });
 
-  const useHighlightCredentialsMutation = useHighlightCredentials({
-    onComplete: router.back,
-    address,
-  });
+  const highlightedCredentials = useHighlightedCredentials(address);
 
   const {
     badges,
@@ -54,15 +51,31 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
     credentialsFilter.query
   );
 
-  const prevHighlightedCredentials = highlightedCredentials.map(
+  const useHighlightCredentialsMutation = useHighlightCredentials({
+    onComplete: handleComplete,
+  });
+
+  const prevHighlightedCredentials = highlightedCredentials.data?.map(
     (credential) => credential.id
   );
   const highlightCredentialsRef = React.useRef<number>(
-    prevHighlightedCredentials.length
+    prevHighlightedCredentials?.length || 0
   );
   const [selectedCredentials, setSelectedCredentials] = React.useState<
     string[]
-  >(prevHighlightedCredentials);
+  >(prevHighlightedCredentials || []);
+
+  function handleComplete() {
+    const payload = badges.reduce((prev, next) => {
+      if (selectedCredentials.includes(next.id)) {
+        prev.push(next);
+      }
+      return prev;
+    }, [] as Badge[]);
+
+    queryClient.setQueryData(['highlightedCredentials', address], payload);
+    router.back();
+  }
 
   const handleSelectCredential = (id: string) => {
     setSelectedCredentials((credentials) => {
@@ -201,14 +214,9 @@ const Credentials = ({ address, highlightedCredentials }: HighlightProps) => {
 export default Credentials;
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const highlightedCredentials = await getHighlightedCredentials(
-    context.query.address as string
-  );
-
   return {
     props: {
       address: context.query.address,
-      highlightedCredentials,
     },
   };
 };
@@ -221,17 +229,12 @@ export const highlightCredentials = ({ data }: { data: string[] }) => {
 
 export const useHighlightCredentials = ({
   onComplete,
-  address,
 }: {
   onComplete?: () => void;
-  address: string;
 }) => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     onSuccess: () => {
       onComplete?.();
-      queryClient.invalidateQueries(['badges', address]);
     },
     mutationFn: highlightCredentials,
   });
