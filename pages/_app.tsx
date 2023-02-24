@@ -15,7 +15,7 @@ import 'styles/globals.css';
 import { AppProvider } from 'providers';
 import { useLogout } from 'providers/react-query-auth';
 
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from 'config';
+import { REFRESH_TOKEN_KEY } from 'config';
 import storage from 'utils/storage';
 
 const queryConfig: DefaultOptions = {
@@ -56,12 +56,10 @@ const SessionAuthenticator = ({ Component, pageProps }: AppProps) => {
     const user = queryClient.getQueryData(['authenticated-user']);
 
     const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
-    const accessToken = storage.getToken(ACCESS_TOKEN_KEY);
 
     const isRefreshTokenExpired = storage.isTokenExpired(refreshToken);
-    const isAccessTokenExpired = storage.isTokenExpired(accessToken);
 
-    if (user && (isAccessTokenExpired || isRefreshTokenExpired)) {
+    if (user && isRefreshTokenExpired) {
       logout.mutateAsync({}, { onSuccess: () => router.push('/') });
     }
   }, []);
