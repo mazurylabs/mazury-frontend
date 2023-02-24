@@ -254,15 +254,16 @@ const Credential = ({
         isViewed ? 'border-2 border-green-600' : 'border-indigoGray-20'
       } p-4`}
     >
-      <img
-        src={icon}
-        className="mb-3 h-4 w-4 object-contain"
-        alt={title}
-        onError={(event) => {
-          event.currentTarget.src = '/icons/brokenImage.svg';
-          event.currentTarget.classList.add('!h-8', '!w-8');
-        }}
-      />
+      <div className="mb-3 h-[56px] w-[56px]">
+        <img
+          src={icon || '/icons/brokenImage.svg'}
+          className="h-[56px] w-[56px] object-contain"
+          alt={title}
+          onError={(event) => {
+            event.currentTarget.src = '/icons/brokenImage.svg';
+          }}
+        />
+      </div>
       <p className="mb-4 font-serif text-xl font-semibold text-indigoGray-90">
         {capitalize(title)}
       </p>
