@@ -4,7 +4,6 @@ import SVG from 'react-inlinesvg';
 import { Button, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
-import { userSlice } from '@/selectors';
 import { isValid } from '@/utils/api';
 import { useUser } from '@/providers/react-query-auth';
 

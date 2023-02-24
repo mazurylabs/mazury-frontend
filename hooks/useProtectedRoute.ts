@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { userSlice } from 'selectors';
 
 import { useUser } from 'providers/react-query-auth';
 

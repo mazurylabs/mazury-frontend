@@ -23,7 +23,6 @@ import { axios } from 'lib/axios';
 import { useIntersect } from '@/hooks/useIntersect';
 import { useClickOutside } from '@/hooks';
 import { RequireSignin } from '@/components/RequireSignin';
-import { userSlice } from '@/selectors';
 
 const filters = [
   'Mazury',

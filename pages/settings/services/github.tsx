@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, SettingsLayout } from 'components';
 import { updateProfile } from 'utils/api';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { updateUserProfile } from 'slices/user';
 import { useUser } from 'providers/react-query-auth';
 
 type User = Record<'github' | 'address', string>;
