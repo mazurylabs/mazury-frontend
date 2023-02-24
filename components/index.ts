@@ -4,7 +4,6 @@ export { Avatar } from './Avatar';
 export { Pill } from './Pill';
 export { HR } from './HR';
 export { Input } from './Input';
-export { RoleCard } from './RoleCard';
 export { InfoBox } from './InfoBox';
 export { WalletRequestModal } from './WalletRequestModal';
 export { Portal } from './Portal';

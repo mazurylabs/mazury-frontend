@@ -1,4 +1,4 @@
-import { axios } from '@/lib/axios';
+import { axios } from 'lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 
