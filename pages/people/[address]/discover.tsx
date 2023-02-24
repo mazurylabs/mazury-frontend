@@ -2,12 +2,13 @@ import * as React from 'react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
+import { useQuery } from '@tanstack/react-query';
 
 import { Layout, Progress } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
-import { Profile } from 'types';
+import { axios } from 'lib/axios';
 
 interface ProfileProps {
   address: string;
@@ -27,6 +28,13 @@ const Discover = ({ address }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const router = useRouter();
 
+  const a = useQuery({
+    queryKey: ['discover'],
+    queryFn: () => getDiscoverCredentials(address),
+  });
+
+  console.log(a);
+
   return (
     <Layout variant="plain" showMobileSidebar={false}>
       <Container
@@ -36,7 +44,7 @@ const Discover = ({ address }: ProfileProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
             loading={!accountInView}
           />
@@ -95,6 +103,11 @@ const Discover = ({ address }: ProfileProps) => {
 };
 
 export default Discover;
+
+const getDiscoverCredentials = async (address: string) => {
+  const { data } = await axios.get(`/discover/${address}`);
+  return data;
+};
 
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
