@@ -1,23 +1,22 @@
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button, SettingsLayout } from 'components';
 import { updateProfile } from 'utils/api';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
+import { updateUserProfile } from 'slices/user';
+import { useUser } from 'providers/react-query-auth';
 
 type User = Record<'github' | 'address', string>;
 type Steps = 'idle' | 'success';
 
 const GithubPage: NextPage = () => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   useProtectedRoute();
   useIsOnboarded();
 
-  const [currentStep, setCurrentStep] = useState<Steps>('idle');
-  const { address, profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
 
   const [user, setUser] = useState<User>({
     github: '',
@@ -26,7 +25,7 @@ const GithubPage: NextPage = () => {
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (address && !user.address) {
+    if (profile?.eth_address && !user.address) {
       setUser({
         address: profile?.eth_address as string,
         github: profile?.github as string,
@@ -34,7 +33,7 @@ const GithubPage: NextPage = () => {
 
       localStorage.removeItem('gh-route');
     }
-  }, [address, user.address, profile?.eth_address, profile?.github]);
+  }, [user.address, profile?.eth_address, profile?.github]);
 
   const handleVerifyGithub = async () => {
     const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
@@ -50,7 +49,10 @@ const GithubPage: NextPage = () => {
     if (error) {
       return alert('Error disconnecting profile.');
     }
-    dispatch(updateUserProfile({ github: '' }));
+    queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+      ...prev,
+      github: '',
+    }));
     setUser((user) => {
       return { ...user, github: '' };
     });

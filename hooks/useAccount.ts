@@ -1,20 +1,37 @@
-import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
 
-import { userSlice } from 'selectors';
-import { useProfile } from './useProfile';
+import { useUser } from 'providers/react-query-auth';
+
 import { Profile } from 'types';
+import { useUserSession } from 'hooks';
+import { getUserFn } from 'utils/api';
+import storage from 'utils/storage';
+import { STORED_USER } from 'config';
 
-export const useAccount = (address?: string) => {
-  const user = useSelector(userSlice);
-  const isOwnProfile = user?.profile?.eth_address === address;
-  const { profile } = useProfile(!isOwnProfile ? address : '');
-  const accountInView = isOwnProfile ? (user.profile as Profile) : profile;
+export const useAccount = (address: string) => {
+  const userSessionExpired = useUserSession();
+  const storedUser = storage.getToken(STORED_USER) as Profile;
+
+  const { data: user, status } = useUser({
+    enabled: !userSessionExpired,
+    initialData: storedUser,
+  });
+
+  const isOwnProfile = user?.eth_address === address;
+
+  const { data: profile } = useQuery({
+    queryKey: ['profile', address],
+    queryFn: async () => await getUserFn(address, isOwnProfile),
+    enabled: !isOwnProfile,
+  });
+
+  const accountInView = isOwnProfile ? (user as Profile) : (profile as Profile);
 
   return {
-    user,
-    profile,
+    user: user as Profile,
+    profile: profile as Profile,
     isOwnProfile,
     accountInView,
+    status,
   };
 };

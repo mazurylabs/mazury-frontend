@@ -68,8 +68,8 @@ export const RoleCard: FC<RoleCardProps> = ({
     >
       <Image
         src={(!isMobile && hovered) || selected ? coloredSrc : iconSrc}
-        width="20px"
-        height="20px"
+        width="20"
+        height="20"
         alt="Role icon"
       />
       <span className="text-xs font-bold uppercase">

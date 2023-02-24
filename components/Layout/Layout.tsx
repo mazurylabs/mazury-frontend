@@ -56,7 +56,7 @@ export const Layout: FC<LayoutProps> = ({
         onMouseLeave={() => !signInOpen && setIsOpen(false)}
         role="menu"
       >
-        <Link href="/">
+        <Link legacyBehavior href="/">
           <a className="h-[32px] w-[32px] cursor-pointer">
             <SVG src="/new-logo.svg" height="32px" width="32px" />
           </a>

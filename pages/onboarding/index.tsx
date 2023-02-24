@@ -38,7 +38,7 @@ const OnboardingPage: NextPage = () => {
 
           return (
             <div className="relative flex h-screen flex-col items-center px-4 pb-12 sm:h-fit sm:px-0">
-              <Link href="/">
+              <Link legacyBehavior href="/">
                 <a className="fixed top-6 left-4 hidden xl:block">
                   <span className="sr-only">Home</span>
                   <SVG height={40} width={40} src="/icons/mazury-logo.svg" />

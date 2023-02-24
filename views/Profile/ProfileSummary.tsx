@@ -101,11 +101,7 @@ export const ProfileSummary = ({
           style={isMobile ? { opacity } : undefined}
         >
           {profile?.banner && (
-            <img
-              src={profile?.banner}
-              alt="Banner"
-              className="h-[100px] w-full"
-            />
+            <img src={profile?.banner} alt="Banner" className="h-full w-full" />
           )}
         </motion.div>
 

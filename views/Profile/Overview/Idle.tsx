@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import { QueryClient, useQuery } from 'react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Progress } from 'components';
@@ -40,7 +40,7 @@ export const Idle = ({
   const queryClient = new QueryClient();
 
   const profileCompletion = useQuery({
-    queryKey: 'profileCompletion',
+    queryKey: ['profileCompletion'],
     queryFn: () => getProfileCompletion(address),
     enabled: isOwnProfile,
   });
@@ -59,7 +59,7 @@ export const Idle = ({
 
   const handleMazuryTalent = async () => {
     await axios.post(`/profiles/${address}/mazury_talent/`, {});
-    queryClient.invalidateQueries('profileCompletion');
+    queryClient.invalidateQueries(['profileCompletion']);
   };
 
   const credentials = hasHighlightedCredentials
@@ -281,7 +281,10 @@ const CredentialsSection: React.FC<{
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
-              <Link href={`/people/${router.query.address}/discover`}>
+              <Link
+                legacyBehavior
+                href={`/people/${router.query.address}/discover`}
+              >
                 <a className="text-center font-sans text-xs font-semibold text-indigo-600">
                   Discover web3 credentials
                 </a>

@@ -22,7 +22,6 @@ import {
   useMobile,
 } from 'hooks';
 
-import { Profile } from 'types';
 import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import { ethers } from 'ethers';
 
@@ -99,7 +98,7 @@ const Credentials = ({ address }: CredentialsProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
             intersectionRef={ref}
           />
@@ -129,7 +128,10 @@ const Credentials = ({ address }: CredentialsProps) => {
             />
 
             {isOwnProfile && (
-              <Link href={`/people/${address}/credentials/highlight`}>
+              <Link
+                legacyBehavior
+                href={`/people/${address}/credentials/highlight`}
+              >
                 <a className="flex items-center space-x-2 py-3 px-6 font-sansSemi text-sm font-semibold text-indigo-600">
                   <SVG src="/icons/heart-colored.svg" height={16} width={16} />
                   <span className="hidden lg:block">Highlight</span>

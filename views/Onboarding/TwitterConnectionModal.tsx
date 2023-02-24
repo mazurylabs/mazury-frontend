@@ -1,11 +1,9 @@
-import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button, Input, Modal, Spinner } from 'components';
 import { TwitterModalContext } from 'contexts';
 import Image from 'next/image';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { getMessageToBeSigned, verifyTweet } from 'utils/api';
+import { verifyTweet } from 'utils/api';
 
 interface ContentComponentProps {
   onButtonClick?: () => void;
@@ -45,7 +43,7 @@ const PasteTweetStep: FC<ContentComponentProps> = () => {
 };
 
 const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const { goToNextStep, tweetURL, setCurrentStep } =
     useContext(TwitterModalContext);
 
@@ -57,7 +55,10 @@ const WalletSigningStep: FC<ContentComponentProps> = ({}) => {
       goToNextStep();
     } else {
       // In case of success skip the next screen
-      dispatch(updateUserProfile({ twitter: data.username }));
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        twitter: data.username,
+      }));
       setCurrentStep((currentStep) => currentStep + 2);
     }
   }, [goToNextStep, tweetURL, setCurrentStep]);
@@ -111,8 +112,8 @@ const SuccessStep: FC<ContentComponentProps> = ({ onButtonClick }) => {
       <div className="mt-4 flex w-full justify-center">
         <Image
           src="/icons/success.png"
-          height="64px"
-          width="64px"
+          height="64"
+          width="64"
           alt="Success indicator"
         />
       </div>

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
+import { ethers } from 'ethers';
 
 import { Layout } from 'components';
 import { Container, ProfileSummary, ProfileSummaryMobile } from 'views/Profile';
 import { useAccount, useIntersect, useMobile } from 'hooks';
 
 import { Idle, SocialMedia } from 'views/Profile/Overview';
-import { Profile } from 'types';
-import { ProfileSummaryAccordion } from '@/views/Profile/ProfileSummaryAccordion';
-import { ethers } from 'ethers';
+
+import { ProfileSummaryAccordion } from 'views/Profile/ProfileSummaryAccordion';
 
 interface ProfileProps {
   address: string;
@@ -36,7 +36,7 @@ const Profile = ({ address }: ProfileProps) => {
     <ProfileSummaryAccordion
       address={address}
       profile={accountInView}
-      user={user.profile as Profile}
+      user={user}
       isOwnProfile={isOwnProfile}
     />
   );
@@ -81,7 +81,7 @@ const Profile = ({ address }: ProfileProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
             loading={!accountInView}
             intersectionRef={ref}

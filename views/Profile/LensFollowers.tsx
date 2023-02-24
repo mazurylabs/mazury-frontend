@@ -49,7 +49,7 @@ export const LensFollowers = ({
             const noMutuals = id === mutuals[mutuals.length - 1].id;
             return (
               <span key={handle + id}>
-                <Link href={`/people/${ownedBy}`}>
+                <Link legacyBehavior href={`/people/${ownedBy}`}>
                   <a className="cursor-pointer">{handle}</a>
                 </Link>
                 {noMutuals ? '' : `${!!remainder ? ', ' : ' and '}`}

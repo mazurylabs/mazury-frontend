@@ -2,25 +2,26 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '../Button';
-import { userSlice } from '@/selectors';
-import { SidebarContext } from '@/contexts';
-import storage from '@/utils/storage';
-import { ROUTE_PATH } from '@/config';
-import { useCountDown, useMobile } from '@/hooks';
-import { getProfile, verifyEmail } from '@/utils/api';
-import { login } from '@/slices/user';
+
+import { SidebarContext } from 'contexts';
+import storage from 'utils/storage';
+import { ROUTE_PATH, STORED_USER } from 'config';
+import { useCountDown, useMobile } from 'hooks';
+import { verifyEmail } from 'utils/api';
+import { useUser } from 'providers/react-query-auth';
 
 export const RequireSignin = () => {
+  const queryClient = useQueryClient();
   const ref = React.useRef<HTMLDivElement>(null!);
-  const dispatch = useDispatch();
   const isMobile = useMobile();
   const prevPath = React.useRef('');
   const [isSignInRequired, setIsSignInRequired] = React.useState(true);
   const router = useRouter();
-  const { profile, isAuthenticated } = useSelector(userSlice);
+  const storedUser = storage.getToken(STORED_USER);
+  const { data: profile } = useUser();
   const { setSignInOpen, signInOpen } = React.useContext(SidebarContext);
   const [isClosed, setIsClosed] = React.useState(false);
   const { count, handleStartCounter } = useCountDown(30);
@@ -43,7 +44,7 @@ export const RequireSignin = () => {
   };
 
   const handleEmailVerification = async () => {
-    if (isAuthenticated) {
+    if (profile) {
       const { error } = await verifyEmail(profile?.eth_address as string);
       if (!error) {
         handleStartCounter();
@@ -52,11 +53,7 @@ export const RequireSignin = () => {
   };
 
   const handleRefresh = async () => {
-    const { data } = await getProfile(profile?.eth_address as string);
-
-    if (data) {
-      dispatch(login(data));
-    }
+    queryClient.invalidateQueries(['authenticated-user']);
   };
 
   const handleGoToSettings = () => router.push('/settings/account/email');
@@ -167,7 +164,7 @@ export const RequireSignin = () => {
     storage.clearToken(ROUTE_PATH);
   }
 
-  if (isClosed || (isAuthenticated && isEmailVerified && profile?.email)) {
+  if (isClosed || (profile && isEmailVerified && profile?.email)) {
     return null;
   }
 
@@ -190,7 +187,7 @@ export const RequireSignin = () => {
     >
       {isSignInRequired && (
         <>
-          {!isAuthenticated
+          {!storedUser
             ? initial
             : !isEmailVerified && profile?.email
             ? verify

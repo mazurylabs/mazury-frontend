@@ -4,7 +4,6 @@ import debounce from 'lodash.debounce';
 import SVG from 'react-inlinesvg';
 import { AnimatePresence, motion } from 'framer-motion';
 import clsx from 'clsx';
-import { useSelector } from 'react-redux';
 
 import { Toggle } from 'components/Toggle';
 
@@ -65,7 +64,6 @@ const initialFilterState = {
 };
 
 export const ResultState = () => {
-  const { isAuthenticated, profile } = useSelector(userSlice);
   const filterRef = React.useRef<HTMLUListElement>(null!);
   const [cursor, setCursor] = React.useState('');
   const { ref, entry } = useIntersect({ rootMargin: '50px' });

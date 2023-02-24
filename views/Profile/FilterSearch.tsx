@@ -143,7 +143,10 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                     <span>{option.value}</span>
                   </li>
                 ))}
-                <Link href={`/people/${router.query.address}/discover`}>
+                <Link
+                  legacyBehavior
+                  href={`/people/${router.query.address}/discover`}
+                >
                   <a className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
                     <p className="font-sans text-sm font-medium text-indigoGray-90">
                       Discover web3 credentials

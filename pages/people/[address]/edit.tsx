@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
-import { useDispatch } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
@@ -9,9 +9,8 @@ import { Button, Input, Layout } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount, useMobile } from 'hooks';
 import { updateProfile, isValid } from 'utils/api';
-import { updateUserProfile } from 'slices/user';
-import { Profile, ValueOf } from 'types';
-import { emailRegex } from '@/utils';
+import { ValueOf } from 'types';
+import { emailRegex } from 'utils';
 
 interface EditProps {
   address: string;
@@ -30,8 +29,8 @@ interface UserProfile {
 const Edit = ({ address }: EditProps) => {
   const isMobile = useMobile(false);
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const queryClient = useQueryClient();
+  const { user, accountInView, isOwnProfile, status } = useAccount(address);
   const [loading, setLoading] = React.useState(false);
   const [usernameError, setUsernameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
@@ -94,7 +93,7 @@ const Edit = ({ address }: EditProps) => {
     let isUsernameInvalid = false;
 
     for (let field in restOfProfile) {
-      if ((user.profile as any)[field] !== (userProfile as any)[field]) {
+      if ((user as any)[field] !== (userProfile as any)[field]) {
         payload = { ...payload, [field]: (userProfile as any)[field] };
       }
     }
@@ -137,28 +136,29 @@ const Edit = ({ address }: EditProps) => {
     setLoading(false);
 
     if (!error) {
-      dispatch(
-        updateUserProfile({
-          ...data,
-        })
-      );
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        ...data,
+      }));
     } else {
       toast.error('Something went wrong');
     }
   };
 
-  if (!isOwnProfile) {
-    router.push(`/profile/${address}`);
-  }
+  React.useEffect(() => {
+    if (!isOwnProfile) {
+      router.push(`/people/${address}`);
+    }
+  }, [isOwnProfile]);
 
   React.useEffect(() => {
     if (user) {
       setUserProfile({
-        location: user.profile?.location || '',
-        username: user.profile?.username || '',
-        full_name: user.profile?.full_name || '',
-        email: user.profile?.email || '',
-        bio: user.profile?.bio || '',
+        location: user?.location || '',
+        username: user?.username || '',
+        full_name: user?.full_name || '',
+        email: user?.email || '',
+        bio: user?.bio || '',
       });
     }
   }, [user]);
@@ -172,7 +172,7 @@ const Edit = ({ address }: EditProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
           />
         }
@@ -186,7 +186,7 @@ const Edit = ({ address }: EditProps) => {
             <div className="relative h-[238px] overflow-hidden rounded-lg lg:w-[350px]">
               <div className="relative">
                 <img
-                  src={banner || user.profile?.banner || '/icons/no-banner.svg'}
+                  src={banner || user?.banner || '/icons/no-banner.svg'}
                   alt="Banner"
                   className="h-[114px] w-full object-cover"
                 />
@@ -210,7 +210,7 @@ const Edit = ({ address }: EditProps) => {
 
               <div className="absolute bottom-0 left-4 w-fit">
                 <img
-                  src={avatar || user.profile?.avatar || '/icons/no-avatar.svg'}
+                  src={avatar || user?.avatar || '/icons/no-avatar.svg'}
                   alt="Avatar"
                   className="h-[150px] w-[150px] rounded-full object-cover"
                 />

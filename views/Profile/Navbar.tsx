@@ -34,7 +34,7 @@ const NavLink = ({
   isActive: boolean;
 }) => {
   return (
-    <Link href={href}>
+    <Link legacyBehavior href={href}>
       <a
         className={`flex shrink-0 items-center space-x-2 ${
           isActive

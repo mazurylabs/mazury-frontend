@@ -1,22 +1,21 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import { Toaster, toast } from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, GithubModal, Input, TwitterModal } from 'components';
-import { userSlice } from 'selectors';
 import { updateProfile } from 'utils/api';
-import { updateUserProfile } from 'slices/user';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUser } from '@/providers/react-query-auth';
 
 interface SocialMediaProps {
   address?: string;
 }
 
 export const SocialMedia: React.FC<SocialMediaProps> = ({ address }) => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
   const [website, setWebsite] = React.useState('');
-  const { profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
 
   React.useEffect(() => {
     if (profile?.website) {
@@ -39,7 +38,10 @@ export const SocialMedia: React.FC<SocialMediaProps> = ({ address }) => {
       setLoading(false);
 
       if (!error) {
-        dispatch(updateUserProfile({ ...data }));
+        queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+          ...prev,
+          ...data,
+        }));
       } else {
         toast.error('Something went wrong');
       }
@@ -103,7 +105,10 @@ export const SocialMedia: React.FC<SocialMediaProps> = ({ address }) => {
             </button>
           }
           handleSubmit={(username) =>
-            dispatch(updateUserProfile({ twitter: username }))
+            queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+              ...prev,
+              twitter: username,
+            }))
           }
           isDisconnecting={!!profile?.twitter}
         />
@@ -133,7 +138,10 @@ export const SocialMedia: React.FC<SocialMediaProps> = ({ address }) => {
           }
           isDisconnecting={!!profile?.github}
           handleSubmit={(username) => {
-            dispatch(updateUserProfile({ github: username }));
+            queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+              ...prev,
+              github: username,
+            }));
           }}
         />
       </div>

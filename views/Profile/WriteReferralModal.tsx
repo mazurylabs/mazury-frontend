@@ -239,8 +239,8 @@ export const WriteReferralModal: FC<WriteReferralModalProps> = ({
             <div className="mt-4 flex w-full justify-center">
               <Image
                 src="/icons/success.png"
-                height="64px"
-                width="64px"
+                height="64"
+                width="64"
                 alt="Success indicator"
               />
             </div>
