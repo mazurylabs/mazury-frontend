@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -30,7 +29,6 @@ const Discover = ({ address }: ProfileProps) => {
   const [selectedFilter, setSelectedFilter] = React.useState('All');
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const { data } = useQuery({
     queryKey: ['discover', address],
