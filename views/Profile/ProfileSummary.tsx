@@ -242,7 +242,7 @@ export const ProfileSummary = ({
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="hidden space-y-2 lg:block">
             <ProfileLinks
               handleCopy={() => handleCopy(profile?.eth_address || '')}
               icon="/icons/browse-wallet.svg"
