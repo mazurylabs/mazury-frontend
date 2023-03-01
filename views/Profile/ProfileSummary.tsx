@@ -94,24 +94,17 @@ export const ProfileSummary = ({
       <Toaster />
       <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
         <motion.div
-          className={clsx(
-            'h-[114px] w-full',
-            !profile?.banner && 'bg-gradient-3'
-          )}
+          className={clsx('h-[114px] w-full', 'bg-gradient-3')}
           style={isMobile ? { opacity } : undefined}
         >
           {profile?.banner && (
-            <img
-              src={profile?.banner}
-              alt="Banner"
-              className="h-[100px] w-full"
-            />
+            <img src={profile?.banner} alt="Banner" className="h-full w-full" />
           )}
         </motion.div>
 
         <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
           <motion.div
-            className="relative top-[-26px] mb-[-16px] flex items-center space-x-2 lg:mb-[-10px]"
+            className="relative top-[-26px] mb-[-16px] flex items-center space-x-4 lg:mb-[-10px]"
             style={isMobile ? { top, height, backgroundColor } : undefined}
           >
             <div>
@@ -250,88 +243,74 @@ export const ProfileSummary = ({
           </div>
 
           <div className="hidden space-y-2 lg:block">
-            <div className="flex justify-between">
-              <div className="flex items-center space-x-2">
-                <SVG src="/icons/browse-wallet.svg" height={16} width={16} />
-                <div>
-                  <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
-                    {profile?.username}
-                  </p>
-
-                  <p
-                    className={`font-sans text-xs text-indigoGray-${
-                      profile?.ens_name ? '70' : '50'
-                    }`}
-                  >
-                    {returnTruncatedIfEthAddress(
-                      profile?.eth_address as string
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex space-x-2">
-                {isOwnProfile && (
-                  <button>
-                    <SVG src="/icons/chevron-down.svg" height={24} width={24} />
-                  </button>
-                )}
-                <button
-                  aria-label="copy to clipboard"
-                  onClick={() => handleCopy(profile?.eth_address || '')}
-                >
-                  <SVG src="/icons/copy.svg" height={24} width={24} />
-                </button>
-              </div>
-            </div>
-
+            <ProfileLinks
+              handleCopy={() => handleCopy(profile?.eth_address || '')}
+              icon="/icons/browse-wallet.svg"
+              value={returnTruncatedIfEthAddress(
+                profile?.eth_address as string
+              )}
+            />
             {profile?.lens_handle && (
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-2">
-                  <SVG src="/icons/lens.svg" height={16} width={16} />
-                  <div>
-                    <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
-                      {profile?.lens_handle}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex space-x-2">
-                  {isOwnProfile && (
-                    <button>
-                      <SVG
-                        src="/icons/chevron-down.svg"
-                        height={24}
-                        width={24}
-                      />
-                    </button>
-                  )}
-                  <button
-                    aria-label="copy to clipboard"
-                    onClick={() => handleCopy(profile?.lens_handle || '')}
-                  >
-                    <SVG src="/icons/lenster.svg" height={24} width={24} />
-                  </button>
-                </div>
-              </div>
+              <ProfileLinks
+                handleCopy={() => handleCopy(profile?.lens_handle || '')}
+                icon="/icons/lens.svg"
+                value={`@${profile?.lens_handle}`}
+              />
+            )}
+            {profile?.linkedIn && (
+              <ProfileLinks
+                handleCopy={() => handleCopy(profile?.linkedIn || '')}
+                icon="/icons/linkedin-black.svg"
+                value={profile?.linkedIn}
+              />
+            )}
+            {profile?.twitter && (
+              <ProfileLinks
+                handleCopy={() =>
+                  handleCopy(`http://twitter.com/${profile.twitter}`)
+                }
+                icon="/icons/linkedin-black.svg"
+                value={`@${profile?.twitter}`}
+              />
+            )}
+            {profile?.github && (
+              <ProfileLinks
+                handleCopy={() =>
+                  handleCopy(`https://github.com/${profile.github}`)
+                }
+                icon="/icons/github-black.svg"
+                value={profile?.github}
+              />
             )}
           </div>
-
-          {isOwnProfile && (
-            <Button
-              variant="tertiary"
-              className="mt-6 hidden h-[29px] w-full border-[1.5px] border-indigoGray-20 lg:block"
-            >
-              <div className="flex items-center space-x-2">
-                <SVG height={16} width={16} src="/icons/plus.svg" />
-                <span className="font-sansMid text-sm font-medium text-indigoGray-90">
-                  Add links
-                </span>
-              </div>
-            </Button>
-          )}
         </div>
       </div>
     </>
+  );
+};
+
+const ProfileLinks = ({
+  value,
+  handleCopy,
+  icon,
+}: {
+  value: string;
+  handleCopy: () => void;
+  icon: string;
+}) => {
+  return (
+    <div className="flex items-center space-x-2">
+      <SVG src={icon} height={16} width={16} />
+      <p className={clsx('font-sans text-xs font-medium text-indigoGray-90')}>
+        {value}
+      </p>
+      <button
+        aria-label="copy to clipboard"
+        onClick={handleCopy}
+        className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-indigoGray-10"
+      >
+        <SVG src="/icons/external-link-black.svg" height={12} width={12} />
+      </button>
+    </div>
   );
 };

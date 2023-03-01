@@ -4,23 +4,21 @@ import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
 import { getProfile, updateProfile, verifyEmail } from 'utils/api';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { userSlice } from '@/selectors';
-import { login, updateUserProfile } from '@/slices/user';
 import { useCountDown } from '@/hooks/useCountDown';
+import { useUser } from 'providers/react-query-auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Steps = 'idle' | 'active' | 'error';
 
 const EmailPage: NextPage = () => {
+  const queryClient = useQueryClient();
   const { count, handleStartCounter } = useCountDown(30);
-  const dispatch = useDispatch();
   useProtectedRoute();
   useIsOnboarded();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
-  const { profile, address } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const [accountEmail, setAccountEmail] = useState('');
   const [email, setEmail] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -42,10 +40,8 @@ const EmailPage: NextPage = () => {
   };
 
   const handleEmailVerification = async () => {
-    // setCurrentStep('active');
-
-    if (address) {
-      const { error } = await verifyEmail(address);
+    if (profile?.eth_address) {
+      const { error } = await verifyEmail(profile?.eth_address);
       if (!error) {
         setCurrentStep('idle');
         handleStartCounter();
@@ -56,21 +52,17 @@ const EmailPage: NextPage = () => {
   };
 
   const handleRefresh = async () => {
-    const { data } = await getProfile(profile?.eth_address as string);
-
-    if (data) {
-      dispatch(login(data));
-    }
+    queryClient.invalidateQueries(['authenticated-user']);
   };
 
   const handleRetry = async (email: string) => {
-    if (address) {
+    if (profile?.eth_address) {
       const formData = {
         email,
       };
 
       const { error: updateProfileError, data } = await updateProfile(
-        address,
+        profile?.eth_address,
         '',
         formData
       );
@@ -79,13 +71,11 @@ const EmailPage: NextPage = () => {
         setCurrentStep('error');
         return alert('Error updating profile.');
       } else {
-        console.log(data);
-        dispatch(
-          updateUserProfile({
-            ...data,
-            ...(profile?.email !== email && { email_verified: false }),
-          })
-        );
+        queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+          ...prev,
+          ...(profile?.email !== email && { email_verified: false }),
+        }));
+
         setIsNewChange(true);
         setCurrentStep('idle');
         setEmail(data.email); //optimistic update for the input fields
@@ -159,8 +149,8 @@ const EmailPage: NextPage = () => {
                     <Image
                       src="/icons/trash.svg"
                       alt="Back"
-                      width="16px"
-                      height="16px"
+                      width="16"
+                      height="16"
                     />
                   </button>
                 </div>

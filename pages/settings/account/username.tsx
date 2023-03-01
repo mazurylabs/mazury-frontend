@@ -3,9 +3,9 @@ import { NextPage } from 'next';
 import { Button, Input, Modal, SettingsLayout, Spinner } from 'components';
 import { updateProfile } from 'utils/api';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { useUser } from 'providers/react-query-auth';
 
 type Steps = 'idle' | 'active' | 'error';
 
@@ -15,14 +15,13 @@ interface User {
 }
 
 const UsernamePage: NextPage = () => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const { data: profile } = useUser();
   useProtectedRoute();
   useIsOnboarded();
 
   const [currentStep, setCurrentStep] = useState<Steps>('idle');
   const [isNewChange, setIsNewChange] = useState(false);
-
-  const { profile, address } = useSelector(userSlice);
   const [username, setUsername] = useState('');
   const [full_name, setFullname] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -50,12 +49,12 @@ const UsernamePage: NextPage = () => {
   };
 
   const handleRequestSignature = async (user: User) => {
-    if (!address) {
+    if (!profile?.eth_address) {
       return alert('Please connect your wallet first');
     }
 
     const { error: updateProfileError, data } = await updateProfile(
-      address,
+      profile?.eth_address || '',
       '',
       user
     );
@@ -65,7 +64,10 @@ const UsernamePage: NextPage = () => {
 
     //optimistic update for the input fields
     if (data) {
-      dispatch(updateUserProfile(data));
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        ...data,
+      }));
       setUsername(data.username);
       setFullname(data.full_name);
       setDisabled(true);

@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
 import { updateProfile, verifyTweet } from '@/utils/api';
 import { Steps } from './types';
-import { userSlice } from '@/selectors';
 import { getTwitterConnectionPopupLink } from '@/utils';
 
 import { Modal } from '../Modal';
@@ -11,6 +9,7 @@ import { Modal } from '../Modal';
 import { ActiveStep } from './ActiveStep';
 import { ErrorStep } from './ErrorStep';
 import { DisconnectStep } from './DisconnectStep';
+import { useUser } from 'providers/react-query-auth';
 
 interface TwitterModalProps {
   trigger: React.ReactElement;
@@ -24,7 +23,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
   isDisconnecting,
 }) => {
   const [loading, setLoading] = React.useState(false);
-  const { profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const [url, setUrl] = React.useState<string>('');
   const [currentStep, setCurrentStep] = React.useState<Steps>(Steps.IDLE);
 

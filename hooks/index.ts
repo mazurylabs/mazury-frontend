@@ -1,6 +1,5 @@
 export { useBadges } from './useBadges';
 export { useBadgeTypes, useTotalBadgeCounts } from './useBadgeTypes';
-export { useProfile, useIsOnboarded } from './useProfile';
 export { useReferrals } from './useReferrals';
 export { useScrollPosition } from './useScrollPosition';
 export { useScreenWidth } from './useScreenWidth';
@@ -22,3 +21,5 @@ export { useMutualFollowers } from './useMutualFollowers';
 export { useAccount } from './useAccount';
 export { useAnimateOnScroll } from './useAnimateOnScroll';
 export { useIntersect } from './useIntersect';
+export { useUserSession } from './useUserSession';
+export { useIsOnboarded } from './useIsOnboarded';

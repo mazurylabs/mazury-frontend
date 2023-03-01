@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 
 import type { ListResponse, Badge } from 'types';

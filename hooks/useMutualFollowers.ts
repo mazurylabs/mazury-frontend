@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { MutualFollowers } from '../types';
 import { formatNumber } from 'utils';

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
 import SVG from 'react-inlinesvg';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 
-import type { ListResponse, Profile, Post } from 'types';
+import type { ListResponse, Post } from 'types';
 import { axios } from 'lib/axios';
 import { Button, Layout } from 'components';
 import {
@@ -55,7 +55,7 @@ const Writing = ({ address }: WritingProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
             intersectionRef={ref}
           />
@@ -142,7 +142,7 @@ interface LensPost extends Writing {
 //   detailUrl,
 // }: LensPost) => {
 //   return (
-//     <Link href={detailUrl}>
+//     <Link legacyBehavior href={detailUrl}>
 //       <a className="mb-6 flex w-full flex-col space-y-3 rounded-lg bg-indigoGray-5 py-3 px-4">
 //         <div className="space-y-1">
 //           <div className="flex items-center space-x-2">

@@ -6,18 +6,18 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { SidebarContext } from 'contexts';
-import { profileSuggestionsSlice, userSlice } from '@/selectors';
-import { useSelector } from 'react-redux';
 
 import { Avatar, Button, MobileSidebar, Layout } from 'components';
 import {
   useClickOutside,
   useIsOnboarded,
   useMobile,
-  useProfile,
   useProfileSuggestions,
 } from 'hooks';
 import { returnTruncatedIfEthAddress } from 'utils';
+import { useUser } from '@/providers/react-query-auth';
+import storage from '@/utils/storage';
+import { USER_ADDRESS } from '@/config';
 
 type SearchState = 'idle' | 'loading' | 'result' | 'empty';
 
@@ -79,19 +79,19 @@ const Home: NextPage = () => {
 
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const { isAuthenticated, profile } = useSelector(userSlice);
-  const { suggestions } = useSelector(profileSuggestionsSlice);
+  const { data: profile } = useUser();
 
-  useProfileSuggestions(profile?.eth_address as string, apiParams);
-  useProfile(profile?.eth_address as string, !!profile?.eth_address);
+  const { profiles: suggestions } = useProfileSuggestions(
+    storage.getToken(USER_ADDRESS),
+    apiParams
+  );
+
   useIsOnboarded();
 
   const handleLogin = () => {
     setIsOpen(true);
     isMobile ? router.push('/sign-in') : setSignInOpen(true);
   };
-
-  const accountData = useSelector(userSlice);
 
   useClickOutside(searchRef, handleCloseSearch);
 
@@ -359,7 +359,7 @@ const Home: NextPage = () => {
 
                   <div className="mt-1 mb-3 lg:mb-5">
                     <ul className="space-y-6">
-                      {accountData.profile?.is_recruiter ? (
+                      {profile?.is_recruiter ? (
                         <p className="text-sm text-indigo-600">
                           Hire straight from our pool of top crypto native
                           talent with a proven track record
@@ -373,10 +373,10 @@ const Home: NextPage = () => {
                     </ul>
                   </div>
 
-                  {isAuthenticated ? (
+                  {profile ? (
                     <a
                       href={`${
-                        accountData.profile?.is_recruiter
+                        profile?.is_recruiter
                           ? 'mailto:recruiting@mazury.xyz'
                           : `https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${profile?.eth_address}`
                       }`}
@@ -384,9 +384,7 @@ const Home: NextPage = () => {
                       rel="noreferrer"
                       className="grid w-max place-items-center rounded-lg bg-indigo-600 py-2 px-6 text-center font-medium text-indigo-50 shadow-sm"
                     >
-                      {accountData.profile?.is_recruiter
-                        ? 'Contact us'
-                        : 'Apply to join'}
+                      {profile?.is_recruiter ? 'Contact us' : 'Apply to join'}
                     </a>
                   ) : (
                     <button
@@ -399,8 +397,8 @@ const Home: NextPage = () => {
                   )}
                 </div>
 
-                {isAuthenticated && profile?.is_recruiter && (
-                  <Link href="/people/connections">
+                {profile?.is_recruiter && (
+                  <Link legacyBehavior href="/people/connections">
                     <a className="my-6 flex items-center justify-between rounded-md bg-indigo-50 py-[13.5px] px-3 font-sans text-sm font-semibold text-indigo-900 transition-all lg:my-3">
                       See your connections
                       <Image
@@ -424,7 +422,10 @@ const Home: NextPage = () => {
                     {Boolean(suggestions) ? (
                       suggestions?.map((suggestion, index) => (
                         <li key={index}>
-                          <Link href={`/people/${suggestion?.eth_address}`}>
+                          <Link
+                            legacyBehavior
+                            href={`/people/${suggestion?.eth_address}`}
+                          >
                             <a className="flex">
                               <Avatar
                                 src={suggestion.avatar}

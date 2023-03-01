@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 
 import { Button, Layout } from 'components';
@@ -45,7 +45,7 @@ const Credentials = ({ address }: HighlightProps) => {
     isFetchingNextPage,
     isLoading,
   } = useBadges(
-    user.profile?.eth_address || '',
+    user?.eth_address || '',
     credentialsFilter.issuer,
     10,
     credentialsFilter.query
@@ -120,7 +120,7 @@ const Credentials = ({ address }: HighlightProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
           />
         }

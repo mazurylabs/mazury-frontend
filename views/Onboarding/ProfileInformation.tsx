@@ -1,17 +1,16 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
-import { useSelector } from 'react-redux';
 
 import { Button, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
-import { userSlice } from '@/selectors';
 import { isValid } from '@/utils/api';
+import { useUser } from '@/providers/react-query-auth';
 
 export const ProfileInformation = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const { profile: userProfile } = useSelector(userSlice);
+  const { data: userProfile } = useUser();
   const { handleStep, handleSetProfile, profile } = useOnboardingContext();
   const avatar = profile?.avatar
     ? URL.createObjectURL(profile?.avatar as any)

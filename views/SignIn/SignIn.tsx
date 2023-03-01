@@ -1,17 +1,14 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import { SocialButton } from 'components';
 import { colors } from 'utils';
 
-import { Connector, useConnect, useAccount } from 'wagmi';
+import { Connector, useConnect } from 'wagmi';
 import { SignInModal } from './SignInModal';
-import { setAddress } from '@/slices/user';
+import storage from 'utils/storage';
+import { USER_ADDRESS } from 'config';
 
 export const SignIn = () => {
-  const { address, connector, isConnected } = useAccount();
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
-  const dispatch = useDispatch();
+  const { connectors, connectAsync } = useConnect();
   const [showSignInModal, setShowSigninModal] = React.useState(false);
 
   const metamaskConnector = connectors.find(
@@ -29,16 +26,13 @@ export const SignIn = () => {
   };
 
   const handleConnect = async (connector: Connector | undefined) => {
-    connect({ connector });
-  };
+    const { account } = await connectAsync({ connector });
 
-  React.useEffect(() => {
-    if (isConnected) {
-      // this is problematic if the connection is cached
+    if (account) {
       setShowSigninModal(true);
-      dispatch(setAddress(address as string));
+      storage.setToken(account, USER_ADDRESS);
     }
-  }, [isConnected]);
+  };
 
   return (
     <div className="flex min-h-screen flex-col overflow-hidden py-6 lg:w-[300px]">

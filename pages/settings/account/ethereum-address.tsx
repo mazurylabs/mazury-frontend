@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Button, SettingsLayout } from 'components';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
-import { userSlice } from '@/selectors';
+import { useUser } from 'providers/react-query-auth';
 
 type AddressArray = Record<'username' | 'address', string>[];
 
@@ -12,7 +11,7 @@ const EthAddressPage: NextPage = () => {
   useProtectedRoute();
   useIsOnboarded();
 
-  const { profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const [addresses, setAddresses] = useState<AddressArray>([]);
 
   // Prefill form with exisiting email

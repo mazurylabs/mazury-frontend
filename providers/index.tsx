@@ -5,7 +5,7 @@ import { ReduxProvider } from './redux';
 import { SwrProvider } from './swr';
 import { SidebarProvider } from '@/contexts';
 import { ReactQueryProvider } from './react-query';
-import { QueryClient } from 'react-query';
+import { QueryClient } from '@tanstack/react-query';
 
 export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
   children,

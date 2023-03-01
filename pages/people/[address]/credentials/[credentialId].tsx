@@ -8,12 +8,12 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { Layout } from 'components';
 import { ActionButton, Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
-import { Badge, ListResponse, Profile } from 'types';
+import { Badge, ListResponse } from 'types';
 import { axios } from 'lib/axios';
 import { commify } from 'utils';
 import { useHighlightCredentials } from './highlight';
@@ -149,7 +149,7 @@ const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
           />
         }

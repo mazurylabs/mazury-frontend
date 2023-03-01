@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Layout, Progress } from 'components';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
-import { Profile } from 'types';
+import { axios } from 'lib/axios';
+import { capitalize } from 'utils';
 
 interface ProfileProps {
   address: string;
@@ -19,24 +20,60 @@ interface CredentialProps {
   description: string;
   url: string;
   isViewed?: boolean;
+  onClickExternalUrl: () => void;
 }
 
 export type OverviewViews = 'idle' | 'discover' | 'social';
 
 const Discover = ({ address }: ProfileProps) => {
+  const [selectedFilter, setSelectedFilter] = React.useState('All');
   const { user, accountInView, isOwnProfile } = useAccount(address);
-  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery({
+    queryKey: ['discover', address],
+    queryFn: () => getDiscoverCredentials(address),
+    enabled: isOwnProfile,
+  });
+
+  const { mutate } = useDiscoverCredentials({
+    onComplete: (data) => {
+      queryClient.setQueryData<DiscoverCredentials>(
+        ['discover', address],
+        (prev) => ({
+          issuers:
+            prev?.issuers.map((item) =>
+              item.issuer.name === data ? { ...item, discovered: true } : item
+            ) || [],
+        })
+      );
+    },
+  });
+
+  const filterCategories =
+    data?.issuers
+      .reduce((prev, next, index) => {
+        prev.push(...next.issuer.categories);
+        return prev;
+      }, [] as string[])
+      .reduce((prev, next) => {
+        return { ...prev, [next]: prev[next] + 1 || 1 };
+      }, {} as Record<string, number>) || {};
+
+  const progress =
+    data?.issuers.reduce((prev, next) => {
+      return prev + (!!next.discovered ? 1 : 0);
+    }, 0) || 0;
 
   return (
     <Layout variant="plain" showMobileSidebar={false}>
       <Container
         title={'Discover web3 credentials'}
-        handleGoBack={router.back}
         summary={
           <ProfileSummary
             address={address}
             profile={accountInView}
-            user={user.profile as Profile}
+            user={user}
             isOwnProfile={isOwnProfile}
             loading={!accountInView}
           />
@@ -45,16 +82,26 @@ const Discover = ({ address }: ProfileProps) => {
         <div>
           <div className="mb-7 space-y-7">
             <div className="flex space-x-5 overflow-x-auto">
-              <FilterButton isSelected={true} title="All" />
-              <FilterButton title="Work" value="3" />
-              <FilterButton title="Education" value="3" />
-              <FilterButton title="Social" value="3" />
-              <FilterButton title="Web3 native" value="3" />
+              <FilterButton
+                isSelected={selectedFilter === 'All'}
+                title="All"
+                handleSelect={() => setSelectedFilter('All')}
+                value={data?.issuers.length || 0}
+              />
+              {Object.keys(filterCategories).map((category) => (
+                <FilterButton
+                  key={category}
+                  title={category}
+                  isSelected={selectedFilter === category}
+                  handleSelect={() => setSelectedFilter(category)}
+                  value={filterCategories[category]}
+                />
+              ))}
             </div>
 
             <Progress
-              total={4}
-              current={1}
+              total={data?.issuers.length || 0}
+              current={progress}
               label="read"
               size="large"
               variant="light"
@@ -62,31 +109,37 @@ const Discover = ({ address }: ProfileProps) => {
           </div>
 
           <div className="lg:grid lg:grid-cols-3">
-            <Credential
-              title="Sismo"
-              description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
-              icon="sismo.svg"
-              url="#"
-              isViewed={true}
-            />
-            <Credential
-              title="Buildspace"
-              description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
-              icon="buildspace.svg"
-              url="#"
-            />
-            <Credential
-              title="GitPOAP"
-              description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
-              icon="gitpoap.svg"
-              url="#"
-            />
-            <Credential
-              title="101"
-              description="Buildspace accelerates your builder journey into web3. It provides courses that set you up for web3 development."
-              icon="101.svg"
-              url="#"
-            />
+            {data?.issuers.map((issuer) => {
+              if (selectedFilter === 'All') {
+                return (
+                  <Credential
+                    key={issuer.issuer.name}
+                    title={issuer.issuer.name}
+                    description={issuer.issuer.description}
+                    icon={issuer.issuer.logo_url}
+                    url={issuer.issuer.external_url}
+                    isViewed={issuer.discovered}
+                    onClickExternalUrl={() =>
+                      mutate({ data: issuer.issuer.name, address })
+                    }
+                  />
+                );
+              } else if (issuer.issuer.categories.includes(selectedFilter)) {
+                return (
+                  <Credential
+                    key={issuer.issuer.name}
+                    title={issuer.issuer.name}
+                    description={issuer.issuer.description}
+                    icon={issuer.issuer.logo_url}
+                    url={issuer.issuer.external_url}
+                    isViewed={issuer.discovered}
+                    onClickExternalUrl={() =>
+                      mutate({ data: issuer.issuer.name, address })
+                    }
+                  />
+                );
+              }
+            })}
           </div>
         </div>
       </Container>
@@ -95,6 +148,52 @@ const Discover = ({ address }: ProfileProps) => {
 };
 
 export default Discover;
+
+type DiscoverCredentials = {
+  issuers: {
+    discovered: boolean;
+    issuer: {
+      categories: string[];
+      description: string;
+      display_name: string;
+      external_url: string;
+      logo_url: string;
+      name: string;
+    };
+  }[];
+};
+
+const getDiscoverCredentials = async (address: string) => {
+  const { data } = await axios.get<DiscoverCredentials>(`/discover/${address}`);
+  return data;
+};
+
+export const discoverCredential = ({
+  data,
+  address,
+}: {
+  data: string;
+  address: string;
+}) => {
+  return axios.patch(`/discover/${address}`, {
+    issuer: data,
+    discovered: true,
+  });
+};
+
+export const useDiscoverCredentials = ({
+  onComplete,
+}: {
+  onComplete?: (data: string) => void;
+}) => {
+  return useMutation({
+    onSuccess: (_, variable) => {
+      console.log(variable.data);
+      onComplete?.(variable.data);
+    },
+    mutationFn: discoverCredential,
+  });
+};
 
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
@@ -108,10 +207,12 @@ const FilterButton = ({
   title,
   value,
   isSelected,
+  handleSelect,
 }: {
   title: string;
-  value?: string;
+  value: number;
   isSelected?: boolean;
+  handleSelect: () => void;
 }) => {
   return (
     <button
@@ -119,6 +220,7 @@ const FilterButton = ({
       className={`flex shrink-0 space-x-2 rounded-md bg-${
         isSelected ? 'indigoGray-90' : 'transparent'
       } py-2 px-3`}
+      onClick={handleSelect}
     >
       <span
         className={`text-${
@@ -144,6 +246,7 @@ const Credential = ({
   description,
   url,
   isViewed,
+  onClickExternalUrl,
 }: CredentialProps) => {
   return (
     <div
@@ -151,16 +254,31 @@ const Credential = ({
         isViewed ? 'border-2 border-green-600' : 'border-indigoGray-20'
       } p-4`}
     >
-      <SVG height={56} width={56} src={`/icons/${icon}`} className="mb-3" />
+      <div className="mb-3 h-[56px] w-[56px]">
+        <img
+          src={icon || '/icons/brokenImage.svg'}
+          className="h-[56px] w-[56px] object-contain"
+          alt={title}
+          onError={(event) => {
+            event.currentTarget.src = '/icons/brokenImage.svg';
+          }}
+        />
+      </div>
       <p className="mb-4 font-serif text-xl font-semibold text-indigoGray-90">
-        {title}
+        {capitalize(title)}
       </p>
       <p className="mb-5 font-sans text-sm text-indigoGray-90">{description}</p>
-      <a target="_blank" rel="noreferrer" className="flex space-x-2" href={url}>
+      <a
+        onClick={isViewed ? undefined : onClickExternalUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="flex space-x-2 rounded-lg bg-indigoGray-5 py-1 px-6"
+        href={url}
+      >
         <span className="font-sansSemi text-sm font-semibold text-indigoGray-90">
-          Visit {title}
+          Visit {capitalize(title)}
         </span>
-        <SVG height={16} width={16} src="/icons/external-link.svg" />
+        <SVG height={16} width={16} src="/icons/external-link-black.svg" />
       </a>
 
       {isViewed && (

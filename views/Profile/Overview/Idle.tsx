@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import SVG from 'react-inlinesvg';
-import { QueryClient, useQuery } from 'react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Progress } from 'components';
@@ -27,6 +27,14 @@ type DummyCrendential = {
   image: string;
 };
 
+type ProfileCompletion = {
+  personal_information: boolean;
+  discover_web3_credentials: boolean;
+  highlight_credentials: boolean;
+  connect_social_media: boolean;
+  sign_up_mazury_talent: boolean;
+};
+
 const skeletons = Array(5).fill('skeleton');
 
 export const Idle = ({
@@ -40,7 +48,7 @@ export const Idle = ({
   const queryClient = new QueryClient();
 
   const profileCompletion = useQuery({
-    queryKey: 'profileCompletion',
+    queryKey: ['profileCompletion'],
     queryFn: () => getProfileCompletion(address),
     enabled: isOwnProfile,
   });
@@ -59,7 +67,13 @@ export const Idle = ({
 
   const handleMazuryTalent = async () => {
     await axios.post(`/profiles/${address}/mazury_talent/`, {});
-    queryClient.invalidateQueries('profileCompletion');
+    queryClient.setQueryData<ProfileCompletion>(
+      ['profileCompletion'],
+      (prev) => ({
+        ...(prev || ({} as ProfileCompletion)),
+        sign_up_mazury_talent: true,
+      })
+    );
   };
 
   const credentials = hasHighlightedCredentials
@@ -71,7 +85,12 @@ export const Idle = ({
   const completedData = completionDataArray.filter(Boolean).length;
 
   return (
-    <div className="space-y-4 lg:space-y-6">
+    <div
+      className={clsx(
+        'space-y-4',
+        isOwnProfile ? 'lg:space-y-6' : 'lg:space-y-0'
+      )}
+    >
       {isOwnProfile && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
           <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
@@ -281,7 +300,10 @@ const CredentialsSection: React.FC<{
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
-              <Link href={`/people/${router.query.address}/discover`}>
+              <Link
+                legacyBehavior
+                href={`/people/${router.query.address}/discover`}
+              >
                 <a className="text-center font-sans text-xs font-semibold text-indigo-600">
                   Discover web3 credentials
                 </a>
@@ -355,9 +377,10 @@ const WritingSection = () => {
   );
 };
 
-export const getProfileCompletion = async (address: string): Promise<any> => {
-  //write proper types
-  const { data } = await axios.get(`/profiles/${address}/completion`);
+export const getProfileCompletion = async (address: string) => {
+  const { data } = await axios.get<ProfileCompletion>(
+    `/profiles/${address}/completion`
+  );
   return data;
 };
 

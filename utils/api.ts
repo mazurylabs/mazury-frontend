@@ -392,33 +392,10 @@ export const createSiweMessage = async (
   }
 };
 
-export const getTokens = async (
-  message?: string,
-  signature?: string,
-  user?: string
-) => {
-  try {
-    const res = await axios.post(`auth/siwe/verify`, {
-      message,
-      user,
-      signature,
-    });
+export async function getUserFn(address: string, isOwnProfile?: boolean) {
+  const { data } = await axios.get<Profile>(
+    `/profiles/${address}${!isOwnProfile ? '?action=display_profile_page' : ''}`
+  );
 
-    return res.data;
-  } catch (error) {
-    // throw error;
-    console.log('verifyerror', error);
-  }
-};
-
-export const refreshToken = async (refreshToken: string) => {
-  try {
-    const res = await axios.post(`/auth/token/refresh`, {
-      refresh: refreshToken,
-    });
-
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
-};
+  return data;
+}

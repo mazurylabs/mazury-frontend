@@ -1,22 +1,20 @@
 import { NextPage } from 'next';
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import { toast, Toaster } from 'react-hot-toast';
 
 import { Button, SettingsLayout } from 'components';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector } from 'react-redux';
-import { userSlice } from '@/selectors';
 import { updateProfile } from '@/utils/api';
-import { updateUserProfile } from '@/slices/user';
 
 import * as Sentry from '@sentry/nextjs';
+import { useUser } from 'providers/react-query-auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
   useIsOnboarded();
-  const dispatch = useDispatch();
-  const { profile } = useSelector(userSlice);
+  const queryClient = useQueryClient();
+  const { data: profile } = useUser();
   const [loading, setLoading] = React.useState(false);
   const [isRecruiter, setIsRecruiter] = React.useState(
     () => !!profile?.is_recruiter
@@ -29,7 +27,10 @@ const EthAddressPage: NextPage = () => {
     });
 
     if (!error) {
-      dispatch(updateUserProfile({ is_recruiter: isRecruiter }));
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        is_recruiter: isRecruiter,
+      }));
     } else {
       Sentry.captureException(error);
       toast.error('Something went wrong');

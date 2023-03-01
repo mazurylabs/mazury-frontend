@@ -1,25 +1,44 @@
-import useSWR from 'swr';
-import { useDispatch } from 'react-redux';
+import { axios } from 'lib/axios';
+import { useQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
+
 import { ListResponse, Profile } from '../types';
-import { setSuggestions } from '../slices/profileSuggestions';
+
+const getProfileSuggestions = async ({
+  address,
+  networkParam,
+  limitParam,
+}: {
+  address: string;
+  networkParam: string;
+  limitParam: string;
+}) => {
+  const { data } = await axios.get<ListResponse<Profile>>(
+    clsx(`/profiles/`, networkParam, address, limitParam).split(' ').join('')
+  );
+
+  return data.results;
+};
 
 export const useProfileSuggestions = (
   address?: string,
   options?: { isNetwork?: boolean; limit?: number }
 ) => {
-  const dispatch = useDispatch();
+  const networkParam = clsx(options?.isNetwork && '?network=');
+  const limitParam = clsx(options?.limit && '&limit=' + options?.limit);
 
-  const networkParam = options?.isNetwork ? '?network=' : '';
-  const limitParam = options?.limit ? '&limit=' + options?.limit : '';
-
-  const { data, error } = useSWR<ListResponse<Profile>>(
-    `/profiles/${networkParam}${address}${limitParam}`
-  );
-
-  if (data) dispatch(setSuggestions(data?.results));
+  const { data, error } = useQuery({
+    queryKey: clsx('profileSuggestions').split(' '),
+    queryFn: () =>
+      getProfileSuggestions({
+        address: address || '',
+        networkParam,
+        limitParam,
+      }),
+  });
 
   return {
-    profiles: data?.results,
+    profiles: data,
     error,
   };
 };

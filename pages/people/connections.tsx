@@ -18,7 +18,7 @@ const Connections = () => {
     <Layout variant="plain">
       <div className="mb-10 px-4 lg:mt-16 lg:px-8">
         <div className="w-full bg-white pt-9">
-          <Link href="/">
+          <Link legacyBehavior href="/">
             <a className="h-6 w-6">
               <SVG src="/icons/arrow-left.svg" height={24} width={24} />
               <span className="sr-only">Go back</span>
@@ -49,6 +49,7 @@ const Connections = () => {
           {connections?.map((connection, index) => (
             <div key={index}>
               <Link
+                legacyBehavior
                 href={`/people/${connection.requested_profile.eth_address}`}
               >
                 <a className="flex items-center">
