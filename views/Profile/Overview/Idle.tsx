@@ -195,7 +195,7 @@ export const Idle = ({
 
       <div className="lg:hidden">{profileSummaryAccordion}</div>
 
-      <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:space-y-0">
+      <div className="flex flex-col space-y-4 xl:flex-row xl:space-x-6 xl:space-y-0">
         <CredentialsSection
           credentials={credentials}
           isOwnProfile={isOwnProfile}
@@ -211,18 +211,21 @@ export const Idle = ({
   );
 };
 
-const SectionWrapper: React.FC<{ title: string; icon: string }> = ({
-  title,
-  icon,
-  children,
-}) => {
+const SectionWrapper: React.FC<{
+  title: string;
+  icon: string;
+  url: string;
+}> = ({ title, icon, children, url }) => {
   return (
-    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 lg:max-w-[50%]">
+    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 xl:max-w-[50%]">
       <div className="flex items-center space-x-2">
         <SVG src={icon} height={16} width={16} />
-        <p className="font-sansMid text-sm font-medium text-indigoGray-50">
+        <Link
+          href={url}
+          className="font-sansMid text-sm font-medium text-indigoGray-50"
+        >
           {title}
-        </p>
+        </Link>
         <SVG src="/icons/chevron-right.svg" height={16} width={16} />
       </div>
       {children}
@@ -254,6 +257,10 @@ const CredentialsSection: React.FC<{
           ? 'Highlighted credentials'
           : 'Top credentials'
       }
+      url={`${
+        router.asPath +
+        (hasHighlightedCredentials ? '/credentials/highlight' : '/credentials')
+      }`}
     >
       <div className="space-y-10">
         <div
@@ -338,8 +345,14 @@ const CredentialsSection: React.FC<{
 };
 
 const WritingSection = () => {
+  const router = useRouter();
+
   return (
-    <SectionWrapper icon="/icons/writing-grey.svg" title="Highlighted writing">
+    <SectionWrapper
+      icon="/icons/writing-grey.svg"
+      title="Highlighted writing"
+      url={router.asPath + '/writing'}
+    >
       <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
         <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
         <p className="text-center font-sans text-sm text-indigoGray-90">
