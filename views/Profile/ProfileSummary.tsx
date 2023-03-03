@@ -243,41 +243,33 @@ export const ProfileSummary = ({
           </div>
 
           <div className="hidden space-y-2 lg:block">
-            <ProfileLinks
-              handleCopy={() => handleCopy(profile?.eth_address || '')}
-              icon="/icons/browse-wallet.svg"
-              value={returnTruncatedIfEthAddress(
-                profile?.eth_address as string
-              )}
-            />
+            {profile?.eth_address && (
+              <ProfileLinks
+                url={`https://etherscan.io/address/${profile?.eth_address}`}
+                icon="/icons/browse-wallet.svg"
+                value={returnTruncatedIfEthAddress(
+                  profile?.eth_address as string
+                )}
+              />
+            )}
             {profile?.lens_handle && (
               <ProfileLinks
-                handleCopy={() => handleCopy(profile?.lens_handle || '')}
-                icon="/icons/lens.svg"
+                url={`https://lenster.xyz/u/${profile?.lens_handle}`}
+                icon={'/icons/lens.svg'}
                 value={`@${profile?.lens_handle}`}
               />
             )}
-            {profile?.linkedIn && (
-              <ProfileLinks
-                handleCopy={() => handleCopy(profile?.linkedIn || '')}
-                icon="/icons/linkedin-black.svg"
-                value={profile?.linkedIn}
-              />
-            )}
+
             {profile?.twitter && (
               <ProfileLinks
-                handleCopy={() =>
-                  handleCopy(`http://twitter.com/${profile.twitter}`)
-                }
-                icon="/icons/linkedin-black.svg"
+                url={`http://twitter.com/${profile.twitter}`}
+                icon="/icons/twitter-black.svg"
                 value={`@${profile?.twitter}`}
               />
             )}
             {profile?.github && (
               <ProfileLinks
-                handleCopy={() =>
-                  handleCopy(`https://github.com/${profile.github}`)
-                }
+                url={`https://github.com/${profile.github}`}
                 icon="/icons/github-black.svg"
                 value={profile?.github}
               />
@@ -291,11 +283,11 @@ export const ProfileSummary = ({
 
 const ProfileLinks = ({
   value,
-  handleCopy,
+  url,
   icon,
 }: {
   value: string;
-  handleCopy: () => void;
+  url: string;
   icon: string;
 }) => {
   return (
@@ -304,13 +296,14 @@ const ProfileLinks = ({
       <p className={clsx('font-sans text-xs font-medium text-indigoGray-90')}>
         {value}
       </p>
-      <button
-        aria-label="copy to clipboard"
-        onClick={handleCopy}
+      <a
+        target="_blank"
+        rel="noreferrer"
+        href={url}
         className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-indigoGray-10"
       >
         <SVG src="/icons/external-link-black.svg" height={12} width={12} />
-      </button>
+      </a>
     </div>
   );
 };
