@@ -21,7 +21,7 @@ interface Credential {
 
 const Skeleton = () => {
   return (
-    <div className={`flex w-full items-center space-x-4`}>
+    <div className={`flex w-full items-center space-x-4 xl:min-w-[362px]`}>
       <div className="h-12 w-12 animate-pulse rounded-full bg-indigoGray-30" />
       <div className="h-full grow space-y-1">
         <div className="h-3 w-[80%] animate-pulse rounded-lg bg-indigoGray-30" />

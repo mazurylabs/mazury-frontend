@@ -15,6 +15,7 @@ interface LayoutProps {
   variant?: 'three-part' | 'plain';
   children?: React.ReactNode;
   showMobileSidebar?: boolean;
+  className?: string;
 }
 
 export const Layout: FC<LayoutProps> = ({
@@ -25,6 +26,7 @@ export const Layout: FC<LayoutProps> = ({
   variant = 'three-part',
   children,
   showMobileSidebar = true,
+  className,
 }) => {
   const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
 
@@ -66,7 +68,12 @@ export const Layout: FC<LayoutProps> = ({
         {sidebarContent}
       </motion.aside>
 
-      <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
+      <main
+        className={clsx(
+          'mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-[calc(100vw-75px)]',
+          className
+        )}
+      >
         {variant === 'three-part' && (
           <>
             {headerContent}

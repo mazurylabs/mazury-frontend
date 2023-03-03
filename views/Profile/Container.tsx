@@ -48,10 +48,10 @@ export const Container: React.FC<ContainerProps> & {
 
   return (
     <>
-      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6">
+      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto]">
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
-        <div className="relative flex grow flex-col">
+        <div className="relative flex grow flex-col xl:max-w-fit">
           <div
             className={clsx(
               'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:pt-10 lg:pb-6',
