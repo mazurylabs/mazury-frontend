@@ -25,7 +25,7 @@ export const LensFollowers = ({
           <span className="font-sansSemi font-semibold text-indigoGray-90">
             {lensFollowers}
           </span>{' '}
-          followers on Lens
+          follower{lensFollowers == 1 ? 's' : ''} on Lens
         </p>
       )}
       <div className="flex items-center space-x-[3.5px]">
