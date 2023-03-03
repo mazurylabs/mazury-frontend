@@ -10,18 +10,20 @@ export const fetchBadges = async ({
   limit = 4,
   nextPage,
   query,
+  highlighted,
 }: {
   address: string;
   issuer?: string;
   limit: number;
   nextPage?: string;
   query?: string;
+  highlighted: boolean;
 }): Promise<ListResponse<Badge>> => {
   const { data } = await axios.get(
     nextPage ||
       `/search/badges?owner=${address}&size=${limit}${
         query ? `&query=${query}` : ''
-      }${issuer ? `&filters=${issuer}` : ''}`
+      }${issuer ? `&filters=${issuer}` : ''}&highlighted=${highlighted}`
   );
 
   return data;
@@ -32,6 +34,7 @@ export const useBadges = (
   issuer?: string,
   limit: number = 4,
   query?: string,
+  highlighted: boolean = false,
   enabled: boolean = true
 ) => {
   const {
@@ -44,7 +47,14 @@ export const useBadges = (
   } = useInfiniteQuery(
     clsx('badges', address, query && query, issuer && issuer).split(' '),
     ({ pageParam }) =>
-      fetchBadges({ address, issuer, limit, nextPage: pageParam, query }),
+      fetchBadges({
+        address,
+        issuer,
+        limit,
+        nextPage: pageParam,
+        query,
+        highlighted,
+      }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.next;
