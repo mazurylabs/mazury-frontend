@@ -150,7 +150,7 @@ const useNavItems = ({
       label: 'Writing',
       isActive: false,
       value: credentialCount.data?.posts?.total || '0',
-      icon: '/icons/writing-black.svg',
+      icon: '/icons/writing.svg',
       href: `/people/${address}/writing`,
     },
   ];
@@ -160,7 +160,6 @@ const useNavItems = ({
       ? {
           ...item,
           isActive: true,
-          ...(item.icon ? { icon: `/icons/${activeItem}-active.svg` } : {}),
         }
       : item
   );

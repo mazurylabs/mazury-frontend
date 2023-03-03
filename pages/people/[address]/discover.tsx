@@ -108,7 +108,7 @@ const Discover = ({ address }: ProfileProps) => {
             />
           </div>
 
-          <div className="lg:grid lg:grid-cols-3">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
             {data?.issuers.map((issuer) => {
               if (selectedFilter === 'All') {
                 return (
@@ -250,7 +250,7 @@ const Credential = ({
 }: CredentialProps) => {
   return (
     <div
-      className={`relative mr-6 mb-8 flex w-full flex-col items-center rounded-lg border text-center lg:max-w-[259px] ${
+      className={`relative mr-6 mb-8 flex w-full flex-col items-center rounded-lg border text-center xl:max-w-[259px] ${
         isViewed ? 'border-2 border-green-600' : 'border-indigoGray-20'
       } p-4`}
     >

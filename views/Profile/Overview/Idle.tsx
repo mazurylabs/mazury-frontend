@@ -213,13 +213,13 @@ export const Idle = ({
 
 const SectionWrapper: React.FC<{
   title: string;
-  icon: string;
+  icon: React.ReactNode;
   url: string;
 }> = ({ title, icon, children, url }) => {
   return (
     <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 xl:max-w-[50%]">
       <div className="flex items-center space-x-2">
-        <SVG src={icon} height={16} width={16} />
+        {icon}
         <Link
           href={url}
           className="font-sansMid text-sm font-medium text-indigoGray-50"
@@ -251,7 +251,14 @@ const CredentialsSection: React.FC<{
 
   return (
     <SectionWrapper
-      icon="/icons/credentials-grey.svg"
+      icon={
+        <SVG
+          src={'/icons/credentials.svg'}
+          height={16}
+          width={16}
+          className="text-indigoGray-50"
+        />
+      }
       title={
         hasHighlightedCredentials
           ? 'Highlighted credentials'
@@ -349,7 +356,14 @@ const WritingSection = () => {
 
   return (
     <SectionWrapper
-      icon="/icons/writing-grey.svg"
+      icon={
+        <SVG
+          src={'/icons/writing.svg'}
+          height={16}
+          width={16}
+          className="text-indigoGray-40"
+        />
+      }
       title="Highlighted writing"
       url={router.asPath + '/writing'}
     >

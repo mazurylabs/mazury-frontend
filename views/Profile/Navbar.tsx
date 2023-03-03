@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import Link from 'next/link';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
@@ -42,7 +43,16 @@ const NavLink = ({
             : 'bg-transparent font-sansMid font-medium text-indigoGray-90'
         } rounded-md px-3 py-2 text-sm`}
       >
-        {icon && <SVG src={icon} height={16} width={16} />}
+        {icon && (
+          <SVG
+            src={icon}
+            height={16}
+            width={16}
+            className={clsx(
+              isActive ? 'text-indigoGray-5' : 'text-indigoGray-90'
+            )}
+          />
+        )}
         <span>{label}</span>
         {value && (
           <p
