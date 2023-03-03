@@ -91,7 +91,11 @@ const Credentials = ({ address }: CredentialsProps) => {
   });
 
   return (
-    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
+    <Layout
+      variant="plain"
+      showMobileSidebar={entry?.isIntersecting}
+      className="lg:px-0"
+    >
       <Container
         navItems={navItems}
         summary={
@@ -145,7 +149,7 @@ const Credentials = ({ address }: CredentialsProps) => {
               <p className="font-sans text-sm text-indigoGray-50">
                 Highlighted credentials
               </p>
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
                 {highlightedCredentials.data?.map(({ badge_type, id }) => (
                   <Credential
                     key={id + 'highlighted'}
@@ -172,7 +176,7 @@ const Credentials = ({ address }: CredentialsProps) => {
             <div
               className={clsx(
                 badges.length || isLoading
-                  ? 'grid grid-cols-1 gap-6 lg:grid-cols-2'
+                  ? 'grid grid-cols-1 gap-6 xl:grid-cols-2'
                   : 'flex items-center justify-center'
               )}
             >
