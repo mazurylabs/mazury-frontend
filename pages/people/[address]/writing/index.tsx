@@ -279,7 +279,7 @@ const Mirror = ({
 const Skeleton = () => {
   return (
     <div
-      className={`w-full space-y-3 rounded-lg bg-indigoGray-5 py-3 pl-4 pr-[10px]`}
+      className={`w-full space-y-3 rounded-lg bg-indigoGray-5 py-3 pl-4 pr-[10px] xl:min-w-[401px]`}
     >
       <div className="flex items-center space-x-2">
         <div className="h-8 w-8 animate-pulse rounded-full bg-indigoGray-30" />

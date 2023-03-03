@@ -48,7 +48,7 @@ export const Container: React.FC<ContainerProps> & {
 
   return (
     <>
-      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto]">
+      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto] xl:min-w-[1200px]">
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col xl:max-w-fit">
@@ -84,7 +84,7 @@ export const Container: React.FC<ContainerProps> & {
             )}
           </div>
 
-          <div className="max-w-[826.6px] grow overflow-scroll px-4 lg:px-0">
+          <div className="max-w-[826.6px] grow overflow-scroll px-4 xl:min-w-[826.6px] xl:px-0">
             {children}
           </div>
           <Modal
