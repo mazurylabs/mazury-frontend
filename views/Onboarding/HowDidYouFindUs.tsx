@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Toaster, toast } from 'react-hot-toast';
 
 import { Button, Checkbox } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { updateProfile } from '@/utils/api';
-import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
+import { useUser } from '@/providers/react-query-auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 const howDidYouFindUsSources = [
   'Twitter',
@@ -18,10 +17,10 @@ const howDidYouFindUsSources = [
 ];
 
 export const HowDidYouFindUs = () => {
+  const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
-  const dispatch = useDispatch();
   const { handleStep, profile, handleSetProfile } = useOnboardingContext();
-  const { profile: userProfile } = useSelector(userSlice);
+  const { data: userProfile } = useUser();
 
   const handleCheck = (selectedSource: string) => {
     const filteredSources = profile.how_did_you_find_us
@@ -58,7 +57,11 @@ export const HowDidYouFindUs = () => {
     setLoading(false);
 
     if (!error) {
-      dispatch(updateUserProfile({ onboarded: true, ...data }));
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        ...data,
+        onboarded: true,
+      }));
       handleStep(OnboardingStepsEnum['ALLSET']);
     } else {
       toast.error('Something went wrong');

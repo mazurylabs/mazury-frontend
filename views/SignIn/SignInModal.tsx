@@ -2,19 +2,18 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import { useSignMessage } from 'wagmi';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { getProfile } from '@/utils/api';
-import { createSiweMessage, getTokens } from '@/utils/api';
-import storage from '@/utils/storage';
-
-import { Button, Modal, Spinner } from '@/components';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, ROUTE_PATH } from '@/config';
-import { userSlice } from '@/selectors';
-import { login } from '@/slices/user';
-import { SidebarContext } from '@/contexts';
-
+import { useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/nextjs';
+
+import { createSiweMessage } from 'utils/api';
+import storage from 'utils/storage';
+
+import { Button, Modal, Spinner } from 'components';
+import { ROUTE_PATH, USER_ADDRESS } from 'config';
+import { SidebarContext } from 'contexts';
+
+import { useLogin } from 'providers/react-query-auth';
+import { Profile } from 'types';
 
 type Steps = 'initialise' | 'loading' | 'error';
 
@@ -24,12 +23,15 @@ interface SignInModalProps {
 
 export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { address, profile } = useSelector(userSlice);
+  const login = useLogin();
+  const queryClient = useQueryClient();
+
+  const address = storage.getToken(USER_ADDRESS);
+
   const [activeStep, setActiveStep] = React.useState<Steps>('initialise');
   const { setSignInOpen, setIsOpen } = React.useContext(SidebarContext);
 
-  const { data, signMessage } = useSignMessage({
+  const { signMessage } = useSignMessage({
     onSuccess(data, variables) {
       handleSignIn(variables.message as string, data);
     },
@@ -42,7 +44,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
 
   const handleSignMessage = async () => {
     const message = await createSiweMessage(
-      address as string,
+      address,
       'Sign in with Ethereum to the app.'
     );
 
@@ -50,42 +52,32 @@ export const SignInModal: React.FC<SignInModalProps> = ({ onClose }) => {
   };
 
   const handleSignIn = async (message: string, signature: string) => {
-    const tokens = await getTokens(message, signature, address as string);
-
-    storage.setToken(tokens.refresh, REFRESH_TOKEN_KEY);
-    storage.setToken(tokens.access_token, ACCESS_TOKEN_KEY);
+    await login.mutateAsync({ message, address, signature });
 
     await handleUser();
   };
 
   const handleUser = async () => {
-    try {
-      if (address) {
-        const { data } = await getProfile(address);
-        const pathToRoute = storage.getToken(ROUTE_PATH);
+    const pathToRoute = storage.getToken(ROUTE_PATH);
+    const user = queryClient.getQueryData<Profile>(['authenticated-user']);
 
-        if (data) {
-          onClose();
-          dispatch(login(data));
-          setSignInOpen(false);
-          setIsOpen(false);
-          if (!data.onboarded) {
-            router.push('/onboarding');
-          } else if (pathToRoute) {
-            router.push(pathToRoute);
-            // storage.clearToken(ROUTE_PATH);
-          } else {
-            router.push(`/`);
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error);
+    onClose();
+    setSignInOpen(false);
+    setIsOpen(false);
+
+    if (!user?.onboarded) {
+      router.push('/onboarding');
+    } else if (pathToRoute) {
+      router.push(pathToRoute);
+      storage.clearToken(ROUTE_PATH);
+    } else {
+      router.push(`/`);
     }
   };
 
   const handleInitialise = () => {
     setActiveStep('loading');
+    storage.setToken(router.asPath, ROUTE_PATH);
     handleSignMessage();
   };
 

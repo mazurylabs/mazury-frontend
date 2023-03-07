@@ -1,20 +1,19 @@
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button, SettingsLayout } from 'components';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { userSlice } from '@/selectors';
-import { updateUserProfile } from '@/slices/user';
 import { TwitterModal } from '@/components/TwitterModal';
+import { useUser } from '@/providers/react-query-auth';
 
 type User = Record<'twitter' | 'address', string>;
 
 const TwitterPage: NextPage = () => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   useProtectedRoute();
   useIsOnboarded();
-  const { address, profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
 
   const [user, setUser] = useState<User>({
     twitter: '',
@@ -23,13 +22,13 @@ const TwitterPage: NextPage = () => {
 
   // Prefill form with exisiting email
   useEffect(() => {
-    if (address && !user.address) {
+    if (profile?.eth_address && !user.address) {
       setUser({
         address: profile?.eth_address as string,
         twitter: profile?.twitter as string,
       });
     }
-  }, [address, user.address, profile?.eth_address, profile?.twitter]);
+  }, [user.address, profile?.eth_address, profile?.twitter]);
 
   return (
     <SettingsLayout
@@ -70,7 +69,13 @@ const TwitterPage: NextPage = () => {
                   setUser((user) => {
                     return { ...user, twitter };
                   });
-                  dispatch(updateUserProfile({ twitter }));
+                  queryClient.setQueryData(
+                    ['authenticated-user'],
+                    (prev: any) => ({
+                      ...prev,
+                      twitter,
+                    })
+                  );
                 }}
               />
             </div>

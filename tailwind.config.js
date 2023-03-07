@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -8,13 +10,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        sansSemi: ['Inter-SemiBold', 'sans-serif'],
-        sansMid: ['Inter-Medium', 'sans-serif'],
-        sansBold: ['Inter-Bold', 'sans-serif'],
-        sansThin: ['Inter-Thin', 'sans-serif'],
-        serif: ['Masqualero', 'serif'],
-        demi: ['Masqualero DemiBold', 'serif'],
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansSemi: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansMid: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansBold: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sansThin: ['Inter var', ...defaultTheme.fontFamily.sans],
+        serif: ['Masqualero', ...defaultTheme.fontFamily.serif],
+        demi: ['Masqualero DemiBold', ...defaultTheme.fontFamily.serif],
       },
       colors: {
         indigoGray: {
@@ -294,6 +296,10 @@ module.exports = {
       backgroundImage: {
         'gradient-1':
           'linear-gradient(46.77deg, #E6FFF0 -63.19%, rgba(169, 255, 203, 0) 46.5%),linear-gradient(251.48deg, #EBDEFF -37.4%, rgba(244, 237, 255, 0) 54.75%),linear-gradient(0deg, #EEEEEE, #EEEEEE)',
+        'gradient-2':
+          'radial-gradient(100% 201.99% at 71.43% 0%, rgba(28, 64, 255, 0.2) 0%, rgba(188, 208, 239, 0.2) 100%)',
+        'gradient-3':
+          'radial-gradient(100% 201.99% at 71.43% 0%, rgba(28, 64, 255, 0.2) 0%, rgba(188, 208, 239, 0.2) 100%)',
       },
     },
     container: {

@@ -1,36 +1,84 @@
+import Axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+
 import { MutualFollowers } from '../types';
-import { getMutualFollowers } from '../utils/api';
-import * as React from 'react';
+import { formatNumber } from 'utils';
 
 export const useMutualFollowers = (
   viewingProfileId: string,
   yourProfileId: string
 ) => {
-  const [mutualFollowers, setMutualFollowers] = React.useState<MutualFollowers>(
-    {} as MutualFollowers
+  const { data, isLoading } = useQuery({
+    queryKey: ['mutualFollowers', viewingProfileId, yourProfileId],
+    queryFn: () => getMutualFollowers('0x28fb', '0x290f'),
+    enabled:
+      !!viewingProfileId &&
+      !!yourProfileId &&
+      viewingProfileId !== yourProfileId,
+  });
+
+  const followers = +(
+    data?.mutualFollowersProfiles?.pageInfo?.totalCount || '0'
+  );
+  const mutualFollowers = +(
+    data?.mutualFollowersProfiles?.items?.length || '0'
   );
 
-  React.useEffect(() => {
-    const getFollowers = async () => {
-      try {
-        if (
-          viewingProfileId &&
-          yourProfileId &&
-          viewingProfileId !== yourProfileId
+  return {
+    isLoading,
+    mutualFollowers: data?.mutualFollowersProfiles,
+    remainingFollowers: formatNumber(followers - mutualFollowers),
+    lensFollowers: formatNumber(followers),
+  };
+};
+
+export const getMutualFollowers = async (
+  viewingProfileId: string,
+  yourProfileId: string
+): Promise<Record<'mutualFollowersProfiles', MutualFollowers>> => {
+  try {
+    const query = {
+      query: `
+      query {
+        mutualFollowersProfiles(
+          request: {
+            viewingProfileId: ${JSON.stringify(viewingProfileId)}
+            yourProfileId: ${JSON.stringify(yourProfileId)}
+            limit: ${JSON.stringify(2)}
+          }
         ) {
-          const { data } = await getMutualFollowers(
-            viewingProfileId,
-            yourProfileId
-          );
-          setMutualFollowers(data.mutualFollowersProfiles);
+          items {
+            id
+            name
+            handle
+            picture {
+              ... on NftImage {
+                uri
+              }
+              ... on MediaSet {
+                original {
+                  url
+                }
+              }
+            }
+            ownedBy
+          }
+          pageInfo {
+            totalCount
+          }
         }
-      } catch (error) {
-        console.log(error);
       }
+      `,
     };
 
-    getFollowers();
-  }, [viewingProfileId, yourProfileId]);
+    const response = await Axios({
+      url: 'https://api.lens.dev/',
+      method: 'post',
+      data: query,
+    });
 
-  return { mutualFollowers };
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
 };

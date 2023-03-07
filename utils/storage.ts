@@ -17,7 +17,7 @@ const storage = {
     window.localStorage.removeItem(APP_STORAGE_PREFIX + key);
   },
   isTokenExpired: (token?: string) => {
-    if (!token) return false;
+    if (!token) return true;
 
     const decodedToken = jwt_decode(token) as { exp: number };
 

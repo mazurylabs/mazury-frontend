@@ -66,8 +66,8 @@ export const Tags: FC<TagsProps> = ({
           <Image
             role="button"
             src="/icons/plus.svg"
-            height="12px"
-            width="12px"
+            height="12"
+            width="12"
             alt="Plus icon"
             onClick={() => {
               if (!newTag) {

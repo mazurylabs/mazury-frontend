@@ -71,8 +71,8 @@ export const Pill: React.FC<PillProps> = ({
           src={`/icons/${labelToIconName[label as Labels]}-${
             active ? 'colored' : 'black'
           }.svg`}
-          width={'16px'}
-          height={'16px'}
+          width={'16'}
+          height={'16'}
           alt={`${label} icon`}
         />
       )}

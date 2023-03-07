@@ -2,7 +2,6 @@ import Axios, { AxiosRequestConfig } from 'axios';
 
 import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '../config/index';
 import storage from '../utils/storage';
-import { refreshToken } from '../utils/api';
 
 async function authRequestInterceptor(config: AxiosRequestConfig) {
   if (!config?.headers) return;
@@ -16,13 +15,21 @@ async function authRequestInterceptor(config: AxiosRequestConfig) {
   return config;
 }
 
+async function refreshToken(refreshToken: string) {
+  const res = await axios.post(`/auth/token/refresh`, {
+    refresh: refreshToken,
+  });
+
+  return res.data;
+}
+
 async function authResponseErrorInterceptor(error: any) {
   const prevRequest = error?.config;
 
   const storedToken = storage.getToken(ACCESS_TOKEN_KEY);
   const isExpired = storage.isTokenExpired(storedToken);
 
-  if (error?.response?.status === 401 && isExpired && !prevRequest?.sent) {
+  if ((isExpired || error?.response?.status === 401) && !prevRequest?.sent) {
     const storedToken = storage.getToken(REFRESH_TOKEN_KEY);
 
     prevRequest.sent = true;

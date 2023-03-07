@@ -3,18 +3,21 @@ import Link from 'next/link';
 import * as React from 'react';
 import { SidebarContext } from 'contexts';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
 import SVG from 'react-inlinesvg';
 
-import { userSlice } from '@/selectors';
-import { logout } from '@/slices/user';
-import { SignIn } from '@/views/SignIn';
-import { colors } from '@/utils';
-import { verifyEmail } from '@/utils/api';
-import { WalletRequestModal } from '@/components/WalletRequestModal';
-import { SlidersIcon } from '@/components/Icons';
-import { HomeIcon, SearchIcon } from '@/components';
-import { disconnect } from '@wagmi/core';
+import { SignIn } from 'views/SignIn';
+
+import { colors } from 'utils';
+import { verifyEmail } from 'utils/api';
+
+import { WalletRequestModal } from 'components/WalletRequestModal';
+import { SlidersIcon } from 'components/Icons';
+import { HomeIcon, SearchIcon } from 'components';
+
+import { useLogout, useUser } from 'providers/react-query-auth';
+import { useUserSession } from '@/hooks';
+import storage from '@/utils/storage';
+import { STORED_USER } from '@/config';
 
 const iconColors = {
   active: colors.indigo[50],
@@ -24,11 +27,21 @@ const iconColors = {
 type Steps = 'idle' | 'active' | 'error';
 
 export const Sidebar: React.FC = () => {
-  const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
+  const logout = useLogout();
   const router = useRouter();
-  const dispatch = useDispatch();
+
+  const userSessionExpired = useUserSession();
+
+  const [currentStep, setCurrentStep] = React.useState<Steps>('idle');
+
+  const storedUser = storage.getToken(STORED_USER);
+
   const { pathname } = router;
-  const { profile, isAuthenticated } = useSelector(userSlice);
+  const { data: profile } = useUser({
+    enabled: !userSessionExpired,
+    initialData: storedUser,
+  });
+
   const { isOpen, signInOpen, setSignInOpen } =
     React.useContext(SidebarContext);
 
@@ -36,8 +49,6 @@ export const Sidebar: React.FC = () => {
   const closeSignIn = () => setSignInOpen(false);
 
   const handleEmailVerification = async () => {
-    // setCurrentStep('active');
-
     if (profile?.eth_address) {
       const { error } = await verifyEmail(profile?.eth_address);
       if (!error) {
@@ -48,10 +59,8 @@ export const Sidebar: React.FC = () => {
     }
   };
 
-  const handleLogOut = async () => {
-    await disconnect();
-    router.push('/');
-    dispatch(logout());
+  const handleLogOut = () => {
+    logout.mutate({}, { onSuccess: () => router.push('/') });
   };
 
   return (
@@ -114,7 +123,7 @@ export const Sidebar: React.FC = () => {
             <div className="mt-auto flex flex-col">
               {/* Email not verified alert */}
               {isOpen &&
-                isAuthenticated &&
+                !!storedUser &&
                 profile?.email &&
                 !profile?.email_verified && (
                   <div className="mx-auto mb-11 flex w-[144px] items-center justify-center">
@@ -144,7 +153,7 @@ export const Sidebar: React.FC = () => {
 
               <hr className={`my-8 w-full border border-indigoGray-20`} />
 
-              {isAuthenticated ? (
+              {!!storedUser ? (
                 <>
                   {/* // Profile button */}
                   <SidebarItem
@@ -178,7 +187,7 @@ export const Sidebar: React.FC = () => {
                 </button>
               )}
 
-              {isAuthenticated && (
+              {!!storedUser && (
                 <SidebarItem
                   href="/settings"
                   label="Settings"
@@ -197,7 +206,7 @@ export const Sidebar: React.FC = () => {
                 />
               )}
 
-              {isAuthenticated && (
+              {!!storedUser && (
                 <button
                   type="button"
                   onClick={handleLogOut}
@@ -248,7 +257,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   active = false,
 }) => {
   return (
-    <Link href={href} passHref>
+    <Link legacyBehavior href={href} passHref>
       <a
         className={`flex h-[40px] ${
           isOpen && 'w-full'

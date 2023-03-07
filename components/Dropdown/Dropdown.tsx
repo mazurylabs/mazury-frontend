@@ -51,8 +51,8 @@ export const Dropdown: FCWithClassName<DropdownProps> = ({
         </label>
         <Image
           src="/icons/angle-down.svg"
-          width="16px"
-          height="16px"
+          width="16"
+          height="16"
           alt="Dropdown icon"
         />
       </div>

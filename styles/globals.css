@@ -4,69 +4,69 @@
 
 @layer base {
   /* Inter thin */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Thin.ttf');
     font-weight: 100;
-  }
+  } */
 
   /* Inter extralight */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-ExtraLight.ttf');
     font-weight: 200;
-  }
+  } */
 
   /* Inter light */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Light.ttf');
     font-weight: 300;
-  }
+  } */
 
   /* Inter regular */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Regular.ttf');
     font-weight: 400;
-  }
+  } */
 
   /* Inter medium */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Medium.ttf');
     font-weight: 500;
-  }
+  } */
 
   /* Inter semibold */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-SemiBold.ttf');
     font-weight: 600;
-  }
+  } */
 
   /* Inter bold */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Bold.ttf');
     font-weight: 700;
-  }
+  } */
 
   /* Inter extrabold */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-ExtraBold.ttf');
     font-weight: 800;
-  }
+  } */
 
   /* Inter black   */
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter.ttf');
+    src: url('/fonts/Inter-Black.ttf');
     font-weight: 900;
-  }
+  } */
 
-  @font-face {
+  /* @font-face {
     font-family: 'Inter';
     src: url('/fonts/Inter.ttf');
     font-weight: 600;
@@ -76,7 +76,7 @@
     font-family: 'Inter';
     src: url('/fonts/Inter.ttf');
     font-weight: 400;
-  }
+  } */
 
   @font-face {
     font-family: 'Masqualero';

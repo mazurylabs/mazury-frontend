@@ -1,91 +1,101 @@
 /* eslint-disable @next/next/no-img-element */
-import { userSlice } from '../../selectors/index';
-import { logout } from '../../slices/user';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { disconnect } from '@wagmi/core';
+import clsx from 'clsx';
+
+import { useLogout, useUser } from 'providers/react-query-auth';
+import storage from '@/utils/storage';
+import { STORED_USER } from '@/config';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
-  // TODO: Implement active state
+  className?: string;
 }
 
-export const MobileSidebar: React.FC<MobileSidebarProps> = ({ children }) => {
+export const MobileSidebar: React.FC<MobileSidebarProps> = ({
+  children,
+  className,
+}) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { address, profile, isAuthenticated } = useSelector(userSlice);
+  const { data: profile } = useUser();
+  const logout = useLogout();
 
-  // const isSignedIn = !!accountData;
+  const storedUser = storage.getToken(STORED_USER);
 
-  const handleLogOut = async () => {
-    await disconnect();
-    dispatch(logout());
-    router.push('/');
+  const handleLogOut = () => {
+    logout.mutate({}, { onSuccess: () => router.push('/') });
   };
 
   return (
-    <div className="sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] py-4 lg:hidden">
+    <div
+      className={clsx(
+        'sticky bottom-0 left-0 flex w-screen items-center justify-between border bg-white px-[58.5px] py-4 lg:hidden',
+        className
+      )}
+    >
       {children || (
         <>
-          <Link href="/" passHref>
+          <Link legacyBehavior href="/" passHref>
             <a>
               <Image
                 src="/icons/home.svg"
                 alt="Home icon"
-                width="24px"
-                height="24px"
+                width={24}
+                height={24}
               />
             </a>
           </Link>
 
-          <Link href="/search" passHref>
+          <Link legacyBehavior href="/search" passHref>
             <a>
               <Image
                 src="/icons/search.svg"
                 alt="Search icon"
-                width="24px"
-                height="24px"
+                width="24"
+                height="24"
               />
             </a>
           </Link>
 
-          {isAuthenticated ? (
+          {!!profile && !!storedUser ? (
             <>
-              <Link href={`/people/${address}`} passHref>
+              <Link
+                legacyBehavior
+                href={`/people/${profile.eth_address}`}
+                passHref
+              >
                 <a>
                   <img
                     src={profile?.avatar || '/profile-active.svg'}
                     alt="Profile icon"
-                    width="24px"
-                    height="24px"
-                    className="rounded-full"
+                    className="h-6 w-6 rounded-full object-cover"
                   />{' '}
                 </a>
               </Link>
             </>
           ) : (
-            <Link href="/sign-in" passHref>
+            <Link legacyBehavior href="/sign-in" passHref>
               <a>
                 <Image
                   src="/icons/user-black.svg"
                   alt="Sign in icon"
-                  width="24px"
-                  height="24px"
+                  width="24"
+                  height="24"
                 />{' '}
               </a>
             </Link>
           )}
 
-          <Link href="/settings" passHref>
+          <Link legacyBehavior href="/settings" passHref>
             <a>
               <Image
                 src="/icons/sliders.svg"
                 alt="Settings icon"
-                width="24px"
-                height="24px"
+                width="24"
+                height="24"
               />{' '}
             </a>
           </Link>

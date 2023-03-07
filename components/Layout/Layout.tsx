@@ -5,6 +5,7 @@ import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
+import clsx from 'clsx';
 
 interface LayoutProps {
   sidebarContent?: React.ReactNode;
@@ -13,6 +14,8 @@ interface LayoutProps {
   headerContent?: React.ReactNode;
   variant?: 'three-part' | 'plain';
   children?: React.ReactNode;
+  showMobileSidebar?: boolean;
+  className?: string;
 }
 
 export const Layout: FC<LayoutProps> = ({
@@ -22,6 +25,8 @@ export const Layout: FC<LayoutProps> = ({
   headerContent,
   variant = 'three-part',
   children,
+  showMobileSidebar = true,
+  className,
 }) => {
   const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
 
@@ -53,7 +58,7 @@ export const Layout: FC<LayoutProps> = ({
         onMouseLeave={() => !signInOpen && setIsOpen(false)}
         role="menu"
       >
-        <Link href="/">
+        <Link legacyBehavior href="/">
           <a className="h-[32px] w-[32px] cursor-pointer">
             <SVG src="/new-logo.svg" height="32px" width="32px" />
           </a>
@@ -63,7 +68,12 @@ export const Layout: FC<LayoutProps> = ({
         {sidebarContent}
       </motion.aside>
 
-      <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
+      <main
+        className={clsx(
+          'mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-[calc(100vw-75px)]',
+          className
+        )}
+      >
         {variant === 'three-part' && (
           <>
             {headerContent}
@@ -83,7 +93,7 @@ export const Layout: FC<LayoutProps> = ({
         {variant === 'plain' && <>{children}</>}
       </main>
 
-      <MobileSidebar />
+      <MobileSidebar className={clsx(!showMobileSidebar && 'hidden')} />
     </div>
   );
 };
