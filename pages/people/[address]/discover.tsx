@@ -30,7 +30,7 @@ const Discover = ({ address }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['discover', address],
     queryFn: () => getDiscoverCredentials(address),
     enabled: isOwnProfile,
@@ -79,69 +79,73 @@ const Discover = ({ address }: ProfileProps) => {
           />
         }
       >
-        <div>
-          <div className="mb-7 space-y-7">
-            <div className="flex space-x-5 overflow-x-auto">
-              <FilterButton
-                isSelected={selectedFilter === 'All'}
-                title="All"
-                handleSelect={() => setSelectedFilter('All')}
-                value={data?.issuers.length || 0}
-              />
-              {Object.keys(filterCategories).map((category) => (
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <div>
+            <div className="mb-7 space-y-7">
+              <div className="flex space-x-5 overflow-x-auto">
                 <FilterButton
-                  key={category}
-                  title={category}
-                  isSelected={selectedFilter === category}
-                  handleSelect={() => setSelectedFilter(category)}
-                  value={filterCategories[category]}
+                  isSelected={selectedFilter === 'All'}
+                  title="All"
+                  handleSelect={() => setSelectedFilter('All')}
+                  value={data?.issuers.length || 0}
                 />
-              ))}
+                {Object.keys(filterCategories).map((category) => (
+                  <FilterButton
+                    key={category}
+                    title={category}
+                    isSelected={selectedFilter === category}
+                    handleSelect={() => setSelectedFilter(category)}
+                    value={filterCategories[category]}
+                  />
+                ))}
+              </div>
+
+              <Progress
+                total={data?.issuers.length || 0}
+                current={progress}
+                label="read"
+                size="large"
+                variant="light"
+              />
             </div>
 
-            <Progress
-              total={data?.issuers.length || 0}
-              current={progress}
-              label="read"
-              size="large"
-              variant="light"
-            />
+            <div className="lg:grid lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
+              {data?.issuers.map((issuer) => {
+                if (selectedFilter === 'All') {
+                  return (
+                    <Credential
+                      key={issuer.issuer.name}
+                      title={issuer.issuer.name}
+                      description={issuer.issuer.description}
+                      icon={issuer.issuer.logo_url}
+                      url={issuer.issuer.external_url}
+                      isViewed={issuer.discovered}
+                      onClickExternalUrl={() =>
+                        mutate({ data: issuer.issuer.name, address })
+                      }
+                    />
+                  );
+                } else if (issuer.issuer.categories.includes(selectedFilter)) {
+                  return (
+                    <Credential
+                      key={issuer.issuer.name}
+                      title={issuer.issuer.name}
+                      description={issuer.issuer.description}
+                      icon={issuer.issuer.logo_url}
+                      url={issuer.issuer.external_url}
+                      isViewed={issuer.discovered}
+                      onClickExternalUrl={() =>
+                        mutate({ data: issuer.issuer.name, address })
+                      }
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
-
-          <div className="lg:grid lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-            {data?.issuers.map((issuer) => {
-              if (selectedFilter === 'All') {
-                return (
-                  <Credential
-                    key={issuer.issuer.name}
-                    title={issuer.issuer.name}
-                    description={issuer.issuer.description}
-                    icon={issuer.issuer.logo_url}
-                    url={issuer.issuer.external_url}
-                    isViewed={issuer.discovered}
-                    onClickExternalUrl={() =>
-                      mutate({ data: issuer.issuer.name, address })
-                    }
-                  />
-                );
-              } else if (issuer.issuer.categories.includes(selectedFilter)) {
-                return (
-                  <Credential
-                    key={issuer.issuer.name}
-                    title={issuer.issuer.name}
-                    description={issuer.issuer.description}
-                    icon={issuer.issuer.logo_url}
-                    url={issuer.issuer.external_url}
-                    isViewed={issuer.discovered}
-                    onClickExternalUrl={() =>
-                      mutate({ data: issuer.issuer.name, address })
-                    }
-                  />
-                );
-              }
-            })}
-          </div>
-        </div>
+        )}
       </Container>
     </Layout>
   );
@@ -288,6 +292,84 @@ const Credential = ({
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+const Skeleton = () => {
+  return (
+    <div className="space-y-6">
+      <div className="flex space-x-4">
+        <div className="h-[30px] w-[106px] animate-pulse rounded-2xl bg-indigoGray-30" />
+        <div className="h-[30px] w-[106px] animate-pulse rounded-2xl bg-indigoGray-30" />
+        <div className="h-[30px] w-[106px] animate-pulse rounded-2xl bg-indigoGray-30" />
+        <div className="h-[30px] w-[106px] animate-pulse rounded-2xl bg-indigoGray-30" />
+        <div className="h-[30px] w-[106px] animate-pulse rounded-2xl bg-indigoGray-30" />
+      </div>
+
+      <div className="h-[22px] w-[230px] animate-pulse rounded-2xl bg-indigoGray-30" />
+
+      <div className="lg:grid lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
+        <div className="flex h-[269px] w-[259px] flex-col items-center justify-center space-y-4 rounded-lg border border-indigoGray-20">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="h-[57px] w-[57px] animate-pulse rounded-full bg-indigoGray-30" />
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[178px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+        </div>
+
+        <div className="flex h-[269px] w-[259px] flex-col items-center justify-center space-y-4 rounded-lg border border-indigoGray-20">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="h-[57px] w-[57px] animate-pulse rounded-full bg-indigoGray-30" />
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[178px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+        </div>
+
+        <div className="flex h-[269px] w-[259px] flex-col items-center justify-center space-y-4 rounded-lg border border-indigoGray-20">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="h-[57px] w-[57px] animate-pulse rounded-full bg-indigoGray-30" />
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[178px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+        </div>
+
+        <div className="flex h-[269px] w-[259px] flex-col items-center justify-center space-y-4 rounded-lg border border-indigoGray-20">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="h-[57px] w-[57px] animate-pulse rounded-full bg-indigoGray-30" />
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="h-3 w-[140px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[178px] animate-pulse rounded-lg bg-indigoGray-30" />
+            <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+          </div>
+
+          <div className="h-3 w-[120px] animate-pulse rounded-lg bg-indigoGray-30" />
+        </div>
+      </div>
     </div>
   );
 };
