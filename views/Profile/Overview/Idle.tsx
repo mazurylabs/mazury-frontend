@@ -121,7 +121,7 @@ export const Idle = ({
                   <button
                     disabled={!!profileCompletionData?.['personal_information']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-transparent lg:pr-[10px] lg:pb-0 lg:font-semibold',
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-transparent lg:pr-[10px] lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['personal_information'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -134,7 +134,7 @@ export const Idle = ({
                       !!profileCompletionData?.['discover_web3_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
                       profileCompletionData?.['discover_web3_credentials'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -147,7 +147,7 @@ export const Idle = ({
                       !!profileCompletionData?.['highlight_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
                       profileCompletionData?.['highlight_credentials'] &&
                         !!highlightedCredentials.data?.length &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
@@ -161,7 +161,7 @@ export const Idle = ({
                   <button
                     disabled={!!profileCompletionData?.['connect_social_media']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -174,7 +174,7 @@ export const Idle = ({
                     rel="noreferrer"
                     href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
                     className={clsx(
-                      '!m-0 shrink-0 border-l-indigoGray-20 !p-0 !pt-3 font-sans !text-xs !font-medium text-indigoGray-90 lg:border-l lg:!pt-0 lg:!pl-[10px] lg:!pr-[10px] lg:!font-semibold',
+                      '!m-0 shrink-0 border-l-indigoGray-20 !p-0 !pt-3 font-sans !text-xs !font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:!pt-0 lg:!pl-[10px] lg:!pr-[10px] lg:!font-semibold',
                       profileCompletionData?.['sign_up_mazury_talent'] &&
                         'pointer-events-none font-medium text-indigoGray-40 line-through'
                     )}
@@ -218,11 +218,11 @@ const SectionWrapper: React.FC<{
 }> = ({ title, icon, children, url }) => {
   return (
     <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 xl:max-w-[50%]">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 text-indigoGray-50 hover:text-indigoGray-70">
         {icon}
         <Link
           href={url}
-          className="font-sansMid text-sm font-medium text-indigoGray-50"
+          className="font-sansMid text-sm font-medium text-inherit"
         >
           {title}
         </Link>
@@ -256,7 +256,7 @@ const CredentialsSection: React.FC<{
           src={'/icons/credentials.svg'}
           height={16}
           width={16}
-          className="text-indigoGray-50"
+          className="text-inherit"
         />
       }
       title={
@@ -318,7 +318,7 @@ const CredentialsSection: React.FC<{
                 legacyBehavior
                 href={`/people/${router.query.address}/discover`}
               >
-                <a className="text-center font-sans text-xs font-semibold text-indigo-600">
+                <a className="rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
                   Discover web3 credentials
                 </a>
               </Link>
@@ -361,7 +361,7 @@ const WritingSection = () => {
           src={'/icons/writing.svg'}
           height={16}
           width={16}
-          className="text-indigoGray-40"
+          className="text-inherit"
         />
       }
       title="Highlighted writing"
@@ -377,26 +377,36 @@ const WritingSection = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            className="flex cursor-pointer items-center space-x-2"
+            className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-[#01501F] hover:bg-indigoGray-10"
             href="https://www.lens.xyz"
           >
             <SVG src="/icons/lens-green.svg" height={16} width={16} />
-            <span className="font-sans text-xs font-semibold text-[#01501F]">
+            <span className="font-sans text-xs font-semibold text-inherit">
               Discover Lens
             </span>
-            <SVG src="/icons/chevron-right-green.svg" height={16} width={16} />
+            <SVG
+              src="/icons/chevron-right.svg"
+              height={16}
+              width={16}
+              className="text-[#01501F]"
+            />
           </a>
           <a
             target="_blank"
             rel="noreferrer"
-            className="flex cursor-pointer items-center space-x-2"
+            className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-blue-600 hover:bg-indigoGray-10"
             href="https://www.mirror.xyz"
           >
             <SVG src="/icons/mirror-icon-blue.svg" height={16} width={16} />
-            <span className="font-sans text-xs font-semibold text-blue-600">
+            <span className="font-sans text-xs font-semibold text-inherit">
               Discover Mirror
             </span>
-            <SVG src="/icons/chevron-right-blue.svg" height={16} width={16} />
+            <SVG
+              src="/icons/chevron-right.svg"
+              height={16}
+              width={16}
+              className="text-blue-600"
+            />
           </a>
         </div>
       </div>

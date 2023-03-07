@@ -154,7 +154,8 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                     <SVG
                       height={24}
                       width={24}
-                      src="/icons/chevron-right-black.svg"
+                      src="/icons/chevron-right.svg"
+                      className="text-indigoGray-90"
                     />
                   </a>
                 </Link>

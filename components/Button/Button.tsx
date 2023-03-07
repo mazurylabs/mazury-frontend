@@ -4,11 +4,11 @@ import { ButtonProps } from './Button.types';
 
 const variants = {
   primary:
-    'bg-indigoGray-90  text-indigoGray-5 hover:bg-indigoGray-70 active:text-indigoGray-30  disabled:bg-indigoGray-30 shadow-base',
+    'bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40',
   secondary:
-    'border-[1.5px] border-indigoGray-90 bg-white text-indigoGray-90 hover:border-indigoGray-70 hover:text-indigoGray-70 active:border-indigoGray-80 active:text-indigoGray-80 disabled:border-indigoGray-30 disabled:text-indigoGray-30',
+    'border-[1.5px] border-indigoGray-20 bg-indigoGray-10 text-indigoGray-90 hover:border-indigoGray-30 hover:text-indigoGray-50 active:border-indigoGray-80 active:text-indigoGray-80 disabled:border-indigoGray-30 disabled:bg-indigoGray-20 disabled:text-indigoGray-40 hover:bg-indigoGray-20 hover:text-indigoGray-50 active:bg-indigoGray-5 active:border-indigoGray-20 active:text-indigoGray-70',
   tertiary:
-    'bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-70 active:text-indigoGray-60 disabled:text-indigoGray-30',
+    'bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-50 active:text-indigoGray-70 disabled:text-indigoGray-40',
 };
 
 export const Button: React.FC<ButtonProps> = ({

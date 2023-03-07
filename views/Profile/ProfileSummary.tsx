@@ -291,18 +291,23 @@ const ProfileLinks = ({
   icon: string;
 }) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 text-indigoGray-90 hover:text-indigoGray-60">
       <SVG src={icon} height={16} width={16} />
-      <p className={clsx('font-sans text-xs font-medium text-indigoGray-90')}>
+      <p className={clsx('font-sans text-xs font-medium text-inherit')}>
         {value}
       </p>
       <a
         target="_blank"
         rel="noreferrer"
         href={url}
-        className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-indigoGray-10"
+        className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-indigoGray-10 hover:bg-indigoGray-20"
       >
-        <SVG src="/icons/external-link-black.svg" height={12} width={12} />
+        <SVG
+          src="/icons/external-link.svg"
+          className="text-indigoGray-90"
+          height={12}
+          width={12}
+        />
       </a>
     </div>
   );

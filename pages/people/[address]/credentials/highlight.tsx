@@ -179,12 +179,12 @@ const Credentials = ({ address }: HighlightProps) => {
                     showCheckbox={true}
                     isSelected={selectedCredentials.includes(badgeId)}
                     onSelect={() => handleSelectCredential(badgeId)}
-                    className={`${
+                    className={clsx(
+                      'rounded-lg hover:bg-indigoGray-5 ',
                       selectedCredentials.length >= 8 &&
-                      !selectedCredentials.includes(badgeId)
-                        ? 'cursor-not-allowed'
-                        : ''
-                    } `}
+                        !selectedCredentials.includes(badgeId) &&
+                        'cursor-not-allowed'
+                    )}
                   />
                 );
               })

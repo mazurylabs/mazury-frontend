@@ -209,7 +209,7 @@ const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
                         href={data.external_links.opensea}
                         rel="noreferrer"
                         target="_blank"
-                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600 hover:bg-indigo-100"
                       >
                         <SVG
                           src={`/icons/opensea.svg`}
@@ -226,7 +226,7 @@ const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
                         href={data.external_links.rainbow}
                         rel="noreferrer"
                         target="_blank"
-                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600 hover:bg-indigo-100"
                       >
                         <SVG
                           src={`/icons/rainbow.svg`}
@@ -243,7 +243,7 @@ const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
                         href={data?.external_links.poap}
                         rel="noreferrer"
                         target="_blank"
-                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600"
+                        className="flex items-center rounded-md bg-indigo-50 py-1 px-2 font-sansMid text-sm font-medium text-indigo-600 hover:bg-indigo-100"
                       >
                         <SVG
                           src={`/icons/gitpoap.svg`}

@@ -228,7 +228,7 @@ const Mirror = ({
       target="_blank"
       rel="noreferrer"
       href={url}
-      className="mb-6 flex w-full flex-col space-y-3 overflow-hidden rounded-lg bg-indigoGray-5"
+      className="mb-6 flex w-full flex-col space-y-3 overflow-hidden rounded-lg bg-indigoGray-5 hover:bg-indigoGray-10"
     >
       <div className="flex h-[200px] w-full items-center justify-center bg-indigoGray-10 lg:w-[401.3px]">
         <img
@@ -268,7 +268,12 @@ const Mirror = ({
           <div className="flex items-center space-x-2 font-sans text-xs font-semibold text-sky-600">
             <SVG height={16} width={16} src="/icons/mirror-icon-blue.svg" />
             <span>See on Mirror</span>
-            <SVG src="/icons/chevron-right-blue.svg" height={16} width={16} />
+            <SVG
+              src="/icons/chevron-right.svg"
+              className="text-sky-600"
+              height={16}
+              width={16}
+            />
           </div>
         </div>
       </div>

@@ -254,7 +254,7 @@ const Credential = ({
 }: CredentialProps) => {
   return (
     <div
-      className={`relative mr-6 mb-8 flex w-full flex-col items-center rounded-lg border text-center xl:max-w-[259px] ${
+      className={`relative mr-6 mb-8 flex w-full flex-col items-center rounded-lg border text-center hover:shadow-lg xl:max-w-[259px] ${
         isViewed ? 'border-2 border-green-600' : 'border-indigoGray-20'
       } p-4`}
     >
@@ -282,7 +282,12 @@ const Credential = ({
         <span className="font-sansSemi text-sm font-semibold text-indigoGray-90">
           Visit {capitalize(title)}
         </span>
-        <SVG height={16} width={16} src="/icons/external-link-black.svg" />
+        <SVG
+          height={16}
+          width={16}
+          src="/icons/external-link.svg"
+          className="text-indigoGray-90"
+        />
       </a>
 
       {isViewed && (

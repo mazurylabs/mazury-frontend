@@ -37,11 +37,12 @@ const NavLink = ({
   return (
     <Link legacyBehavior href={href}>
       <a
-        className={`flex shrink-0 items-center space-x-2 ${
+        className={clsx(
+          'flex shrink-0 items-center space-x-2 rounded-md px-3 py-2 text-sm',
           isActive
             ? 'bg-indigoGray-90 font-sansSemi font-semibold text-indigo-50'
-            : 'bg-transparent font-sansMid font-medium text-indigoGray-90'
-        } rounded-md px-3 py-2 text-sm`}
+            : 'bg-transparent font-sansMid font-medium text-indigoGray-90 hover:text-indigoGray-60'
+        )}
       >
         {icon && (
           <SVG
@@ -49,7 +50,7 @@ const NavLink = ({
             height={16}
             width={16}
             className={clsx(
-              isActive ? 'text-indigoGray-5' : 'text-indigoGray-90'
+              isActive ? 'text-indigoGray-5' : 'text-indigoGray-inherit'
             )}
           />
         )}
