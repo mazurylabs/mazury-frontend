@@ -89,7 +89,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
           <button
             type="button"
             className={clsx(
-              'flex h-full items-center justify-between rounded-lg  bg-indigoGray-5 px-4',
+              'flex h-full items-center justify-between rounded-lg  bg-indigoGray-5 px-4 hover:bg-indigoGray-10',
               dropdown.className
             )}
             onClick={() => setToggleDropdown(!toggleDropdown)}
