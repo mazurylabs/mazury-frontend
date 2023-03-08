@@ -148,7 +148,7 @@ const Credentials = ({ address }: HighlightProps) => {
           />
 
           <div className="flex space-x-6">
-            <div className="rounded-md bg-indigoGray-10 p-3">
+            <div className="rounded-md bg-indigoGray-10 p-3 hover:bg-indigoGray-20">
               <p className="font-inter text-sm font-medium text-indigoGray-90">
                 {selectedCredentials.length} selected out of 8 possible
               </p>

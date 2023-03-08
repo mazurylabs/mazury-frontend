@@ -15,6 +15,7 @@ import {
   ProfileSummaryMobile,
 } from 'views/Profile';
 import { useAccount, useIntersect, useMobile } from 'hooks';
+import { truncateString } from 'utils';
 
 interface WritingProps {
   address: string;
@@ -258,7 +259,9 @@ const Mirror = ({
 
         <div className="space-y-1">
           <p className="font-sansMid font-medium text-indigoGray-90">{title}</p>
-          <p className="font-sans text-sm text-indigoGray-90">{preview}</p>
+          <p className="font-sans text-sm text-indigoGray-90">
+            {truncateString(preview, 100)}
+          </p>
         </div>
 
         <div className="flex items-center justify-between">

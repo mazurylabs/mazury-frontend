@@ -50,9 +50,9 @@ export const Credential: React.FC<Credential> & {
 
   return (
     <div
-      className={`flex cursor-pointer items-center space-x-4 border ${
+      className={`flex cursor-pointer items-center space-x-4 rounded-lg border hover:bg-indigoGray-10 ${
         isSelected
-          ? 'rounded-lg border-indigoGray-20 bg-indigoGray-5'
+          ? 'border-indigoGray-20 bg-indigoGray-5'
           : 'border-transparent'
       } ${className} ${showCheckbox ? 'px-4 py-2' : ''}`}
       onClick={onSelect}

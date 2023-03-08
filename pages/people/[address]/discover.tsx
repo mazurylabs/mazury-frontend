@@ -231,7 +231,7 @@ const FilterButton = ({
           isSelected
             ? 'indigo-50 font-sansSemi font-semibold'
             : 'indigoGray-90 font-sansMid font-medium'
-        }`}
+        } hover:text-indigoGray-60`}
       >
         {title}
       </span>
@@ -276,7 +276,7 @@ const Credential = ({
         onClick={isViewed ? undefined : onClickExternalUrl}
         target="_blank"
         rel="noreferrer"
-        className="flex space-x-2 rounded-lg bg-indigoGray-5 py-1 px-6"
+        className="flex items-center space-x-2 rounded-lg bg-indigoGray-5 py-1 px-6"
         href={url}
       >
         <span className="font-sansSemi text-sm font-semibold text-indigoGray-90">

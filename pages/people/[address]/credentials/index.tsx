@@ -162,6 +162,7 @@ const Credentials = ({ address }: CredentialsProps) => {
                     totalSupply={badge_type.total_supply}
                     isSelected={true}
                     className="border-indigo-400 px-4 py-2"
+                    variant={badge_type.issuer.name}
                   />
                 ))}
               </div>

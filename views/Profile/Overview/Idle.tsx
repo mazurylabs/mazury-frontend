@@ -289,9 +289,12 @@ const CredentialsSection: React.FC<{
                   key={id}
                   title={badge_type.title}
                   description={badge_type.description}
-                  onSelect={() => {}}
+                  onSelect={() =>
+                    router.push(`${router.asPath}/credentials/${id}`)
+                  }
                   imageSrc={badge_type.image}
                   totalSupply={badge_type.total_supply}
+                  variant={badge_type.issuer.name}
                 />
               ))}
             </div>
