@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 
 import { useClickOutside } from 'hooks';
 import { CredentialsCount } from '@/types';
+import storage from 'utils/storage';
+import { STORED_USER } from 'config';
 
 interface SearchProps {
   onSearch: () => void;
@@ -35,6 +37,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
   search,
 }) => {
   const defaultOption = `All ${dropdown.label.toLowerCase()}`;
+  const storedUser = storage.getToken(STORED_USER);
 
   const router = useRouter();
   const containerRef = React.useRef<HTMLDivElement>(null!);
@@ -111,11 +114,11 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute top-[100%] left-0 z-10 mt-1 h-[432px] w-[91.4vw] max-w-[672px] overflow-hidden rounded-lg bg-indigoGray-5 lg:mt-0 lg:w-full lg:max-w-[100%]"
+                className="absolute top-[100%] left-0 z-10 mt-1 h-[432px] w-[91.4vw] max-w-[672px] overflow-hidden rounded-lg bg-indigoGray-5 shadow-lg lg:mt-0 lg:w-full lg:max-w-[100%]"
               >
                 <li
                   className={clsx(
-                    'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium text-indigoGray-90',
+                    'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10',
                     !dropdown.selectedOption && 'text-indigo-600',
                     !dropdown.options?.total &&
                       'cursor-not-allowed text-indigoGray-30'
@@ -129,7 +132,7 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                   <li
                     key={option.title}
                     className={clsx(
-                      'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium',
+                      'flex cursor-pointer items-center justify-between py-[13.5px] pl-4 pr-6 font-sans text-sm font-medium hover:bg-indigoGray-10',
                       dropdown.selectedOption === option.title
                         ? 'text-indigo-600'
                         : 'text-indigoGray-90',
@@ -143,22 +146,24 @@ export const FilterSearch: React.FC<FilterSearchProps> = ({
                     <span>{option.value}</span>
                   </li>
                 ))}
-                <Link
-                  legacyBehavior
-                  href={`/people/${router.query.address}/discover`}
-                >
-                  <a className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
-                    <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      Discover web3 credentials
-                    </p>
-                    <SVG
-                      height={24}
-                      width={24}
-                      src="/icons/chevron-right.svg"
-                      className="text-indigoGray-90"
-                    />
-                  </a>
-                </Link>
+                {!!storedUser && (
+                  <Link
+                    legacyBehavior
+                    href={`/people/${router.query.address}/discover`}
+                  >
+                    <a className="sticky bottom-0 flex items-center space-x-[1px] bg-indigo-50 px-4 py-[13.5px]">
+                      <p className="font-sans text-sm font-medium text-indigoGray-90">
+                        Discover web3 credentials
+                      </p>
+                      <SVG
+                        height={24}
+                        width={24}
+                        src="/icons/chevron-right.svg"
+                        className="text-indigoGray-90"
+                      />
+                    </a>
+                  </Link>
+                )}
               </motion.ul>
             )}
           </AnimatePresence>

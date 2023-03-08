@@ -222,7 +222,10 @@ const SectionWrapper: React.FC<{
         {icon}
         <Link
           href={url}
-          className="font-sansMid text-sm font-medium text-inherit"
+          className={clsx(
+            'font-sansMid text-sm font-medium text-inherit',
+            !url && 'pointer-events-none'
+          )}
         >
           {title}
         </Link>
@@ -264,10 +267,16 @@ const CredentialsSection: React.FC<{
           ? 'Highlighted credentials'
           : 'Top credentials'
       }
-      url={`${
-        router.asPath +
-        (hasHighlightedCredentials ? '/credentials/highlight' : '/credentials')
-      }`}
+      url={
+        isOwnProfile
+          ? `${
+              router.asPath +
+              (hasHighlightedCredentials
+                ? '/credentials/highlight'
+                : '/credentials')
+            }`
+          : ''
+      }
     >
       <div className="space-y-10">
         <div

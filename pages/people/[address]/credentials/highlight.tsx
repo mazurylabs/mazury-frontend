@@ -107,6 +107,11 @@ const Credentials = ({ address }: HighlightProps) => {
     setSearchTerm('');
   };
 
+  if (!isOwnProfile) {
+    router.push(`/people/${address}`);
+    return null;
+  }
+
   return (
     <Layout variant="plain" showMobileSidebar={false}>
       <Container
