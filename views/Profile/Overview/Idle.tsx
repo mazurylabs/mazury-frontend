@@ -294,6 +294,7 @@ const CredentialsSection: React.FC<{
                   }
                   imageSrc={badge_type.image}
                   totalSupply={badge_type.total_supply}
+                  variant={badge_type.issuer.name}
                 />
               ))}
             </div>
