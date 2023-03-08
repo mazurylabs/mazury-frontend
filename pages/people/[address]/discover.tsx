@@ -9,6 +9,7 @@ import { useAccount } from 'hooks';
 
 import { axios } from 'lib/axios';
 import { capitalize } from 'utils';
+import { useRouter } from 'next/router';
 
 interface ProfileProps {
   address: string;
@@ -29,6 +30,7 @@ const Discover = ({ address }: ProfileProps) => {
   const [selectedFilter, setSelectedFilter] = React.useState('All');
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data, isLoading } = useQuery({
     queryKey: ['discover', address],
@@ -64,6 +66,11 @@ const Discover = ({ address }: ProfileProps) => {
     data?.issuers.reduce((prev, next) => {
       return prev + (!!next.discovered ? 1 : 0);
     }, 0) || 0;
+
+  if (!isOwnProfile) {
+    router.push(`/people/${address}`);
+    return null;
+  }
 
   return (
     <Layout variant="plain" showMobileSidebar={false}>
