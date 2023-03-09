@@ -94,11 +94,15 @@ export const ProfileSummary = ({
       <Toaster />
       <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
         <motion.div
-          className={clsx('h-[114px] w-full', 'bg-gradient-3')}
+          className={clsx('bg-gradient-3, h-[114px] w-full')}
           style={isMobile ? { opacity } : undefined}
         >
           {profile?.banner && (
-            <img src={profile?.banner} alt="Banner" className="h-full w-full" />
+            <img
+              src={profile?.banner}
+              alt="Banner"
+              className="h-full w-full object-cover object-top"
+            />
           )}
         </motion.div>
 
