@@ -143,7 +143,7 @@ const useNavItems = ({
   const credentialCount = useCredentialCount(address);
   const { data, isLoading } = useLensPost({ profileId });
 
-  const loading = isLoading || credentialCount.isLoading;
+  const loading = (isLoading && !!profileId) || credentialCount.isLoading;
 
   const writingCount = loading
     ? '0'
