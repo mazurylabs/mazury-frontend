@@ -220,7 +220,9 @@ const getLensPublications = async (profileId: string) => {
       };
     }>('https://api.lens.dev/', query);
 
-    return response.data.data.publications;
+    return {
+      items: response.data.data.publications.items.filter((item) => item?.id),
+    };
   } catch (error) {
     throw error;
   }
