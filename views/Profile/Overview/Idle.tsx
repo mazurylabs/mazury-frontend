@@ -443,6 +443,7 @@ const WritingSection: React.FC<{
 
               return (
                 <LensPost
+                  key={post.id}
                   replies={post.stats.totalAmountOfComments}
                   quotes={post.stats.totalAmountOfMirrors}
                   likes={post.stats.totalUpvotes}
