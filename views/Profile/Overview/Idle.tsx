@@ -237,8 +237,8 @@ const SectionWrapper: React.FC<{
   url: string;
 }> = ({ title, icon, children, url }) => {
   return (
-    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 lg:max-h-[600px] lg:overflow-y-auto lg:pb-2 xl:max-w-[50%]">
-      <div className="flex items-center space-x-2 text-indigoGray-50 hover:text-indigoGray-70">
+    <div className="h-fit grow rounded-lg bg-indigoGray-5 px-6 pb-4 lg:max-h-[580px] lg:overflow-y-auto lg:pb-2 xl:max-w-[50%]">
+      <div className="sticky top-0 flex items-center space-x-2 bg-indigoGray-5 py-4 text-indigoGray-50 hover:text-indigoGray-70">
         {icon}
         <Link
           href={url}
