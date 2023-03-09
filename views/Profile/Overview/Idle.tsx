@@ -221,7 +221,7 @@ export const Idle = ({
           // }
         />
         <WritingSection
-          loading={isLensLoading || isMirrorLoading}
+          loading={(!!lensId && isLensLoading) || isMirrorLoading}
           lensPost={lensPost?.items}
           mirrorPost={mirrorPost}
           author={author}
