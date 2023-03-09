@@ -152,7 +152,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
   };
 };
 
-const Skeleton = () => {
+export const Skeleton = () => {
   return (
     <div
       className={`w-full space-y-3 rounded-lg bg-indigoGray-5 py-3 pl-4 pr-[10px] xl:min-w-[401px]`}

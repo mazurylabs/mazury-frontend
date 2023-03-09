@@ -408,7 +408,27 @@ const WritingSection: React.FC<{
       url={router.asPath + '/writing'}
     >
       {loading ? (
-        <></>
+        <div className="mb-[85px] w-full space-y-4">
+          {skeletons.map((_, index) => (
+            <div
+              key={`writing-skeleton-${index}`}
+              className={`w-full space-y-3 rounded-lg bg-indigoGray-5 py-3 pl-4 pr-[10px]`}
+            >
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-8 animate-pulse rounded-full bg-indigoGray-30" />
+                <div className="h-4 w-[60%] animate-pulse rounded-lg bg-indigoGray-30" />
+              </div>
+
+              <div className="h-5 w-[90%] animate-pulse rounded-lg bg-indigoGray-30" />
+
+              <div className="h-full grow space-y-1">
+                <div className="h-4 w-full animate-pulse rounded-lg bg-indigoGray-30" />
+                <div className="h-4 w-full animate-pulse rounded-lg bg-indigoGray-30" />
+                <div className="h-4 w-full animate-pulse rounded-lg bg-indigoGray-30" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : mirrorPost?.length || lensPost?.length ? (
         <>
           <>
