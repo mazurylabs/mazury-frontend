@@ -88,6 +88,7 @@ const Credentials = ({ address }: CredentialsProps) => {
   const navItems = Container.useNavItems({
     address,
     activeItem: 'credentials',
+    profileId: accountInView?.lens_id as string,
   });
 
   return (
@@ -215,7 +216,7 @@ const Credentials = ({ address }: CredentialsProps) => {
             {hasMoreData && (
               <div className="mt-6 flex justify-center">
                 <Button
-                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90"
+                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !font-semibold !text-indigoGray-90"
                   variant="secondary"
                   onClick={() => handleFetchMore()}
                   loading={isFetchingNextPage}

@@ -178,6 +178,7 @@ export interface Profile
   lens_id?: string;
   lens_handle?: string;
   banner?: string;
+  title?: string;
 }
 
 interface LensProfile {
@@ -362,4 +363,18 @@ export interface CredentialsCount {
   posts: {
     total: string;
   };
+}
+
+export interface LensPublication {
+  items: {
+    id: string;
+    metadata: { content: string; name: string };
+    stats: {
+      totalAmountOfCollects: string;
+      totalAmountOfComments: string;
+      totalAmountOfMirrors: string;
+      totalDownvote: string;
+      totalUpvotes: string;
+    };
+  }[];
 }

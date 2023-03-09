@@ -154,6 +154,12 @@ export const ProfileSummary = ({
               />
             )}
 
+            {profile?.title && (
+              <p className="mb-2 hidden font-sans text-sm font-semibold text-indigoGray-90 lg:block">
+                {profile.title}
+              </p>
+            )}
+
             {profile?.bio && (
               <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
                 {profile.bio}

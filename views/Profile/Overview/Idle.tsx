@@ -6,17 +6,23 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { Progress } from 'components';
 import { axios } from 'lib/axios';
-import { Badge, ListResponse } from 'types';
+import { Badge, LensPublication, ListResponse, Post } from 'types';
 import { useBadges } from 'hooks';
 
 import { OverviewViews } from 'pages/people/[address]';
 import { Credential } from '../Credential';
+import { useLensPost } from '../Container';
+import { useWriting } from 'pages/people/[address]/writing';
+import { MirrorPost } from '../MirrorPost';
+import { LensPost } from '../LensPost';
 
 interface IdleProps {
   handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
   profileSummaryAccordion: React.ReactNode;
+  lensId: string;
+  author: { username: string; avatar: string };
 }
 
 type DummyCrendential = {
@@ -42,6 +48,8 @@ export const Idle = ({
   address,
   isOwnProfile,
   profileSummaryAccordion,
+  lensId,
+  author,
 }: IdleProps) => {
   const router = useRouter();
   const [showLess, setShowLess] = React.useState(false);
@@ -54,6 +62,13 @@ export const Idle = ({
   });
 
   const highlightedCredentials = useHighlightedCredentials(address);
+  const { data: lensPost, isLoading: isLensLoading } = useLensPost({
+    profileId: lensId,
+  });
+  const { writings: mirrorPost, isLoading: isMirrorLoading } = useWriting({
+    address,
+    limit: 8,
+  });
 
   const hasHighlightedCredentials = !!highlightedCredentials.data?.length;
 
@@ -205,7 +220,12 @@ export const Idle = ({
           //   isOwnProfile ? undefined : dummyCredentials.slice(0, 2)
           // }
         />
-        <WritingSection />
+        <WritingSection
+          loading={isLensLoading || isMirrorLoading}
+          lensPost={lensPost?.items}
+          mirrorPost={mirrorPost}
+          author={author}
+        />
       </div>
     </div>
   );
@@ -217,7 +237,7 @@ const SectionWrapper: React.FC<{
   url: string;
 }> = ({ title, icon, children, url }) => {
   return (
-    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 xl:max-w-[50%]">
+    <div className="h-fit grow space-y-4 rounded-lg bg-indigoGray-5 py-4 px-6 lg:max-h-[600px] lg:overflow-y-auto lg:pb-2 xl:max-w-[50%]">
       <div className="flex items-center space-x-2 text-indigoGray-50 hover:text-indigoGray-70">
         {icon}
         <Link
@@ -363,7 +383,15 @@ const CredentialsSection: React.FC<{
   );
 };
 
-const WritingSection = () => {
+const WritingSection: React.FC<{
+  loading?: boolean;
+  lensPost?: LensPublication['items'];
+  mirrorPost?: Post[];
+  author: {
+    username: string;
+    avatar: string;
+  };
+}> = ({ loading, mirrorPost, lensPost, author }) => {
   const router = useRouter();
 
   return (
@@ -376,52 +404,82 @@ const WritingSection = () => {
           className="text-inherit"
         />
       }
-      title="Highlighted writing"
+      title="Recent writing"
       url={router.asPath + '/writing'}
     >
-      <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
-        <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
-        <p className="text-center font-sans text-sm text-indigoGray-90">
-          Discover Mirror and Lenster to show off your web3 network and
-          knowledge
-        </p>
-        <div className="flex items-center space-x-8">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-[#01501F] hover:bg-indigoGray-10"
-            href="https://www.lens.xyz"
-          >
-            <SVG src="/icons/lens-green.svg" height={16} width={16} />
-            <span className="font-sans text-xs font-semibold text-inherit">
-              Discover Lens
-            </span>
-            <SVG
-              src="/icons/chevron-right.svg"
-              height={16}
-              width={16}
-              className="text-[#01501F]"
-            />
-          </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-blue-600 hover:bg-indigoGray-10"
-            href="https://www.mirror.xyz"
-          >
-            <SVG src="/icons/mirror-icon-blue.svg" height={16} width={16} />
-            <span className="font-sans text-xs font-semibold text-inherit">
-              Discover Mirror
-            </span>
-            <SVG
-              src="/icons/chevron-right.svg"
-              height={16}
-              width={16}
-              className="text-blue-600"
-            />
-          </a>
+      {loading ? (
+        <></>
+      ) : mirrorPost?.length || lensPost?.length ? (
+        <>
+          <>
+            {mirrorPost?.map((writing) => {
+              return (
+                <MirrorPost hideBanner={true} key={writing.id} {...writing} />
+              );
+            })}
+
+            {lensPost?.slice(0, 8 - (mirrorPost?.length || 0)).map((post) => {
+              if (!post?.id) return null;
+
+              return (
+                <LensPost
+                  replies={post.stats.totalAmountOfComments}
+                  quotes={post.stats.totalAmountOfMirrors}
+                  likes={post.stats.totalUpvotes}
+                  saves={post.stats.totalAmountOfCollects}
+                  url={`https://lenster.xyz/posts/${post.id}`}
+                  description={post.metadata.content}
+                  author={author}
+                />
+              );
+            })}
+          </>
+        </>
+      ) : (
+        <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
+          <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
+          <p className="text-center font-sans text-sm text-indigoGray-90">
+            Discover Mirror and Lenster to show off your web3 network and
+            knowledge
+          </p>
+          <div className="flex items-center space-x-8">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-[#01501F] hover:bg-indigoGray-10"
+              href="https://www.lens.xyz"
+            >
+              <SVG src="/icons/lens-green.svg" height={16} width={16} />
+              <span className="font-sans text-xs font-semibold text-inherit">
+                Discover Lens
+              </span>
+              <SVG
+                src="/icons/chevron-right.svg"
+                height={16}
+                width={16}
+                className="text-[#01501F]"
+              />
+            </a>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              className="flex cursor-pointer items-center space-x-2 rounded-lg p-2 text-blue-600 hover:bg-indigoGray-10"
+              href="https://www.mirror.xyz"
+            >
+              <SVG src="/icons/mirror-icon-blue.svg" height={16} width={16} />
+              <span className="font-sans text-xs font-semibold text-inherit">
+                Discover Mirror
+              </span>
+              <SVG
+                src="/icons/chevron-right.svg"
+                height={16}
+                width={16}
+                className="text-blue-600"
+              />
+            </a>
+          </div>
         </div>
-      </div>
+      )}
     </SectionWrapper>
   );
 };

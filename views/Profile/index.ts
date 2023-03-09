@@ -5,3 +5,5 @@ export { Credential } from './Credential';
 export { FilterSearch } from './FilterSearch';
 export { ActionButton } from './ActionButton';
 export { EmptyState } from './EmptyState';
+export { LensPost } from './LensPost';
+export { MirrorPost } from './MirrorPost';
