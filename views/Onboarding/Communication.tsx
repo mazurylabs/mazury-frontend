@@ -5,6 +5,7 @@ import { Button, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { isValid } from '@/utils/api';
+import { emailRegex } from '@/utils';
 
 export const Communication = () => {
   const [error, setError] = React.useState<string>('');
@@ -15,9 +16,6 @@ export const Communication = () => {
     event.preventDefault();
 
     setError('');
-
-    const emailRegex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!profile.email.toLowerCase().match(emailRegex)) {
       setError('Email address is invalid');

@@ -41,3 +41,9 @@ yarn-error.log*
 /storybook-static
 
 /.vscode
+
+# Sentry
+.sentryclirc
+
+# Sentry
+next.config.original.js

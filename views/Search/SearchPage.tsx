@@ -9,13 +9,13 @@ import { useClickOutside, useMobile } from 'hooks';
 import { ResultState } from './ResultState';
 import { EmptyState } from './EmptyState';
 import { IdleState } from './IdleState';
-import { useSelector } from 'react-redux';
-import { userSlice } from '@/selectors';
+
+import { useUser } from 'providers/react-query-auth';
 
 type SearchState = 'idle' | 'result' | 'empty';
 
 const SearchPage: NextPage = () => {
-  const { profile, isAuthenticated } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const searchRef = React.useRef<HTMLDivElement>(null!);
   const inputRef = React.useRef<HTMLInputElement>(null!);
 
@@ -27,8 +27,7 @@ const SearchPage: NextPage = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [UIState, setUIState] = React.useState<SearchState>('result');
 
-  const shouldQuerySearch =
-    isAuthenticated && profile?.email && profile.email_verified;
+  const shouldQuerySearch = profile?.email && profile.email_verified;
 
   const animationAttributes = !isMobile
     ? {

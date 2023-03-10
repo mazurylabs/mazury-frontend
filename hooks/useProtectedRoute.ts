@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { userSlice } from 'selectors';
-import { useConnect } from 'wagmi';
+
+import { useUser } from 'providers/react-query-auth';
 
 // Redirects to '/' if the user has not signed in
 export const useProtectedRoute = () => {
   const router = useRouter();
-  const { isAuthenticated } = useSelector(userSlice);
+  const { data } = useUser();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!data) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [data, router]);
 };

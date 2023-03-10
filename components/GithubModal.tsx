@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
-import { userSlice } from '@/selectors';
-import { updateProfile } from '@/utils/api';
+import { updateProfile } from 'utils/api';
 import { Modal } from './Modal';
 import { Button } from './Button';
+import { useUser } from '@/providers/react-query-auth';
 
 interface GithubModalProps {
   trigger: React.ReactElement;
-  handleSubmit: (value: string) => void;
+  handleSubmit?: (value: string) => void;
   handleConnect?: () => void;
   isDisconnecting: boolean;
 }
@@ -19,7 +18,7 @@ export const GithubModal: React.FC<GithubModalProps> = ({
   isDisconnecting,
   handleConnect,
 }) => {
-  const { profile } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleConnectGithub = async (
@@ -42,7 +41,7 @@ export const GithubModal: React.FC<GithubModalProps> = ({
     if (error) {
       return alert('Error disconnecting profile.');
     }
-    handleSubmit('');
+    handleSubmit?.('');
   };
 
   const handleClose = () => setIsOpen(false);

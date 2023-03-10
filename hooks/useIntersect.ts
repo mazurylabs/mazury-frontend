@@ -4,7 +4,13 @@ export const useIntersect = ({
   root = null,
   rootMargin,
   threshold = 0,
-}: { root?: any; rootMargin?: string; threshold?: number } = {}): any => {
+  enabled = true,
+}: {
+  root?: any;
+  rootMargin?: string;
+  threshold?: number;
+  enabled?: boolean;
+} = {}): any => {
   const [entry, setEntry] = useState({});
   const [node, setNode] = useState(null);
 
@@ -14,7 +20,8 @@ export const useIntersect = ({
     const isSupported =
       'IntersectionObserver' in window &&
       'IntersectionObserverEntry' in window &&
-      'intersectionRatio' in window.IntersectionObserverEntry.prototype;
+      'intersectionRatio' in window.IntersectionObserverEntry.prototype &&
+      enabled;
 
     if (!isSupported) {
       return setEntry({ isIntersecting: true });

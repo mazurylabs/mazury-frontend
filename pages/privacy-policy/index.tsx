@@ -3,11 +3,10 @@ import { Helmet } from 'react-helmet';
 import Link from 'next/link';
 import SVG from 'react-inlinesvg';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { userSlice } from '@/selectors';
+import { useUser } from '@/providers/react-query-auth';
 
 const PrivacyPolicy = () => {
-  const { profile, isAuthenticated } = useSelector(userSlice);
+  const { data: profile } = useUser();
   const router = useRouter();
 
   return (
@@ -773,7 +772,7 @@ const PrivacyPolicy = () => {
         </style>
       </Helmet>
 
-      <Link href="/">
+      <Link legacyBehavior href="/">
         <a className="fixed top-6 left-4 hidden xl:block">
           <span className="sr-only">Home</span>
           <SVG height={40} width={40} src="/icons/mazury-logo.svg" />
@@ -785,7 +784,7 @@ const PrivacyPolicy = () => {
         className="page sans px-4 lg:px-0"
       >
         <div className="sticky top-0 space-y-4 bg-white pt-4 pb-1 sm:pt-20">
-          {(!isAuthenticated || profile?.onboarded) && (
+          {profile?.onboarded && (
             <button
               type="button"
               onClick={() => router.push('/')}

@@ -1,28 +1,23 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
-import {
-  persistStore,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistStore } from 'redux-persist';
 
-import rootReducer from '@/slices';
+const rootReducer = combineReducers({});
+
+const persistConfig = {
+  key: 'Mazury',
+  storage,
+};
+
+const reducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  reducer,
   devTools: process.env.NODE_ENV !== 'production',
 });
 
@@ -30,10 +25,8 @@ const persistor = persistStore(store);
 
 export const ReduxProvider: React.FC = ({ children }) => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        {children}
-      </PersistGate>
-    </Provider>
+    <PersistGate loading={null} persistor={persistor}>
+      {children}
+    </PersistGate>
   );
 };

@@ -61,6 +61,11 @@ export interface ConnectionType {
   status: 'pending' | 'accepted' | 'declined';
 }
 
+export type Tag = {
+  name: string;
+  level: '1' | '2' | '3';
+};
+
 export interface BadgeType {
   id: string;
   total_supply?: number;
@@ -81,17 +86,20 @@ export interface BadgeType {
   rainbowUrl?: string;
   poapUrl?: string;
   kudosUrl?: string;
+  tags: Tag[];
 }
 
 export interface Badge {
   id: string;
   owner: PersonBasicDetails;
   badge_type: BadgeType;
+  highlighted: boolean;
   created_at: string;
   updated_at: string;
   minted: boolean;
   minted_at: string;
   external_links?: any;
+  hidden: boolean;
 }
 
 export type MappedSkills<T> = {
@@ -169,6 +177,8 @@ export interface Profile
   followers_count?: number;
   lens_id?: string;
   lens_handle?: string;
+  banner?: string;
+  title?: string;
 }
 
 interface LensProfile {
@@ -259,6 +269,9 @@ export interface Activity {
 export interface MirrorPost {
   author: {
     address: string;
+    avatar: string;
+    ens_name: string;
+    username: string;
   };
   body: string;
   digest: string;
@@ -276,6 +289,9 @@ export interface Post {
   id: string;
   author: {
     eth_address: string;
+    avatar: string;
+    username: string;
+    ens_name: string;
   };
   posted_at: string;
   title: string;
@@ -332,3 +348,33 @@ export type CredentialCount = {
   '101': number;
   sismo: number;
 };
+
+export interface CredentialsCount {
+  credentials: {
+    101: string;
+    buildspace: string;
+    gitpoap: string;
+    kudos: string;
+    mazury: string;
+    poap: string;
+    sismo: string;
+    total: string;
+  };
+  posts: {
+    total: string;
+  };
+}
+
+export interface LensPublication {
+  items: {
+    id: string;
+    metadata: { content: string; name: string };
+    stats: {
+      totalAmountOfCollects: string;
+      totalAmountOfComments: string;
+      totalAmountOfMirrors: string;
+      totalDownvote: string;
+      totalUpvotes: string;
+    };
+  }[];
+}

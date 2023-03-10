@@ -48,7 +48,10 @@ export const RecruiterInfo = () => {
             <p className="font-sans text-sm font-medium text-indigoGray-60">
               We provide guides about using the platform to recruiters, like
               this
-              <Link href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773">
+              <Link
+                legacyBehavior
+                href="https://mazury.notion.site/How-to-scout-talent-using-Mazury-Search-3b0b609e4d334349bb997562ef446773"
+              >
                 <a target="_blank" className="font-semiBold text-indigo-600">
                   {' '}
                   guide to scout using Mazury Search

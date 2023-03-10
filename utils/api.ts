@@ -1,72 +1,16 @@
 import { SiweMessage } from 'siwe';
-import Axios from 'axios';
 
 import { OnboardingFormDataType } from 'contexts';
 import {
   Activity,
   APIResponse,
-  AxiosResponse,
   Badge,
   ListResponse,
-  MutualFollowers,
   Profile,
   Referral,
 } from 'types';
 import type { ScopedMutator } from 'swr/dist/types';
 import { axios } from '../lib/axios';
-
-export const getMutualFollowers = async (
-  viewingProfileId: string,
-  yourProfileId: string
-): Promise<
-  AxiosResponse<Record<'mutualFollowersProfiles', MutualFollowers>>
-> => {
-  try {
-    const query = {
-      query: `
-      query {
-        mutualFollowersProfiles(
-          request: {
-            viewingProfileId: ${JSON.stringify(viewingProfileId)}
-            yourProfileId: ${JSON.stringify(yourProfileId)}
-            limit: ${JSON.stringify(2)}
-          }
-        ) {
-          items {
-            id
-            name
-            handle
-            picture {
-              ... on NftImage {
-                uri
-              }
-              ... on MediaSet {
-                original {
-                  url
-                }
-              }
-            }
-            ownedBy
-          }
-          pageInfo {
-            totalCount
-          }
-        }
-      }
-      `,
-    };
-
-    const response = await Axios({
-      url: 'https://api.lens.dev/',
-      method: 'post',
-      data: query,
-    });
-
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const getProfile: (
   address: string
@@ -222,18 +166,20 @@ export const updateProfile: (
   signature: string,
   data: OnboardingFormDataType,
   avatarFile?: File | null,
-  shouldRemoveAvi?: boolean
+  shouldRemoveAvi?: boolean,
+  bannerFile?: File | null
 ) => Promise<APIResponse> = async (
   address,
   signature,
   data,
   avatarFile,
-  shouldRemoveAvi = false
+  shouldRemoveAvi = false,
+  bannerFile
 ) => {
   try {
     const formData = new FormData();
     for (let key in data) {
-      if (key === 'avatar') {
+      if (key === 'avatar' || key === 'banner') {
         continue;
       }
       // @ts-ignore
@@ -245,11 +191,18 @@ export const updateProfile: (
     if (avatarFile) {
       formData.append('avatar', avatarFile, avatarFile?.name);
     }
+    if (bannerFile) {
+      formData.append('banner', bannerFile, bannerFile?.name);
+    }
     // @ts-expect-error passing in a boolean to formdata
     formData.append('onboarded', true);
-    const res = await axios.patch(`/profiles/${address}/`, formData);
+    const { data: Profile } = await axios.patch(
+      `/profiles/${address}/`,
+      formData
+    );
+
     return {
-      data,
+      data: Profile,
       error: null,
     };
   } catch (err) {
@@ -439,33 +392,10 @@ export const createSiweMessage = async (
   }
 };
 
-export const getTokens = async (
-  message?: string,
-  signature?: string,
-  user?: string
-) => {
-  try {
-    const res = await axios.post(`auth/siwe/verify`, {
-      message,
-      user,
-      signature,
-    });
+export async function getUserFn(address: string, isOwnProfile?: boolean) {
+  const { data } = await axios.get<Profile>(
+    `/profiles/${address}${!isOwnProfile ? '?action=display_profile_page' : ''}`
+  );
 
-    return res.data;
-  } catch (error) {
-    // throw error;
-    console.log('verifyerror', error);
-  }
-};
-
-export const refreshToken = async (refreshToken: string) => {
-  try {
-    const res = await axios.post(`/auth/token/refresh`, {
-      refresh: refreshToken,
-    });
-
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
-};
+  return data;
+}

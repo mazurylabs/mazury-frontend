@@ -1,18 +1,18 @@
-import { userSlice } from '@/selectors';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { connectGithub } from 'utils/api';
+
+import { useUser } from 'providers/react-query-auth';
 
 const Page: NextPage = () => {
   const router = useRouter();
   const githubCode = router.query.code as string;
-  const { address } = useSelector(userSlice);
+  const { data } = useUser();
 
   useEffect(() => {
     (async () => {
-      if (!address) {
+      if (!data?.eth_address) {
         return;
       }
       if (githubCode) {
@@ -37,7 +37,7 @@ const Page: NextPage = () => {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [githubCode, address]);
+  }, [githubCode, data?.eth_address]);
 
   if (!githubCode) {
     return <div>No code</div>;

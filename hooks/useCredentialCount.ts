@@ -1,34 +1,18 @@
-import * as React from 'react';
-import { axios } from 'lib/axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { CredentialCount } from '../types';
+import { axios } from 'lib/axios';
+import { CredentialsCount } from '../types';
+
+const getCredentialCount = async (
+  address: string
+): Promise<CredentialsCount> => {
+  const { data } = await axios.get(`/profiles/${address}/count/`);
+  return data;
+};
 
 export const useCredentialCount = (address: string) => {
-  const [error, setError] = React.useState(false);
-  const [credentialCount, setCredentialCount] =
-    React.useState<CredentialCount>();
-
-  React.useEffect(() => {
-    const getCredentialCount = async () => {
-      setError(false);
-      try {
-        if (address) {
-          const { data } = await axios.get(
-            `profiles/${address}/credential_counts/`
-          );
-          setCredentialCount(data);
-        }
-      } catch (error) {
-        console.log(error);
-        setError(true);
-      }
-    };
-
-    getCredentialCount();
-  }, [address]);
-
-  return {
-    credentialCount,
-    error,
-  };
+  return useQuery({
+    queryKey: ['credentialCount', address],
+    queryFn: () => getCredentialCount(address),
+  });
 };

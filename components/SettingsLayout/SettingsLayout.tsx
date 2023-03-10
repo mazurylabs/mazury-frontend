@@ -1,21 +1,21 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import * as Sentry from '@sentry/nextjs';
+import { useQueryClient } from '@tanstack/react-query';
 import SVG from 'react-inlinesvg';
-import { useSelector, useDispatch } from 'react-redux';
 import { Toaster, toast } from 'react-hot-toast';
 
 import { Button, Layout, Sidebar, Pill, Spinner } from 'components';
+import { Toggle } from '../Toggle';
+import { updateProfile } from 'utils/api';
+import { useLogout, useUser } from 'providers/react-query-auth';
+
 import {
   SettingsCardProps,
   SettingsLayoutProps,
   SettingsLinkProps,
 } from './SettingsLayout.types';
-import { Toggle } from '../Toggle';
-import { userSlice } from '@/selectors';
-import { updateProfile } from '@/utils/api';
-import { logout, updateUserProfile } from '@/slices/user';
 
 const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
   const nestedRoute = title.includes('services')
@@ -33,6 +33,7 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
       <div className="rounded-lg border border-indigoGray-20">
         {links.map((link, index) => (
           <Link
+            legacyBehavior
             href={`/settings/${nestedRoute}/${link.toLowerCase()}`}
             key={link + index}
           >
@@ -90,6 +91,7 @@ const SettingsLink = ({ title, links }: SettingsLinkProps) => {
               }`}
             >
               <Link
+                legacyBehavior
                 href={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
                 as={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
               >
@@ -108,11 +110,11 @@ const SettingsLink = ({ title, links }: SettingsLinkProps) => {
 };
 
 export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
+  const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
-  const dispatch = useDispatch();
+  const logout = useLogout();
   const router = useRouter();
-  const { profile } = useSelector(userSlice);
-  const [_, disconnect] = useAccount();
+  const { data: profile } = useUser();
 
   const handleOpenToOpportunities = async () => {
     const payload = {
@@ -128,8 +130,12 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
     );
 
     if (!error) {
-      dispatch(updateUserProfile(payload));
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        ...payload,
+      }));
     } else {
+      Sentry.captureException(error);
       toast.error('Something went wrong');
     }
 
@@ -137,9 +143,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
   };
 
   const handleLogOut = () => {
-    disconnect();
-    router.push('/');
-    dispatch(logout());
+    logout.mutate({}, { onSuccess: () => router.push('/') });
   };
 
   return (
@@ -174,7 +178,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
           {content ? (
             <div className="flex grow flex-col">
               <div className="mb-6 text-sm text-indigoGray-40 md:mb-3">
-                <Link href={'/settings'}>
+                <Link legacyBehavior href={'/settings'}>
                   <a className="flex w-fit items-center font-sans">
                     <SVG src="/icons/back.svg" width="16px" height="16px" />
 
@@ -219,7 +223,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
                 </div>
               </button>
 
-              <Link href="/settings/account/profile-type">
+              <Link legacyBehavior href="/settings/account/profile-type">
                 <a
                   type="button"
                   className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
@@ -244,7 +248,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
               />
 
               <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
-                <Link href="/privacy-policy">
+                <Link legacyBehavior href="/privacy-policy">
                   <a className="flex w-full justify-between">
                     <p className="font-sans text-sm font-semibold text-indigoGray-90">
                       Privacy policy
@@ -253,7 +257,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
                   </a>
                 </Link>
 
-                <Link href="/terms-of-service">
+                <Link legacyBehavior href="/terms-of-service">
                   <a className="flex w-full justify-between">
                     <p className="font-sans text-sm font-semibold text-indigoGray-90">
                       Terms of service

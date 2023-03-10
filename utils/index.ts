@@ -12,6 +12,9 @@ import type {
 } from 'types';
 import { theme } from '../tailwind.config';
 
+export const emailRegex =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export const getTruncatedAddress = (
   address: string | undefined | null,
   length: number = 4
@@ -29,7 +32,7 @@ export const goToLink = (link: string) => {
   window.open(link, '_blank');
 };
 
-function capitalize(word: string) {
+export function capitalize(word: string) {
   return word.charAt(0).toUpperCase() + word.substring(1);
 }
 
@@ -266,6 +269,8 @@ export const clearWagmiStorage = () => {
 };
 
 export const formatNumber = (num: number) => {
+  if (!num) return 0;
+
   if (Math.abs(num) < 1000) {
     return num;
   }
@@ -295,4 +300,19 @@ export const formatNumber = (num: number) => {
   }
 
   return sign + shortNumber;
+};
+
+export const formatIpfsImage = (url: string) => {
+  const prefix = 'https://lens.infura-ipfs.io/ipfs/';
+  const urlArray = url.split('//');
+
+  if (urlArray[0].includes('ipfs')) return prefix + url.split('//')[1];
+
+  return url;
+};
+
+export const plurify = (count: number, text: string) => {
+  if (count > 1) return text + 's';
+
+  return text;
 };
