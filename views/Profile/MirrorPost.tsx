@@ -26,7 +26,7 @@ export const MirrorPost = ({
           <img
             src={background_image || '/icons/brokenImage.svg'}
             className={clsx(
-              'h-full w-full object-contain',
+              'h-full w-full object-cover object-top',
               !background_image && 'h-[48px] w-[48px]'
             )}
             onError={(event) => {

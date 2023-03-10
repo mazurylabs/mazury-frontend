@@ -190,7 +190,7 @@ const Edit = ({ address }: EditProps) => {
                 <img
                   src={banner || user?.banner || '/icons/no-banner.svg'}
                   alt="Banner"
-                  className="h-[114px] w-full object-cover"
+                  className="h-[114px] w-full object-cover object-top"
                 />
                 <ImageButton
                   label={
