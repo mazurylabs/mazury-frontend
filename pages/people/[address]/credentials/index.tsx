@@ -24,16 +24,17 @@ import {
 
 import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import { ethers } from 'ethers';
+import { formatProfileRoute } from '@/utils';
 
 interface CredentialsProps {
-  address: string;
+  ethAddress: string;
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address }: CredentialsProps) => {
+const Credentials = ({ ethAddress }: CredentialsProps) => {
   const router = useRouter();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const [searchTerm, setSearchTerm] = React.useState('');
   const isMobile = useMobile();
 
@@ -42,8 +43,8 @@ const Credentials = ({ address }: CredentialsProps) => {
     enabled: isMobile,
   });
 
-  const ethAddress = ethers.utils.isAddress(address)
-    ? address
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
     : accountInView?.eth_address || '';
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -59,12 +60,7 @@ const Credentials = ({ address }: CredentialsProps) => {
     hasMoreData,
     isFetchingNextPage,
     isLoading,
-  } = useBadges(
-    ethAddress,
-    credentialsFilter.issuer,
-    10,
-    credentialsFilter.query
-  );
+  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
 
   const credentialCount = useCredentialCount(address);
 
@@ -86,7 +82,7 @@ const Credentials = ({ address }: CredentialsProps) => {
   };
 
   const navItems = Container.useNavItems({
-    address,
+    address: ethAddress,
     activeItem: 'credentials',
     profileId: accountInView?.lens_id as string,
   });
@@ -235,9 +231,25 @@ const Credentials = ({ address }: CredentialsProps) => {
 export default Credentials;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const address = context.query.address as string;
+
+  const url = context.resolvedUrl || '';
+
+  const { ethAddress, normalisedRoute } = formatProfileRoute(url, address);
+
+  if (!ethers.utils.isAddress(address) && !address.includes('.eth')) {
+    return {
+      redirect: {
+        destination: normalisedRoute,
+        permanent: false,
+      },
+      props: { ethAddress },
+    };
+  }
+
   return {
     props: {
-      address: context.query.address,
+      ethAddress,
     },
   };
 };

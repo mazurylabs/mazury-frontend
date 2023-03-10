@@ -35,6 +35,7 @@ export const useProfileSuggestions = (
         networkParam,
         limitParam,
       }),
+    enabled: !!address,
   });
 
   return {

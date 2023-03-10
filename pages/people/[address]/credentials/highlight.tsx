@@ -17,16 +17,23 @@ import {
   FilterSearch,
   ProfileSummary,
 } from 'views/Profile';
+import { ethers } from 'ethers';
+import { formatProfileRoute } from '@/utils';
 
 interface HighlightProps {
-  address: string;
+  ethAddress: string;
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address }: HighlightProps) => {
+const Credentials = ({ ethAddress }: HighlightProps) => {
   const router = useRouter();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
+
   const credentialCount = useCredentialCount(address);
   const [searchTerm, setSearchTerm] = React.useState('');
   const queryClient = useQueryClient();
@@ -219,9 +226,25 @@ const Credentials = ({ address }: HighlightProps) => {
 export default Credentials;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const address = context.query.address as string;
+
+  const url = context.resolvedUrl || '';
+
+  const { ethAddress, normalisedRoute } = formatProfileRoute(url, address);
+
+  if (!ethers.utils.isAddress(address) && !address.includes('.eth')) {
+    return {
+      redirect: {
+        destination: normalisedRoute,
+        permanent: false,
+      },
+      props: { ethAddress },
+    };
+  }
+
   return {
     props: {
-      address: context.query.address,
+      ethAddress,
     },
   };
 };

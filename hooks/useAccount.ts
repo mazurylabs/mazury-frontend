@@ -22,7 +22,7 @@ export const useAccount = (address: string) => {
   const { data: profile } = useQuery({
     queryKey: ['profile', address],
     queryFn: async () => await getUserFn(address, isOwnProfile),
-    enabled: !isOwnProfile,
+    enabled: !isOwnProfile && !!address,
   });
 
   const accountInView = isOwnProfile ? (user as Profile) : (profile as Profile);

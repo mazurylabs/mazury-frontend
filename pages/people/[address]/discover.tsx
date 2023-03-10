@@ -8,11 +8,12 @@ import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 
 import { axios } from 'lib/axios';
-import { capitalize } from 'utils';
+import { capitalize, formatProfileRoute } from 'utils';
 import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
 
 interface ProfileProps {
-  address: string;
+  ethAddress: string;
 }
 
 interface CredentialProps {
@@ -26,16 +27,20 @@ interface CredentialProps {
 
 export type OverviewViews = 'idle' | 'discover' | 'social';
 
-const Discover = ({ address }: ProfileProps) => {
+const Discover = ({ ethAddress }: ProfileProps) => {
   const [selectedFilter, setSelectedFilter] = React.useState('All');
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
 
   const { data, isLoading } = useQuery({
     queryKey: ['discover', address],
     queryFn: () => getDiscoverCredentials(address),
-    enabled: isOwnProfile,
+    enabled: isOwnProfile && !!address,
   });
 
   const { mutate } = useDiscoverCredentials({
@@ -207,9 +212,25 @@ export const useDiscoverCredentials = ({
 };
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const address = context.query.address as string;
+
+  const url = context.resolvedUrl || '';
+
+  const { ethAddress, normalisedRoute } = formatProfileRoute(url, address);
+
+  if (!ethers.utils.isAddress(address) && !address.includes('.eth')) {
+    return {
+      redirect: {
+        destination: normalisedRoute,
+        permanent: false,
+      },
+      props: { ethAddress },
+    };
+  }
+
   return {
     props: {
-      address: context.query.address,
+      ethAddress,
     },
   };
 };
