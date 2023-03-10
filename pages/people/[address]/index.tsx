@@ -58,12 +58,21 @@ const Profile = ({ address }: ProfileProps) => {
             setSelectedOverviewViews(view)
           }
           profileSummaryAccordion={profileSummaryAccordion}
+          lensId={accountInView?.lens_id || ''}
+          author={{
+            username: accountInView?.username,
+            avatar: accountInView?.avatar,
+          }}
         />
       ),
     },
   };
 
-  const navItems = Container.useNavItems({ address, activeItem: 'overview' });
+  const navItems = Container.useNavItems({
+    address,
+    activeItem: 'overview',
+    profileId: accountInView?.lens_id as string,
+  });
 
   const handleGoBack =
     selectedOverviewViews !== 'idle'

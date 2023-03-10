@@ -201,7 +201,7 @@ const Credentials = ({ address }: HighlightProps) => {
           {hasMoreData && (
             <div className="flex justify-center">
               <Button
-                className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !text-indigoGray-90 !shadow-base"
+                className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !font-semibold !text-indigoGray-90 !shadow-base"
                 variant="secondary"
                 onClick={() => handleFetchMore()}
                 loading={isFetchingNextPage}

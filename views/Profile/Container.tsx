@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import { AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 import { Button, Modal } from 'components';
 import { Navbar } from './Navbar';
@@ -9,6 +10,8 @@ import { NavItem } from './type';
 import { useCredentialCount } from 'hooks';
 import { RequireSignin } from '@/components/RequireSignin';
 import clsx from 'clsx';
+import Axios from 'axios';
+import { LensPublication } from 'types';
 
 interface ContainerProps {
   summary: React.ReactElement;
@@ -131,11 +134,21 @@ export const Container: React.FC<ContainerProps> & {
 const useNavItems = ({
   address,
   activeItem,
+  profileId,
 }: {
   address: string;
   activeItem: string;
+  profileId: string;
 }) => {
   const credentialCount = useCredentialCount(address);
+  const { data, isLoading } = useLensPost({ profileId });
+
+  const loading = (isLoading && !!profileId) || credentialCount.isLoading;
+
+  const writingCount = loading
+    ? '0'
+    : +(data?.items.length || '0') +
+      +(credentialCount.data?.posts?.total || '0');
 
   const navItems = [
     { label: 'Overview', isActive: false, href: `/people/${address}` },
@@ -149,7 +162,7 @@ const useNavItems = ({
     {
       label: 'Writing',
       isActive: false,
-      value: credentialCount.data?.posts?.total || '0',
+      value: String(writingCount),
       icon: '/icons/writing.svg',
       href: `/people/${address}/writing`,
     },
@@ -166,3 +179,59 @@ const useNavItems = ({
 };
 
 Container.useNavItems = useNavItems;
+
+const getLensPublications = async (profileId: string) => {
+  try {
+    const query = {
+      query: `
+      query {
+        publications(
+          request: {
+            profileId: ${JSON.stringify(profileId)}
+            limit: ${JSON.stringify(10)}
+            publicationTypes: [POST, COMMENT, MIRROR]
+          }
+        ) {
+          items {
+            ... on Post {
+              id
+              stats {
+                totalAmountOfMirrors
+                totalAmountOfCollects
+                totalAmountOfComments
+                totalUpvotes
+                totalDownvotes
+              }
+              metadata {
+                name
+                content
+              }
+            }
+          }
+          
+        }
+      }
+      `,
+    };
+
+    const response = await Axios.post<{
+      data: {
+        publications: LensPublication;
+      };
+    }>('https://api.lens.dev/', query);
+
+    return {
+      items: response.data.data.publications.items.filter((item) => item?.id),
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const useLensPost = ({ profileId }: { profileId: string }) => {
+  return useQuery({
+    queryKey: ['lensPublications', profileId],
+    queryFn: () => getLensPublications(profileId),
+    enabled: !!profileId,
+  });
+};

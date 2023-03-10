@@ -24,6 +24,7 @@ interface UserProfile {
   avatar?: File;
   banner?: File;
   bio?: string;
+  title?: string;
 }
 
 const Edit = ({ address }: EditProps) => {
@@ -159,6 +160,7 @@ const Edit = ({ address }: EditProps) => {
         full_name: user?.full_name || '',
         email: user?.email || '',
         bio: user?.bio || '',
+        title: user?.title || '',
       });
     }
   }, [user]);
@@ -188,7 +190,7 @@ const Edit = ({ address }: EditProps) => {
                 <img
                   src={banner || user?.banner || '/icons/no-banner.svg'}
                   alt="Banner"
-                  className="h-[114px] w-full object-cover"
+                  className="h-[114px] w-full object-cover object-top"
                 />
                 <ImageButton
                   label={
@@ -326,6 +328,18 @@ const Edit = ({ address }: EditProps) => {
                 placeholder="Insert location"
                 onChange={(value) => {
                   handleChange('location', value);
+                }}
+              />
+            </div>
+
+            <div>
+              <Input
+                id="title"
+                label="Job title"
+                value={userProfile.title || ''}
+                placeholder="Insert job title"
+                onChange={(value) => {
+                  handleChange('title', value);
                 }}
               />
             </div>
