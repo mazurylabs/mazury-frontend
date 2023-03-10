@@ -391,7 +391,9 @@ const CredentialDetails = ({ ethAddress, credentialId }: HighlightProps) => {
 
 export default CredentialDetails;
 
-export const getServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = async (
+  context: NextPageContext & { resolvedUrl: string }
+) => {
   const address = context.query.address as string;
 
   const url = context.resolvedUrl || '';

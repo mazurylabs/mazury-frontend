@@ -111,10 +111,12 @@ const Profile = ({ ethAddress }: ProfileProps) => {
 
 export default Profile;
 
-export const getServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = async (
+  context: NextPageContext & { resolvedUrl: string }
+) => {
   const address = context.query.address as string;
 
-  const url = context.resolvedUrl || '';
+  const url = context.resolvedUrl;
 
   const { ethAddress, normalisedRoute } = formatProfileRoute(url, address);
 
