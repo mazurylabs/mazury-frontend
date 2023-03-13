@@ -48,7 +48,9 @@ const Credentials = ({ address }: HighlightProps) => {
     user?.eth_address || '',
     credentialsFilter.issuer,
     10,
-    credentialsFilter.query
+    credentialsFilter.query,
+    true
+    // highlightedCredentials.status !== 'loading' || !!highlightedCredentials.data
   );
 
   const useHighlightCredentialsMutation = useHighlightCredentials({
@@ -106,6 +108,13 @@ const Credentials = ({ address }: HighlightProps) => {
     setCredentialsFilter({ issuer: '', query: '' });
     setSearchTerm('');
   };
+
+  React.useEffect(() => {
+    if (!highlightCredentialsRef.current) {
+      setSelectedCredentials(prevHighlightedCredentials || []);
+      highlightCredentialsRef.current = prevHighlightedCredentials?.length || 0;
+    }
+  }, [prevHighlightedCredentials]);
 
   if (!isOwnProfile) {
     router.push(`/people/${address}`);
@@ -167,7 +176,7 @@ const Credentials = ({ address }: HighlightProps) => {
                 : 'flex items-center justify-center'
             )}
           >
-            {isLoading ? (
+            {isLoading || highlightedCredentials.isLoading ? (
               skeletons.map((item, index) => (
                 <Credential.Skeleton key={index + item} />
               ))
