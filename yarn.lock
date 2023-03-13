@@ -2064,6 +2064,20 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
+"@unpic/core@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@unpic/core/-/core-0.0.15.tgz#32f9d8da6aaa874a80fd920c68516cf4e42c7a7f"
+  integrity sha512-09abPh6F+krmYSjJHHtYOQ/BtLa2eq47+lcRAhOeg3R7ByV3hTw+wkeF8pCXmPAgk5WQfXeYRcT2Ez4QoXyb8Q==
+  dependencies:
+    unpic "^3.0.1"
+
+"@unpic/react@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@unpic/react/-/react-0.0.17.tgz#6bead04a96d48ab060dfb617e26ef23d102d8bb1"
+  integrity sha512-JRIjp5mLZI1ut5vGP0s0+5XLSvDulphjZ5nC7dpPiUk/4urboF1O6Ivox+jTzgQSVuRWeTO8loZ14lAThD2+2A==
+  dependencies:
+    "@unpic/core" "^0.0.15"
+
 "@wagmi/chains@0.2.6":
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-0.2.6.tgz#21e17329f3912ce45144062360f9e59e5558af14"
@@ -8237,6 +8251,11 @@ universalify@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+
+unpic@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/unpic/-/unpic-3.0.1.tgz#4af276b43b0f129c2bae405817f7becd3d1cd553"
+  integrity sha512-6N15YV5GS5eeS8nqcAjljd03VWIrmVjMy4IHnu1pRDONheC4lan2f2SAKOO1+x5Ll3+M0Fu0VSr1POEiXFUNrg==
 
 uri-js@^4.2.2:
   version "4.4.1"

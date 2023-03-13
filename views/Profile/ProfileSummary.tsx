@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import toast, { Toaster } from 'react-hot-toast';
+import { Image } from '@unpic/react';
 
 import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
 
@@ -98,10 +99,12 @@ export const ProfileSummary = ({
           style={isMobile ? { opacity } : undefined}
         >
           {profile?.banner && (
-            <img
+            <Image
               src={profile?.banner}
               alt="Banner"
               className="h-full w-full object-cover object-top"
+              layout="fullWidth"
+              loading="eager"
             />
           )}
         </motion.div>
