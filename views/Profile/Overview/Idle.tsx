@@ -106,7 +106,7 @@ export const Idle = ({
         isOwnProfile ? 'lg:space-y-6' : 'lg:space-y-0'
       )}
     >
-      {isOwnProfile && (
+      {isOwnProfile && completedData !== 5 && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
           <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
