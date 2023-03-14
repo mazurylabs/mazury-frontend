@@ -26,10 +26,16 @@ async function refreshToken(refreshToken: string) {
 async function authResponseErrorInterceptor(error: any) {
   const prevRequest = error?.config;
 
-  const storedToken = storage.getToken(ACCESS_TOKEN_KEY);
-  const isExpired = storage.isTokenExpired(storedToken);
+  const accessToken = storage.getToken(ACCESS_TOKEN_KEY);
+  const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
+  const isAccessExpired = storage.isTokenExpired(accessToken);
+  const isRefreshExpired = storage.isTokenExpired(refreshToken);
 
-  if ((isExpired || error?.response?.status === 401) && !prevRequest?.sent) {
+  if (
+    (isAccessExpired || error?.response?.status === 401) &&
+    !prevRequest?.sent &&
+    !isRefreshExpired
+  ) {
     const storedToken = storage.getToken(REFRESH_TOKEN_KEY);
 
     prevRequest.sent = true;
