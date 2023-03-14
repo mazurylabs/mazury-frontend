@@ -48,7 +48,7 @@ const Writing = ({ address }: WritingProps) => {
 
   const navItems = Container.useNavItems({
     address,
-    activeItem: 'writing',
+    activeItem: 'content',
     profileId: accountInView?.lens_id as string,
   });
 
@@ -120,7 +120,7 @@ const Writing = ({ address }: WritingProps) => {
                 })}
               </>
             ) : (
-              <EmptyState emptyMessage="No writings to show" />
+              <EmptyState emptyMessage="No content to show" />
             )}
           </div>
         </div>

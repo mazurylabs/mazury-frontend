@@ -5,7 +5,7 @@ export { useScrollPosition } from './useScrollPosition';
 export { useScreenWidth } from './useScreenWidth';
 export { useCurrentBreakpoint } from './useCurrentBreakpoint';
 export { useMobile } from './useMobile';
-export { useIntersection, useActiveProfileSection } from './useIntersection';
+export { useIntersection } from './useIntersection';
 export { useDebounce } from './useDebounce';
 export { useActivity } from './useActivity';
 export { useReferralCount } from './useReferralCount';

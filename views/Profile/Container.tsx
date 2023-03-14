@@ -145,7 +145,7 @@ const useNavItems = ({
 
   const loading = (isLoading && !!profileId) || credentialCount.isLoading;
 
-  const writingCount = loading
+  const contentCount = loading
     ? '0'
     : +(data?.items.length || '0') +
       +(credentialCount.data?.posts?.total || '0');
@@ -160,11 +160,11 @@ const useNavItems = ({
       href: `/people/${address}/credentials`,
     },
     {
-      label: 'Writing',
+      label: 'Content',
       isActive: false,
-      value: String(writingCount),
-      icon: '/icons/writing.svg',
-      href: `/people/${address}/writing`,
+      value: String(contentCount),
+      icon: '/icons/content.svg',
+      href: `/people/${address}/content`,
     },
   ];
 

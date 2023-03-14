@@ -12,7 +12,7 @@ import { useBadges } from 'hooks';
 import { OverviewViews } from 'pages/people/[address]';
 import { Credential } from '../Credential';
 import { useLensPost } from '../Container';
-import { useWriting } from 'pages/people/[address]/writing';
+import { useWriting } from '@/pages/people/[address]/content';
 import { MirrorPost } from '../MirrorPost';
 import { LensPost } from '../LensPost';
 
@@ -403,14 +403,14 @@ const WritingSection: React.FC<{
     <SectionWrapper
       icon={
         <SVG
-          src={'/icons/writing.svg'}
+          src={'/icons/content.svg'}
           height={16}
           width={16}
           className="text-inherit"
         />
       }
-      title="Recent writing"
-      url={router.asPath + '/writing'}
+      title="Content"
+      url={router.asPath + '/content'}
     >
       {loading ? (
         <div className="mb-[85px] w-full space-y-4">
@@ -465,8 +465,7 @@ const WritingSection: React.FC<{
         <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
           <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
           <p className="text-center font-sans text-sm text-indigoGray-90">
-            Discover Mirror and Lenster to show off your web3 network and
-            knowledge
+            No content on web3 social yet
           </p>
           <div className="flex items-center space-x-8">
             <a
