@@ -182,7 +182,7 @@ const Credentials = ({ address }: CredentialsProps) => {
                   : 'flex items-center justify-center'
               )}
             >
-              {isLoading ? (
+              {isLoading || highlightedCredentials.isLoading ? (
                 skeletons.map((item, index) => (
                   <Credential.Skeleton key={index + item} />
                 ))
