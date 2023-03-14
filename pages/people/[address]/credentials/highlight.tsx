@@ -25,10 +25,11 @@ interface HighlightProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ address }: HighlightProps) => {
+  const isMounted = React.useRef<boolean>(false);
   const router = useRouter();
   const { user, accountInView, isOwnProfile } = useAccount(address);
   const credentialCount = useCredentialCount(address);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
   const queryClient = useQueryClient();
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -50,7 +51,6 @@ const Credentials = ({ address }: HighlightProps) => {
     10,
     credentialsFilter.query,
     true
-    // highlightedCredentials.status !== 'loading' || !!highlightedCredentials.data
   );
 
   const useHighlightCredentialsMutation = useHighlightCredentials({
@@ -110,7 +110,8 @@ const Credentials = ({ address }: HighlightProps) => {
   };
 
   React.useEffect(() => {
-    if (!highlightCredentialsRef.current) {
+    if (!isMounted.current) {
+      isMounted.current = true;
       setSelectedCredentials(prevHighlightedCredentials || []);
       highlightCredentialsRef.current = prevHighlightedCredentials?.length || 0;
     }
