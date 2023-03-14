@@ -89,7 +89,12 @@ export const LensPost = ({
         <div className="flex items-center space-x-2 font-sans text-xs font-semibold text-[#8b5df5]">
           <SVG height={16} width={16} src="/icons/lenster-indigo.svg" />
           <span>See on Lenster</span>
-          <SVG src="/icons/chevron-right-indigo.svg" height={16} width={16} />
+          <SVG
+            src="/icons/chevron-right.svg"
+            height={16}
+            width={16}
+            className="text-[#8B5DF5]"
+          />
         </div>
       </div>
     </a>
