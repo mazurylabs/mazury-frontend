@@ -3,16 +3,17 @@ import { disconnect } from '@wagmi/core';
 
 import { axios } from 'lib/axios';
 import storage from 'utils/storage';
+import { clearWagmiStorage } from 'utils';
+import { getUserFn } from 'utils/api';
+
 import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   STORED_USER,
   USER_ADDRESS,
 } from 'config';
-import { clearWagmiStorage } from 'utils';
-import { getUserFn } from 'utils/api';
 
-async function logoutFn() {
+export async function logoutFn() {
   await disconnect();
   clearWagmiStorage();
 
