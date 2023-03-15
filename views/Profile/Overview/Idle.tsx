@@ -108,7 +108,7 @@ export const Idle = ({
         showCompletionData ? 'lg:space-y-6' : 'lg:space-y-0'
       )}
     >
-      {'showCompletionData' && (
+      {showCompletionData && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
           <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
@@ -133,7 +133,7 @@ export const Idle = ({
 
           {!showLess && (
             <div className="border-t-none flex flex-col rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row">
-              {completedData === 5 ? (
+              {completedData !== 5 ? (
                 <>
                   <button
                     disabled={!!profileCompletionData?.['personal_information']}
@@ -176,7 +176,7 @@ export const Idle = ({
                     Highlight credentials
                   </button>
                   <button
-                    // disabled={!!profileCompletionData?.['connect_social_media']}
+                    disabled={!!profileCompletionData?.['connect_social_media']}
                     className={clsx(
                       'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
                       profileCompletionData?.['connect_social_media'] &&
