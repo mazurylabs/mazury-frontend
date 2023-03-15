@@ -27,6 +27,7 @@ interface HighlightProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ ethAddress }: HighlightProps) => {
+  const isMounted = React.useRef<boolean>(false);
   const router = useRouter();
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
 
@@ -35,7 +36,7 @@ const Credentials = ({ ethAddress }: HighlightProps) => {
     : accountInView?.eth_address || '';
 
   const credentialCount = useCredentialCount(address);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
   const queryClient = useQueryClient();
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -55,7 +56,8 @@ const Credentials = ({ ethAddress }: HighlightProps) => {
     user?.eth_address || '',
     credentialsFilter.issuer,
     10,
-    credentialsFilter.query
+    credentialsFilter.query,
+    true
   );
 
   const useHighlightCredentialsMutation = useHighlightCredentials({
@@ -113,6 +115,14 @@ const Credentials = ({ ethAddress }: HighlightProps) => {
     setCredentialsFilter({ issuer: '', query: '' });
     setSearchTerm('');
   };
+
+  React.useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      setSelectedCredentials(prevHighlightedCredentials || []);
+      highlightCredentialsRef.current = prevHighlightedCredentials?.length || 0;
+    }
+  }, [prevHighlightedCredentials]);
 
   if (!isOwnProfile) {
     router.push(`/people/${address}`);
@@ -174,7 +184,7 @@ const Credentials = ({ ethAddress }: HighlightProps) => {
                 : 'flex items-center justify-center'
             )}
           >
-            {isLoading ? (
+            {isLoading || highlightedCredentials.isLoading ? (
               skeletons.map((item, index) => (
                 <Credential.Skeleton key={index + item} />
               ))

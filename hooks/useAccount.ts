@@ -13,7 +13,7 @@ export const useAccount = (address: string) => {
   const storedUser = storage.getToken(STORED_USER) as Profile;
 
   const { data: user, status } = useUser({
-    enabled: !userSessionExpired,
+    enabled: !userSessionExpired && !!address,
     initialData: storedUser,
   });
 

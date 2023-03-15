@@ -9,7 +9,7 @@ import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
 
 import { Profile } from 'types';
 import { Button } from 'components';
-import { returnTruncatedIfEthAddress } from 'utils';
+import { formatNumber, returnTruncatedIfEthAddress } from 'utils';
 
 import { LensFollowers } from './LensFollowers';
 import { ProfileTag } from './ProfileTag';
@@ -149,6 +149,17 @@ export const ProfileSummary = ({
           </motion.div>
 
           <div>
+            {profile?.followers_count && (
+              <div className="mb-1 flex hidden items-center lg:block">
+                <p className="space-x-[2px] font-sans text-xs">
+                  <span className="text-semibold text-indigoGray-90">
+                    {formatNumber(profile.followers_count)}
+                  </span>
+                  <span className="text-indigoGray-50">followers on Lens</span>
+                </p>
+              </div>
+            )}
+
             {!isOwnProfile && !!mutualFollowers?.items?.length && (
               <LensFollowers
                 remainder={+remainingFollowers}

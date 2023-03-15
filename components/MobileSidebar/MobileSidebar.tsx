@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useLogout, useUser } from 'providers/react-query-auth';
 import storage from '@/utils/storage';
 import { STORED_USER } from '@/config';
+import { useUserSession } from '@/hooks';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
@@ -19,11 +20,16 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
   children,
   className,
 }) => {
+  const userSessionExpired = useUserSession();
   const router = useRouter();
-  const { data: profile } = useUser();
   const logout = useLogout();
 
   const storedUser = storage.getToken(STORED_USER);
+
+  const { data: profile } = useUser({
+    enabled: !userSessionExpired,
+    initialData: storedUser,
+  });
 
   const handleLogOut = () => {
     logout.mutate({}, { onSuccess: () => router.push('/') });
