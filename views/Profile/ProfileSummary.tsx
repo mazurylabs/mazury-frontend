@@ -149,7 +149,7 @@ export const ProfileSummary = ({
           </motion.div>
 
           <div>
-            {profile?.followers_count && (
+            {!!profile?.followers_count && (
               <div className="mb-1 flex hidden items-center lg:block">
                 <p className="space-x-[2px] font-sans text-xs">
                   <span className="text-semibold text-indigoGray-90">
@@ -169,13 +169,13 @@ export const ProfileSummary = ({
               />
             )}
 
-            {profile?.title && (
+            {!!profile?.title && (
               <p className="mb-2 hidden font-sans text-sm font-semibold text-indigoGray-90 lg:block">
                 {profile.title}
               </p>
             )}
 
-            {profile?.bio && (
+            {!!profile?.bio && (
               <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
                 {profile.bio}
               </p>
@@ -206,7 +206,7 @@ export const ProfileSummary = ({
                 </div>
               )}
 
-            {profile?.location && (
+            {!!profile?.location && (
               <div className="mt-4 flex items-center space-x-2">
                 <SVG src="/icons/location.svg" height={16} width={16} />
                 <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
@@ -264,7 +264,7 @@ export const ProfileSummary = ({
           </div>
 
           <div className="hidden space-y-2 lg:block">
-            {profile?.eth_address && (
+            {!!profile?.eth_address && (
               <ProfileLinks
                 url={`https://etherscan.io/address/${profile?.eth_address}`}
                 icon="/icons/browse-wallet.svg"
@@ -273,7 +273,7 @@ export const ProfileSummary = ({
                 )}
               />
             )}
-            {profile?.lens_handle && (
+            {!!profile?.lens_handle && (
               <ProfileLinks
                 url={`https://lenster.xyz/u/${profile?.lens_handle}`}
                 icon={'/icons/lens.svg'}
@@ -281,14 +281,14 @@ export const ProfileSummary = ({
               />
             )}
 
-            {profile?.twitter && (
+            {!!profile?.twitter && (
               <ProfileLinks
                 url={`http://twitter.com/${profile.twitter}`}
                 icon="/icons/twitter-black.svg"
                 value={`@${profile?.twitter}`}
               />
             )}
-            {profile?.github && (
+            {!!profile?.github && (
               <ProfileLinks
                 url={`https://github.com/${profile.github}`}
                 icon="/icons/github-black.svg"
