@@ -210,7 +210,7 @@ export const useWriting = ({
       getNextPageParam: (lastPage) => {
         return lastPage.next;
       },
-      enabled,
+      enabled: enabled && !!address,
     }
   );
 
