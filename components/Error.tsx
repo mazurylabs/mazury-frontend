@@ -12,9 +12,11 @@ export const Error: React.FC<Props> = ({ title, description }) => {
   return (
     <Layout variant="plain">
       <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex max-w-[464px] flex-col items-center space-y-[40px]">
+        <div className="flex max-w-[480px] flex-col items-center space-y-[40px]">
           <div className="flex flex-col items-center space-y-6">
-            <h1 className="font-demi text-5xl text-indigoGray-90">{title}</h1>
+            <h1 className="font-demi text-5xl !font-normal text-indigoGray-90">
+              {title}
+            </h1>
             <p className="max-w-[70%] text-center font-sans text-indigoGray-90">
               {description}
             </p>
