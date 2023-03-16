@@ -12,6 +12,7 @@ export * from './Tags';
 export * from './Icons';
 export { Sidebar } from './Sidebar';
 export { SettingsLayout } from './SettingsLayout';
+export { Error } from './Error';
 export * from './Checkbox';
 export * from './Modal';
 export * from './Spinner';
