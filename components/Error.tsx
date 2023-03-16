@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-
 import { Button } from './Button';
 import { Layout } from './Layout/Layout';
 
@@ -9,7 +7,7 @@ interface Props {
 }
 
 export const Error: React.FC<Props> = ({ title, description }) => {
-  const router = useRouter();
+  const handleReset = () => window.location.assign(window.location.origin);
 
   return (
     <Layout variant="plain">
@@ -21,7 +19,7 @@ export const Error: React.FC<Props> = ({ title, description }) => {
               {description}
             </p>
           </div>
-          <Button size="large" onClick={() => router.push('/')}>
+          <Button size="large" onClick={handleReset}>
             Go to home screen
           </Button>
         </div>

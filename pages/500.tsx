@@ -1,10 +1,6 @@
-import { useRouter } from 'next/router';
-
 import { Error } from 'components';
 
 export default function Custom404() {
-  const router = useRouter();
-
   return (
     <Error
       title="Something went wrong"
