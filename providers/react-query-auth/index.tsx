@@ -25,6 +25,8 @@ export async function logoutFn() {
 
 export async function userFn() {
   const address = storage.getToken(USER_ADDRESS);
+  if (!address) return null;
+
   const user = await getUserFn(address);
 
   return user;
