@@ -15,13 +15,14 @@ import { ActionButton, Container, ProfileSummary } from 'views/Profile';
 import { useAccount } from 'hooks';
 import { Badge, ListResponse } from 'types';
 import { axios } from 'lib/axios';
-import { commify } from 'utils';
+import { commify, formatProfileRoute } from 'utils';
 import { useHighlightCredentials } from './highlight';
 import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import clsx from 'clsx';
+import { ethers } from 'ethers';
 
 interface HighlightProps {
-  address: string;
+  ethAddress: string;
   credentialId: string;
 }
 
@@ -51,10 +52,14 @@ const Skeleton = () => {
   );
 };
 
-const CredentialDetails = ({ address, credentialId }: HighlightProps) => {
+const CredentialDetails = ({ ethAddress, credentialId }: HighlightProps) => {
   const router = useRouter();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const queryClient = useQueryClient();
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
 
   const highlightedCredentials = useHighlightedCredentials(address);
 
@@ -389,7 +394,7 @@ export default CredentialDetails;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
       credentialId: context.query.credentialId,
     },
   };

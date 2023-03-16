@@ -9,15 +9,16 @@ import { useAccount, useIntersect, useMobile } from 'hooks';
 import { Idle, SocialMedia } from 'views/Profile/Overview';
 
 import { ProfileSummaryAccordion } from 'views/Profile/ProfileSummaryAccordion';
+import { formatProfileRoute } from '@/utils';
 
 interface ProfileProps {
-  address: string;
+  ethAddress: string;
 }
 
 export type OverviewViews = 'idle' | 'social';
 
-const Profile = ({ address }: ProfileProps) => {
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+const Profile = ({ ethAddress }: ProfileProps) => {
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const isMobile = useMobile();
 
   const { ref, entry } = useIntersect({
@@ -25,8 +26,8 @@ const Profile = ({ address }: ProfileProps) => {
     enabled: isMobile,
   });
 
-  const ethAddress = ethers.utils.isAddress(address)
-    ? address
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
     : accountInView?.eth_address || '';
 
   const [selectedOverviewViews, setSelectedOverviewViews] =
@@ -52,13 +53,13 @@ const Profile = ({ address }: ProfileProps) => {
     idle: {
       view: (
         <Idle
-          address={ethAddress}
+          address={address}
           isOwnProfile={isOwnProfile}
           handleNavigateViews={(view: OverviewViews) =>
             setSelectedOverviewViews(view)
           }
           profileSummaryAccordion={profileSummaryAccordion}
-          lensId={accountInView?.lens_id || ''}
+          lensId={accountInView?.lens_id as string}
           author={{
             username: accountInView?.username,
             avatar: accountInView?.avatar,
@@ -69,7 +70,7 @@ const Profile = ({ address }: ProfileProps) => {
   };
 
   const navItems = Container.useNavItems({
-    address,
+    address: ethAddress,
     activeItem: 'overview',
     profileId: accountInView?.lens_id as string,
   });
@@ -113,7 +114,7 @@ export default Profile;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
     },
   };
 };
