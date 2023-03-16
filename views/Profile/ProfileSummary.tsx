@@ -155,7 +155,9 @@ export const ProfileSummary = ({
                   <span className="text-semibold text-indigoGray-90">
                     {formatNumber(profile.followers_count)}
                   </span>
-                  <span className="text-indigoGray-50">followers on Lens</span>
+                  <span className="text-indigoGray-50">
+                    follower{profile.followers_count > 1 && 's'} on Lens
+                  </span>
                 </p>
               </div>
             )}
@@ -164,7 +166,6 @@ export const ProfileSummary = ({
               <LensFollowers
                 remainder={+remainingFollowers}
                 mutuals={mutualFollowers.items}
-                lensFollowers={lensFollowers}
                 className="mb-[19px] hidden lg:block"
               />
             )}
