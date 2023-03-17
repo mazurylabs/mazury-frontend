@@ -53,6 +53,7 @@ export const TwitterModal: React.FC<TwitterModalProps> = ({
     });
 
     if (error) {
+      setLoading(false);
       return alert('Error disconnecting profile.');
     }
     setLoading(false);

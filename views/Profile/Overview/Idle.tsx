@@ -9,7 +9,6 @@ import { axios } from 'lib/axios';
 import { Badge, LensPublication, ListResponse, Post } from 'types';
 import { useBadges } from 'hooks';
 
-import { OverviewViews } from 'pages/people/[address]';
 import { Credential } from '../Credential';
 import { useLensPost } from '../Container';
 import { useWriting } from '@/pages/people/[address]/content';
@@ -17,7 +16,6 @@ import { MirrorPost } from '../MirrorPost';
 import { LensPost } from '../LensPost';
 
 interface IdleProps {
-  handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
   profileSummaryAccordion: React.ReactNode;
@@ -44,7 +42,6 @@ type ProfileCompletion = {
 const skeletons = Array(5).fill('skeleton');
 
 export const Idle = ({
-  handleNavigateViews,
   address,
   isOwnProfile,
   profileSummaryAccordion,
@@ -187,7 +184,7 @@ export const Idle = ({
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={() => handleNavigateViews('social')}
+                    onClick={() => router.push(`${router.asPath}/socials`)}
                   >
                     Connect social media
                   </button>

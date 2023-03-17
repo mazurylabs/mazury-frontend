@@ -167,19 +167,19 @@ export const updateProfile: (
   data: OnboardingFormDataType,
   avatarFile?: File | null,
   shouldRemoveAvi?: boolean,
-  bannerFile?: File | null
+  coverFile?: File | null
 ) => Promise<APIResponse> = async (
   address,
   signature,
   data,
   avatarFile,
   shouldRemoveAvi = false,
-  bannerFile
+  coverFile
 ) => {
   try {
     const formData = new FormData();
     for (let key in data) {
-      if (key === 'avatar' || key === 'banner') {
+      if (key === 'avatar' || key === 'cover') {
         continue;
       }
       // @ts-ignore
@@ -191,8 +191,8 @@ export const updateProfile: (
     if (avatarFile) {
       formData.append('avatar', avatarFile, avatarFile?.name);
     }
-    if (bannerFile) {
-      formData.append('banner', bannerFile, bannerFile?.name);
+    if (coverFile) {
+      formData.append('cover', coverFile, coverFile?.name);
     }
     // @ts-expect-error passing in a boolean to formdata
     formData.append('onboarded', true);

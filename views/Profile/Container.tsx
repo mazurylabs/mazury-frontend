@@ -20,6 +20,7 @@ interface ContainerProps {
   handleGoBack?: () => void;
   handleSave?: () => void;
   isSaving?: boolean;
+  saveWithModal?: boolean;
 }
 
 export const Container: React.FC<ContainerProps> & {
@@ -32,6 +33,7 @@ export const Container: React.FC<ContainerProps> & {
   handleGoBack,
   handleSave,
   isSaving,
+  saveWithModal,
 }) => {
   const [toggleSaveModal, setToggleSaveModal] = React.useState(false);
   const router = useRouter();
@@ -72,7 +74,7 @@ export const Container: React.FC<ContainerProps> & {
                   </p>
                 </div>
 
-                {handleSave && (
+                {handleSave && !saveWithModal && (
                   <Button
                     className="mr-2 w-fit !px-5 lg:mr-0 lg:w-[200px]"
                     onClick={handleSave}
