@@ -12,7 +12,7 @@ import { colors } from 'utils';
 import { verifyEmail } from 'utils/api';
 
 import { WalletRequestModal } from 'components/WalletRequestModal';
-import { SlidersIcon } from 'components/Icons';
+import { ExitIcon, SlidersIcon } from 'components/Icons';
 import { HomeIcon, SearchIcon, UserIcon } from 'components';
 
 import { useLogout, useUser } from 'providers/react-query-auth';
@@ -221,11 +221,11 @@ export const Sidebar: React.FC = () => {
                 animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
                 type="button"
                 onClick={openSignIn}
-                className={`flex h-[40px] w-full items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
+                className={`flex h-[40px] w-full min-w-min items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:cursor-pointer hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
               >
                 <UserIcon color={'#110F2A'} />
                 {isOpen && (
-                  <span className="w-[fit-content] shrink-0">Connect</span>
+                  <span className="w-[fit-content] shrink-0">Sign in</span>
                 )}
               </motion.button>
             )}
@@ -251,23 +251,20 @@ export const Sidebar: React.FC = () => {
             )}
 
             {!!storedUser && (
-              <button
+              <motion.button
+                variants={sidebarItemVariants}
+                animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
                 type="button"
                 onClick={handleLogOut}
                 className={`mt-4 flex h-[40px] hover:cursor-pointer ${
-                  isOpen && 'w-full'
+                  isOpen && 'w-full min-w-min'
                 } items-center gap-4 rounded-md p-3 text-sm font-medium text-indigoGray-90 hover:bg-indigoGray-10 hover:text-indigoGray-50 active:border-solid active:border-indigoGray-30 active:bg-indigoGray-10 active:text-indigoGray-80`}
               >
-                <img
-                  width="16px"
-                  height="16px"
-                  src="/icons/sign-out.svg"
-                  alt="Sign out icon"
-                />{' '}
+                <ExitIcon color={'#110F2A'} />
                 {isOpen && (
                   <span className="w-[fit-content] shrink-0">Sign out</span>
                 )}
-              </button>
+              </motion.button>
             )}
             {/* </div> */}
           </>
