@@ -14,5 +14,6 @@ export const useCredentialCount = (address: string) => {
   return useQuery({
     queryKey: ['credentialCount', address],
     queryFn: () => getCredentialCount(address),
+    enabled: !!address,
   });
 };
