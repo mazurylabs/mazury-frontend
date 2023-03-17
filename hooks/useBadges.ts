@@ -59,7 +59,7 @@ export const useBadges = (
       getNextPageParam: (lastPage) => {
         return lastPage.next;
       },
-      enabled,
+      enabled: enabled && !!address,
     }
   );
 

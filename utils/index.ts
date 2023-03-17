@@ -1,6 +1,7 @@
 import { API_URL } from '@/config';
 // import { axios } from '@/lib/axios';
 import axios from 'axios';
+import { ethers } from 'ethers';
 import { ParsedUrlQuery } from 'querystring';
 import type { Badge, ColorName, Profile, Referral, Skill } from 'types';
 import { theme } from '../tailwind.config';
@@ -300,4 +301,26 @@ export const plurify = (count: number, text: string) => {
   if (count > 1) return text + 's';
 
   return text;
+};
+
+export const formatProfileRoute = (url: string, address: string) => {
+  const ethAddress =
+    ethers.utils.isAddress(address) || address.includes('.eth')
+      ? address
+      : address + '.eth';
+
+  const urlArray = url.split('/');
+  const slicedUrlArray = urlArray.slice(0, 2);
+  const normalisedAddress = urlArray[2].includes('.eth')
+    ? urlArray[2]
+    : urlArray[2] + '.eth';
+
+  const normalisedRoute = slicedUrlArray
+    .concat(normalisedAddress, urlArray.slice(3))
+    .join('/');
+
+  return {
+    normalisedRoute,
+    ethAddress,
+  };
 };
