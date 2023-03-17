@@ -16,21 +16,27 @@ import {
 } from 'views/Profile';
 import { useAccount, useIntersect, useMobile } from 'hooks';
 import { useLensPost } from '@/views/Profile/Container';
+import { ethers } from 'ethers';
+import { formatProfileRoute } from '@/utils';
 
 interface WritingProps {
-  address: string;
+  ethAddress: string;
 }
 
 const skeletons = Array(3).fill('skeleton');
 
-const Writing = ({ address }: WritingProps) => {
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+const Writing = ({ ethAddress }: WritingProps) => {
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const isMobile = useMobile();
 
   const { ref, entry } = useIntersect({
     rootMargin: '56px',
     enabled: isMobile,
   });
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
 
   const {
     writings,
@@ -47,8 +53,8 @@ const Writing = ({ address }: WritingProps) => {
   const isLoading = isLensLoading && isMirrorLoading;
 
   const navItems = Container.useNavItems({
-    address,
-    activeItem: 'writing',
+    activeItem: 'content',
+    address: ethAddress,
     profileId: accountInView?.lens_id as string,
   });
 
@@ -120,7 +126,7 @@ const Writing = ({ address }: WritingProps) => {
                 })}
               </>
             ) : (
-              <EmptyState emptyMessage="No writings to show" />
+              <EmptyState emptyMessage="No content to show" />
             )}
           </div>
         </div>
@@ -147,7 +153,7 @@ export default Writing;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
     },
   };
 };
@@ -210,7 +216,7 @@ export const useWriting = ({
       getNextPageParam: (lastPage) => {
         return lastPage.next;
       },
-      enabled,
+      enabled: enabled ? enabled && !!address : !!address,
     }
   );
 
