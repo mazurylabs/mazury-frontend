@@ -55,7 +55,7 @@ export const Idle = ({
   const profileCompletion = useQuery({
     queryKey: ['profileCompletion'],
     queryFn: () => getProfileCompletion(address),
-    enabled: isOwnProfile,
+    enabled: isOwnProfile && !!address,
   });
 
   const highlightedCredentials = useHighlightedCredentials(address);
@@ -65,6 +65,7 @@ export const Idle = ({
   const { writings: mirrorPost, isLoading: isMirrorLoading } = useWriting({
     address,
     limit: 8,
+    enabled: !!address,
   });
 
   const hasHighlightedCredentials = !!highlightedCredentials.data?.length;
@@ -74,7 +75,8 @@ export const Idle = ({
     undefined,
     8,
     undefined,
-    !hasHighlightedCredentials && !!address
+    !hasHighlightedCredentials,
+    !!address
   );
 
   const handleMazuryTalent = async () => {

@@ -10,10 +10,11 @@ import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount, useMobile } from 'hooks';
 import { updateProfile, isValid } from 'utils/api';
 import { ValueOf } from 'types';
-import { emailRegex } from 'utils';
+import { emailRegex, formatProfileRoute } from 'utils';
+import { ethers } from 'ethers';
 
 interface EditProps {
-  address: string;
+  ethAddress: string;
 }
 
 interface UserProfile {
@@ -27,17 +28,21 @@ interface UserProfile {
   title?: string;
 }
 
-const Edit = ({ address }: EditProps) => {
+const Edit = ({ ethAddress }: EditProps) => {
   const isMobile = useMobile(false);
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, accountInView, isOwnProfile, status } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const [loading, setLoading] = React.useState(false);
   const [usernameError, setUsernameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [userProfile, setUserProfile] = React.useState<UserProfile>(
     {} as UserProfile
   );
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
 
   const avatar = userProfile?.avatar
     ? URL.createObjectURL(userProfile?.avatar as any)
@@ -432,7 +437,7 @@ export default Edit;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
     },
   };
 };

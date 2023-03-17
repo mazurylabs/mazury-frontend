@@ -142,7 +142,7 @@ export const ProfileSummary = ({
                       'font-demi text-2xl !font-bold text-indigoGray-90'
                   )}
                 >
-                  @{profile?.username}
+                  @{returnTruncatedIfEthAddress(profile?.username)}
                 </p>
               )}
             </div>
