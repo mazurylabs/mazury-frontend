@@ -95,16 +95,18 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
             </Link>
           )}
 
-          <Link legacyBehavior href="/settings" passHref>
-            <a>
-              <Image
-                src="/icons/sliders.svg"
-                alt="Settings icon"
-                width="24"
-                height="24"
-              />{' '}
-            </a>
-          </Link>
+          {!!profile && !!storedUser && (
+            <Link legacyBehavior href="/settings" passHref>
+              <a>
+                <Image
+                  src="/icons/sliders.svg"
+                  alt="Settings icon"
+                  width="24"
+                  height="24"
+                />{' '}
+              </a>
+            </Link>
+          )}
         </>
       )}
     </div>
