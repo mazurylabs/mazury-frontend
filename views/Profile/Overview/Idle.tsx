@@ -336,30 +336,32 @@ const CredentialsSection: React.FC<{
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <SVG
-                src="/icons/empty-credentials-listing.svg"
-                width={225}
-                height={91}
-              />
+              <SVG src="/icons/no-credentials.svg" width={227} height={70} />
               <p className="font-sans text-sm text-indigoGray-90">
-                For now this user doesn’t have any credentials
+                No web3 credentials yet
               </p>
             </div>
           )}
-          {isOwnProfile && !loading && (
+          {!loading && (
             <div
               className={clsx(
-                'mt-5 w-fit self-center',
+                ' w-fit self-center',
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
               <Link
-                legacyBehavior
                 href={`/people/${router.query.address}/discover`}
+                className={!isOwnProfile ? 'invisible' : ''}
               >
-                <a className="rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
-                  Discover web3 credentials
-                </a>
+                <div className="flex items-center rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
+                  <p className="rm-2">Discover web3 credentials</p>
+                  <SVG
+                    src="/icons/chevron-right.svg"
+                    height={16}
+                    width={16}
+                    className="text-indigo-600"
+                  />
+                </div>
               </Link>
             </div>
           )}
@@ -464,8 +466,8 @@ const WritingSection: React.FC<{
           </>
         </>
       ) : (
-        <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
-          <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
+        <div className="flex min-h-[331px] flex-col items-center justify-center pt-8">
+          <SVG width={202} height={70} src="/icons/no-content.svg" />
           <p className="text-center font-sans text-sm text-indigoGray-90">
             No content on web3 social yet
           </p>
