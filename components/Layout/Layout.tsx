@@ -1,12 +1,14 @@
 import { FC } from 'react';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
+import clsx from 'clsx';
 
 interface LayoutProps {
   sidebarContent?: React.ReactNode;
   innerLeftContent?: React.ReactNode;
   innerRightContent?: React.ReactNode;
   headerContent?: React.ReactNode;
+  showMobileSidebar?: boolean;
   variant?: 'three-part' | 'plain';
   children?: React.ReactNode;
 }
@@ -15,6 +17,7 @@ export const Layout: FC<LayoutProps> = ({
   innerLeftContent,
   innerRightContent,
   headerContent,
+  showMobileSidebar = true,
   variant = 'three-part',
   children,
 }) => {
@@ -45,7 +48,7 @@ export const Layout: FC<LayoutProps> = ({
         {variant === 'plain' && <>{children}</>}
       </main>
 
-      <MobileSidebar />
+      <MobileSidebar className={clsx(!showMobileSidebar && 'hidden')} />
     </div>
   );
 };
