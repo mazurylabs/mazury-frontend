@@ -44,7 +44,7 @@ const sidebarItemVariants = {
 
 const variants = {
   open: {
-    width: 225,
+    width: 215,
     transition: { duration: 0.2 },
   },
   signInOpen: {
@@ -118,9 +118,11 @@ export const Sidebar: React.FC = () => {
           </div>
         ) : (
           <>
-            <Link className="h-[32px] w-[32px] cursor-pointer" href="/">
-              <SVG src="/new-logo.svg" height="32px" width="32px" />
-            </Link>
+            <div className="flex w-full justify-start pl-[5px]">
+              <Link className="h-[32px] w-[32px] cursor-pointer" href="/">
+                <SVG src="/new-logo.svg" height="32px" width="32px" />
+              </Link>
+            </div>
             <hr className={`mx-3 my-8 w-full border-t border-indigoGray-20`} />
             <div className="grow">
               <SidebarItem
