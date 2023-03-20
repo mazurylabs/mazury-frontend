@@ -190,7 +190,7 @@ export const ProfileInformation = () => {
                 }`}
                 onClick={() => {
                   handleSetProfile('is_recruiter', true);
-                  setIsRecruiter(false);
+                  setIsRecruiter(true);
                 }}
               >
                 <span className="font-sansMid text-sm font-medium text-indigoGray-90">
