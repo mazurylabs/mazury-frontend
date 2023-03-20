@@ -6,41 +6,47 @@ import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider'
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { isValid } from '@/utils/api';
 import { useUser } from '@/providers/react-query-auth';
+import { emailRegex } from '@/utils';
 
 export const ProfileInformation = () => {
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [usernameError, setUsernameError] = React.useState<string>('');
+  const [emailError, setEmailError] = React.useState<string>('');
+
   const { data: userProfile } = useUser();
   const { handleStep, handleSetProfile, profile } = useOnboardingContext();
-  const avatar = profile?.avatar
-    ? URL.createObjectURL(profile?.avatar as any)
-    : '';
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files && files.length !== 0) {
-      handleSetProfile('avatar', files[0]);
-      event.target.value = '';
-    }
-  };
-
-  const handleRemove = () => {
-    handleSetProfile('avatar', '');
-  };
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setLoading(true);
-    setError(false);
+    setUsernameError('');
+    setEmailError('');
 
-    const { error } = await isValid('username', profile.username);
+    if (!profile.email.toLowerCase().match(emailRegex)) {
+      setEmailError('Email address is invalid');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const usernameError = await (
+      await isValid('username', profile.username)
+    ).error;
+
+    const emailError = await (await isValid('email', profile.email)).error;
 
     setLoading(false);
 
-    if (!error) {
-      handleStep(OnboardingStepsEnum['COMMUNICATION']);
-    } else {
-      setError(true);
+    if (!emailError && !usernameError) {
+      handleStep(OnboardingStepsEnum['ALLSET']);
+    } else if (emailError && usernameError) {
+      setEmailError('Email already exists');
+      setUsernameError('Username already exists');
+    } else if (emailError) {
+      setEmailError('Email already exists');
+    } else if (usernameError) {
+      setUsernameError('Username already exists');
     }
   };
 
@@ -72,9 +78,17 @@ export const ProfileInformation = () => {
             <Input
               id="username"
               label={
-                <div className="font-sans text-indigoGray-40">
+                <div
+                  className={`font-sans text-${
+                    emailError ? 'red-500' : 'indigoGray-40'
+                  }`}
+                >
                   Username{' '}
-                  <span className="font-sans font-normal text-indigoGray-30">
+                  <span
+                    className={`font-sans font-normal text-${
+                      emailError ? 'red-500' : 'indigoGray-40'
+                    }`}
+                  >
                     (Required)
                   </span>
                 </div>
@@ -84,78 +98,88 @@ export const ProfileInformation = () => {
               onChange={(value) => {
                 handleSetProfile('username', value);
               }}
-              error={error}
-              onFocus={() => setError(false)}
+              error={!!usernameError}
+              onFocus={() => setUsernameError('')}
             />
-            {error && (
+            {usernameError && (
               <div className="flex items-center space-x-1 pl-2">
                 <SVG src="/icons/error.svg" height={12} width={12} />
                 <p className="font-sans text-xs text-red-500">
-                  Username already exists
+                  {usernameError}
                 </p>
               </div>
             )}
           </div>
 
-          <div>
+          <div className="space-y-1">
             <Input
-              id="full_name"
+              id="email"
               label={
-                <div className="font-sans text-indigoGray-40">
-                  Full name{' '}
-                  <span className="font-sans font-normal text-indigoGray-30">
-                    (Optional)
+                <div
+                  className={`font-sans text-${
+                    emailError ? 'red-500' : 'indigoGray-40'
+                  }`}
+                >
+                  E-mail{' '}
+                  <span
+                    className={`font-sans font-normal text-${
+                      emailError ? 'red-500' : 'indigoGray-40'
+                    }`}
+                  >
+                    (Required)
                   </span>
                 </div>
               }
-              value={profile.full_name || ''}
-              placeholder="Insert full name"
-              onChange={(value) => {
-                handleSetProfile('full_name', value);
-              }}
+              value={profile.email || ''}
+              placeholder="Insert e-mail"
+              onChange={(value) => handleSetProfile('email', value)}
+              error={!!emailError}
+              onFocus={() => setEmailError('')}
             />
-          </div>
-        </div>
-
-        <div className="flex w-full items-center justify-center space-x-6">
-          <div>
-            <img
-              src={avatar || '/icons/no-avatar.svg'}
-              alt="Profile"
-              className="h-[100px] w-[100px] rounded-full object-cover"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="cursor-pointer">
-              <div className="flex h-[29px] w-[131px] items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-base">
-                <label
-                  htmlFor="avatar-upload"
-                  className="cursor-pointer font-sans text-sm font-semibold text-indigoGray-90"
-                >
-                  Add picture
-                </label>
-              </div>
-
-              <input
-                id="avatar-upload"
-                accept="image/*"
-                type="file"
-                onInput={handleFileUpload}
-                className="sr-only"
-                name="avatar"
+            <div className="flex items-center space-x-1 pl-2">
+              <SVG
+                src={`/icons/error${!emailError ? '-warning-line' : ''}.svg`}
+                height={12}
+                width={12}
               />
+              <p
+                className={`font-sans text-xs text-${
+                  emailError ? 'red-500' : 'indigoGray-40'
+                }`}
+              >
+                {emailError || 'We will send you a confirmation e-mail'}
+              </p>
             </div>
+          </div>
 
-            <Button
-              type="button"
-              onClick={handleRemove}
-              variant="tertiary"
-              className="w-full !p-0 !font-sans !font-semibold"
-              disabled={!profile.avatar}
-            >
-              Remove
-            </Button>
+          <div>
+            <div className="font-sans text-sm text-indigoGray-40">
+              Profile type{' '}
+              <span className="font-sans font-normal text-indigoGray-30">
+                (Required)
+              </span>
+            </div>
+            <div className="space-y-4">
+              <button
+                className="flex w-full justify-between rounded-lg border border-indigoGray-20 p-6"
+                // onClick={() => handleNext(true)}
+              >
+                <span className="font-sansMid text-base font-medium text-indigoGray-90">
+                  I’m a recruiter
+                </span>
+                <SVG src="/icons/arrow-right.svg" height={24} width={24} />
+              </button>
+
+              <button
+                className="flex w-full justify-between rounded-lg border border-indigoGray-20 p-6"
+                // onClick={() => handleNext(false)}
+              >
+                <span className="font-sansMid text-base font-medium text-indigoGray-90">
+                  I’m a professional
+                </span>
+                <SVG src="/icons/arrow-right.svg" height={24} width={24} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -164,7 +188,7 @@ export const ProfileInformation = () => {
         type="submit"
         size="large"
         className="!mb-12 w-full xl:mb-0"
-        disabled={!profile.username}
+        disabled={!profile.username || !profile.email}
         loading={loading}
         onClick={handleSubmit}
       >
