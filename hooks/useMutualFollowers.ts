@@ -10,7 +10,7 @@ export const useMutualFollowers = (
 ) => {
   const { data, isLoading } = useQuery({
     queryKey: ['mutualFollowers', viewingProfileId, yourProfileId],
-    queryFn: () => getMutualFollowers('0x28fb', '0x290f'),
+    queryFn: () => getMutualFollowers(viewingProfileId, yourProfileId),
     enabled:
       !!viewingProfileId &&
       !!yourProfileId &&

@@ -60,7 +60,6 @@ export const ProfileSummaryAccordion: React.FC<ProfileSummaryProps> = ({
             <LensFollowers
               remainder={+remainingFollowers}
               mutuals={mutualFollowers.items}
-              lensFollowers={lensFollowers}
             />
           )}
 

@@ -8,26 +8,16 @@ import { formatIpfsImage, plurify } from 'utils';
 export const LensFollowers = ({
   remainder,
   mutuals,
-  lensFollowers,
   className,
 }: {
   remainder: number;
   mutuals: MutualFollowers['items'];
-  lensFollowers: number | string;
   className?: string;
 }) => {
   if (!mutuals || mutuals.length === 0) return null;
 
   return (
     <div className={clsx('space-y-2', className)}>
-      {!!lensFollowers && (
-        <p className="font-indigoGray-50 font-sans text-xs">
-          <span className="font-sansSemi font-semibold text-indigoGray-90">
-            {lensFollowers}
-          </span>{' '}
-          follower{lensFollowers == 1 ? 's' : ''} on Lens
-        </p>
-      )}
       <div className="flex items-center space-x-[3.5px]">
         <div className="flex space-x-[-6px]">
           {mutuals?.map((follower, index) => {
