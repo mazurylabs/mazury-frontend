@@ -45,7 +45,9 @@ export const useBadges = (
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    clsx('badges', address, query && query, issuer && issuer).split(' '),
+    clsx('badges', address, query, issuer, highlighted && 'highlighted').split(
+      ' '
+    ),
     ({ pageParam }) =>
       fetchBadges({
         address,

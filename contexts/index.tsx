@@ -91,5 +91,3 @@ export const OnboardingContext = createContext<OnboardingContextType>({
   },
   setValid: () => {},
 });
-
-export * from './twitter';

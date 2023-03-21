@@ -23,7 +23,7 @@ interface UserProfile {
   email: string;
   location?: string;
   avatar?: File;
-  banner?: File;
+  cover?: File;
   bio?: string;
   title?: string;
 }
@@ -48,8 +48,8 @@ const Edit = ({ ethAddress }: EditProps) => {
     ? URL.createObjectURL(userProfile?.avatar as any)
     : '';
 
-  const banner = userProfile?.banner
-    ? URL.createObjectURL(userProfile?.banner as any)
+  const cover = userProfile?.cover
+    ? URL.createObjectURL(userProfile?.cover as any)
     : '';
 
   const handleChange = (
@@ -63,7 +63,7 @@ const Edit = ({ ethAddress }: EditProps) => {
 
   const handleFileUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
-    name: 'avatar' | 'banner'
+    name: 'avatar' | 'cover'
   ) => {
     const { files } = event.target;
     if (files && files.length !== 0) {
@@ -92,7 +92,7 @@ const Edit = ({ ethAddress }: EditProps) => {
     setUsernameError('');
     setEmailError('');
 
-    const { avatar, banner, ...restOfProfile } = userProfile;
+    const { avatar, cover, ...restOfProfile } = userProfile;
 
     let payload = {} as UserProfile;
     let isEmailInvalid = false;
@@ -136,7 +136,7 @@ const Edit = ({ ethAddress }: EditProps) => {
       payload as any,
       userProfile?.avatar,
       false,
-      userProfile?.banner
+      userProfile?.cover
     );
 
     setLoading(false);
@@ -193,13 +193,13 @@ const Edit = ({ ethAddress }: EditProps) => {
             <div className="relative h-[238px] overflow-hidden rounded-lg lg:w-[350px]">
               <div className="relative">
                 <img
-                  src={banner || user?.banner || '/icons/no-banner.svg'}
-                  alt="Banner"
+                  src={cover || user?.cover || '/icons/no-banner.svg'}
+                  alt="user cover"
                   className="h-[114px] w-full object-cover object-top"
                 />
                 <ImageButton
                   label={
-                    !userProfile.banner ? (
+                    !userProfile.cover ? (
                       'Add picture'
                     ) : (
                       <span className="flex">
@@ -208,8 +208,8 @@ const Edit = ({ ethAddress }: EditProps) => {
                       </span>
                     )
                   }
-                  onClick={(event) => handleFileUpload(event, 'banner')}
-                  id="banner"
+                  onClick={(event) => handleFileUpload(event, 'cover')}
+                  id="cover"
                   className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
                 />
               </div>

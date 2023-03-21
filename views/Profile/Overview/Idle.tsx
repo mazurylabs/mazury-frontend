@@ -9,15 +9,13 @@ import { axios } from 'lib/axios';
 import { Badge, LensPublication, ListResponse, Post } from 'types';
 import { useBadges } from 'hooks';
 
-import { OverviewViews } from 'pages/people/[address]';
 import { Credential } from '../Credential';
 import { useLensPost } from '../Container';
-import { useWriting } from 'pages/people/[address]/writing';
+import { useWriting } from '@/pages/people/[address]/content';
 import { MirrorPost } from '../MirrorPost';
 import { LensPost } from '../LensPost';
 
 interface IdleProps {
-  handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
   profileSummaryAccordion: React.ReactNode;
@@ -44,7 +42,6 @@ type ProfileCompletion = {
 const skeletons = Array(5).fill('skeleton');
 
 export const Idle = ({
-  handleNavigateViews,
   address,
   isOwnProfile,
   profileSummaryAccordion,
@@ -187,7 +184,7 @@ export const Idle = ({
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={() => handleNavigateViews('social')}
+                    onClick={() => router.push(`${router.asPath}/socials`)}
                   >
                     Connect social media
                   </button>
@@ -336,30 +333,32 @@ const CredentialsSection: React.FC<{
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <SVG
-                src="/icons/empty-credentials-listing.svg"
-                width={225}
-                height={91}
-              />
+              <SVG src="/icons/no-credentials.svg" width={227} height={70} />
               <p className="font-sans text-sm text-indigoGray-90">
-                For now this user doesn’t have any credentials
+                No web3 credentials yet
               </p>
             </div>
           )}
-          {isOwnProfile && !loading && (
+          {!loading && (
             <div
               className={clsx(
-                'mt-5 w-fit self-center',
+                ' w-fit self-center',
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
               <Link
-                legacyBehavior
                 href={`/people/${router.query.address}/discover`}
+                className={!isOwnProfile ? 'invisible' : ''}
               >
-                <a className="rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
-                  Discover web3 credentials
-                </a>
+                <div className="flex items-center rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
+                  <p className="rm-2">Discover web3 credentials</p>
+                  <SVG
+                    src="/icons/chevron-right.svg"
+                    height={16}
+                    width={16}
+                    className="text-indigo-600"
+                  />
+                </div>
               </Link>
             </div>
           )}
@@ -405,14 +404,14 @@ const WritingSection: React.FC<{
     <SectionWrapper
       icon={
         <SVG
-          src={'/icons/writing.svg'}
+          src={'/icons/content.svg'}
           height={16}
           width={16}
           className="text-inherit"
         />
       }
-      title="Recent writing"
-      url={router.asPath + '/writing'}
+      title="Content"
+      url={router.asPath + '/content'}
     >
       {loading ? (
         <div className="mb-[85px] w-full space-y-4">
@@ -464,11 +463,10 @@ const WritingSection: React.FC<{
           </>
         </>
       ) : (
-        <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
-          <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
+        <div className="flex min-h-[331px] flex-col items-center justify-center pt-8">
+          <SVG width={202} height={70} src="/icons/no-content.svg" />
           <p className="text-center font-sans text-sm text-indigoGray-90">
-            Discover Mirror and Lenster to show off your web3 network and
-            knowledge
+            No content on web3 social yet
           </p>
           <div className="flex items-center space-x-8">
             <a

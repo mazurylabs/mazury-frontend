@@ -3,14 +3,7 @@ import { API_URL } from '@/config';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { ParsedUrlQuery } from 'querystring';
-import type {
-  Badge,
-  ColorName,
-  Profile,
-  ProfileSection,
-  Referral,
-  Skill,
-} from 'types';
+import type { Badge, ColorName, Profile, Referral, Skill } from 'types';
 import { theme } from '../tailwind.config';
 
 export const emailRegex =
@@ -183,14 +176,6 @@ export const getSkillsFromProfile = (profile: Partial<Profile>) => {
     }
   }
   return skills;
-};
-
-export const sectionToColor: { [key in ProfileSection]: ColorName } = {
-  Activity: 'indigo',
-  Credentials: 'fuchsia',
-  Referrals: 'emerald',
-  Writing: 'amber',
-  DAOs: 'purple',
 };
 
 export const truncateString = (str: string, maxLength: number = 50) => {

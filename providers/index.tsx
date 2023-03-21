@@ -6,6 +6,7 @@ import { SwrProvider } from './swr';
 import { SidebarProvider } from '@/contexts';
 import { ReactQueryProvider } from './react-query';
 import { QueryClient } from '@tanstack/react-query';
+import { ErrorBoundaryProvider } from './errorBoundary/ErrorBoundaryProvider';
 
 export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
   children,
@@ -16,7 +17,9 @@ export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
       <ReactQueryProvider queryClient={queryClient}>
         <SwrProvider>
           <WagmiProvider>
-            <SidebarProvider>{children}</SidebarProvider>
+            <SidebarProvider>
+              <ErrorBoundaryProvider>{children}</ErrorBoundaryProvider>
+            </SidebarProvider>
           </WagmiProvider>
         </SwrProvider>
       </ReactQueryProvider>

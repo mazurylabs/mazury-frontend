@@ -27,7 +27,6 @@ interface HighlightProps {
 const skeletons = Array(12).fill('skeleton');
 
 const Credentials = ({ ethAddress }: HighlightProps) => {
-  const isMounted = React.useRef<boolean>(false);
   const router = useRouter();
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
 
@@ -115,14 +114,6 @@ const Credentials = ({ ethAddress }: HighlightProps) => {
     setCredentialsFilter({ issuer: '', query: '' });
     setSearchTerm('');
   };
-
-  React.useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      setSelectedCredentials(prevHighlightedCredentials || []);
-      highlightCredentialsRef.current = prevHighlightedCredentials?.length || 0;
-    }
-  }, [prevHighlightedCredentials]);
 
   if (!isOwnProfile) {
     router.push(`/people/${address}`);

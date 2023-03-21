@@ -53,8 +53,8 @@ const Writing = ({ ethAddress }: WritingProps) => {
   const isLoading = isLensLoading && isMirrorLoading;
 
   const navItems = Container.useNavItems({
+    activeItem: 'content',
     address: ethAddress,
-    activeItem: 'writing',
     profileId: accountInView?.lens_id as string,
   });
 
@@ -126,7 +126,7 @@ const Writing = ({ ethAddress }: WritingProps) => {
                 })}
               </>
             ) : (
-              <EmptyState emptyMessage="No writings to show" />
+              <EmptyState emptyMessage="No content to show" />
             )}
           </div>
         </div>
