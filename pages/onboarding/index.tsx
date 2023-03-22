@@ -9,17 +9,17 @@ import Link from 'next/link';
 
 const onboardingSteps: Record<OnboardingStepsEnum, JSX.Element> = {
   [OnboardingStepsEnum.ALLSET]: <OnboardingViews.AllSet />,
-  [OnboardingStepsEnum.COMMUNICATION]: <OnboardingViews.Communication />,
-  [OnboardingStepsEnum.CONSENT]: <OnboardingViews.Consent />,
-  [OnboardingStepsEnum.HOWDIDYOUFINDUS]: <OnboardingViews.HowDidYouFindUs />,
-  [OnboardingStepsEnum.LOCATION]: <OnboardingViews.Location />,
+  // [OnboardingStepsEnum.COMMUNICATION]: <OnboardingViews.Communication />,
+  // [OnboardingStepsEnum.CONSENT]: <OnboardingViews.Consent />,
+  // [OnboardingStepsEnum.HOWDIDYOUFINDUS]: <OnboardingViews.HowDidYouFindUs />,
+  // [OnboardingStepsEnum.LOCATION]: <OnboardingViews.Location />,
   [OnboardingStepsEnum.PROFILEINFORMATION]: (
     <OnboardingViews.ProfileInformation />
   ),
-  [OnboardingStepsEnum.PROFILETYPE]: <OnboardingViews.ProfileType />,
-  [OnboardingStepsEnum.SOCIALS]: <OnboardingViews.Socials />,
-  [OnboardingStepsEnum.RECRUITER]: <OnboardingViews.RecruiterInfo />,
-  [OnboardingStepsEnum.OPENTOPROJECTS]: <OnboardingViews.OpenToProjects />,
+  // [OnboardingStepsEnum.PROFILETYPE]: <OnboardingViews.ProfileType />,
+  // [OnboardingStepsEnum.SOCIALS]: <OnboardingViews.Socials />,
+  // [OnboardingStepsEnum.RECRUITER]: <OnboardingViews.RecruiterInfo />,
+  // [OnboardingStepsEnum.OPENTOPROJECTS]: <OnboardingViews.OpenToProjects />,
 };
 
 const OnboardingPage: NextPage = () => {
@@ -65,7 +65,7 @@ const OnboardingPage: NextPage = () => {
                   </div>
 
                   <h1 className="font-sansMid text-sm font-medium text-indigoGray-40">
-                    {activeStep.split('-')[0]}
+                    {activeStep}
                   </h1>
                 </div>
 

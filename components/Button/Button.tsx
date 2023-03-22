@@ -24,7 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       className={`flex items-center justify-center gap-2 rounded-[8px] ${
         size === 'small' ? 'py-2' : 'py-3'
-      } px-6 font-sans text-sm font-bold disabled:cursor-not-allowed disabled:shadow-none ${
+      } px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none ${
         variants[variant]
       } ${className}`}
       {...rest}
