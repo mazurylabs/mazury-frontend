@@ -8,8 +8,12 @@ import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { isValid } from '@/utils/api';
 import { useUser } from '@/providers/react-query-auth';
 import { emailRegex } from '@/utils';
+import { updateProfile } from '@/utils/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const ProfileInformation = () => {
+  const queryClient = useQueryClient();
+
   const [loading, setLoading] = React.useState(false);
   const [usernameError, setUsernameError] = React.useState<string>('');
   const [emailError, setEmailError] = React.useState<string>('');
@@ -39,10 +43,23 @@ export const ProfileInformation = () => {
 
     const emailError = await (await isValid('email', profile.email)).error;
 
-    setLoading(false);
-
     if (!emailError && !usernameError) {
-      // TODO upload all data?
+      const { avatar, ...restOfProfile } = profile;
+
+      const { error, data } = await updateProfile(
+        userProfile?.eth_address as string,
+        '',
+        restOfProfile
+      );
+
+      if (!error) {
+        queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+          ...prev,
+          ...data,
+          onboarded: true,
+        }));
+      }
+
       handleStep(OnboardingStepsEnum['ALLSET']);
     } else if (emailError && usernameError) {
       setEmailError('Email already exists');
@@ -52,6 +69,8 @@ export const ProfileInformation = () => {
     } else if (usernameError) {
       setUsernameError('Username already exists');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -84,13 +103,13 @@ export const ProfileInformation = () => {
               label={
                 <div
                   className={`font-sans text-${
-                    emailError ? 'red-500' : 'indigoGray-40 mb-0.5'
+                    usernameError ? 'red-500' : 'indigoGray-40 mb-0.5'
                   }`}
                 >
                   Username{' '}
                   <span
                     className={`font-sans font-normal text-${
-                      emailError ? 'red-500' : 'indigoGray-30'
+                      usernameError ? 'red-500' : 'indigoGray-30'
                     }`}
                   >
                     (Required)
