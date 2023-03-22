@@ -190,38 +190,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
             </div>
           ) : (
             <div className="space-y-8 pb-4">
-              <SettingsCard
-                title="Account"
-                links={['Username', 'Email', 'Ethereum-address']}
-              />
-
-              <button
-                type="button"
-                className="flex w-full items-center space-x-2"
-                onClick={handleOpenToOpportunities}
-              >
-                <div className="flex grow items-center justify-between rounded-lg border border-indigoGray-20 p-4">
-                  <div className="flex flex-col items-start">
-                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                      Open to new opportunities
-                    </p>
-                    <p className="font-sansMid text-xs font-medium text-indigoGray-50">
-                      Recruiters will be able to send you project proposals
-                    </p>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <div className="h-4 w-4">
-                      {loading && <Spinner size={16} />}
-                    </div>
-
-                    <Toggle
-                      isToggled={!!profile?.open_to_opportunities}
-                      onToggle={() => {}}
-                    />
-                  </div>
-                </div>
-              </button>
+              <SettingsCard title="Account" links={['Ethereum-address']} />
 
               <Link legacyBehavior href="/settings/account/profile-type">
                 <a
@@ -241,11 +210,6 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
                   </div>
                 </a>
               </Link>
-
-              <SettingsCard
-                title="Connected services"
-                links={['Twitter', 'Github', 'Discord']}
-              />
 
               <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
                 <Link legacyBehavior href="/privacy-policy">
@@ -279,20 +243,6 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
                   Sign out
                 </p>
               </button>
-
-              <div>
-                <h2 className="font-demi text-xl text-indigoGray-90 md:text-3xl">
-                  Delete account
-                </h2>
-                <p className="my-3 font-sansMid font-medium text-indigoGray-60">
-                  Deleting your account means we delete all the information you
-                  provided after signing up. We cannot delete other information
-                  since it is on the blockchain.
-                </p>
-                <Button className="w-full bg-red-600 md:w-fit" size="large">
-                  DELETE ACCOUNT
-                </Button>
-              </div>
             </div>
           )}
           <Toaster />
