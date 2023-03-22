@@ -5,7 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
-import { Button, Input, Layout } from 'components';
+import { Button, Checkbox, Input, Layout, Spinner } from 'components';
+import { Toggle } from '@/components/Toggle';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount, useMobile } from 'hooks';
 import { updateProfile, isValid } from 'utils/api';
@@ -26,6 +27,9 @@ interface UserProfile {
   cover?: File;
   bio?: string;
   title?: string;
+  open_to_opportunities?: boolean;
+  twitter?: string;
+  email_verified?: string;
 }
 
 const Edit = ({ ethAddress }: EditProps) => {
@@ -274,9 +278,9 @@ const Edit = ({ ethAddress }: EditProps) => {
 
             <Input
               id="full_name"
-              label="Full name"
+              label="Display name"
               value={userProfile.full_name || ''}
-              placeholder="Insert full name"
+              placeholder="Insert display name"
               onChange={(value) => {
                 handleChange('full_name', value);
               }}
@@ -312,17 +316,18 @@ const Edit = ({ ethAddress }: EditProps) => {
                   </div>
                 )}
               </div>
-
-              <div className="flex items-center space-x-1 pl-2">
-                <SVG
-                  src={`/icons/error-warning-line.svg`}
-                  height={12}
-                  width={12}
-                />
-                <p className="font-sans text-xs text-indigoGray-40">
-                  We will send you a confirmation e-mail
-                </p>
-              </div>
+              {userProfile.email_verified && (
+                <div className="flex items-center space-x-1 pl-2">
+                  <SVG
+                    src={`/icons/error-warning-line.svg`}
+                    height={12}
+                    width={12}
+                  />
+                  <p className="font-sans text-xs text-indigoGray-40">
+                    We will send you a confirmation e-mail
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
@@ -335,6 +340,17 @@ const Edit = ({ ethAddress }: EditProps) => {
                   handleChange('location', value);
                 }}
               />
+              <div className="mt-2 flex flex-row items-center space-x-2">
+                <Checkbox
+                  innerClassName="h-4 w-4 text-indigoGray-70"
+                  outerClassName="h-4 w-4 text-indigoGray-70"
+                  checked={false}
+                  setChecked={() => {}}
+                  label=""
+                  id={'acceptTos'}
+                />
+                <p className="text-sm text-indigoGray-90">Work remotely</p>
+              </div>
             </div>
 
             <div>
@@ -366,6 +382,56 @@ const Edit = ({ ethAddress }: EditProps) => {
                 // disabled={!!existingReferral}
               />
             </div>
+
+            <button
+              type="button"
+              className="flex w-full items-center space-x-2"
+              // onClick={handleOpenToOpportunities}
+            >
+              <div className="flex grow items-center justify-between">
+                <div className="flex flex-col items-start">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
+                    Open to new opportunities
+                  </p>
+                  <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                    Recruiters will be able to send you project proposals
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <div className="h-4 w-4">
+                    {loading && <Spinner size={16} />}
+                  </div>
+
+                  <Toggle
+                    isToggled={!!userProfile?.open_to_opportunities}
+                    onToggle={() => {}}
+                  />
+                </div>
+              </div>
+            </button>
+
+            <div>
+              <Input
+                id="twitter"
+                label="Twitter"
+                value={userProfile.title || ''}
+                placeholder="Your twitter handle"
+                onChange={(value) => {
+                  handleChange('twitter', value);
+                }}
+              />
+            </div>
+
+            <Button
+              className="w-full uppercase"
+              size="large"
+              // onClick={
+              //   user.github ? handleDisconnectGithub : handleVerifyGithub
+              // }
+            >
+              {user.github ? 'DISCONNECT' : 'CONNECT'} GITHUB
+            </Button>
 
             <div className="hidden space-x-2 lg:flex">
               <Button
