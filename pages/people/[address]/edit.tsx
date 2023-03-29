@@ -28,6 +28,7 @@ interface UserProfile {
   bio?: string;
   title?: string;
   open_to_opportunities?: boolean;
+  working_remotely?: boolean;
   twitter?: string;
   email_verified?: string;
 }
@@ -170,6 +171,8 @@ const Edit = ({ ethAddress }: EditProps) => {
         email: user?.email || '',
         bio: user?.bio || '',
         title: user?.title || '',
+        open_to_opportunities: user?.open_to_opportunities || false,
+        working_remotely: user?.working_remotely || false,
       });
     }
   }, [user]);
@@ -344,10 +347,12 @@ const Edit = ({ ethAddress }: EditProps) => {
                 <Checkbox
                   innerClassName="h-4 w-4 text-indigoGray-70"
                   outerClassName="h-4 w-4 text-indigoGray-70"
-                  checked={false}
-                  setChecked={() => {}}
+                  checked={userProfile.working_remotely || false}
+                  setChecked={(value) => {
+                    handleChange('working_remotely', value);
+                  }}
                   label=""
-                  id={'acceptTos'}
+                  id={'work-remotely'}
                 />
                 <p className="text-sm text-indigoGray-90">Work remotely</p>
               </div>
@@ -379,14 +384,12 @@ const Edit = ({ ethAddress }: EditProps) => {
                 maxLength={400}
                 value={userProfile.bio || ''}
                 onChange={(e) => handleChange('bio', e.target.value)}
-                // disabled={!!existingReferral}
               />
             </div>
 
             <button
               type="button"
               className="flex w-full items-center space-x-2"
-              // onClick={handleOpenToOpportunities}
             >
               <div className="flex grow items-center justify-between">
                 <div className="flex flex-col items-start">
@@ -405,7 +408,9 @@ const Edit = ({ ethAddress }: EditProps) => {
 
                   <Toggle
                     isToggled={!!userProfile?.open_to_opportunities}
-                    onToggle={() => {}}
+                    onToggle={(value) =>
+                      handleChange('open_to_opportunities', value)
+                    }
                   />
                 </div>
               </div>
