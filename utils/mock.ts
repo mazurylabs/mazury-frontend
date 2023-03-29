@@ -50,6 +50,7 @@ export const mockProfile: Profile = {
   twitter: '',
   github_last_checked: null,
   open_to_opportunities: false,
+  working_remotely: false,
   role_developer: false,
   role_designer: false,
   role_trader: false,
