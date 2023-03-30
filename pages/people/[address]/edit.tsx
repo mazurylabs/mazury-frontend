@@ -30,6 +30,7 @@ interface UserProfile {
   open_to_opportunities?: boolean;
   working_remotely?: boolean;
   twitter?: string;
+  github?: string;
   email_verified?: string;
 }
 
@@ -156,6 +157,26 @@ const Edit = ({ ethAddress }: EditProps) => {
     }
   };
 
+  const handleVerifyGithub = async () => {
+    const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
+    localStorage.setItem('gh-route', 'settings');
+    window.open(githubPopupLink, '_blank');
+  };
+
+  const disconnectGithub = async () => {
+    const { error } = await updateProfile(user.eth_address, '', {
+      github: '',
+    });
+
+    if (error) {
+      return alert('Error disconnecting profile.');
+    }
+    queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+      ...prev,
+      github: '',
+    }));
+  };
+
   React.useEffect(() => {
     if (!isOwnProfile) {
       router.push(`/people/${address}`);
@@ -173,6 +194,8 @@ const Edit = ({ ethAddress }: EditProps) => {
         title: user?.title || '',
         open_to_opportunities: user?.open_to_opportunities || false,
         working_remotely: user?.working_remotely || false,
+        twitter: user?.twitter || '',
+        github: user?.github || '',
       });
     }
   }, [user]);
@@ -420,7 +443,7 @@ const Edit = ({ ethAddress }: EditProps) => {
               <Input
                 id="twitter"
                 label="Twitter"
-                value={userProfile.title || ''}
+                value={userProfile.twitter || ''}
                 placeholder="Your twitter handle"
                 onChange={(value) => {
                   handleChange('twitter', value);
@@ -431,9 +454,7 @@ const Edit = ({ ethAddress }: EditProps) => {
             <Button
               className="w-full uppercase"
               size="large"
-              // onClick={
-              //   user.github ? handleDisconnectGithub : handleVerifyGithub
-              // }
+              onClick={user.github ? disconnectGithub : handleVerifyGithub}
             >
               {user.github ? 'DISCONNECT' : 'CONNECT'} GITHUB
             </Button>
