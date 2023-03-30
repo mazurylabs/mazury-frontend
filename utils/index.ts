@@ -1,9 +1,7 @@
-import { API_URL } from '@/config';
-// import { axios } from '@/lib/axios';
-import axios from 'axios';
+import { InfiniteData } from '@tanstack/react-query';
 import { ethers } from 'ethers';
 import { ParsedUrlQuery } from 'querystring';
-import type { Badge, ColorName, Profile, Referral, Skill } from 'types';
+import type { Badge, ListResponse, Profile, Skill } from 'types';
 import { theme } from '../tailwind.config';
 
 export const emailRegex =
@@ -22,10 +20,6 @@ export const getTruncatedAddress = (
   )}`;
 };
 
-export const goToLink = (link: string) => {
-  window.open(link, '_blank');
-};
-
 export function capitalize(word: string) {
   return word.charAt(0).toUpperCase() + word.substring(1);
 }
@@ -36,32 +30,6 @@ export function toCapitalizedWord(word: string) {
 }
 
 export const colors = theme.extend.colors;
-
-type MonthDigit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-export const getMonthName = (month: MonthDigit) => {
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  return months[month - 1];
-};
-
-export const getMonthAndYear = (date: Date) => {
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${getMonthName(month as MonthDigit).slice(0, 3)} ${year}`;
-};
 
 export const skillsList: Skill[] = [
   'frontendDev',
@@ -82,40 +50,8 @@ export const skillsList: Skill[] = [
   'community',
 ];
 
-export const toCamelCase = (text: string) => {
-  return text
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (leftTrim, index) =>
-      index === 0 ? leftTrim.toLowerCase() : leftTrim.toUpperCase()
-    )
-    .replace(/\s+/g, '');
-};
-
-// Scans an array of referrals and finds out if the user has already referred someone
-export const hasAlreadyReferredReceiver = (
-  referrals: Referral[],
-  receiver: string,
-  author: string
-) => {
-  return referrals.find((referral) => {
-    return (
-      referral.receiver.eth_address === receiver &&
-      referral.author.eth_address === author
-    );
-  });
-};
-
 export const getTwitterConnectionPopupLink = (ethAddress: string) => {
   return `https://twitter.com/intent/tweet?text=I'm%20verifying%20myself%20for%20%40mazuryxyz%20%F0%9F%8C%8A%0a%0ahttps://mzry.me/${ethAddress}`;
-};
-
-/**
- * Returns '-' if the value is null or undefined, otherwise returns the value. Useful because 0 || '-' returns '-'
- */
-export const getMetricDisplayValue = (
-  value: number | null | undefined,
-  placeholder: string = '-'
-) => {
-  return value === null || value === undefined ? placeholder : value;
 };
 
 const detectIfEthAddress = (str: string) => {
@@ -149,33 +85,6 @@ export const commify = (value: number) => {
   numberString = numberString.split('').reverse().join('');
 
   return numberString;
-};
-
-export const getSkillSlugsFromReferral = (referral: Referral) => {
-  const { skills } = referral;
-  return skills?.map((skill) => skill.slug);
-};
-
-const getOffset = (page: number) => {
-  return (page - 1) * 20;
-};
-
-export const getOffsetArray = (page: number) => {
-  const offsets = [];
-  for (let i = 1; i <= page; i++) {
-    offsets.push(getOffset(i));
-  }
-  return offsets;
-};
-
-export const getSkillsFromProfile = (profile: Partial<Profile>) => {
-  const skills = [];
-  for (let skill of skillsList) {
-    if (profile[skill]) {
-      skills.push(skill);
-    }
-  }
-  return skills;
 };
 
 export const truncateString = (str: string, maxLength: number = 50) => {
@@ -324,3 +233,17 @@ export const formatProfileRoute = (url: string, address: string) => {
     ethAddress,
   };
 };
+
+// export const formatInfiniteQueryResponse = <T extends {}>(
+//   responseData: ListResponse<T>[]
+// ) => {
+//   const response = responseData?.reduce((prev, next) => {
+//     return {
+//       ...prev,
+//       ...next,
+//       results: [...(prev?.results || []), ...next.results],
+//     };
+//   }, {} as ListResponse<T>);
+
+//   return response;
+// };

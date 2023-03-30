@@ -114,6 +114,15 @@ export const Sidebar: React.FC = () => {
               className="mt-4"
             />
 
+            <SidebarItem
+              href="/projects"
+              label="Projects"
+              icon={<SVG src="/icons/jobs.svg" />}
+              isOpen={isOpen}
+              active={pathname === '/projects'}
+              className="mt-4"
+            />
+
             <WalletRequestModal
               step={currentStep}
               handleSkip={() => setCurrentStep('idle')}

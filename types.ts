@@ -19,11 +19,6 @@ export type ColorName =
   | 'white'
   | 'black';
 
-export interface Color {
-  name: ColorName;
-  hex: string;
-}
-
 export type ProfileSection =
   | 'Activity'
   | 'Credentials'
@@ -377,4 +372,20 @@ export interface LensPublication {
       totalUpvotes: string;
     };
   }[];
+}
+
+export interface Project {
+  created_at: string;
+  updated_at: string;
+  id: string;
+  name: string;
+  owner: {
+    eth_address: string;
+    username: string;
+    avatar: string;
+    mazury_talent_verified: false;
+  };
+  saved_profiles_preview: [];
+  saved_profiles_preview_count: number;
+  already_in_project: boolean;
 }

@@ -18,8 +18,6 @@ interface SocialProps {
   ethAddress: string;
 }
 
-export type OverviewViews = 'idle' | 'social';
-
 const Profile = ({ ethAddress }: SocialProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const isMobile = useMobile();

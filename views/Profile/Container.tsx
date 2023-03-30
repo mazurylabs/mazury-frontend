@@ -39,10 +39,16 @@ export const Container: React.FC<ContainerProps> & {
   const router = useRouter();
 
   const handleBack = () => {
-    if (handleGoBack) {
+    if (handleGoBack && saveWithModal) {
       setToggleSaveModal(true);
       return;
     }
+
+    if (handleGoBack && !saveWithModal) {
+      handleGoBack();
+      return;
+    }
+
     router.back();
   };
 

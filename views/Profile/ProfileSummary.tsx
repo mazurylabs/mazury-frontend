@@ -23,6 +23,7 @@ interface ProfileSummaryProps {
   loading?: boolean;
   navItems?: NavItem[];
   intersectionRef?: React.MutableRefObject<HTMLDivElement>;
+  handleSaveProfile?: () => void;
 }
 
 const Skeleton: React.FC<{
@@ -71,6 +72,7 @@ export const ProfileSummary = ({
   isOwnProfile,
   loading,
   intersectionRef,
+  handleSaveProfile,
 }: ProfileSummaryProps) => {
   const router = useRouter();
   const isEditPage = router.asPath?.includes('edit');
@@ -230,11 +232,16 @@ export const ProfileSummary = ({
                   ? router.push(`/people/${address}/edit`)
                   : handleCopy(window.location.href)
               }
-              className={`grow ${
-                !isOwnProfile && !user?.is_recruiter
-                  ? 'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold'
-                  : ''
-              }`}
+              className={clsx(
+                'grow whitespace-nowrap',
+                !isOwnProfile &&
+                  !user?.is_recruiter &&
+                  'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold',
+                !isOwnProfile &&
+                  user?.is_recruiter &&
+                  handleSaveProfile &&
+                  'lg:max-w-[174px]'
+              )}
               disabled={isEditPage}
             >
               {!isOwnProfile && (
@@ -256,10 +263,20 @@ export const ProfileSummary = ({
             {(isOwnProfile || user?.is_recruiter) && (
               <Button
                 variant="tertiary"
-                className="min-w-16 border-[1.5px] border-indigoGray-20"
+                className="max-w-16 min-w-[64px] border-[1.5px] border-indigoGray-20"
                 onClick={() => handleCopy(window.location.href)}
               >
                 <SVG height={16} width={16} src="/icons/share.svg" />
+              </Button>
+            )}
+
+            {!isOwnProfile && user?.is_recruiter && handleSaveProfile && (
+              <Button
+                variant="tertiary"
+                className="max-w-16 min-w-[64px] border-[1.5px] border-indigoGray-20"
+                onClick={handleSaveProfile}
+              >
+                <SVG height={16} width={16} src="/icons/star-unfilled.svg" />
               </Button>
             )}
           </div>

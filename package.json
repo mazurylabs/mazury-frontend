@@ -12,6 +12,9 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.1.1",
+    "@radix-ui/react-avatar": "^1.0.2",
+    "@radix-ui/react-popover": "^1.0.5",
     "@reduxjs/toolkit": "^1.9.3",
     "@sentry/nextjs": "^7.37.0",
     "@tailwindcss/line-clamp": "^0.4.0",
@@ -23,6 +26,7 @@
     "axios": "^0.25.0",
     "clsx": "^1.1.1",
     "date-fns": "^2.28.0",
+    "dayjs": "^1.11.7",
     "ethers": "^5.5.3",
     "framer-motion": "^6.2.3",
     "graphql": "^16.3.0",
@@ -45,6 +49,7 @@
     "redux-persist": "^6.0.0",
     "siwe": "^1.1.6",
     "swr": "^1.1.2",
+    "tailwindcss-radix": "^2.8.0",
     "wagmi": "^0.11.4"
   },
   "devDependencies": {
