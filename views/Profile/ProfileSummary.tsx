@@ -296,6 +296,18 @@ export const ProfileSummary = ({
                 value={profile?.github}
               />
             )}
+            {!!profile?.website && (
+              <ProfileLinks
+                url={
+                  profile.website.startsWith('https://') ||
+                  profile.website.startsWith('http://')
+                    ? profile.website
+                    : `https://${profile.website}`
+                }
+                icon="/icons/github-black.svg" // TODO change to website icon
+                value={profile.website}
+              />
+            )}
           </div>
         </div>
       </div>

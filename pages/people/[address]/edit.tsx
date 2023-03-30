@@ -29,6 +29,7 @@ interface UserProfile {
   title?: string;
   open_to_opportunities?: boolean;
   working_remotely?: boolean;
+  website?: string;
   twitter?: string;
   github?: string;
   email_verified?: string;
@@ -194,6 +195,7 @@ const Edit = ({ ethAddress }: EditProps) => {
         title: user?.title || '',
         open_to_opportunities: user?.open_to_opportunities || false,
         working_remotely: user?.working_remotely || false,
+        website: user?.website || '',
         twitter: user?.twitter || '',
         github: user?.github || '',
       });
@@ -438,6 +440,18 @@ const Edit = ({ ethAddress }: EditProps) => {
                 </div>
               </div>
             </button>
+
+            <div>
+              <Input
+                id="website"
+                label="Website"
+                value={userProfile.website || ''}
+                placeholder="Your personal website"
+                onChange={(value) => {
+                  handleChange('website', value);
+                }}
+              />
+            </div>
 
             <div>
               <Input
