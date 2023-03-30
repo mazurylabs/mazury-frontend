@@ -184,7 +184,7 @@ export const Idle = ({
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={() => router.push(`${router.asPath}/socials`)}
+                    onClick={() => router.push(`${router.asPath}/edit`)}
                   >
                     Connect social media
                   </button>

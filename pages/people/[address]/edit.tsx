@@ -466,11 +466,11 @@ const Edit = ({ ethAddress }: EditProps) => {
             </div>
 
             <Button
-              className="w-full uppercase"
+              className="w-1/2"
               size="large"
               onClick={user.github ? disconnectGithub : handleVerifyGithub}
             >
-              {user.github ? 'DISCONNECT' : 'CONNECT'} GITHUB
+              {user.github ? `Disconnect ${user.github}` : 'Connect Github'}
             </Button>
 
             <div className="hidden space-x-2 lg:flex">
