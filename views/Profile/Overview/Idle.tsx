@@ -181,7 +181,7 @@ export const Idle = ({
                     disabled={!!profileCompletionData?.['email_verified']}
                     className={clsx(
                       'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
-                      profileCompletionData?.['connect_social_media'] &&
+                      profileCompletionData?.['email_verified'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
                     onClick={() => router.push(`${router.asPath}/edit`)}
