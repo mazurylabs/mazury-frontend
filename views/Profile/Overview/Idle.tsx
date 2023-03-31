@@ -36,7 +36,7 @@ type ProfileCompletion = {
   discover_web3_credentials: boolean;
   highlight_credentials: boolean;
   connect_social_media: boolean;
-  sign_up_mazury_talent: boolean;
+  email_verified: boolean;
 };
 
 const skeletons = Array(5).fill('skeleton');
@@ -78,17 +78,6 @@ export const Idle = ({
     !hasHighlightedCredentials,
     !!address
   );
-
-  const handleMazuryTalent = async () => {
-    await axios.post(`/profiles/${address}/mazury_talent/`, {});
-    queryClient.setQueryData<ProfileCompletion>(
-      ['profileCompletion'],
-      (prev) => ({
-        ...(prev || ({} as ProfileCompletion)),
-        sign_up_mazury_talent: true,
-      })
-    );
-  };
 
   const credentials = hasHighlightedCredentials
     ? highlightedCredentials.data || []
@@ -134,13 +123,13 @@ export const Idle = ({
           </div>
 
           {!showLess && (
-            <div className="border-t-none flex flex-col rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row">
+            <div className="border-t-none flex flex-col divide-y divide-x-0 rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row lg:justify-between lg:divide-x lg:divide-y-0 lg:divide-indigoGray-20">
               {completedData !== 5 ? (
                 <>
                   <button
                     disabled={!!profileCompletionData?.['personal_information']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-transparent lg:pr-[10px] lg:pb-0 lg:font-semibold',
+                      'm-0 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['personal_information'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -153,7 +142,7 @@ export const Idle = ({
                       !!profileCompletionData?.['discover_web3_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['discover_web3_credentials'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -166,7 +155,7 @@ export const Idle = ({
                       !!profileCompletionData?.['highlight_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['highlight_credentials'] &&
                         !!highlightedCredentials.data?.length &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
@@ -180,7 +169,7 @@ export const Idle = ({
                   <button
                     disabled={!!profileCompletionData?.['connect_social_media']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -188,19 +177,17 @@ export const Idle = ({
                   >
                     Connect social media
                   </button>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
+                  <button
+                    disabled={!!profileCompletionData?.['email_verified']}
                     className={clsx(
-                      '!m-0 shrink-0 border-l-indigoGray-20 !p-0 !pt-3 font-sans !text-xs !font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:!pt-0 lg:!pl-[10px] lg:!pr-[10px] lg:!font-semibold',
-                      profileCompletionData?.['sign_up_mazury_talent'] &&
-                        'pointer-events-none font-medium text-indigoGray-40 line-through'
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
+                      profileCompletionData?.['email_verified'] &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={handleMazuryTalent}
+                    onClick={() => router.push(`${router.asPath}/edit`)}
                   >
-                    Learn about Mazury Talent
-                  </a>
+                    Verify email
+                  </button>
                 </>
               ) : (
                 <p className="font-sans text-xs text-indigoGray-90">
