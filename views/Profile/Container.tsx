@@ -20,6 +20,7 @@ interface ContainerProps {
   handleGoBack?: () => void;
   handleSave?: () => void;
   isSaving?: boolean;
+  saveWithModal?: boolean;
 }
 
 export const Container: React.FC<ContainerProps> & {
@@ -32,6 +33,7 @@ export const Container: React.FC<ContainerProps> & {
   handleGoBack,
   handleSave,
   isSaving,
+  saveWithModal,
 }) => {
   const [toggleSaveModal, setToggleSaveModal] = React.useState(false);
   const router = useRouter();
@@ -72,7 +74,7 @@ export const Container: React.FC<ContainerProps> & {
                   </p>
                 </div>
 
-                {handleSave && (
+                {handleSave && !saveWithModal && (
                   <Button
                     className="mr-2 w-fit !px-5 lg:mr-0 lg:w-[200px]"
                     onClick={handleSave}
@@ -145,7 +147,7 @@ const useNavItems = ({
 
   const loading = (isLoading && !!profileId) || credentialCount.isLoading;
 
-  const writingCount = loading
+  const contentCount = loading
     ? '0'
     : +(data?.items.length || '0') +
       +(credentialCount.data?.posts?.total || '0');
@@ -160,11 +162,11 @@ const useNavItems = ({
       href: `/people/${address}/credentials`,
     },
     {
-      label: 'Writing',
+      label: 'Content',
       isActive: false,
-      value: String(writingCount),
-      icon: '/icons/writing.svg',
-      href: `/people/${address}/writing`,
+      value: String(contentCount),
+      icon: '/icons/content.svg',
+      href: `/people/${address}/content`,
     },
   ];
 

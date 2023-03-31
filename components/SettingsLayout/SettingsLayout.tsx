@@ -24,12 +24,6 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
 
   return (
     <div>
-      <div className="mb-3">
-        <h2 className="font-demi text-xl text-indigoGray-90 md:text-3xl">
-          {title}
-        </h2>
-      </div>
-
       <div className="rounded-lg border border-indigoGray-20">
         {links.map((link, index) => (
           <Link
@@ -147,157 +141,104 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
   };
 
   return (
-    <Layout
-      headerContent={
-        <div className="md: z-10 mt-4 flex w-full justify-start bg-white px-4 md:sticky md:top-0 md:mt-20 md:px-0">
-          <div className="flex justify-center md:mt-4 md:w-3/12">
-            <h1 className="font-demi text-4xl text-indigoGray-90 md:text-5xl">
-              Settings
-            </h1>
-          </div>
+    <Layout variant={'plain'}>
+      <div className="mt-4 flex w-full bg-white px-4 md:sticky md:top-0 md:z-10 md:mt-20 md:px-0 md:pl-28">
+        <div className="flex justify-center md:mt-4">
+          <h1 className="font-demi text-4xl text-indigoGray-90 md:text-5xl">
+            Settings
+          </h1>
         </div>
-      }
-      sidebarContent={<Sidebar />}
-      innerLeftContent={
-        <div className="flex justify-center">
-          <div>
-            <SettingsLink
-              title="Account"
-              links={['Username', 'Email', 'Ethereum-address', 'Profile-type']}
-            />
+      </div>
+      <div className="flex grow flex-col px-4 pb-4 md:max-w-[700px] md:pl-28">
+        {content ? (
+          <div className="flex grow flex-col">
+            <div className="mb-6 text-sm text-indigoGray-40 md:mb-3">
+              <Link legacyBehavior href={'/settings'}>
+                <a className="flex w-fit items-center font-sans">
+                  <SVG src="/icons/back.svg" width="16px" height="16px" />
 
-            <SettingsLink
-              title="Services"
-              links={['Twitter', 'Github', 'Discord']}
-            />
-          </div>
-        </div>
-      }
-      innerRightContent={
-        <div className="flex grow flex-col pb-4 md:max-w-[31.25rem]">
-          {content ? (
-            <div className="flex grow flex-col">
-              <div className="mb-6 text-sm text-indigoGray-40 md:mb-3">
-                <Link legacyBehavior href={'/settings'}>
-                  <a className="flex w-fit items-center font-sans">
-                    <SVG src="/icons/back.svg" width="16px" height="16px" />
-
-                    <span className="ml-3">SETTINGS</span>
-                  </a>
-                </Link>
-              </div>
-              <div className="flex grow flex-col">{content}</div>
+                  <span className="ml-3">SETTINGS</span>
+                </a>
+              </Link>
             </div>
-          ) : (
-            <div className="space-y-8 pb-4">
-              <SettingsCard
-                title="Account"
-                links={['Username', 'Email', 'Ethereum-address']}
-              />
+            <div className="flex grow flex-col">{content}</div>
+          </div>
+        ) : (
+          <div className="space-y-4 pb-4">
+            <SettingsCard title="Account" links={['Ethereum-address']} />
 
-              <button
+            <Link legacyBehavior href="/settings/account/profile-type">
+              <a
                 type="button"
-                className="flex w-full items-center space-x-2"
-                onClick={handleOpenToOpportunities}
+                className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
               >
-                <div className="flex grow items-center justify-between rounded-lg border border-indigoGray-20 p-4">
-                  <div className="flex flex-col items-start">
-                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                      Open to new opportunities
-                    </p>
-                    <p className="font-sansMid text-xs font-medium text-indigoGray-50">
-                      Recruiters will be able to send you project proposals
-                    </p>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <div className="h-4 w-4">
-                      {loading && <Spinner size={16} />}
-                    </div>
-
-                    <Toggle
-                      isToggled={!!profile?.open_to_opportunities}
-                      onToggle={() => {}}
-                    />
-                  </div>
+                <div className="flex flex-col items-start">
+                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                    Profile type
+                  </p>
+                  <p className="font-sansMid text-xs font-medium text-indigo-600">
+                    {profile?.is_recruiter ? 'Recruiter' : 'Talent'}
+                  </p>
                 </div>
-              </button>
+                <div>
+                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
+                </div>
+              </a>
+            </Link>
 
-              <Link legacyBehavior href="/settings/account/profile-type">
-                <a
-                  type="button"
-                  className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
-                >
-                  <div className="flex flex-col items-start">
-                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                      Profile type
-                    </p>
-                    <p className="font-sansMid text-xs font-medium text-indigo-600">
-                      {profile?.is_recruiter ? 'Recruiter' : 'Talent'}
-                    </p>
-                  </div>
-                  <div>
-                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                  </div>
+            <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
+              <Link legacyBehavior href="/privacy-policy">
+                <a className="flex w-full justify-between">
+                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                    Privacy policy
+                  </p>
+                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
                 </a>
               </Link>
 
-              <SettingsCard
-                title="Connected services"
-                links={['Twitter', 'Github', 'Discord']}
-              />
+              <Link legacyBehavior href="/terms-of-service">
+                <a className="flex w-full justify-between">
+                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                    Terms of service
+                  </p>
+                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
+                </a>
+              </Link>
+            </div>
 
-              <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
-                <Link legacyBehavior href="/privacy-policy">
-                  <a className="flex w-full justify-between">
-                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                      Privacy policy
-                    </p>
-                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                  </a>
-                </Link>
-
-                <Link legacyBehavior href="/terms-of-service">
-                  <a className="flex w-full justify-between">
-                    <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                      Terms of service
-                    </p>
-                    <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                  </a>
-                </Link>
-              </div>
-
-              <button
-                type="button"
-                className="flex w-full items-center space-x-3 rounded-lg border border-indigoGray-20 p-4"
-                onClick={handleLogOut}
-              >
-                <div>
-                  <SVG src="/icons/sign-out.svg" width={16} height={16} />
-                </div>
-                <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                  Sign out
-                </p>
-              </button>
-
+            <button
+              type="button"
+              className="flex w-full items-center space-x-3 rounded-lg border border-indigoGray-20 p-4"
+              onClick={handleLogOut}
+            >
               <div>
-                <h2 className="font-demi text-xl text-indigoGray-90 md:text-3xl">
-                  Delete account
-                </h2>
-                <p className="my-3 font-sansMid font-medium text-indigoGray-60">
-                  Deleting your account means we delete all the information you
-                  provided after signing up. We cannot delete other information
-                  since it is on the blockchain.
+                <SVG src="/icons/sign-out.svg" width={16} height={16} />
+              </div>
+              <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                Sign out
+              </p>
+            </button>
+
+            <div className="flex w-full items-center justify-between rounded-lg px-4">
+              <div className="flex flex-col items-start">
+                <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  Contact support
                 </p>
-                <Button className="w-full bg-red-600 md:w-fit" size="large">
-                  DELETE ACCOUNT
-                </Button>
+                <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                  You can contact us by writing to{' '}
+                  <a
+                    className="text-indigo-600"
+                    href="mailto:support@mazury.xyz"
+                  >
+                    support@mazury.xyz
+                  </a>
+                </p>
               </div>
             </div>
-          )}
-          <Toaster />
-        </div>
-      }
-    />
+          </div>
+        )}
+        <Toaster />
+      </div>
+    </Layout>
   );
 };

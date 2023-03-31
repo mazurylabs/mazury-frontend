@@ -3,8 +3,12 @@ import Axios, { AxiosRequestConfig } from 'axios';
 import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from '../config/index';
 import storage from '../utils/storage';
 
+import { logoutFn } from 'providers/react-query-auth';
+
 async function authRequestInterceptor(config: AxiosRequestConfig) {
-  if (!config?.headers) return;
+  if (!config?.headers) {
+    return;
+  }
 
   const storedToken = storage.getToken(ACCESS_TOKEN_KEY);
 
@@ -15,7 +19,7 @@ async function authRequestInterceptor(config: AxiosRequestConfig) {
   return config;
 }
 
-async function refreshToken(refreshToken: string) {
+async function getAuthTokens(refreshToken: string) {
   const res = await axios.post(`/auth/token/refresh`, {
     refresh: refreshToken,
   });
@@ -26,18 +30,29 @@ async function refreshToken(refreshToken: string) {
 async function authResponseErrorInterceptor(error: any) {
   const prevRequest = error?.config;
 
-  const storedToken = storage.getToken(ACCESS_TOKEN_KEY);
-  const isExpired = storage.isTokenExpired(storedToken);
+  const accessToken = storage.getToken(ACCESS_TOKEN_KEY);
+  const refreshToken = storage.getToken(REFRESH_TOKEN_KEY);
+  const isAccessExpired = storage.isTokenExpired(accessToken);
+  const isRefreshExpired = storage.isTokenExpired(refreshToken);
 
-  if ((isExpired || error?.response?.status === 401) && !prevRequest?.sent) {
+  if (isRefreshExpired) {
+    logoutFn();
+    return Promise.reject(error);
+  }
+
+  if (
+    (isAccessExpired || error?.response?.status === 401) &&
+    !prevRequest?.sent
+  ) {
     const storedToken = storage.getToken(REFRESH_TOKEN_KEY);
 
     prevRequest.sent = true;
-    const { access } = await refreshToken(storedToken);
+    const { access } = await getAuthTokens(storedToken);
     storage.setToken(access, ACCESS_TOKEN_KEY);
     prevRequest.headers['Authorization'] = `Bearer ${access}`;
     return axios(prevRequest);
   }
+
   return Promise.reject(error);
 }
 

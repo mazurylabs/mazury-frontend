@@ -8,11 +8,7 @@ import clsx from 'clsx';
 import { Toggle } from 'components/Toggle';
 
 import { LoadingState } from './LoadingState';
-import { BadgeFilter } from './BadgeFilter';
 import { CredentialFilter } from './CredentialFilter';
-import { ReferralFilter } from './ReferralFilter';
-import { RoleFilter } from './RoleFilter';
-import { SkillFilter } from './SkillFilter';
 import { InitialFilterState } from './InitialFilterState';
 import { EmptyState } from './EmptyState';
 import { SearchResults } from './SearchResults';

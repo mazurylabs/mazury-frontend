@@ -9,15 +9,13 @@ import { axios } from 'lib/axios';
 import { Badge, LensPublication, ListResponse, Post } from 'types';
 import { useBadges } from 'hooks';
 
-import { OverviewViews } from 'pages/people/[address]';
 import { Credential } from '../Credential';
 import { useLensPost } from '../Container';
-import { useWriting } from 'pages/people/[address]/writing';
+import { useWriting } from '@/pages/people/[address]/content';
 import { MirrorPost } from '../MirrorPost';
 import { LensPost } from '../LensPost';
 
 interface IdleProps {
-  handleNavigateViews: (view: OverviewViews) => void;
   address: string;
   isOwnProfile: boolean;
   profileSummaryAccordion: React.ReactNode;
@@ -38,13 +36,12 @@ type ProfileCompletion = {
   discover_web3_credentials: boolean;
   highlight_credentials: boolean;
   connect_social_media: boolean;
-  sign_up_mazury_talent: boolean;
+  email_verified: boolean;
 };
 
 const skeletons = Array(5).fill('skeleton');
 
 export const Idle = ({
-  handleNavigateViews,
   address,
   isOwnProfile,
   profileSummaryAccordion,
@@ -58,7 +55,7 @@ export const Idle = ({
   const profileCompletion = useQuery({
     queryKey: ['profileCompletion'],
     queryFn: () => getProfileCompletion(address),
-    enabled: isOwnProfile,
+    enabled: isOwnProfile && !!address,
   });
 
   const highlightedCredentials = useHighlightedCredentials(address);
@@ -68,6 +65,7 @@ export const Idle = ({
   const { writings: mirrorPost, isLoading: isMirrorLoading } = useWriting({
     address,
     limit: 8,
+    enabled: !!address,
   });
 
   const hasHighlightedCredentials = !!highlightedCredentials.data?.length;
@@ -77,19 +75,9 @@ export const Idle = ({
     undefined,
     8,
     undefined,
-    !hasHighlightedCredentials && !!address
+    !hasHighlightedCredentials,
+    !!address
   );
-
-  const handleMazuryTalent = async () => {
-    await axios.post(`/profiles/${address}/mazury_talent/`, {});
-    queryClient.setQueryData<ProfileCompletion>(
-      ['profileCompletion'],
-      (prev) => ({
-        ...(prev || ({} as ProfileCompletion)),
-        sign_up_mazury_talent: true,
-      })
-    );
-  };
 
   const credentials = hasHighlightedCredentials
     ? highlightedCredentials.data || []
@@ -99,14 +87,19 @@ export const Idle = ({
   const completionDataArray = Object.values(profileCompletionData || {});
   const completedData = completionDataArray.filter(Boolean).length;
 
+  const showCompletionData =
+    isOwnProfile &&
+    completedData !== 5 &&
+    profileCompletion.status !== 'loading';
+
   return (
     <div
       className={clsx(
         'space-y-4',
-        isOwnProfile ? 'lg:space-y-6' : 'lg:space-y-0'
+        showCompletionData ? 'lg:space-y-6' : 'lg:space-y-0'
       )}
     >
-      {isOwnProfile && (
+      {showCompletionData && (
         <div className="overflow-hidden rounded-lg lg:max-w-[826.6px]">
           <div className="flex w-full justify-between bg-indigoGray-90 py-3 px-6 lg:items-center">
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
@@ -130,13 +123,13 @@ export const Idle = ({
           </div>
 
           {!showLess && (
-            <div className="border-t-none flex flex-col rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row">
+            <div className="border-t-none flex flex-col divide-y divide-x-0 rounded-b-lg border border-indigoGray-20 py-3 px-6 lg:flex-row lg:justify-between lg:divide-x lg:divide-y-0 lg:divide-indigoGray-20">
               {completedData !== 5 ? (
                 <>
                   <button
                     disabled={!!profileCompletionData?.['personal_information']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-transparent lg:pr-[10px] lg:pb-0 lg:font-semibold',
+                      'm-0 p-0 pb-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['personal_information'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -149,7 +142,7 @@ export const Idle = ({
                       !!profileCompletionData?.['discover_web3_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['discover_web3_credentials'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
@@ -162,7 +155,7 @@ export const Idle = ({
                       !!profileCompletionData?.['highlight_credentials']
                     }
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['highlight_credentials'] &&
                         !!highlightedCredentials.data?.length &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
@@ -176,27 +169,25 @@ export const Idle = ({
                   <button
                     disabled={!!profileCompletionData?.['connect_social_media']}
                     className={clsx(
-                      'm-0 shrink-0 border-b border-b-indigoGray-20 border-l-indigoGray-20 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:border-transparent lg:pt-0 lg:pb-0 lg:pl-[10px] lg:pr-[10px] lg:font-semibold',
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
                       profileCompletionData?.['connect_social_media'] &&
                         'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={() => handleNavigateViews('social')}
+                    onClick={() => router.push(`${router.asPath}/edit`)}
                   >
                     Connect social media
                   </button>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://airtable.com/shr7Cjchcji8zMay7?prefill_Mazury+profile=https://app.mazury.xyz/people/${address}`}
+                  <button
+                    disabled={!!profileCompletionData?.['email_verified']}
                     className={clsx(
-                      '!m-0 shrink-0 border-l-indigoGray-20 !p-0 !pt-3 font-sans !text-xs !font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:border-l lg:!pt-0 lg:!pl-[10px] lg:!pr-[10px] lg:!font-semibold',
-                      profileCompletionData?.['sign_up_mazury_talent'] &&
-                        'pointer-events-none font-medium text-indigoGray-40 line-through'
+                      'm-0 p-0 pb-3 pt-3 text-left font-sans text-xs font-medium text-indigoGray-90 hover:text-indigoGray-60 lg:px-[10px] lg:pt-0 lg:pb-0 lg:font-semibold',
+                      profileCompletionData?.['email_verified'] &&
+                        'cursor-not-allowed font-medium text-indigoGray-40 line-through'
                     )}
-                    onClick={handleMazuryTalent}
+                    onClick={() => router.push(`${router.asPath}/edit`)}
                   >
-                    Learn about Mazury Talent
-                  </a>
+                    Verify email
+                  </button>
                 </>
               ) : (
                 <p className="font-sans text-xs text-indigoGray-90">
@@ -329,30 +320,32 @@ const CredentialsSection: React.FC<{
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <SVG
-                src="/icons/empty-credentials-listing.svg"
-                width={225}
-                height={91}
-              />
+              <SVG src="/icons/no-credentials.svg" width={227} height={70} />
               <p className="font-sans text-sm text-indigoGray-90">
-                For now this user doesn’t have any credentials
+                No web3 credentials yet
               </p>
             </div>
           )}
-          {isOwnProfile && !loading && (
+          {!loading && (
             <div
               className={clsx(
-                'mt-5 w-fit self-center',
+                ' w-fit self-center',
                 hasCredentials && 'mb-[85px] mt-9'
               )}
             >
               <Link
-                legacyBehavior
                 href={`/people/${router.query.address}/discover`}
+                className={!isOwnProfile ? 'invisible' : ''}
               >
-                <a className="rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
-                  Discover web3 credentials
-                </a>
+                <div className="flex items-center rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
+                  <p className="rm-2">Discover web3 credentials</p>
+                  <SVG
+                    src="/icons/chevron-right.svg"
+                    height={16}
+                    width={16}
+                    className="text-indigo-600"
+                  />
+                </div>
               </Link>
             </div>
           )}
@@ -398,14 +391,14 @@ const WritingSection: React.FC<{
     <SectionWrapper
       icon={
         <SVG
-          src={'/icons/writing.svg'}
+          src={'/icons/content.svg'}
           height={16}
           width={16}
           className="text-inherit"
         />
       }
-      title="Recent writing"
-      url={router.asPath + '/writing'}
+      title="Content"
+      url={router.asPath + '/content'}
     >
       {loading ? (
         <div className="mb-[85px] w-full space-y-4">
@@ -457,11 +450,10 @@ const WritingSection: React.FC<{
           </>
         </>
       ) : (
-        <div className="flex min-h-[331px] flex-col items-center justify-center space-y-4 pt-8">
-          <SVG width={169} height={60} src="/icons/credentials-listing.svg" />
+        <div className="flex min-h-[331px] flex-col items-center justify-center pt-8">
+          <SVG width={202} height={70} src="/icons/no-content.svg" />
           <p className="text-center font-sans text-sm text-indigoGray-90">
-            Discover Mirror and Lenster to show off your web3 network and
-            knowledge
+            No content on web3 social yet
           </p>
           <div className="flex items-center space-x-8">
             <a

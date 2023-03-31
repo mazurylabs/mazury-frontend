@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import { Profile } from 'types';
 import { useMutualFollowers } from 'hooks';
-import { returnTruncatedIfEthAddress } from 'utils';
+import { formatNumber, returnTruncatedIfEthAddress } from 'utils';
 
 import { ProfileTag } from './ProfileTag';
 import { LensFollowers } from './LensFollowers';
@@ -45,12 +45,21 @@ export const ProfileSummaryAccordion: React.FC<ProfileSummaryProps> = ({
 
       {isToggled && (
         <div className="space-y-4">
+          {profile?.followers_count && (
+            <div className="flex items-center">
+              <p className="space-x-[2px] font-sans text-xs">
+                <span className="text-semibold text-indigoGray-90">
+                  {formatNumber(profile.followers_count)}
+                </span>
+                <span className="text-indigoGray-50">followers on Lens</span>
+              </p>
+            </div>
+          )}
+
           {!isOwnProfile && !!mutualFollowers?.items?.length && (
             <LensFollowers
               remainder={+remainingFollowers}
               mutuals={mutualFollowers.items}
-              lensFollowers={lensFollowers}
-              className="mb-[19px] hidden lg:block"
             />
           )}
 
@@ -63,7 +72,7 @@ export const ProfileSummaryAccordion: React.FC<ProfileSummaryProps> = ({
 
             {!isOwnProfile &&
               (profile?.is_recruiter || profile?.open_to_opportunities) && (
-                <div className="mt-2 hidden space-y-2 lg:block">
+                <div className="mt-2 space-y-2">
                   {profile?.is_recruiter && (
                     <ProfileTag
                       icon="/icons/user-white.svg"

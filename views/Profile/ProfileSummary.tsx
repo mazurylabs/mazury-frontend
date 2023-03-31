@@ -9,11 +9,12 @@ import { useAnimateOnScroll, useMobile, useMutualFollowers } from 'hooks';
 
 import { Profile } from 'types';
 import { Button } from 'components';
-import { returnTruncatedIfEthAddress } from 'utils';
+import { formatNumber, returnTruncatedIfEthAddress } from 'utils';
 
 import { LensFollowers } from './LensFollowers';
 import { ProfileTag } from './ProfileTag';
 import { NavItem } from './type';
+import Link from 'next/link';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -94,77 +95,91 @@ export const ProfileSummary = ({
       <Toaster />
       <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
         <motion.div
-          className={clsx('bg-gradient-3, h-[114px] w-full')}
+          className={clsx('h-[114px] w-full bg-gradient-3')}
           style={isMobile ? { opacity } : undefined}
         >
-          {profile?.banner && (
+          {profile?.cover && (
             <img
-              src={profile?.banner}
-              alt="Banner"
+              src={profile?.cover}
+              alt="user cover"
               className="h-full w-full object-cover object-top"
             />
           )}
         </motion.div>
 
         <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
-          <motion.div
-            className="relative top-[-26px] mb-[-16px] flex items-center space-x-4 lg:mb-[-10px]"
-            style={isMobile ? { top, height, backgroundColor } : undefined}
-          >
-            <div>
-              <motion.img
-                src={profile?.avatar || '/icons/no-avatar.svg'}
-                alt="Profile"
-                className="h-[100px] w-[100px] rounded-full object-cover"
-                style={
-                  isMobile
-                    ? { height: avatarHeight, width: avatarHeight }
-                    : undefined
-                }
-              />
-            </div>
+          <Link href={`/people/${profile?.eth_address}`}>
+            <motion.div
+              className="relative top-[-26px] mb-[-16px] flex items-center space-x-4 lg:mb-[-10px]"
+              style={isMobile ? { top, height, backgroundColor } : undefined}
+            >
+              <div>
+                <motion.img
+                  src={profile?.avatar || '/icons/no-avatar.svg'}
+                  alt="Profile"
+                  className="h-[100px] w-[100px] rounded-full object-cover"
+                  style={
+                    isMobile
+                      ? { height: avatarHeight, width: avatarHeight }
+                      : undefined
+                  }
+                />
+              </div>
 
-            <div>
-              {profile?.full_name && (
-                <motion.h1
-                  className="font-demi text-2xl !font-bold text-indigoGray-90"
-                  style={{ fontSize }}
-                >
-                  {profile?.full_name}
-                </motion.h1>
-              )}
+              <div>
+                {profile?.full_name && (
+                  <motion.h1
+                    className="font-demi text-2xl !font-bold text-indigoGray-90"
+                    style={{ fontSize }}
+                  >
+                    {profile?.full_name}
+                  </motion.h1>
+                )}
 
-              {profile?.username && (
-                <p
-                  className={clsx(
-                    'font-sans text-xs text-indigoGray-50',
-                    !profile.full_name &&
-                      'font-demi text-2xl !font-bold text-indigoGray-90'
-                  )}
-                >
-                  @{profile?.username}
-                </p>
-              )}
-            </div>
-          </motion.div>
+                {profile?.username && (
+                  <p
+                    className={clsx(
+                      'font-sans text-xs text-indigoGray-50',
+                      !profile.full_name &&
+                        'font-demi text-2xl !font-bold text-indigoGray-90'
+                    )}
+                  >
+                    @{returnTruncatedIfEthAddress(profile?.username)}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          </Link>
 
           <div>
+            {!!profile?.followers_count && (
+              <div className="mb-1 flex hidden items-center lg:block">
+                <p className="space-x-[2px] font-sans text-xs">
+                  <span className="text-semibold text-indigoGray-90">
+                    {formatNumber(profile.followers_count)}
+                  </span>
+                  <span className="text-indigoGray-50">
+                    follower{profile.followers_count > 1 && 's'} on Lens
+                  </span>
+                </p>
+              </div>
+            )}
+
             {!isOwnProfile && !!mutualFollowers?.items?.length && (
               <LensFollowers
                 remainder={+remainingFollowers}
                 mutuals={mutualFollowers.items}
-                lensFollowers={lensFollowers}
                 className="mb-[19px] hidden lg:block"
               />
             )}
 
-            {profile?.title && (
+            {!!profile?.title && (
               <p className="mb-2 hidden font-sans text-sm font-semibold text-indigoGray-90 lg:block">
                 {profile.title}
               </p>
             )}
 
-            {profile?.bio && (
+            {!!profile?.bio && (
               <p className="hidden font-sans text-sm text-indigoGray-90 lg:block">
                 {profile.bio}
               </p>
@@ -195,7 +210,7 @@ export const ProfileSummary = ({
                 </div>
               )}
 
-            {profile?.location && (
+            {!!profile?.location && (
               <div className="mt-4 flex items-center space-x-2">
                 <SVG src="/icons/location.svg" height={16} width={16} />
                 <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
@@ -253,7 +268,7 @@ export const ProfileSummary = ({
           </div>
 
           <div className="hidden space-y-2 lg:block">
-            {profile?.eth_address && (
+            {!!profile?.eth_address && (
               <ProfileLinks
                 url={`https://etherscan.io/address/${profile?.eth_address}`}
                 icon="/icons/browse-wallet.svg"
@@ -262,7 +277,7 @@ export const ProfileSummary = ({
                 )}
               />
             )}
-            {profile?.lens_handle && (
+            {!!profile?.lens_handle && (
               <ProfileLinks
                 url={`https://lenster.xyz/u/${profile?.lens_handle}`}
                 icon={'/icons/lens.svg'}
@@ -270,18 +285,30 @@ export const ProfileSummary = ({
               />
             )}
 
-            {profile?.twitter && (
+            {!!profile?.twitter && (
               <ProfileLinks
                 url={`http://twitter.com/${profile.twitter}`}
                 icon="/icons/twitter-black.svg"
                 value={`@${profile?.twitter}`}
               />
             )}
-            {profile?.github && (
+            {!!profile?.github && (
               <ProfileLinks
                 url={`https://github.com/${profile.github}`}
                 icon="/icons/github-black.svg"
                 value={profile?.github}
+              />
+            )}
+            {!!profile?.website && (
+              <ProfileLinks
+                url={
+                  profile.website.startsWith('https://') ||
+                  profile.website.startsWith('http://')
+                    ? profile.website
+                    : `https://${profile.website}`
+                }
+                icon="/icons/link.svg"
+                value={profile.website}
               />
             )}
           </div>

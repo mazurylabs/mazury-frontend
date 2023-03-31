@@ -24,16 +24,17 @@ import {
 
 import { useHighlightedCredentials } from 'views/Profile/Overview/Idle';
 import { ethers } from 'ethers';
+import { formatProfileRoute } from '@/utils';
 
 interface CredentialsProps {
-  address: string;
+  ethAddress: string;
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address }: CredentialsProps) => {
+const Credentials = ({ ethAddress }: CredentialsProps) => {
   const router = useRouter();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const [searchTerm, setSearchTerm] = React.useState('');
   const isMobile = useMobile();
 
@@ -42,8 +43,8 @@ const Credentials = ({ address }: CredentialsProps) => {
     enabled: isMobile,
   });
 
-  const ethAddress = ethers.utils.isAddress(address)
-    ? address
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
     : accountInView?.eth_address || '';
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -59,12 +60,7 @@ const Credentials = ({ address }: CredentialsProps) => {
     hasMoreData,
     isFetchingNextPage,
     isLoading,
-  } = useBadges(
-    ethAddress,
-    credentialsFilter.issuer,
-    10,
-    credentialsFilter.query
-  );
+  } = useBadges(address, credentialsFilter.issuer, 10, credentialsFilter.query);
 
   const credentialCount = useCredentialCount(address);
 
@@ -86,17 +82,13 @@ const Credentials = ({ address }: CredentialsProps) => {
   };
 
   const navItems = Container.useNavItems({
-    address,
+    address: ethAddress,
     activeItem: 'credentials',
     profileId: accountInView?.lens_id as string,
   });
 
   return (
-    <Layout
-      variant="plain"
-      showMobileSidebar={entry?.isIntersecting}
-      className="lg:px-0"
-    >
+    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
         navItems={navItems}
         summary={
@@ -170,62 +162,67 @@ const Credentials = ({ address }: CredentialsProps) => {
             </div>
           )}
 
-          <div>
-            <p className="mb-2 font-sans text-sm text-indigoGray-50">
-              All credentials
-            </p>
+          {!!highlightedCredentials?.data?.length &&
+          badges.length == 0 ? null : (
+            <div>
+              <p className="mb-2 font-sans text-sm text-indigoGray-50">
+                All credentials
+              </p>
 
-            <div
-              className={clsx(
-                badges.length || isLoading
-                  ? 'grid grid-cols-1 gap-6 xl:grid-cols-2'
-                  : 'flex items-center justify-center'
-              )}
-            >
-              {isLoading ? (
-                skeletons.map((item, index) => (
-                  <Credential.Skeleton key={index + item} />
-                ))
-              ) : badges.length ? (
-                badges?.map(({ id: badgeId, badge_type, hidden }) => {
-                  const { title, total_supply, description, image, issuer } =
-                    badge_type;
+              <div
+                className={clsx(
+                  badges.length || isLoading
+                    ? 'grid grid-cols-1 gap-6 xl:grid-cols-2'
+                    : 'flex items-center justify-center'
+                )}
+              >
+                {isLoading || highlightedCredentials.isLoading ? (
+                  skeletons.map((item, index) => (
+                    <Credential.Skeleton key={index + item} />
+                  ))
+                ) : badges.length ? (
+                  badges?.map(({ id: badgeId, badge_type, hidden }) => {
+                    const { title, total_supply, description, image, issuer } =
+                      badge_type;
 
-                  return (
-                    <Credential
-                      key={badgeId + 'all_credentials'}
-                      imageSrc={image}
-                      title={title}
-                      variant={issuer.name}
-                      totalSupply={total_supply}
-                      description={description}
-                      isSelected={true}
-                      className="border-transparent px-4 py-2"
-                      isHidden={hidden}
-                      onSelect={() =>
-                        router.push(`/people/${address}/credentials/${badgeId}`)
-                      }
-                    />
-                  );
-                })
-              ) : (
-                <EmptyState onReset={handleResetFilters} />
+                    return (
+                      <Credential
+                        key={badgeId + 'all_credentials'}
+                        imageSrc={image}
+                        title={title}
+                        variant={issuer.name}
+                        totalSupply={total_supply}
+                        description={description}
+                        isSelected={true}
+                        className="border-transparent px-4 py-2"
+                        isHidden={hidden}
+                        onSelect={() =>
+                          router.push(
+                            `/people/${address}/credentials/${badgeId}`
+                          )
+                        }
+                      />
+                    );
+                  })
+                ) : (
+                  <EmptyState onReset={handleResetFilters} />
+                )}
+              </div>
+
+              {hasMoreData && (
+                <div className="mt-6 flex justify-center">
+                  <Button
+                    className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !font-semibold !text-indigoGray-90"
+                    variant="secondary"
+                    onClick={() => handleFetchMore()}
+                    loading={isFetchingNextPage}
+                  >
+                    Load more
+                  </Button>
+                </div>
               )}
             </div>
-
-            {hasMoreData && (
-              <div className="mt-6 flex justify-center">
-                <Button
-                  className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !font-semibold !text-indigoGray-90"
-                  variant="secondary"
-                  onClick={() => handleFetchMore()}
-                  loading={isFetchingNextPage}
-                >
-                  Load more
-                </Button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </Container>
     </Layout>
@@ -237,7 +234,7 @@ export default Credentials;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
     },
   };
 };

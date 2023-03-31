@@ -1,54 +1,83 @@
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 
-import { Button, Input } from '@/components';
+import Link from 'next/link';
+import { Button, Checkbox, Input } from '@/components';
 import { useOnboardingContext } from '@/providers/onboarding/OnboardingProvider';
 import { OnboardingStepsEnum } from '@/providers/onboarding/types';
 import { isValid } from '@/utils/api';
 import { useUser } from '@/providers/react-query-auth';
+import { emailRegex } from '@/utils';
+import { updateProfile } from '@/utils/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const ProfileInformation = () => {
+  const queryClient = useQueryClient();
+
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [usernameError, setUsernameError] = React.useState<string>('');
+  const [emailError, setEmailError] = React.useState<string>('');
+  const [isRecruiter, setIsRecruiter] = React.useState<boolean>(false);
+  const [tosAccepted, setTosAccepted] = React.useState<boolean>(false);
+
   const { data: userProfile } = useUser();
   const { handleStep, handleSetProfile, profile } = useOnboardingContext();
-  const avatar = profile?.avatar
-    ? URL.createObjectURL(profile?.avatar as any)
-    : '';
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files && files.length !== 0) {
-      handleSetProfile('avatar', files[0]);
-      event.target.value = '';
-    }
-  };
-
-  const handleRemove = () => {
-    handleSetProfile('avatar', '');
-  };
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setLoading(true);
-    setError(false);
+    setUsernameError('');
+    setEmailError('');
 
-    const { error } = await isValid('username', profile.username);
+    if (!profile.email.toLowerCase().match(emailRegex)) {
+      setEmailError('Email address is invalid');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const usernameError = await (
+      await isValid('username', profile.username)
+    ).error;
+
+    const emailError = await (await isValid('email', profile.email)).error;
+
+    if (!emailError && !usernameError) {
+      const { avatar, ...restOfProfile } = profile;
+
+      const { error, data } = await updateProfile(
+        userProfile?.eth_address as string,
+        '',
+        restOfProfile
+      );
+
+      if (!error) {
+        queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+          ...prev,
+          ...data,
+          onboarded: true,
+        }));
+      }
+
+      handleStep(OnboardingStepsEnum['ALLSET']);
+    } else if (emailError && usernameError) {
+      setEmailError('Email already exists');
+      setUsernameError('Username already exists');
+    } else if (emailError) {
+      setEmailError('Email already exists');
+    } else if (usernameError) {
+      setUsernameError('Username already exists');
+    }
 
     setLoading(false);
-
-    if (!error) {
-      handleStep(OnboardingStepsEnum['COMMUNICATION']);
-    } else {
-      setError(true);
-    }
   };
 
   return (
     <>
       <div className="mb-[90px] space-y-8 sm:mb-[128px] sm:space-y-6 xl:mb-[32px]">
         <div className="space-y-3">
-          <h2 className="font-demi text-4xl text-indigoGray-90">Hi there</h2>
+          <h2 className="font-demi text-4xl text-indigoGray-90">Hi there!</h2>
           <p className="font-sansSemi text-sm font-medium text-indigoGray-60">
             We’re glad you’re joining us. Let’s take a moment to polish your
             profile a bit!
@@ -72,9 +101,17 @@ export const ProfileInformation = () => {
             <Input
               id="username"
               label={
-                <div className="font-sans text-indigoGray-40">
+                <div
+                  className={`font-sans text-${
+                    usernameError ? 'red-500' : 'indigoGray-40 mb-0.5'
+                  }`}
+                >
                   Username{' '}
-                  <span className="font-sans font-normal text-indigoGray-30">
+                  <span
+                    className={`font-sans font-normal text-${
+                      usernameError ? 'red-500' : 'indigoGray-30'
+                    }`}
+                  >
                     (Required)
                   </span>
                 </div>
@@ -84,92 +121,146 @@ export const ProfileInformation = () => {
               onChange={(value) => {
                 handleSetProfile('username', value);
               }}
-              error={error}
-              onFocus={() => setError(false)}
+              error={!!usernameError}
+              onFocus={() => setUsernameError('')}
             />
-            {error && (
+            {usernameError && (
               <div className="flex items-center space-x-1 pl-2">
                 <SVG src="/icons/error.svg" height={12} width={12} />
                 <p className="font-sans text-xs text-red-500">
-                  Username already exists
+                  {usernameError}
                 </p>
               </div>
             )}
           </div>
 
-          <div>
+          <div className="space-y-1">
             <Input
-              id="full_name"
+              id="email"
               label={
-                <div className="font-sans text-indigoGray-40">
-                  Full name{' '}
-                  <span className="font-sans font-normal text-indigoGray-30">
-                    (Optional)
+                <div
+                  className={`font-sans text-${
+                    emailError ? 'red-500' : 'indigoGray-40 mb-0.5'
+                  }`}
+                >
+                  E-mail{' '}
+                  <span
+                    className={`font-sans font-normal text-${
+                      emailError ? 'red-500' : 'indigoGray-30'
+                    }`}
+                  >
+                    (Required)
                   </span>
                 </div>
               }
-              value={profile.full_name || ''}
-              placeholder="Insert full name"
-              onChange={(value) => {
-                handleSetProfile('full_name', value);
-              }}
+              value={profile.email || ''}
+              placeholder="Insert e-mail"
+              onChange={(value) => handleSetProfile('email', value)}
+              error={!!emailError}
+              onFocus={() => setEmailError('')}
             />
-          </div>
-        </div>
-
-        <div className="flex w-full items-center justify-center space-x-6">
-          <div>
-            <img
-              src={avatar || '/icons/no-avatar.svg'}
-              alt="Profile"
-              className="h-[100px] w-[100px] rounded-full object-cover"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="cursor-pointer">
-              <div className="flex h-[29px] w-[131px] items-center justify-center rounded-lg border border-indigoGray-20 bg-indigoGray-10 shadow-base">
-                <label
-                  htmlFor="avatar-upload"
-                  className="cursor-pointer font-sans text-sm font-semibold text-indigoGray-90"
-                >
-                  Add picture
-                </label>
-              </div>
-
-              <input
-                id="avatar-upload"
-                accept="image/*"
-                type="file"
-                onInput={handleFileUpload}
-                className="sr-only"
-                name="avatar"
+            <div className="flex items-center space-x-1 pl-2">
+              <SVG
+                src={`/icons/error${!emailError ? '-warning-line' : ''}.svg`}
+                height={12}
+                width={12}
               />
+              <p
+                className={`font-sans text-xs text-${
+                  emailError ? 'red-500' : 'indigoGray-40'
+                }`}
+              >
+                {emailError || 'We will send you a confirmation e-mail'}
+              </p>
             </div>
+          </div>
 
-            <Button
-              type="button"
-              onClick={handleRemove}
-              variant="tertiary"
-              className="w-full !p-0 !font-sans !font-semibold"
-              disabled={!profile.avatar}
-            >
-              Remove
-            </Button>
+          <div>
+            <div className="mb-0.5 font-sans text-sm text-indigoGray-40">
+              Profile type{' '}
+              <span className="font-sans font-normal text-indigoGray-30">
+                (Required)
+              </span>
+            </div>
+            <div className="flex flex-row space-x-1 md:space-x-4">
+              <button
+                type="button"
+                className={`flex w-full justify-between rounded-lg py-3 px-4 ${
+                  !isRecruiter
+                    ? `border-[1.5px] border-indigo-600 bg-indigo-50`
+                    : `border border-indigoGray-20`
+                }`}
+                onClick={() => {
+                  handleSetProfile('is_recruiter', false);
+                  setIsRecruiter(false);
+                }}
+              >
+                <span className="font-sansMid text-sm font-medium text-indigoGray-90">
+                  I’m a professional
+                </span>
+              </button>
+
+              <button
+                type="button"
+                className={`flex w-full justify-between rounded-lg py-3 px-4 ${
+                  isRecruiter
+                    ? `border-[1.5px] border-indigo-600 bg-indigo-50`
+                    : `border border-indigoGray-20`
+                }`}
+                onClick={() => {
+                  handleSetProfile('is_recruiter', true);
+                  setIsRecruiter(true);
+                }}
+              >
+                <span className="font-sansMid text-sm font-medium text-indigoGray-90">
+                  I’m a recruiter
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <Button
-        type="submit"
-        size="large"
-        className="!mb-12 w-full xl:mb-0"
-        disabled={!profile.username}
-        loading={loading}
-        onClick={handleSubmit}
-      >
-        Continue
-      </Button>
+      <div>
+        <div className="mb-2 flex flex-row items-center space-x-2">
+          <Checkbox
+            innerClassName="h-4 w-4"
+            outerClassName="h-4 w-4"
+            checked={tosAccepted}
+            setChecked={() => setTosAccepted(!tosAccepted)}
+            label=""
+            id={'acceptTos'}
+          />
+          <p className="text-sm">
+            By checking you agree to the{' '}
+            <Link
+              className="font-medium text-indigo-600"
+              href={'/privacy-policy'}
+              target="_blank"
+            >
+              privacy-policy
+            </Link>{' '}
+            and the{' '}
+            <Link
+              className="font-medium text-indigo-600"
+              href={'/terms-of-service'}
+              target="_blank"
+            >
+              terms of service
+            </Link>
+          </p>
+        </div>
+        <Button
+          type="submit"
+          size="large"
+          className="!mb-12 w-full xl:mb-0"
+          disabled={!profile.username || !profile.email || !tosAccepted}
+          loading={loading}
+          onClick={handleSubmit}
+        >
+          Continue
+        </Button>
+      </div>
     </>
   );
 };

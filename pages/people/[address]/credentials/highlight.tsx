@@ -17,18 +17,25 @@ import {
   FilterSearch,
   ProfileSummary,
 } from 'views/Profile';
+import { ethers } from 'ethers';
+import { formatProfileRoute } from '@/utils';
 
 interface HighlightProps {
-  address: string;
+  ethAddress: string;
 }
 
 const skeletons = Array(12).fill('skeleton');
 
-const Credentials = ({ address }: HighlightProps) => {
+const Credentials = ({ ethAddress }: HighlightProps) => {
   const router = useRouter();
-  const { user, accountInView, isOwnProfile } = useAccount(address);
+  const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
+
+  const address = ethers.utils.isAddress(ethAddress)
+    ? ethAddress
+    : accountInView?.eth_address || '';
+
   const credentialCount = useCredentialCount(address);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
   const queryClient = useQueryClient();
 
   const [credentialsFilter, setCredentialsFilter] = React.useState({
@@ -48,7 +55,8 @@ const Credentials = ({ address }: HighlightProps) => {
     user?.eth_address || '',
     credentialsFilter.issuer,
     10,
-    credentialsFilter.query
+    credentialsFilter.query,
+    true
   );
 
   const useHighlightCredentialsMutation = useHighlightCredentials({
@@ -167,7 +175,7 @@ const Credentials = ({ address }: HighlightProps) => {
                 : 'flex items-center justify-center'
             )}
           >
-            {isLoading ? (
+            {isLoading || highlightedCredentials.isLoading ? (
               skeletons.map((item, index) => (
                 <Credential.Skeleton key={index + item} />
               ))
@@ -221,7 +229,7 @@ export default Credentials;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      address: context.query.address,
+      ethAddress: context.query.address,
     },
   };
 };
