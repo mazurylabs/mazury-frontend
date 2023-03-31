@@ -24,7 +24,7 @@ const Page: NextPage = () => {
 
         let originRoute = localStorage.getItem('gh-route'); //determine origin route
         if (originRoute) {
-          router.push('/settings/services/github');
+          router.push(`/`);
         } else {
           router.push(
             {

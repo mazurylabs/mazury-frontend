@@ -5,7 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
-import { Button, Input, Layout } from 'components';
+import { Button, Checkbox, Input, Layout, Spinner } from 'components';
+import { Toggle } from '@/components/Toggle';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount, useMobile } from 'hooks';
 import { updateProfile, isValid } from 'utils/api';
@@ -26,6 +27,12 @@ interface UserProfile {
   cover?: File;
   bio?: string;
   title?: string;
+  open_to_opportunities?: boolean;
+  working_remotely?: boolean;
+  website?: string;
+  twitter?: string;
+  github?: string;
+  email_verified?: string;
 }
 
 const Edit = ({ ethAddress }: EditProps) => {
@@ -151,6 +158,26 @@ const Edit = ({ ethAddress }: EditProps) => {
     }
   };
 
+  const handleVerifyGithub = async () => {
+    const githubPopupLink = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`;
+    localStorage.setItem('gh-route', 'settings');
+    window.open(githubPopupLink, '_blank');
+  };
+
+  const disconnectGithub = async () => {
+    const { error } = await updateProfile(user.eth_address, '', {
+      github: '',
+    });
+
+    if (error) {
+      return alert('Error disconnecting profile.');
+    }
+    queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+      ...prev,
+      github: '',
+    }));
+  };
+
   React.useEffect(() => {
     if (!isOwnProfile) {
       router.push(`/people/${address}`);
@@ -166,6 +193,11 @@ const Edit = ({ ethAddress }: EditProps) => {
         email: user?.email || '',
         bio: user?.bio || '',
         title: user?.title || '',
+        open_to_opportunities: user?.open_to_opportunities || false,
+        working_remotely: user?.working_remotely || false,
+        website: user?.website || '',
+        twitter: user?.twitter || '',
+        github: user?.github || '',
       });
     }
   }, [user]);
@@ -274,9 +306,9 @@ const Edit = ({ ethAddress }: EditProps) => {
 
             <Input
               id="full_name"
-              label="Full name"
+              label="Display name"
               value={userProfile.full_name || ''}
-              placeholder="Insert full name"
+              placeholder="Insert display name"
               onChange={(value) => {
                 handleChange('full_name', value);
               }}
@@ -312,17 +344,18 @@ const Edit = ({ ethAddress }: EditProps) => {
                   </div>
                 )}
               </div>
-
-              <div className="flex items-center space-x-1 pl-2">
-                <SVG
-                  src={`/icons/error-warning-line.svg`}
-                  height={12}
-                  width={12}
-                />
-                <p className="font-sans text-xs text-indigoGray-40">
-                  We will send you a confirmation e-mail
-                </p>
-              </div>
+              {userProfile.email_verified && (
+                <div className="flex items-center space-x-1 pl-2">
+                  <SVG
+                    src={`/icons/error-warning-line.svg`}
+                    height={12}
+                    width={12}
+                  />
+                  <p className="font-sans text-xs text-indigoGray-40">
+                    We will send you a confirmation e-mail
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
@@ -335,6 +368,19 @@ const Edit = ({ ethAddress }: EditProps) => {
                   handleChange('location', value);
                 }}
               />
+              <div className="mt-2 flex flex-row items-center space-x-2">
+                <Checkbox
+                  innerClassName="h-4 w-4 text-indigoGray-70"
+                  outerClassName="h-4 w-4 text-indigoGray-70"
+                  checked={userProfile.working_remotely || false}
+                  setChecked={(value) => {
+                    handleChange('working_remotely', value);
+                  }}
+                  label=""
+                  id={'work-remotely'}
+                />
+                <p className="text-sm text-indigoGray-90">Work remotely</p>
+              </div>
             </div>
 
             <div>
@@ -363,9 +409,69 @@ const Edit = ({ ethAddress }: EditProps) => {
                 maxLength={400}
                 value={userProfile.bio || ''}
                 onChange={(e) => handleChange('bio', e.target.value)}
-                // disabled={!!existingReferral}
               />
             </div>
+
+            <button
+              type="button"
+              className="flex w-full items-center space-x-2"
+            >
+              <div className="flex grow items-center justify-between">
+                <div className="flex flex-col items-start">
+                  <p className="font-sans text-sm font-medium text-indigoGray-90">
+                    Open to new opportunities
+                  </p>
+                  <p className="font-sansMid text-xs font-medium text-indigoGray-50">
+                    Recruiters will be able to send you project proposals
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <div className="h-4 w-4">
+                    {loading && <Spinner size={16} />}
+                  </div>
+
+                  <Toggle
+                    isToggled={!!userProfile?.open_to_opportunities}
+                    onToggle={(value) =>
+                      handleChange('open_to_opportunities', value)
+                    }
+                  />
+                </div>
+              </div>
+            </button>
+
+            <div>
+              <Input
+                id="website"
+                label="Website"
+                value={userProfile.website || ''}
+                placeholder="Your personal website"
+                onChange={(value) => {
+                  handleChange('website', value);
+                }}
+              />
+            </div>
+
+            <div>
+              <Input
+                id="twitter"
+                label="Twitter"
+                value={userProfile.twitter || ''}
+                placeholder="Your twitter handle"
+                onChange={(value) => {
+                  handleChange('twitter', value);
+                }}
+              />
+            </div>
+
+            <Button
+              className="w-1/2"
+              size="large"
+              onClick={user.github ? disconnectGithub : handleVerifyGithub}
+            >
+              {user.github ? `Disconnect ${user.github}` : 'Connect Github'}
+            </Button>
 
             <div className="hidden space-x-2 lg:flex">
               <Button

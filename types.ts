@@ -164,6 +164,7 @@ export interface Profile
   linkedIn: string;
   github_last_checked?: string | null;
   open_to_opportunities: boolean;
+  working_remotely: boolean;
   onboarded: boolean;
   email: string;
   email_verified?: boolean;
