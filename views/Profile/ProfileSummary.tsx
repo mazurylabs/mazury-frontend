@@ -307,7 +307,7 @@ export const ProfileSummary = ({
                     ? profile.website
                     : `https://${profile.website}`
                 }
-                icon="/icons/github-black.svg" // TODO change to website icon
+                icon="/icons/link.svg"
                 value={profile.website}
               />
             )}
