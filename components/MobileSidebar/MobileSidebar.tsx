@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import clsx from 'clsx';
+import SVG from 'react-inlinesvg';
 
 import { useLogout, useUser } from 'providers/react-query-auth';
 import storage from '@/utils/storage';
 import { STORED_USER } from '@/config';
 import { useUserSession } from '@/hooks';
+import { Avatar } from '../Avatar';
 
 interface MobileSidebarProps {
   children?: React.ReactNode;
@@ -44,66 +45,34 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
     >
       {children || (
         <>
-          <Link legacyBehavior href="/" passHref>
-            <a>
-              <Image
-                src="/icons/home.svg"
-                alt="Home icon"
-                width={24}
-                height={24}
-              />
-            </a>
+          <Link href="/" passHref>
+            <span className="sr-only">Home</span>
+            <SVG src="/icons/home.svg" width={24} height={24} />
           </Link>
 
-          <Link legacyBehavior href="/search" passHref>
-            <a>
-              <Image
-                src="/icons/search.svg"
-                alt="Search icon"
-                width="24"
-                height="24"
-              />
-            </a>
+          <Link href="/search" passHref>
+            <span className="sr-only">Search</span>
+            <SVG src="/icons/search.svg" width={24} height={24} />
           </Link>
 
           {!!profile && !!storedUser ? (
-            <>
-              <Link
-                legacyBehavior
-                href={`/people/${profile.eth_address}`}
-                passHref
-              >
-                <a>
-                  <img
-                    src={profile?.avatar || '/profile-active.svg'}
-                    alt="Profile icon"
-                    className="h-6 w-6 rounded-full object-cover"
-                  />{' '}
-                </a>
-              </Link>
-            </>
+            <Link href={`/people/${profile.eth_address}`}>
+              <Avatar
+                src={profile?.avatar || '/profile-active.svg'}
+                alt={profile.username}
+                variant="sm"
+              />
+            </Link>
           ) : (
-            <Link legacyBehavior href="/sign-in" passHref>
-              <a>
-                <Image
-                  src="/icons/user-black.svg"
-                  alt="Sign in icon"
-                  width="24"
-                  height="24"
-                />{' '}
-              </a>
+            <Link href="/sign-in" passHref>
+              <span className="sr-only">Sign in</span>
+              <SVG src="/icons/user-black.svg" width={24} height={24} />
             </Link>
           )}
 
-          <Link legacyBehavior href="/settings" passHref>
-            <a>
-              <Image
-                src="/icons/sliders.svg"
-                alt="Settings icon"
-                width="24"
-                height="24"
-              />{' '}
-            </a>
+          <Link href="/settings" passHref>
+            <span className="sr-only">Settings</span>
+            <SVG src="/icons/sliders.svg" width={24} height={24} />{' '}
           </Link>
         </>
       )}

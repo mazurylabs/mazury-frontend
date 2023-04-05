@@ -1,32 +1,40 @@
 import React from 'react';
+import * as RadixAvatar from '@radix-ui/react-avatar';
+import clsx from 'clsx';
+
+const variants = {
+  xs: 'h-5 w-5',
+  sm: 'h-6 w-6',
+  md: 'h-10 w-10',
+  lg: 'h-[100px] w-[100px]',
+  xl: 'h-[150px] w-[150px]',
+};
 
 interface Props {
   src: string;
-  width?: number | string;
-  height?: number | string;
-  alt?: string;
-  borderRadius?: number | string;
+  alt: string;
+  variant?: keyof typeof variants;
   className?: string;
-  onClick?: () => void;
 }
 
 export const Avatar: React.FC<Props> = ({
   src,
-  width = '100px',
-  height = '100px',
-  alt = 'Avatar',
-  borderRadius = '100%',
+  alt,
+  variant = 'md',
   className,
-  onClick,
 }) => {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src || '/default-avi.png'}
-      alt={alt}
-      style={{ borderRadius, width, height }}
-      className={className}
-      onClick={onClick}
-    />
+    <div className={variants[variant]}>
+      <RadixAvatar.Root className={clsx(variants[variant], 'rounded-full')}>
+        <RadixAvatar.Image
+          className={clsx('object-cover h-full w-full rounded-full', className)}
+          src={src}
+          alt={alt}
+        />
+        <RadixAvatar.Fallback className="h-full w-full" delayMs={600}>
+          <div className="bg-indigoGray-30 animate-pulse h-full w-full rounded-full" />
+        </RadixAvatar.Fallback>
+      </RadixAvatar.Root>
+    </div>
   );
 };

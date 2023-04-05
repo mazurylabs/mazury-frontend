@@ -429,10 +429,8 @@ const Home: NextPage = () => {
                             <a className="flex">
                               <Avatar
                                 src={suggestion.avatar}
-                                width={40}
-                                height={40}
+                                variant="md"
                                 alt="user"
-                                className="object-cover"
                               />
 
                               <div className="ml-3 mr-4 flex min-w-[208px] grow flex-col justify-center">
@@ -466,7 +464,7 @@ const Home: NextPage = () => {
                             className="flex animate-pulse items-end"
                             key={index}
                           >
-                            <div className="h-5 h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
+                            <div className="h-10 w-10 shrink-0 rounded-full bg-indigoGray-20" />
 
                             <div className="ml-3 mr-[60px] flex flex-col justify-center space-y-[2px]">
                               <div className="h-4 w-20 rounded bg-indigoGray-20" />

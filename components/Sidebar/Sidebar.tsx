@@ -12,7 +12,7 @@ import { verifyEmail } from 'utils/api';
 
 import { WalletRequestModal } from 'components/WalletRequestModal';
 import { SlidersIcon } from 'components/Icons';
-import { HomeIcon, SearchIcon } from 'components';
+import { Avatar, HomeIcon, SearchIcon } from 'components';
 
 import { useLogout, useUser } from 'providers/react-query-auth';
 import { useUserSession } from '@/hooks';
@@ -169,10 +169,10 @@ export const Sidebar: React.FC = () => {
                     href={`/people/${profile?.eth_address}`}
                     label="Profile"
                     icon={
-                      <img
+                      <Avatar
                         src={profile?.avatar || '/profile-active.svg'}
                         alt="Profile icon"
-                        className="h-5 w-5 rounded-full object-cover"
+                        variant="xs"
                       />
                     }
                     isOpen={isOpen}
