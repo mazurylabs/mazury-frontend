@@ -12,11 +12,10 @@ import { axios } from 'lib/axios';
 
 interface Props {
   profileAddress?: string;
-  userAddress?: string;
 }
 
-export const Projects: React.FC<Props> = ({ profileAddress, userAddress }) => {
-  const { data, isLoading } = useProjects({ address: userAddress });
+export const Projects: React.FC<Props> = ({ profileAddress }) => {
+  const { data, isLoading } = useProjects({ address: profileAddress });
 
   const projects = data?.results.flatMap((project) => project.projects);
 
@@ -47,6 +46,7 @@ const Project: React.FC<ProjectProp> = ({ project, profileId }) => {
   const { mutate } = useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries(clsx('project', profileId).split(' '));
+      queryClient.invalidateQueries(clsx('projects', profileId).split(' '));
     },
     onError: (error: any) => {
       if (error?.response) {

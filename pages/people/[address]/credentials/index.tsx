@@ -117,10 +117,7 @@ const Credentials = ({ ethAddress }: CredentialsProps) => {
         />
 
         {isSaveProfileView ? (
-          <Projects
-            userAddress={user?.eth_address}
-            profileAddress={accountInView?.eth_address}
-          />
+          <Projects profileAddress={accountInView?.eth_address} />
         ) : (
           <div className="space-y-3 lg:space-y-6">
             <div className="flex w-full items-center space-x-4">

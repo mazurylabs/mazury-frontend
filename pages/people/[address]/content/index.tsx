@@ -84,10 +84,7 @@ const Writing = ({ ethAddress }: WritingProps) => {
           profile={accountInView}
         />
         {isSaveProfileView ? (
-          <Projects
-            userAddress={user?.eth_address}
-            profileAddress={accountInView?.eth_address}
-          />
+          <Projects profileAddress={accountInView?.eth_address} />
         ) : (
           <div className="space-y-6">
             {/* <FilterSearch
