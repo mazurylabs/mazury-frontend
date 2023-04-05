@@ -9,7 +9,6 @@ type TableColumn<Entry> = {
   width?: number;
   align?: 'center' | 'left' | 'right';
   withSorting?: boolean;
-  includeInEmptyState?: boolean;
   Cell?({ entry }: { entry: Entry }): React.ReactElement;
 };
 
@@ -44,40 +43,77 @@ export const Table = <Entry extends { eth_address: string }>({
   emptyState,
   isLoading,
 }: TableProps<Entry>) => {
-  const emptyStateColumns = columns.filter(
-    (column) => column.includeInEmptyState
-  );
+  const columnDimension = getColumnDimension<{ width?: number } & any>(columns);
+  const skeletonArray = new Array(4).fill(true);
 
   if (!rows?.length) {
     return (
-      <div className="grow flex flex-col xl:space-y-[128px]">
-        <div className="flex py-2 px-4 bg-indigoGray-5 rounded-md">
-          {emptyStateColumns.map((column, index) => (
+      <div
+        className={clsx(
+          'overflow-y-auto',
+          !isLoading && 'grow flex flex-col xl:space-y-[128px] h-full'
+        )}
+      >
+        <div className="flex rounded-md min-w-[1200px] shrink-0">
+          {columns.map((column, index) => (
             <div
               key={column.title}
-              className={clsx(
-                'flex space-x-3 items-center grow',
-                index === emptyStateColumns.length - 1 && 'justify-end'
-              )}
+              className="grow"
+              style={{
+                textAlign: column.align || 'left',
+                width: column.width
+                  ? `${column.width}%`
+                  : `${columnDimension}%`,
+              }}
             >
-              {!index && (
-                <div className="h-4 w-4 border border-indigoGray-30 rounded" />
-              )}
-              <p className="font-sans font-medium text-xs text-indigoGray-50">
-                {column.title}
-                {column.withSorting && (
-                  <SVG className="ml-1 inline-block" src="/icons/polygon.svg" />
+              <div
+                className={clsx(
+                  'w-full flex space-x-3 items-center grow py-2 px-4 bg-indigoGray-5',
+                  index === columns.length - 1 && 'justify-end'
                 )}
-              </p>
+              >
+                {!index && (
+                  <div className="h-4 w-4 border border-indigoGray-30 rounded" />
+                )}
+                <p className="font-sans font-medium text-xs text-indigoGray-50">
+                  {column.title}
+                  {column.withSorting && (
+                    <SVG
+                      className="ml-1 inline-block"
+                      src="/icons/polygon.svg"
+                    />
+                  )}
+                </p>
+              </div>
+
+              {isLoading &&
+                skeletonArray.map((_, skeletonIndex) => (
+                  <div
+                    className={clsx(
+                      'mt-4 flex',
+                      column.align ? 'justify-end' : 'justify-start'
+                    )}
+                    key={`table-skeleton-${skeletonIndex}`}
+                  >
+                    {!index ? (
+                      <div className="flex items-center space-x-3">
+                        <div className="h-10 w-10 animate-pulse rounded-full bg-indigoGray-30" />
+                        <div className="h-3 w-[147px] animate-pulse rounded-2xl bg-indigoGray-30" />
+                      </div>
+                    ) : index === columns.length - 1 ? (
+                      <div className="w-[44px] h-9 rounded-[32px] animate-pulse rounded-2xl bg-indigoGray-30" />
+                    ) : (
+                      <div className="h-10 w-full flex items-center">
+                        <div className="h-3 w-[60%] animate-pulse rounded-2xl bg-indigoGray-30" />
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
           ))}
         </div>
 
-        {isLoading ? (
-          <div>
-            <p>Loading...</p>
-          </div>
-        ) : (
+        {!isLoading && (
           <div className="flex flex-col items-center space-y-4 grow justify-center xl:justify-start">
             <SVG src="/icons/no-credentials.svg" width={227} height={70} />
             <p className="font-sans text-sm text-indigoGray-90">
@@ -96,8 +132,6 @@ export const Table = <Entry extends { eth_address: string }>({
       </div>
     );
   }
-
-  const columnDimension = getColumnDimension<{ width?: number } & any>(columns);
 
   return (
     <div className="overflow-x-auto">

@@ -374,6 +374,27 @@ export interface LensPublication {
   }[];
 }
 
+export type ProjectProfileStatus =
+  | 'contacted'
+  | 'uncontacted'
+  | 'toBeContacted';
+
+export interface ProjectProfile {
+  avatar: string;
+  eth_address: string;
+  status: ProjectProfileStatus;
+  title: string;
+  location: string;
+  comments: string;
+  followers: string;
+  twitter: string;
+  lens_handle: string;
+  github: string;
+  username: string;
+  followers_count: number;
+  mazury_talent_verified: true;
+}
+
 export interface Project {
   created_at: string;
   updated_at: string;
@@ -385,7 +406,7 @@ export interface Project {
     avatar: string;
     mazury_talent_verified: false;
   };
-  saved_profiles_preview: [];
+  saved_profiles_preview: ProjectProfile[];
   saved_profiles_preview_count: number;
   already_in_project: boolean;
 }
