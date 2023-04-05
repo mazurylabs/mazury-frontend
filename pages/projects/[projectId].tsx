@@ -205,7 +205,7 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
     const { mutate } = useMutation({
       onMutate: () => setFocusInput(false),
       onSuccess: (_, variables) => {
-        queryClient.invalidateQueries(['projects']);
+        queryClient.invalidateQueries(['projects', profileId]);
         variables.archived &&
           dispatch({ type: 'success', message: 'Project has been archived' });
       },
@@ -327,6 +327,8 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
     );
   }
 );
+
+ProjectHeader.displayName = 'ProjectHeader';
 
 const Notes = ({ comments }: { comments: string }) => {
   const [note, setNote] = React.useState('');

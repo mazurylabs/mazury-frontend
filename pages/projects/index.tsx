@@ -264,6 +264,7 @@ const GroupList: React.FC<{
               <Link
                 href={`/projects/${project.id}`}
                 key={project.id}
+                passHref
                 className={clsx(
                   'overflow-hidden grow w-full rounded-lg lg:grow-0 shrink-0 lg:w-[calc(50%-16px)] bg-indigoGray-5 lg:odd:mr-4 mb-4',
                   isArchived && 'pointer-events-none'
@@ -289,6 +290,7 @@ const GroupList: React.FC<{
                           {project.saved_profiles_preview.map(
                             (profile, index) => (
                               <div
+                                key={`project-user-${index}`}
                                 style={{
                                   zIndex:
                                     project.saved_profiles_preview.length -
