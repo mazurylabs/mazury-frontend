@@ -210,9 +210,9 @@ export const ProfileSummary = ({
               )}
 
             {!!profile?.location && (
-              <div className="mt-4 flex items-center space-x-2">
+              <div className="mt-4 flex items-center space-x-2 text-indigoGray-90">
                 <SVG src="/icons/location.svg" height={16} width={16} />
-                <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
+                <p className="font-sansSemi text-xs font-semibold">
                   {profile.location}
                 </p>
               </div>

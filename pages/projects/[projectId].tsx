@@ -5,14 +5,16 @@ import * as Popover from '@radix-ui/react-popover';
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 
 import { Avatar, Layout, Table } from 'components';
 import { useClickOutside, useMobile } from 'hooks';
 import { capitalize, truncateString } from 'utils';
-import { Project, ProjectProfile, ProjectProfileStatus } from 'types';
+import { Project, ProjectProfile } from 'types';
 import { axios } from 'lib/axios';
 import { useAlert } from 'components/Alert.tsx';
 import { useUser } from 'providers/react-query-auth';
+import { LinkIcon, Notes, Opportunity, StatusTags } from 'views/Opportunities';
 
 type ProjectTableRows = ProjectProfile & {
   socials?: string;
@@ -24,6 +26,7 @@ interface ProfileProps {
 
 const Project = ({ projectId }: ProfileProps) => {
   const { data: user } = useUser();
+  const router = useRouter();
   const [projectTitle, setProjectTitle] = React.useState('Untitled project');
   const prevTitle = React.useRef<string>(projectTitle);
 
@@ -48,6 +51,31 @@ const Project = ({ projectId }: ProfileProps) => {
           ref={prevTitle}
         />
 
+        {true ? (
+          <Opportunity
+            title="Senior frontend developer"
+            companyName="Uniswap"
+            location=" NYC, Remote"
+            salary="$180,000-$220,000"
+            logo="/icons/dummy-badge.svg"
+            opportunityUrl="/opportunities/123"
+            candidatesUrl="/opportunities/123/applicants"
+          />
+        ) : (
+          <button
+            type="button"
+            className="flex w-full hover:bg-indigoGray-5 flex-col items-center rounded-md border border-[2px] border-dashed border-[#E2E6F0] px-2 py-6 font-sans"
+          >
+            <span className="text-black flex items-center font-sans text-lg font-medium">
+              <SVG src="/icons/plus.svg" className="mr-2" />
+              Publish to Mazury Opportunities
+            </span>
+            <span className="whitespace-nowrap px-10 text-sm text-indigoGray-50 xl:px-0">
+              Make your project seen by the best web3 talent
+            </span>
+          </button>
+        )}
+
         <div className="grow flex flex-col">
           <Table<ProjectTableRows>
             emptyState={{
@@ -58,7 +86,10 @@ const Project = ({ projectId }: ProfileProps) => {
               },
             }}
             isLoading={isLoading}
-            rows={data?.profiles}
+            rows={data?.profiles.map((profile) => ({
+              ...profile,
+              onClick: () => router.push(`/people/${profile.eth_address}`),
+            }))}
             columns={[
               {
                 title: 'Name',
@@ -143,45 +174,6 @@ const Project = ({ projectId }: ProfileProps) => {
         </div>
       </div>
     </Layout>
-  );
-};
-
-const LinkIcon = ({ url, icon }: { url: string; icon: string }) => {
-  return (
-    <a target="_blank" rel="noreferrer" href={url}>
-      <SVG src={icon} className="text-indigoGray-90" height={16} width={16} />
-    </a>
-  );
-};
-
-const StatusTags: React.FC<{ status: ProjectProfileStatus }> = ({ status }) => {
-  return (
-    <div
-      className={clsx(
-        'flex w-fit items-center space-x-2 rounded-md border py-[2px] px-2',
-        status === 'contacted' && 'border-green-200 bg-green-50 text-green-600',
-        (!status || status === 'uncontacted') &&
-          'border-indigoGray-20 bg-indigoGray-5 text-indigoGray-60',
-        status === 'toBeContacted' &&
-          'border-amber-200 bg-amber-50 text-amber-600'
-      )}
-    >
-      <div
-        className={clsx(
-          'h-2 w-2 rounded-full',
-          status === 'contacted' && 'bg-green-600',
-          (!status || status === 'uncontacted') && 'bg-indigoGray-60',
-          'toBeContacted' && 'bg-amber-600'
-        )}
-      />
-      <p className="font-sans text-[13px]">
-        {!status || status === 'uncontacted'
-          ? 'Not contacted'
-          : status === 'contacted'
-          ? 'Contacted'
-          : 'To be contacted'}
-      </p>
-    </div>
   );
 };
 
@@ -329,101 +321,6 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
 );
 
 ProjectHeader.displayName = 'ProjectHeader';
-
-const Notes = ({ comments }: { comments: string }) => {
-  const [note, setNote] = React.useState('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNote(event.target.value);
-  };
-
-  return (
-    <Popover.Root>
-      <Popover.Trigger asChild className="relative">
-        <button
-          type="button"
-          aria-label="comments"
-          className="data-[state=open]:bg-indigo-600 data-[state=open]:text-indigo-50 data-[state=open]:before:bg-indigo-50 ml-[auto] flex h-9 w-[44px] items-center justify-center rounded-[32px] border border-indigoGray-20 bg-indigoGray-5 text-indigoGray-40 before:absolute before:z-[-1] before:h-[42px] before:w-[52px] before:rounded-[32px] before:bg-transparent before:content-['*'] hover:bg-indigoGray-10"
-        >
-          <SVG src="/icons/message-square.svg" className="mr-1" />
-          {comments}
-        </button>
-      </Popover.Trigger>
-
-      <Popover.Portal>
-        <Popover.Content
-          align="end"
-          alignOffset={-15}
-          sideOffset={0}
-          className="h-[272px] w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] lg:h-[212px] lg:w-[352px]"
-        >
-          <div className="flex h-full w-full flex-col rounded-lg bg-white shadow-base">
-            <div className="px-4">
-              <div className="flex justify-end pt-4">
-                <Popover.Close aria-label="Close">
-                  <SVG src="/icons/x.svg" className="h-4 w-4" />
-                </Popover.Close>
-              </div>
-              <p className="font-sans text-base font-medium text-indigoGray-90">
-                Notes
-              </p>
-            </div>
-
-            <div className="mt-4 h-[110px] space-y-2 overflow-y-auto pl-4 pb-2">
-              {true ? (
-                <div className="border-l border-l-indigoGray-20 pl-3">
-                  <div>
-                    <p className="font-sans text-xs font-medium text-indigoGray-40">
-                      May 12 2023
-                    </p>
-                  </div>
-                  <p className="font-sans text-sm text-indigoGray-90">
-                    They are open to relocation
-                  </p>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-6 border-l border-l-indigoGray-20 pl-3">
-                  <p className="font-sans text-sm text-indigoGray-50">
-                    Comment deleted
-                  </p>
-                  <button
-                    type="button"
-                    className="font-sans text-sm font-medium text-indigo-500"
-                  >
-                    Undo
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <form
-              onSubmit={(event) => event.preventDefault()}
-              className="mt-[auto] flex h-[46px] w-full items-center justify-between bg-indigoGray-5 px-4"
-            >
-              <textarea
-                onChange={handleChange}
-                value={note}
-                placeholder="Write a note…"
-                className="mr-4 h-full grow resize-none bg-transparent py-3 font-sans text-sm text-indigoGray-90"
-              />
-              <button
-                type="submit"
-                disabled={!note}
-                className={clsx(
-                  'flex h-8 w-8 items-center justify-center rounded-full',
-                  note ? 'bg-indigoGray-90' : 'bg-indigoGray-30'
-                )}
-              >
-                <SVG src="/icons/arrow-up.svg" />
-              </button>
-            </form>
-          </div>
-          <Popover.Arrow fill="white" className="drop-shadow" />
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
-  );
-};
 
 export default Project;
 

@@ -14,6 +14,7 @@ interface Props {
   src: string;
   alt: string;
   variant?: keyof typeof variants;
+  outerClassName?: string;
   className?: string;
 }
 
@@ -22,10 +23,17 @@ export const Avatar: React.FC<Props> = ({
   alt,
   variant = 'md',
   className,
+  outerClassName,
 }) => {
   return (
-    <div className={variants[variant]}>
-      <RadixAvatar.Root className={clsx(variants[variant], 'rounded-full')}>
+    <div className={clsx(!outerClassName && variants[variant], outerClassName)}>
+      <RadixAvatar.Root
+        className={clsx(
+          !outerClassName && variants[variant],
+          'rounded-full',
+          outerClassName
+        )}
+      >
         <RadixAvatar.Image
           className={clsx('object-cover h-full w-full rounded-full', className)}
           src={src}

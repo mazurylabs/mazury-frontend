@@ -37,7 +37,9 @@ const getColumnDimension = <Entry extends any>(
   return (100 - availableColumnWidth) / remainingItems;
 };
 
-export const Table = <Entry extends { eth_address: string }>({
+export const Table = <
+  Entry extends { eth_address: string; onClick?: () => void }
+>({
   rows,
   columns,
   emptyState,
@@ -114,7 +116,7 @@ export const Table = <Entry extends { eth_address: string }>({
         </div>
 
         {!isLoading && (
-          <div className="flex flex-col items-center space-y-4 grow justify-center xl:justify-start">
+          <div className="translate-x-[-50%] translate-y-[-50%] w-screen fixed left-[50%] top-[50%] xl:left-0 xl:top-0 xl:w-full xl:relative xl:translate-x-0 xl:translate-y-0 flex flex-col items-center space-y-4 grow justify-center xl:justify-start">
             <SVG src="/icons/no-credentials.svg" width={227} height={70} />
             <p className="font-sans text-sm text-indigoGray-90">
               {emptyState.description}
@@ -164,7 +166,11 @@ export const Table = <Entry extends { eth_address: string }>({
           {rows.map((entry, entryIndex) => (
             <tr
               key={entry?.eth_address || entryIndex}
-              className="first:rounded-l-lg first:rounded-t-lg last:rounded-r-lg last:rounded-b-lg hover:bg-indigoGray-5"
+              className={clsx(
+                'first:rounded-l-lg first:rounded-t-lg last:rounded-r-lg last:rounded-b-lg hover:bg-indigoGray-5',
+                entry?.onClick && 'cursor-pointer'
+              )}
+              onClick={() => entry?.onClick?.()}
             >
               {columns.map(({ Cell, field, title }, columnIndex) => (
                 <td

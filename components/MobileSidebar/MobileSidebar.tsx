@@ -66,7 +66,12 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
           ) : (
             <Link href="/sign-in" passHref>
               <span className="sr-only">Sign in</span>
-              <SVG src="/icons/user-black.svg" width={24} height={24} />
+              <SVG
+                src="/icons/user.svg"
+                width={24}
+                height={24}
+                className="text-indigoGray-90"
+              />
             </Link>
           )}
 
