@@ -2,14 +2,20 @@ import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
-import { Button, Layout } from 'components';
-import { truncateString } from 'utils';
+import { Avatar, Button, Layout } from 'components';
+import { capitalize, truncateString } from 'utils';
 import { useMobile } from 'hooks';
+import { axios } from 'lib/axios';
+import { CompanyType, ListResponse, OpportunityType } from 'types';
 
 const Opportunities = () => {
   const isMobile = useMobile();
   const router = useRouter();
+
+  const { data, isLoading } = useOpportunities({ withId: false });
 
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
@@ -28,14 +34,14 @@ const Opportunities = () => {
                 className="max-w-[66px] font-medium max-h-[37px]"
                 variant="tertiary"
               >
-                All <span className="text-indigoGray-40">18</span>
+                Job <span className="text-indigoGray-40">18</span>
               </Button>
               <Button
                 size="large"
                 className="max-w-[66px] font-medium max-h-[37px]"
                 variant="tertiary"
               >
-                All <span className="text-indigoGray-40">18</span>
+                Other <span className="text-indigoGray-40">18</span>
               </Button>
             </div>
 
@@ -50,202 +56,93 @@ const Opportunities = () => {
             </div>
 
             <div className="space-y-3">
-              <div className="py-3 px-6 bg-indigoGray-5 space-y-3 rounded-lg">
-                <div className="flex space-x-3">
-                  <SVG src="/icons/dummy-badge.svg" className="h-10 w-10" />
-                  <div className="space-y-1">
-                    <p className="font-semibold font-sans text-sm text-indigoGray-90">
-                      Uniswap
-                    </p>
-                    <p className="font-sans text-sm text-indigoGray-90">
-                      {truncateString(
-                        `The Uniswap Protocol is the largest decentralized trading and automated market making protocol (often called a DEX, “Decentralized Exchange”) on Ethereum.
-                        The Uniswap Labs team was a major contributor to the Uniswap Protocol and now focuses on building a suite of products to support the Uniswap ecosystem. Our team is one of the most impactful in crypto. We are based out of SoHo in New York City with the option to be partially or fully remote depending on the position.`,
-                        isMobile ? 62 : 170
-                      )}
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <SVG src="/icons/user.svg" className="w-4 h-4" />
-                      <p className="font-sans text-xs font-medium text-indigoGray-90">
-                        150-200 people work here
+              {data?.results.map((opportunity) => (
+                <div
+                  key={opportunity.id}
+                  className="py-3 px-6 bg-indigoGray-5 space-y-3 rounded-lg"
+                >
+                  <div className="flex space-x-3">
+                    <Avatar
+                      src={opportunity.company_info.logo}
+                      alt={opportunity.company_info.name}
+                      variant="md"
+                      className="h-10 w-10 rounded-lg"
+                    />
+                    <div className="space-y-1">
+                      <p className="font-semibold font-sans text-sm text-indigoGray-90">
+                        {opportunity.company_info.name}
                       </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
-                  <div className=" font-sans font-medium flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={clsx(
-                          'py-[2px] px-2 rounded-[32px]',
-                          true ? 'bg-sky-600' : 'bg-teal-600'
+                      <p className="font-sans text-sm text-indigoGray-90">
+                        {truncateString(
+                          opportunity.company_info.description,
+                          isMobile ? 62 : 170
                         )}
-                      >
-                        <p className="text-indigoGray-5 text-xs">Job</p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="text-sm text-indigoGray-90">
-                          Lead Technical Recruiter - US Remote (ET) (contract)
-                          at Uniswap
-                        </p>
-                        <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/location.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            NYC
-                          </p>
-
-                          <p>Remote</p>
-
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/history-alt.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            Yesterday
-                          </p>
-
-                          <p>$180,000-$220,000</p>
-                        </div>
-                      </div>
-                    </div>
-                    <Button
-                      onClick={() => router.push(`/opportunities/123`)}
-                      className="max-h-[29px]"
-                    >
-                      Apply
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-3 px-6 bg-indigoGray-5 space-y-3 rounded-lg">
-                <div className="flex space-x-3">
-                  <SVG src="/icons/dummy-badge.svg" className="h-10 w-10" />
-                  <div className="space-y-1">
-                    <p className="font-semibold font-sans text-sm text-indigoGray-90">
-                      Polygon Labs
-                    </p>
-                    <p className="font-sans text-sm text-indigoGray-90">
-                      {truncateString(
-                        `Polygon Labs, a development and growth team for the Polygon protocols.  The execution layer of the internet, scaling Ethereum for mass adoption.`,
-                        isMobile ? 62 : 170
-                      )}
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <SVG src="/icons/user.svg" className="w-4 h-4" />
-                      <p className="font-sans text-xs font-medium text-indigoGray-90">
-                        200+ people work here
                       </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
-                  <div className=" font-sans font-medium flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={clsx(
-                          'py-[2px] px-2 rounded-[32px]',
-                          false ? 'bg-sky-600' : 'bg-teal-600'
-                        )}
-                      >
-                        <p className="text-indigoGray-5 text-xs">
-                          Other opportunity
+                      <div className="flex items-center space-x-2">
+                        <SVG src="/icons/user.svg" className="w-4 h-4" />
+                        <p className="font-sans text-xs font-medium text-indigoGray-90">
+                          {opportunity.company_info.size} people work here
                         </p>
                       </div>
+                    </div>
+                  </div>
 
-                      <div className="space-y-1">
-                        <p className="text-sm text-indigoGray-90">
-                          The Pit Hacker House at ETHDenver 2023
-                        </p>
-                        <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/location.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            Metaverse
+                  <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
+                    <div className=" font-sans font-medium flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className={clsx(
+                            'py-[2px] px-2 rounded-[32px]',
+                            opportunity.type === 'job'
+                              ? 'bg-sky-600'
+                              : 'bg-teal-600'
+                          )}
+                        >
+                          <p className="text-indigoGray-5 text-xs">
+                            {capitalize(opportunity.type)}
                           </p>
+                        </div>
 
-                          <p>Remote</p>
-
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/history-alt.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            Yesterday
+                        <div className="space-y-1">
+                          <p className="text-sm text-indigoGray-90">
+                            {opportunity.title}
                           </p>
+                          <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
+                            <p className="flex items-center">
+                              <SVG
+                                src="/icons/location.svg"
+                                className="h-4 w-4 mr-1"
+                              />
+                              {opportunity.location}
+                            </p>
 
-                          <p>$180,000-$220,000</p>
+                            <p>{opportunity.work_mode}</p>
+
+                            <p className="flex items-center">
+                              <SVG
+                                src="/icons/history-alt.svg"
+                                className="h-4 w-4 mr-1"
+                              />
+                              {dayjs(opportunity.created_at).fromNow()}
+                            </p>
+
+                            <p>{opportunity.salary}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <Button
-                      onClick={() => router.push(`/opportunities/123`)}
-                      className="max-h-[29px]"
-                    >
-                      Apply
-                    </Button>
-                  </div>
-
-                  <div className="h-[1px] w-full bg-indigoGray-20 my-3" />
-
-                  <div className=" font-sans font-medium flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={clsx(
-                          'py-[2px] px-2 rounded-[32px]',
-                          false ? 'bg-sky-600' : 'bg-teal-600'
-                        )}
+                      <Button
+                        onClick={() =>
+                          router.push(`/opportunities/${opportunity.id}`)
+                        }
+                        className="max-h-[29px]"
                       >
-                        <p className="text-indigoGray-5 text-xs">
-                          Other opportunity
-                        </p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="text-sm text-indigoGray-90">
-                          Lead Technical Recruiter - US Remote (ET) (contract)
-                          at Uniswap
-                        </p>
-                        <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/location.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            NYC
-                          </p>
-
-                          <p>Remote</p>
-
-                          <p className="flex items-center">
-                            <SVG
-                              src="/icons/history-alt.svg"
-                              className="h-4 w-4 mr-1"
-                            />
-                            Yesterday
-                          </p>
-
-                          <p>$180,000-$220,000</p>
-                        </div>
-                      </div>
+                        Apply
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => router.push(`/opportunities/123`)}
-                      className="max-h-[29px]"
-                    >
-                      Apply
-                    </Button>
+                    {/* <div className="h-[1px] w-full bg-indigoGray-20 my-3" /> */}
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -255,3 +152,27 @@ const Opportunities = () => {
 };
 
 export default Opportunities;
+
+const getOpportunitites = async (projectId?: string) => {
+  const { data } = await axios.get<
+    ListResponse<OpportunityType<CompanyType> & { created_at: string }>
+  >(`/opportunities${projectId ? `/?project=${projectId}` : '/'}`);
+
+  return data;
+};
+
+export const useOpportunities = ({
+  projectId,
+  onSuccess,
+  withId = false,
+}: {
+  projectId?: string;
+  onSuccess?: () => void;
+  withId?: boolean;
+}) => {
+  return useQuery({
+    queryKey: clsx('opportunitities', projectId).split(' '),
+    queryFn: async () => getOpportunitites(projectId),
+    enabled: withId ? !!projectId : true,
+  });
+};

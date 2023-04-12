@@ -19,9 +19,9 @@ export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
         <SwrProvider>
           <WagmiProvider>
             <SidebarProvider>
-              <ErrorBoundaryProvider>
-                <AlertProvider>{children}</AlertProvider>
-              </ErrorBoundaryProvider>
+              {/* <ErrorBoundaryProvider> */}
+              <AlertProvider>{children}</AlertProvider>
+              {/* </ErrorBoundaryProvider> */}
             </SidebarProvider>
           </WagmiProvider>
         </SwrProvider>

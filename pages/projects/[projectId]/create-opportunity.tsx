@@ -2,27 +2,22 @@ import { NextPageContext } from 'next';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Layout } from 'components';
 import { useAlert } from 'components/Alert.tsx';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   CompanyInformation,
   OpportunityDescription,
   OpportunityDetails,
   OpportunityType,
 } from 'views/Opportunities/edit';
-import {
-  CompanyType,
-  ListResponse,
-  OpportunityType as Opportunity,
-} from 'types';
+import { OpportunityType as Opportunity } from 'types';
 import { axios } from 'lib/axios';
-import { useRouter } from 'next/router';
-import { useOpportunity } from '.';
 
 type Props = {
-  opportunityId: string;
+  projectId: string;
 };
 
 export enum EditStepsEnum {
@@ -32,52 +27,23 @@ export enum EditStepsEnum {
   DESCRIPTION = 'Opportunity description',
 }
 
-const Edit: React.FC<Props> = ({ opportunityId }) => {
+const Edit: React.FC<Props> = ({ projectId }) => {
   const router = useRouter();
   const { dispatch } = useAlert({});
   const queryClient = useQueryClient();
   const [selectedStep, setSelectedStep] = React.useState<EditStepsEnum>(
-    router.query?.['company-id']
-      ? EditStepsEnum.COMPANY_INFORMATION
-      : EditStepsEnum.TYPE
+    EditStepsEnum.TYPE
   );
-
-  const cachedData = queryClient.getQueryData<
-    ListResponse<Opportunity<CompanyType>>
-  >(['opportunitities']);
-
-  const cachedOpportunity = cachedData?.results.reduce((prev, next) => {
-    const opportunity =
-      opportunityId === next.id
-        ? { ...next, company_info: next.company_info.id }
-        : {};
-
-    return { ...prev, ...opportunity };
-  }, {} as Opportunity<string>);
-
-  const [opportunity, setOpportunity] = React.useState<
-    Opportunity<string> | undefined
-  >(cachedOpportunity);
-
-  useOpportunity({
-    opportunityId,
-    onSuccess: (data) => {
-      if (data) {
-        setOpportunity({ ...data, company_info: data.company_info.id });
-      }
-    },
-    enabled: !!!cachedOpportunity?.id,
-  });
+  const [opportunity, setOpportunity] = React.useState<Opportunity<string>>();
 
   const { mutate, isLoading: isSubmitting } = useMutation({
     onSuccess: (data) => {
-      queryClient.refetchQueries(['opportunitity', opportunityId]);
+      queryClient.refetchQueries(['opportunitity', projectId]);
       router.push(`/opportunities/${data.id}`);
     },
     mutationFn: () =>
-      updateOpportunity({
+      createOpportunity({
         ...(opportunity || ({} as Opportunity<string>)),
-        id: opportunityId,
       }),
   });
 
@@ -152,7 +118,7 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
       <div className="flex flex-col grow space-y-6">
         <div className="border-transparent flex justify-center lg:border-b lg:border-b-indigoGray-20">
           <div className="px-4 pb-4 pt-6 flex space-x-3 items-center grow max-w-[730px] xl:max-w-[930px] lg:pt-16 lg:px-0">
-            <Link href={`/opportunities/${opportunityId}`}>
+            <Link href={`/projects/${projectId}`}>
               <SVG src="/icons/chevron-left.svg" width={24} height={24} />
             </Link>
             <p className="font-sans font-medium text-2xl text-indigoGray-90">
@@ -185,17 +151,14 @@ export default Edit;
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
-      opportunityId: context.query.opportunityId,
+      projectId: context.query.projectId,
     },
   };
 };
 
-const updateOpportunity = async ({
-  id,
-  ...opportunity
-}: Opportunity<string>) => {
-  const { data } = await axios.patch<Opportunity<string>>(
-    `/opportunities/${id}/`,
+const createOpportunity = async (opportunity: Opportunity<string>) => {
+  const { data } = await axios.post<Opportunity<string>>(
+    `/opportunities/`,
     opportunity
   );
   return data;

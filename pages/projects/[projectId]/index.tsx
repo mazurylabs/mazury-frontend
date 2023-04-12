@@ -15,6 +15,7 @@ import { axios } from 'lib/axios';
 import { useAlert } from 'components/Alert.tsx';
 import { useUser } from 'providers/react-query-auth';
 import { LinkIcon, Notes, Opportunity, StatusTags } from 'views/Opportunities';
+import { useOpportunities } from 'pages/opportunities';
 
 type ProjectTableRows = ProjectProfile & {
   socials?: string;
@@ -29,6 +30,7 @@ const Project = ({ projectId }: ProfileProps) => {
   const router = useRouter();
   const [projectTitle, setProjectTitle] = React.useState('Untitled project');
   const prevTitle = React.useRef<string>(projectTitle);
+  const { dispatch } = useAlert({});
 
   const { data, isLoading } = useQuery({
     queryKey: ['profile', projectId],
@@ -39,6 +41,13 @@ const Project = ({ projectId }: ProfileProps) => {
       prevTitle.current = data.project.name;
     },
   });
+
+  const { data: opportunities, isLoading: isProjectLoading } = useOpportunities(
+    {
+      projectId,
+      withId: true,
+    }
+  );
 
   return (
     <Layout variant="plain">
@@ -51,19 +60,23 @@ const Project = ({ projectId }: ProfileProps) => {
           ref={prevTitle}
         />
 
-        {true ? (
-          <Opportunity
-            title="Senior frontend developer"
-            companyName="Uniswap"
-            location=" NYC, Remote"
-            salary="$180,000-$220,000"
-            logo="/icons/dummy-badge.svg"
-            opportunityUrl="/opportunities/123"
-            candidatesUrl="/opportunities/123/applicants"
-          />
+        {opportunities?.count ? (
+          opportunities.results.map((opportunity) => (
+            <Opportunity
+              key={opportunity.id}
+              title={opportunity.title}
+              companyName={opportunity.company_info.name}
+              location={opportunity.location}
+              salary={opportunity.salary}
+              logo={opportunity.company_info.logo}
+              opportunityUrl={`/opportunities/${opportunity.id}`}
+              candidatesUrl={`/opportunities/${opportunity.id}/applicants`}
+            />
+          ))
         ) : (
-          <button
-            type="button"
+          <Link
+            href={`/projects/${projectId}/create-opportunity`}
+            passHref
             className="flex w-full hover:bg-indigoGray-5 flex-col items-center rounded-md border border-[2px] border-dashed border-[#E2E6F0] px-2 py-6 font-sans"
           >
             <span className="text-black flex items-center font-sans text-lg font-medium">
@@ -73,7 +86,7 @@ const Project = ({ projectId }: ProfileProps) => {
             <span className="whitespace-nowrap px-10 text-sm text-indigoGray-50 xl:px-0">
               Make your project seen by the best web3 talent
             </span>
-          </button>
+          </Link>
         )}
 
         <div className="grow flex flex-col">

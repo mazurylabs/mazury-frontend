@@ -4,8 +4,10 @@ import SVG from 'react-inlinesvg';
 import { Input } from 'components';
 
 export const CustomInput: React.FC<
-  React.ComponentProps<typeof Input> & { info?: string }
-> = ({ error, label, info, required = true, ...props }) => {
+  React.ComponentProps<typeof Input> & {
+    info?: string;
+  }
+> = ({ error, label, info, required = true, onChange, ...props }) => {
   return (
     <div className="space-y-1">
       <Input
@@ -19,7 +21,9 @@ export const CustomInput: React.FC<
             )}
           </div>
         }
+        className="!text-indigoGray-50"
         {...props}
+        onChange={onChange}
       />
 
       {(error || info) && (

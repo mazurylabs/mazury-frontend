@@ -3,25 +3,48 @@ import SVG from 'react-inlinesvg';
 import { NextPageContext } from 'next';
 import Link from 'next/link';
 import * as Popover from '@radix-ui/react-popover';
+import dayjs from 'dayjs';
 
 import { Avatar, Button, Layout } from 'components';
-import { truncateString } from 'utils';
+import { capitalize, truncateString } from 'utils';
 import { useUser } from 'providers/react-query-auth';
 import { useMobile } from 'hooks';
 import { CustomInput } from 'views/Opportunities/CustomInput';
 import { useRouter } from 'next/router';
 import { useAlert } from 'components/Alert.tsx';
 import clsx from 'clsx';
+import { EditStepsEnum } from './edit';
+import { axios } from '@/lib/axios';
+import { CompanyType, ListResponse, OpportunityType } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   opportunityId: string;
 }
 
+type OpportunityWithCompany = OpportunityType<CompanyType> & {
+  created_at: string;
+};
+
+interface Application {
+  email: string;
+  resume: File;
+  website?: string;
+  message?: string;
+}
+
 const Opportunity: React.FC<Props> = ({ opportunityId }) => {
   const router = useRouter();
+
   const { data } = useUser();
   const isMobile = useMobile(false);
   const { dispatch } = useAlert({});
+
+  const { data: opportunity, isLoading } = useOpportunity({ opportunityId });
+
+  if (!opportunity) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <Layout
@@ -29,40 +52,43 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
       showMobileSidebar={false}
       className="!px-4 lg:!px-0"
     >
-      <div className="flex flex-col w-full lg:items-center pt-6 lg:px-0 xl:pt-16">
+      <div className="flex flex-col w-full lg:items-center pb-10 pt-6 lg:px-0 xl:pt-16">
         <div className="lg:w-[730px] xl:w-[1000px] space-y-6 lg:space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-3">
               <div className="flex space-x-3 items-center">
                 <Link href={`/opportunities`} passHref>
                   <SVG src="/icons/chevron-left.svg" width={24} height={24} />
+                  <span className="sr-only">back</span>
                 </Link>
                 <p className="font-sans font-medium text-2xl text-indigoGray-90">
-                  {isMobile
-                    ? truncateString('Senior frontend developer', 15)
-                    : 'Senior frontend developer'}
+                  {capitalize(
+                    isMobile
+                      ? truncateString(opportunity.title, 15)
+                      : opportunity.title
+                  )}
                 </p>
               </div>
               <div className="flex space-x-6">
                 <div className="flex items-center space-x-3">
                   <Avatar
-                    src="/icons/dummy-user.svg"
+                    src={opportunity.company_info.logo}
                     alt="company"
                     outerClassName="h-8 w-8"
                     className="border-[0.6px] border-indigoGray-30"
                   />
                   <p className="font-sans text-sm font-medium text-indigoGray-90">
-                    Uniswap
+                    {capitalize(opportunity.company_info.name)}
                   </p>
                 </div>
                 <p className="font-sans font-medium text-sm text-indigoGray-40 flex items-center">
                   <SVG src="/icons/time.svg" className="mr-1" />
-                  Today
+                  {dayjs(opportunity.created_at).fromNow()}
                 </p>
               </div>
             </div>
 
-            {!'data?.is_recruiter' ? (
+            {data?.is_recruiter ? (
               <RecruiterView
                 handleEdit={() =>
                   router.push(`/opportunities/${opportunityId}/edit`)
@@ -72,7 +98,7 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
                 }
               />
             ) : (
-              <ApplicantView />
+              <ApplicantView opportunityId={opportunityId} />
             )}
           </div>
 
@@ -93,8 +119,11 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
                 <div className="space-y-2">
                   <p className="text-indigoGray-40">Company name</p>
                   <div className="flex space-x-3">
-                    <p>Uniswap</p>
-                    <Link href={`#`} className=" text-indigo-600">
+                    <p>{opportunity.company_info.name}</p>
+                    <Link
+                      href={`/opportunities/${opportunityId}/edit?company-id=${opportunity.company_info.id}`}
+                      className=" text-indigo-600"
+                    >
                       Edit company information
                     </Link>
                   </div>
@@ -104,13 +133,10 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    href="https://boards.greenhouse.io/uniswaplabs/jobs/4003109005"
+                    href={opportunity.website}
                     className="text-indigoGray-90 flex"
                   >
-                    {truncateString(
-                      'https://boards.greenhouse.io/uniswaplabs/jobs/4003109005',
-                      40
-                    )}
+                    {truncateString(opportunity.website, 40)}
                   </a>
                 </div>
               </div>
@@ -118,30 +144,25 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
               <div className="flex flex-col justify-between lg:flex-row lg:space-y-0">
                 <div className="space-y-2">
                   <p className="text-indigoGray-40">Location</p>
-                  <p>NYC | Remote</p>
+                  <p>
+                    {opportunity.location} | {opportunity.work_mode}
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-indigoGray-40">Company size</p>
-                  <p>100-200 people work here</p>
+                  <p>{opportunity.company_info.size} people work here</p>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <p className="text-indigoGray-40">Compensation range</p>
-                <p>$180,000-$220,000</p>
+                <p>{opportunity.salary}</p>
               </div>
 
               <div className="space-y-2">
                 <p className="text-indigoGray-40">Company description</p>
                 <p className="text-justify">
-                  The Uniswap Protocol is the largest decentralized trading and
-                  automated market making protocol (often called a DEX,
-                  “Decentralized Exchange”) on Ethereum. The Uniswap Labs team
-                  was a major contributor to the Uniswap Protocol and now
-                  focuses on building a suite of products to support the Uniswap
-                  ecosystem. Our team is one of the most impactful in crypto. We
-                  are based out of SoHo in New York City with the option to be
-                  partially or fully remote depending on the position.
+                  {opportunity.company_info.description}
                 </p>
               </div>
             </div>
@@ -149,51 +170,7 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
             <div className="space-y-2">
               <p className="text-indigoGray-40">Description</p>
               <p className="text-justify">
-                {`We’re looking for an enthusiastic, self-motivated engineer to
-                help us build the next generation of financial products. As a
-                dedicated frontend hire, you will gain ownership over our
-                existing suite of web products, as well as the ability to
-                influence the creation, design, and execution of future
-                products. You will be responsible for ensuring a consistent,
-                high-quality user experience across trading interfaces,
-                data-heavy analytics pages, documentation portals and more.
-                Responsibilities Create a unified component library for use
-                across all Uniswap products Rapidly implement functional UI
-                elements from design mocks, with an eye toward performance and
-                accessibility Know when to create abstractions vs. one-off
-                features Ensure that components are functional, elegant,
-                performant, and mobile-friendly Understand when and how to run
-                UI tests Requirements 5+ years of software engineering
-                experience At least 3 years of React experience A deep
-                understanding of the architecture of modern client-side React
-                applications Prior experience working with component libraries
-                or design teams in user-facing applications A desire to keep up
-                with modern best practices in web development Nice to Have Prior
-                experience creating a design system or component library
-                Familiarity with the web3 frontend stack (ethers.js/web3.js,
-                EIP-1193, client-side private key management, etc.) Familiarity
-                with React Hooks Experience with TypeScript in React Degree in
-                computer science Love for unicorns :) Minimum full-time salary
-                of $180,000-$220,000. Disclosure in accordance with New York
-                City's Pay Transparency Law. Full Time employees at Uniswap Labs
-                are also eligible for other compensation elements, including
-                equity, tokens, and benefits, dependent on the position type.
-                Uniswap Labs’ benefits include unlimited and encouraged time
-                off, 100% company-paid medical, dental, & vision for you and
-                your dependents, 401(k) participation, annual $1,500 education
-                stipend, up to 16 weeks paid parental leave, home office setup
-                stipend for remote employees and daily lunches at NY
-                headquarters (all benefits are subject to applicable taxes and
-                based on eligibility). Uniswap Labs is proud to be an equal
-                opportunity employer (EEO). We provide employment opportunities
-                without regard to age, race, color, ancestry, national origin,
-                religion, disability (including gender dysphoria and similar
-                gender-related conditions), sex, gender identity or expression,
-                sexual orientation (including actual or perceived
-                heterosexuality, homosexuality, bisexuality, and asexuality),
-                veteran status, military status, domestic violence victim
-                status, reproductive health decision making or any other
-                protected category.`}
+                {capitalize(opportunity.description)}
               </p>
             </div>
           </div>
@@ -258,9 +235,32 @@ const RecruiterView: React.FC<RecruiterViewProps> = ({
   );
 };
 
-const ApplicantView = () => {
-  const isSuccess = false;
+const ApplicantView: React.FC<{ opportunityId: string }> = ({
+  opportunityId,
+}) => {
+  const [application, setApplication] = React.useState<Application>();
   const isMobile = useMobile();
+
+  const handleChange = (value: Partial<Application>) => {
+    setApplication((prev) => ({ ...(prev || ({} as Application)), ...value }));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files && files.length !== 0) {
+      handleChange({ resume: files[0] as File });
+      event.target.value = '';
+    }
+  };
+
+  const { mutate, isLoading, isSuccess } = useMutation({
+    mutationFn: () => apply({ opportunityId, application }),
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    mutate();
+  };
 
   return (
     <Popover.Root>
@@ -317,19 +317,49 @@ const ApplicantView = () => {
                   </p>
                 </div>
 
-                <form className="flex flex-col relative w-[calc(100vw-32px)] lg:h-[392px] lg:w-[460px] overflow-y-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col relative w-[calc(100vw-32px)] lg:h-[392px] lg:w-[460px] overflow-y-auto"
+                >
                   <div className="space-y-4 mb-4 mt-4 px-4">
-                    <CustomInput label="Email" placeholder="Insert salary" />
                     <CustomInput
-                      label="Resume"
-                      placeholder="Insert salary"
-                      required={false}
+                      label="Email"
+                      placeholder="Insert email"
+                      value={application?.email}
+                      onChange={(value) => handleChange({ email: value })}
                     />
+
+                    <div>
+                      <p className="font-sans text-sm text-indigoGray-40">
+                        Resume
+                      </p>
+
+                      <div className="h-[47px] w-full grow border rounded-lg border-indigoGray-20 px-4 py-3 flex items-center justify-between font-sans text-indigoGray-50 font-medium text-sm">
+                        <p>{application?.resume?.name || 'Upload resume'}</p>
+
+                        <label
+                          className="text-xs font-sans font-medium text-violet-700 cursor-pointer"
+                          htmlFor="resume"
+                        >
+                          Upload file
+                        </label>
+
+                        <input
+                          id="resume"
+                          accept=".pdf"
+                          type="file"
+                          onInput={handleFileUpload}
+                          className="sr-only"
+                        />
+                      </div>
+                    </div>
                     <CustomInput
                       label="Website"
-                      placeholder="Insert salary"
+                      placeholder="Insert website"
                       info="Own website, Twitter, discord or any other"
                       required={false}
+                      value={application?.website}
+                      onChange={(value) => handleChange({ website: value })}
                     />
 
                     <div className="space-y-1 grow min-h-[229px] flex flex-col">
@@ -338,7 +368,11 @@ const ApplicantView = () => {
                       </p>
                       <textarea
                         placeholder="Hi! I’m sending my application. Thanks for your time"
-                        className="w-full grow border rounded-lg border-indigoGray-20 grow resize-none bg-transparent px-4 py-3 font-sans text-sm text-indigoGray-90"
+                        className="w-full border rounded-lg border-indigoGray-20 grow resize-none bg-transparent px-4 py-3 font-sans text-sm text-indigoGray-90"
+                        value={application?.message}
+                        onChange={(event) =>
+                          handleChange({ message: event.target.value })
+                        }
                       />
                     </div>
                   </div>
@@ -347,7 +381,8 @@ const ApplicantView = () => {
                     size="large"
                     className="rounded-t-none sticky w-full left-0 bottom-0"
                     type="submit"
-                    loading={false}
+                    loading={isLoading}
+                    disabled={!application?.email || !application.resume}
                   >
                     Send request
                   </Button>
@@ -367,4 +402,53 @@ export const getServerSideProps = async (context: NextPageContext) => {
       opportunityId: context.query.opportunityId,
     },
   };
+};
+
+const getOpportunity = async (opportunityId: string) => {
+  const { data } = await axios.get<OpportunityWithCompany>(
+    `/opportunities/${opportunityId}/`
+  );
+  return data;
+};
+
+export const useOpportunity = ({
+  opportunityId,
+  onSuccess,
+  enabled = true,
+}: {
+  enabled?: boolean;
+  opportunityId: string;
+  onSuccess?: (data?: OpportunityWithCompany) => void;
+}) => {
+  return useQuery({
+    queryKey: ['opportunity', opportunityId],
+    queryFn: async () => getOpportunity(opportunityId),
+    enabled: !!opportunityId && enabled,
+    onSettled: (data) => onSuccess?.(data),
+  });
+};
+
+const apply = async ({
+  opportunityId,
+  application,
+}: {
+  opportunityId: string;
+  application?: Application;
+}) => {
+  const formData = new FormData();
+
+  for (let key in application) {
+    if (key === 'resume') {
+      formData.append('resume', application.resume, application.email);
+    } else {
+      // @ts-ignore
+      formData.append(key, application[key]);
+    }
+  }
+
+  const { data } = await axios.post<Application>(
+    `/opportunities/${opportunityId}/applicants/`,
+    formData
+  );
+  return data;
 };

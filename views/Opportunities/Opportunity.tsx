@@ -2,7 +2,7 @@ import Link from 'next/link';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 
-import { Button } from 'components';
+import { Avatar, Button } from 'components';
 import clsx from 'clsx';
 
 interface Props {
@@ -34,7 +34,12 @@ export const Opportunity: React.FC<Props> = ({
       )}
     >
       <div className="flex items-center space-x-3">
-        <SVG src={logo} className="h-10 w-10 shrink-0" />
+        <Avatar
+          src={logo}
+          alt={companyName}
+          variant="md"
+          className="h-10 w-10 rounded-lg"
+        />
         <div className="space-y-1 font-sans font-medium">
           <p className="whitespace-nowrap text-sm text-indigoGray-90 font-semibold">
             {title}

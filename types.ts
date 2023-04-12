@@ -410,3 +410,25 @@ export interface Project {
   saved_profiles_preview_count: number;
   already_in_project: boolean;
 }
+
+export interface OpportunityType<T> {
+  id: string;
+  type: 'job' | 'other';
+  work_mode: 'remote' | 'hybrid' | 'on-site';
+  title: string;
+  location: string;
+  website: string;
+  salary: string;
+  description: string;
+  published: boolean;
+  company_info: T;
+}
+
+export interface CompanyType {
+  id: string;
+  name: string;
+  size: string;
+  logo: string;
+  description: string;
+  contact_email: string;
+}

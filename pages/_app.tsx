@@ -2,6 +2,9 @@ import * as React from 'react';
 import type { AppProps } from 'next/app';
 import NextHead from 'next/head';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 import {
   DefaultOptions,
