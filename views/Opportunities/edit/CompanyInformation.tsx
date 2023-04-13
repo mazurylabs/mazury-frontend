@@ -13,6 +13,7 @@ import { EditStepsEnum } from 'pages/opportunities/[opportunityId]/edit';
 import { useAlert } from 'components/Alert.tsx';
 
 interface Props {
+  initialCompany?: CompanyType;
   opportunity?: OpportunityType<string>;
   onSubmit: (opportunity: Partial<OpportunityType<string>>) => void;
   onNavigate: (step: EditStepsEnum) => void;
@@ -31,6 +32,7 @@ const generateNewTreeValues = <T extends {}>(originalTree: T, newTree: T) => {
 };
 
 export const CompanyInformation: React.FC<Props> = ({
+  initialCompany,
   opportunity,
   onSubmit,
   onNavigate,
@@ -59,6 +61,7 @@ export const CompanyInformation: React.FC<Props> = ({
     queryFn: async () =>
       getCompany(routeCompanyId || opportunity?.company_info),
     enabled: !!opportunity?.company_info || !!routeCompanyId,
+    initialData: initialCompany as CompanyType,
     onSuccess: (data) => {
       if (routeCompanyId) {
         handlePrefillForm(data);

@@ -414,16 +414,27 @@ const getOpportunity = async (opportunityId: string) => {
 export const useOpportunity = ({
   opportunityId,
   onSuccess,
-  enabled = true,
 }: {
-  enabled?: boolean;
   opportunityId: string;
   onSuccess?: (data?: OpportunityWithCompany) => void;
 }) => {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ['opportunity', opportunityId],
     queryFn: async () => getOpportunity(opportunityId),
-    enabled: !!opportunityId && enabled,
+    enabled: !!opportunityId,
+    initialData: () => {
+      const cachedData = queryClient.getQueryData<
+        ListResponse<OpportunityWithCompany>
+      >(['opportunitities']);
+
+      return cachedData?.results.find(
+        (opportunity) => opportunityId === opportunity.id
+      );
+    },
+    initialDataUpdatedAt: queryClient.getQueryState(['opportunitities'])
+      ?.dataUpdatedAt,
     onSettled: (data) => onSuccess?.(data),
   });
 };

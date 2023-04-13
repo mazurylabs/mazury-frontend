@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { Layout } from 'components';
 import { useAlert } from 'components/Alert.tsx';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   CompanyInformation,
   OpportunityDescription,
@@ -41,32 +41,19 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
       ? EditStepsEnum.COMPANY_INFORMATION
       : EditStepsEnum.TYPE
   );
-
-  const cachedData = queryClient.getQueryData<
-    ListResponse<Opportunity<CompanyType>>
-  >(['opportunitities']);
-
-  const cachedOpportunity = cachedData?.results.reduce((prev, next) => {
-    const opportunity =
-      opportunityId === next.id
-        ? { ...next, company_info: next.company_info.id }
-        : {};
-
-    return { ...prev, ...opportunity };
-  }, {} as Opportunity<string>);
-
+  const [initialCompany, setInitialCompany] = React.useState<CompanyType>();
   const [opportunity, setOpportunity] = React.useState<
     Opportunity<string> | undefined
-  >(cachedOpportunity);
+  >();
 
   useOpportunity({
     opportunityId,
     onSuccess: (data) => {
       if (data) {
+        setInitialCompany(data.company_info);
         setOpportunity({ ...data, company_info: data.company_info.id });
       }
     },
-    enabled: !!!cachedOpportunity?.id,
   });
 
   const { mutate, isLoading: isSubmitting } = useMutation({
@@ -107,6 +94,7 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
       step: 2,
       component: (
         <CompanyInformation
+          initialCompany={initialCompany}
           opportunity={opportunity}
           onSubmit={(opportunity) => {
             handleOpportunity(opportunity);
