@@ -87,11 +87,6 @@ export const ProfileSummaryAccordion: React.FC<ProfileSummaryProps> = ({
                       className="bg-indigoGray-90"
                     />
                   )}
-                  <ProfileTag
-                    icon="/icons/mazuryTalent.svg"
-                    title="Mazury Talent"
-                    className="bg-emerald-600"
-                  />
                 </div>
               )}
           </div>
