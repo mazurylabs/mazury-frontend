@@ -38,7 +38,7 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
     <Layout variant="plain" className="!px-4 lg:!px-0">
       <div className="flex flex-col space-y-4 px-4 pt-4 xl:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pb-[95px] xl:pt-16 xl:mx-[auto]">
         <div className="flex space-x-3 items-center">
-          <Link href={`/opportunities`}>
+          <Link href={`/`}>
             <SVG src="/icons/chevron-left.svg" width={24} height={24} />
           </Link>
           <p className="font-sans font-medium text-2xl text-indigoGray-90">

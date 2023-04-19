@@ -22,7 +22,7 @@ const Applicant: React.FC<Props> = ({ applicantId, opportunityId }) => {
         <div className="flex items-center justify-between">
           <div className="space-y-3">
             <div className="flex space-x-3 items-center">
-              <Link href={`/opportunities`}>
+              <Link href={`/`}>
                 <SVG src="/icons/chevron-left.svg" width={24} height={24} />
               </Link>
               <p className="font-sans font-medium text-2xl text-indigoGray-90">

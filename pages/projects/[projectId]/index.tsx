@@ -15,7 +15,7 @@ import { axios } from 'lib/axios';
 import { useAlert } from 'components/Alert.tsx';
 import { useUser } from 'providers/react-query-auth';
 import { LinkIcon, Notes, Opportunity, StatusTags } from 'views/Opportunities';
-import { useOpportunities } from 'pages/opportunities';
+import { useOpportunities } from '@/pages';
 
 type ProjectTableRows = ProjectProfile & {
   socials?: string;
