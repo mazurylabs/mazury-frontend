@@ -2,12 +2,15 @@ import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import Link from 'next/link';
 import { NextPageContext } from 'next';
+import { useQuery } from '@tanstack/react-query';
 
 import { Avatar, Layout, Table } from 'components';
 import { ProjectProfile } from 'types';
 import { LinkIcon, Notes, StatusTags, Opportunity } from 'views/Opportunities';
 import { capitalize } from 'utils';
 import { useMobile } from 'hooks';
+import { useOpportunity } from '..';
+import { axios } from 'lib/axios';
 
 interface Props {
   opportunityId: string;
@@ -21,6 +24,16 @@ type ProjectTableRows = ProjectProfile & {
 const Applicants: React.FC<Props> = ({ opportunityId }) => {
   const isMobile = useMobile();
 
+  const { data } = useOpportunity({
+    opportunityId,
+  });
+
+  const { data: applicants, isLoading } = useQuery({
+    queryKey: ['applicants', opportunityId],
+    queryFn: async () => getApplicants(opportunityId),
+    enabled: !!opportunityId,
+  });
+
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
       <div className="flex flex-col space-y-4 px-4 pt-4 xl:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pb-[95px] xl:pt-16 xl:mx-[auto]">
@@ -33,13 +46,15 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
           </p>
         </div>
 
-        <Opportunity
-          title="Senior frontend developer"
-          companyName="Uniswap"
-          location=" NYC, Remote"
-          salary="$180,000-$220,000"
-          logo="/icons/dummy-badge.svg"
-        />
+        {data && (
+          <Opportunity
+            title={data?.title}
+            companyName={data?.company_info.name}
+            location={`${data?.location}, ${data?.work_mode}`}
+            salary={data?.salary}
+            logo={data?.company_info.logo}
+          />
+        )}
 
         <Table<ProjectTableRows>
           emptyState={{
@@ -49,7 +64,7 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
               url: `/search`,
             },
           }}
-          isLoading={false}
+          isLoading={isLoading}
           rows={[]}
           columns={[
             {
@@ -145,4 +160,11 @@ export const getServerSideProps = async (context: NextPageContext) => {
       opportunityId: context.query.opportunityId,
     },
   };
+};
+
+const getApplicants = async (opportunityId?: string) => {
+  const { data } = await axios.get<any>(
+    `/opportunities/${opportunityId}/applicants/`
+  );
+  return data;
 };

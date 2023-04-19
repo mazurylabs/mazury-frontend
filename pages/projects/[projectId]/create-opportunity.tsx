@@ -44,6 +44,7 @@ const Edit: React.FC<Props> = ({ projectId }) => {
     mutationFn: () =>
       createOpportunity({
         ...(opportunity || ({} as Opportunity<string>)),
+        // project: projectId,
       }),
   });
 

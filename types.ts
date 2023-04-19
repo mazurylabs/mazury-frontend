@@ -422,6 +422,7 @@ export interface OpportunityType<T> {
   description: string;
   published: boolean;
   company_info: T;
+  project: string;
 }
 
 export interface CompanyType {
