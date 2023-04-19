@@ -90,11 +90,7 @@ const Credentials = ({ ethAddress }: CredentialsProps) => {
   });
 
   return (
-    <Layout
-      variant="plain"
-      showMobileSidebar={entry?.isIntersecting}
-      className="lg:px-0"
-    >
+    <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
         navItems={navItems}
         title={isSaveProfileView ? 'Save profile to folders' : undefined}

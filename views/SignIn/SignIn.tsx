@@ -64,7 +64,7 @@ export const SignIn = () => {
         backgroundColor={colors.metamask}
         label="Browser wallet"
         iconSrc="/icons/wallet.svg"
-        className="mt-4"
+        className="mt-3"
         disabled={!metamaskConnector}
         onClick={() => {
           handleConnect(metamaskConnector);

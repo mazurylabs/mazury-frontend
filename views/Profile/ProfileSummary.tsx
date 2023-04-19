@@ -14,6 +14,7 @@ import { formatNumber, returnTruncatedIfEthAddress } from 'utils';
 import { LensFollowers } from './LensFollowers';
 import { ProfileTag } from './ProfileTag';
 import { NavItem } from './type';
+import Link from 'next/link';
 
 interface ProfileSummaryProps {
   user?: Profile;
@@ -109,46 +110,48 @@ export const ProfileSummary = ({
         </motion.div>
 
         <div className="relative px-4 lg:bg-indigoGray-5 lg:pb-6">
-          <motion.div
-            className="relative top-[-26px] mb-[-16px] flex items-center space-x-4 lg:mb-[-10px]"
-            style={isMobile ? { top, height, backgroundColor } : undefined}
-          >
-            <div>
-              <motion.img
-                src={profile?.avatar || '/icons/no-avatar.svg'}
-                alt="Profile"
-                className="h-[100px] w-[100px] rounded-full object-cover"
-                style={
-                  isMobile
-                    ? { height: avatarHeight, width: avatarHeight }
-                    : undefined
-                }
-              />
-            </div>
+          <Link href={`/people/${profile?.eth_address}`}>
+            <motion.div
+              className="relative top-[-26px] mb-[-16px] flex items-center space-x-4 lg:mb-[-10px]"
+              style={isMobile ? { top, height, backgroundColor } : undefined}
+            >
+              <div>
+                <motion.img
+                  src={profile?.avatar || '/icons/no-avatar.svg'}
+                  alt="Profile"
+                  className="h-[100px] w-[100px] rounded-full object-cover"
+                  style={
+                    isMobile
+                      ? { height: avatarHeight, width: avatarHeight }
+                      : undefined
+                  }
+                />
+              </div>
 
-            <div>
-              {profile?.full_name && (
-                <motion.h1
-                  className="font-demi text-2xl !font-bold text-indigoGray-90"
-                  style={{ fontSize }}
-                >
-                  {profile?.full_name}
-                </motion.h1>
-              )}
+              <div>
+                {profile?.full_name && (
+                  <motion.h1
+                    className="font-demi text-2xl !font-bold text-indigoGray-90"
+                    style={{ fontSize }}
+                  >
+                    {profile?.full_name}
+                  </motion.h1>
+                )}
 
-              {profile?.username && (
-                <p
-                  className={clsx(
-                    'font-sans text-xs text-indigoGray-50',
-                    !profile.full_name &&
-                      'font-demi text-2xl !font-bold text-indigoGray-90'
-                  )}
-                >
-                  @{returnTruncatedIfEthAddress(profile?.username)}
-                </p>
-              )}
-            </div>
-          </motion.div>
+                {profile?.username && (
+                  <p
+                    className={clsx(
+                      'font-sans text-xs text-indigoGray-50',
+                      !profile.full_name &&
+                        'font-demi text-2xl !font-bold text-indigoGray-90'
+                    )}
+                  >
+                    @{returnTruncatedIfEthAddress(profile?.username)}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          </Link>
 
           <div>
             {!!profile?.followers_count && (
@@ -311,6 +314,18 @@ export const ProfileSummary = ({
                 url={`https://github.com/${profile.github}`}
                 icon="/icons/github-black.svg"
                 value={profile?.github}
+              />
+            )}
+            {!!profile?.website && (
+              <ProfileLinks
+                url={
+                  profile.website.startsWith('https://') ||
+                  profile.website.startsWith('http://')
+                    ? profile.website
+                    : `https://${profile.website}`
+                }
+                icon="/icons/link.svg"
+                value={profile.website}
               />
             )}
           </div>
