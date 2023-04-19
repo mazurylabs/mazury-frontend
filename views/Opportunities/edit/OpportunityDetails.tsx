@@ -109,12 +109,12 @@ export const OpportunityDetails: React.FC<Props> = ({
           size="large"
           className="text-indigoGray-5 ml-[auto] bg-teal-600"
           type="submit"
-          disabled={
-            !opportunity?.salary ||
-            !opportunity?.location ||
-            !opportunity?.title ||
-            !opportunity?.website
-          }
+          // disabled={
+          //   !opportunity?.salary ||
+          //   !opportunity?.location ||
+          //   !opportunity?.title ||
+          //   !opportunity?.website
+          // }
         >
           Continue{' '}
           <SVG src="/icons/chevron-right.svg" className="ml-2 h-4 w-4" />

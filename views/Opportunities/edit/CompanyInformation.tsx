@@ -287,7 +287,7 @@ export const CompanyInformation: React.FC<Props> = ({
           size="large"
           className="text-indigoGray-5 ml-[auto] bg-teal-600"
           onClick={() => onNavigate(EditStepsEnum.DETAILS)}
-          disabled={!data || (!company && isNewCompany)}
+          // disabled={!data || (!company && isNewCompany)}
         >
           Continue{' '}
           <SVG src="/icons/chevron-right.svg" className="ml-2 h-4 w-4" />
