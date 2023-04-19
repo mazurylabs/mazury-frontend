@@ -1,6 +1,10 @@
-import { FC } from 'react';
+import { motion } from 'framer-motion';
+import { FC, useContext } from 'react';
+import { SidebarContext } from 'contexts';
 import { MobileSidebar } from '../MobileSidebar/MobileSidebar';
 import { Sidebar } from 'components';
+import Link from 'next/link';
+import SVG from 'react-inlinesvg';
 import clsx from 'clsx';
 
 interface LayoutProps {
@@ -8,27 +12,68 @@ interface LayoutProps {
   innerLeftContent?: React.ReactNode;
   innerRightContent?: React.ReactNode;
   headerContent?: React.ReactNode;
-  showMobileSidebar?: boolean;
   variant?: 'three-part' | 'plain';
   children?: React.ReactNode;
+  showMobileSidebar?: boolean;
+  className?: string;
 }
 
 export const Layout: FC<LayoutProps> = ({
+  sidebarContent = <Sidebar />,
   innerLeftContent,
   innerRightContent,
   headerContent,
-  showMobileSidebar = true,
   variant = 'three-part',
   children,
+  showMobileSidebar = true,
+  className,
 }) => {
+  const { isOpen, signInOpen, setIsOpen } = useContext(SidebarContext);
+
+  const variants = {
+    open: {
+      width: 225,
+      transition: { duration: 0.2 },
+    },
+    signInOpen: {
+      width: 335,
+      transition: { duration: 0.2 },
+    },
+    closed: {
+      width: 75,
+      transition: { duration: 0.2 },
+    },
+  };
+
   return (
     <div
       className="flex min-h-screen w-full flex-col"
       data-testid="layout-container"
     >
-      <Sidebar />
+      <motion.aside
+        variants={variants}
+        animate={signInOpen ? 'signInOpen' : isOpen ? 'open' : 'closed'}
+        className={`fixed left-0 top-0 z-30 !hidden h-screen w-[75px] flex-col items-center bg-white px-4 py-6 shadow-inner lg:!flex`}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => !signInOpen && setIsOpen(false)}
+        role="menu"
+      >
+        <Link legacyBehavior href="/">
+          <a className="h-[32px] w-[32px] cursor-pointer">
+            <SVG src="/new-logo.svg" height="32px" width="32px" />
+          </a>
+        </Link>
 
-      <main className="mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-11/12">
+        <hr className={`mx-3 my-8 w-full border border-indigoGray-20`} />
+        {sidebarContent}
+      </motion.aside>
+
+      <main
+        className={clsx(
+          'mx-auto flex  w-full grow flex-col gap-8 px-0 pt-0 md:px-8 lg:ml-[75px] lg:w-[calc(100vw-75px)]',
+          className
+        )}
+      >
         {variant === 'three-part' && (
           <>
             {headerContent}

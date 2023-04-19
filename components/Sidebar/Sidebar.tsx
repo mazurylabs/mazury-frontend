@@ -118,47 +118,45 @@ export const Sidebar: React.FC = () => {
           </div>
         ) : (
           <>
-            <SidebarItem
-              href="/search"
-              label="Search"
-              icon={
-                <SearchIcon
-                  color={
-                    pathname.startsWith('/search')
-                      ? iconColors.active
-                      : iconColors.inactive
-                  }
-                />
-              }
-              isOpen={isOpen}
-              active={pathname.startsWith(`/search`)}
-              signInOpen={signInOpen}
-            />
-            <SidebarItem
-              href="/"
-              label="Home"
-              icon={
-                <HomeIcon
-                  color={
-                    pathname === '/' ? iconColors.active : iconColors.inactive
-                  }
-                />
-              }
-              isOpen={isOpen}
-              active={pathname === '/'}
-              className="mt-4"
-              signInOpen={signInOpen}
-            />
-
-            <SidebarItem
-              href="/projects"
-              label="Projects"
-              icon={<SVG src="/icons/jobs.svg" />}
-              isOpen={isOpen}
-              active={pathname === '/projects'}
-              className="mt-4"
-              signInOpen={signInOpen}
-            />
+            <div className="flex w-full justify-start pl-[5px]">
+              <Link className="h-[32px] w-[32px] cursor-pointer" href="/">
+                <SVG src="/new-logo.svg" height="32px" width="32px" />
+              </Link>
+            </div>
+            <hr className={`mx-3 my-8 w-full border-t border-indigoGray-20`} />
+            <div className="grow">
+              <SidebarItem
+                href="/search"
+                label="Search"
+                icon={
+                  <SearchIcon
+                    color={
+                      pathname.startsWith('/search')
+                        ? iconColors.active
+                        : iconColors.inactive
+                    }
+                  />
+                }
+                isOpen={isOpen}
+                signInOpen={signInOpen}
+                active={pathname.startsWith('/search')}
+              />
+              <SidebarItem
+                href="/"
+                label="Home"
+                icon={
+                  <HomeIcon
+                    color={
+                      pathname === '/' ? iconColors.active : iconColors.inactive
+                    }
+                  />
+                }
+                isOpen={isOpen}
+                signInOpen={signInOpen}
+                active={pathname === '/'}
+                className="mt-4"
+              />
+            </div>
 
             <WalletRequestModal
               step={currentStep}
