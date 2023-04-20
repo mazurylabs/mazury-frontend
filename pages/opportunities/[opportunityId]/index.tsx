@@ -458,7 +458,7 @@ const apply = async ({
   }
 
   const { data } = await axios.post<Application>(
-    `/opportunities/${opportunityId}/applicants/`,
+    `/opportunities/${opportunityId}/apply/`,
     formData
   );
   return data;
