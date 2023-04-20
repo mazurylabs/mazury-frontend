@@ -57,7 +57,7 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
           <div className="flex items-center justify-between">
             <div className="space-y-3">
               <div className="flex space-x-3 items-center">
-                <Link href={`/opportunities`} passHref>
+                <Link href={`/`} passHref>
                   <SVG src="/icons/chevron-left.svg" width={24} height={24} />
                   <span className="sr-only">back</span>
                 </Link>

@@ -3,18 +3,19 @@ import * as React from 'react';
 import SVG from 'react-inlinesvg';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Layout } from 'components';
 import { useAlert } from 'components/Alert.tsx';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { OpportunityType as Opportunity } from 'types';
+import { axios } from 'lib/axios';
+
 import {
   CompanyInformation,
   OpportunityDescription,
   OpportunityDetails,
   OpportunityType,
 } from 'views/Opportunities/edit';
-import { OpportunityType as Opportunity } from 'types';
-import { axios } from 'lib/axios';
 
 type Props = {
   projectId: string;

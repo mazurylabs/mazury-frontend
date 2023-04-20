@@ -7,13 +7,12 @@ import clsx from 'clsx';
 
 import { Avatar, Button } from 'components';
 import { CustomInput } from '../CustomInput';
-import { CompanyType, OpportunityType } from 'types';
+import { CompanyType, ListResponse, OpportunityType } from 'types';
 import { axios } from 'lib/axios';
 import { EditStepsEnum } from 'pages/opportunities/[opportunityId]/edit';
 import { useAlert } from 'components/Alert.tsx';
 
 interface Props {
-  initialCompany?: CompanyType;
   opportunity?: OpportunityType<string>;
   onSubmit: (opportunity: Partial<OpportunityType<string>>) => void;
   onNavigate: (step: EditStepsEnum) => void;
@@ -32,7 +31,6 @@ const generateNewTreeValues = <T extends {}>(originalTree: T, newTree: T) => {
 };
 
 export const CompanyInformation: React.FC<Props> = ({
-  initialCompany,
   opportunity,
   onSubmit,
   onNavigate,
@@ -40,7 +38,13 @@ export const CompanyInformation: React.FC<Props> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const { dispatch } = useAlert({});
-  const [company, setCompany] = React.useState<CompanyType>();
+
+  const cachedCompany = queryClient.getQueryData<OpportunityType<CompanyType>>([
+    'opportunity',
+    opportunity?.id,
+  ])?.company_info;
+
+  const [company, setCompany] = React.useState<CompanyType | undefined>();
   const prevCompany = React.useRef<CompanyType>();
   const routeCompanyId = router.query?.['company-id'] as string;
   const [isNewCompany, setIsNewCompany] = React.useState(
@@ -53,31 +57,21 @@ export const CompanyInformation: React.FC<Props> = ({
     prevCompany.current = data;
   };
 
-  const { data, isLoading } = useQuery({
-    queryKey: clsx(
-      'company',
-      routeCompanyId || opportunity?.company_info || company?.id
-    ).split(' '),
-    queryFn: async () =>
-      getCompany(routeCompanyId || opportunity?.company_info),
-    enabled: !!opportunity?.company_info || !!routeCompanyId,
-    initialData: initialCompany as CompanyType,
-    onSuccess: (data) => {
-      if (routeCompanyId) {
-        handlePrefillForm(data);
-      } else {
-        setIsNewCompany(false);
-        setCompany(data);
-      }
-    },
+  const { data: companies } = useQuery({
+    queryKey: ['companies'],
+    queryFn: getCompanies,
   });
 
   const { mutate, isLoading: isSavingCompany } = useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<CompanyType>(['company', data.id], (prev) => ({
-        ...prev,
-        ...data,
-      }));
+      queryClient.setQueryData<CompanyType[]>(['companies'], (prev) => {
+        const isEditing = prev?.find((company) => company.id === data.id);
+
+        return isEditing
+          ? prev?.filter((company) => company.id !== data.id).concat(data)
+          : prev?.concat(data);
+      });
+
       setIsNewCompany(false);
       setCompany(data);
       onSubmit({ company_info: data.id });
@@ -91,7 +85,9 @@ export const CompanyInformation: React.FC<Props> = ({
 
       return updateCompany({
         ...payload,
-        id: isNewCompany ? company?.id : opportunity?.company_info,
+        id: isNewCompany
+          ? company?.id || cachedCompany?.id
+          : opportunity?.company_info,
       });
     },
   });
@@ -110,28 +106,38 @@ export const CompanyInformation: React.FC<Props> = ({
 
   return (
     <div className="w-full space-y-4 pb-10">
-      {data && !isNewCompany && (
-        <div className="border-[1.5px] rounded-lg border-indigo-600 w-full py-3 px-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar
-              outerClassName="h-12 w-12"
-              src={data.logo}
-              alt={data.name}
-            />
-
-            <p className="font-sans text-sm font-medium text-indigoGray-90">
-              {data.name}
-            </p>
-          </div>
+      {companies?.length &&
+        !isNewCompany &&
+        companies.map((company) => (
           <button
-            type="button"
-            className="font-sans text-sm text-indigoGray-50"
-            onClick={() => handlePrefillForm(data)}
+            className={clsx(
+              'rounded-lg w-full py-3 px-4 flex items-center justify-between',
+              company.id === opportunity?.company_info
+                ? 'border-[1.5px] border-indigo-600'
+                : 'border border-indigoGray-20'
+            )}
+            onClick={() => onSubmit({ company_info: company.id })}
           >
-            Edit information
+            <div className="flex items-center space-x-4">
+              <Avatar
+                outerClassName="h-12 w-12"
+                src={company.logo}
+                alt={company.name}
+              />
+
+              <p className="font-sans text-sm font-medium text-indigoGray-90">
+                {company.name}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="font-sans text-sm text-indigoGray-50"
+              onClick={() => handlePrefillForm(company)}
+            >
+              Edit information
+            </button>
           </button>
-        </div>
-      )}
+        ))}
 
       <div className="border rounded-lg border-indigoGray-20 w-full space-y-4 pb-3">
         <button
@@ -163,19 +169,21 @@ export const CompanyInformation: React.FC<Props> = ({
               <CustomInput
                 label="Contact e-mail"
                 placeholder="Insert e-mail"
-                value={company?.contact_email || ''}
+                value={
+                  company?.contact_email || cachedCompany?.contact_email || ''
+                }
                 onChange={(value) => handleChange({ contact_email: value })}
               />
               <CustomInput
                 label="Contact name"
                 placeholder="Insert name"
-                value={company?.name || ''}
+                value={company?.name || cachedCompany?.name || ''}
                 onChange={(value) => handleChange({ name: value })}
               />
               <CustomInput
                 label="Description"
                 placeholder="Write a short description"
-                value={company?.description || ''}
+                value={company?.description || cachedCompany?.description || ''}
                 onChange={(value) => handleChange({ description: value })}
               />
 
@@ -193,7 +201,7 @@ export const CompanyInformation: React.FC<Props> = ({
                       type="button"
                       className="py-3 px-4 border border-indigoGray-20 rounded-lg h-[45px] text-sm font-medium font-sans text-indigoGray-50"
                     >
-                      {company?.size || 'Choose size'}
+                      {company?.size || cachedCompany?.size || 'Choose size'}
                     </button>
                   </Popover.Trigger>
                 </div>
@@ -202,22 +210,22 @@ export const CompanyInformation: React.FC<Props> = ({
                   <Popover.Content align="start" sideOffset={4}>
                     <div className="rounded-lg bg-white py-[5px] shadow-lg font-sans text-sm font-semibold text-indigo-600 flex flex-col w-[calc(100vw-64px)] lg:w-[342px] space-y-[5.5px]">
                       <DropdownButton
-                        size={company?.size}
+                        size={company?.size || cachedCompany?.size}
                         label="Less than 10 people"
                         onClick={(size) => handleChange({ size })}
                       />
                       <DropdownButton
-                        size={company?.size}
+                        size={company?.size || cachedCompany?.size}
                         label="Between 10 and 50 people"
                         onClick={(size) => handleChange({ size: '10 - 50' })}
                       />
                       <DropdownButton
-                        size={company?.size}
+                        size={company?.size || cachedCompany?.size}
                         label="Between 50 and 200 people"
                         onClick={(size) => handleChange({ size: '50 - 200' })}
                       />
                       <DropdownButton
-                        size={company?.size}
+                        size={company?.size || cachedCompany?.size}
                         label="More than 200 people"
                         onClick={(size) => handleChange({ size: '200+' })}
                       />
@@ -234,13 +242,19 @@ export const CompanyInformation: React.FC<Props> = ({
                   <Avatar
                     variant="xl"
                     src={
-                      typeof company?.logo === 'string'
-                        ? company.logo
-                        : typeof company?.logo === 'object'
-                        ? URL.createObjectURL(company.logo as any)
+                      company?.logo
+                        ? typeof company?.logo === 'string'
+                          ? company.logo
+                          : typeof company?.logo === 'object'
+                          ? URL.createObjectURL(company.logo as any)
+                          : ''
+                        : typeof cachedCompany?.logo === 'string'
+                        ? cachedCompany?.logo
+                        : typeof cachedCompany?.logo === 'object'
+                        ? URL.createObjectURL(cachedCompany?.logo as any)
                         : ''
                     }
-                    alt={company?.name || 'logo'}
+                    alt={company?.name || cachedCompany?.name || 'logo'}
                   />
                   <label
                     className={`flex cursor-pointer items-center rounded-[40px] bg-[rgb(248,249,252)]/90 px-4 py-2 font-sansMid text-xs font-medium text-indigoGray-90 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] min-w-[99px]`}
@@ -287,7 +301,10 @@ export const CompanyInformation: React.FC<Props> = ({
           size="large"
           className="text-indigoGray-5 ml-[auto] bg-teal-600"
           onClick={() => onNavigate(EditStepsEnum.DETAILS)}
-          disabled={!data || (!company && isNewCompany)}
+          disabled={
+            !opportunity?.company_info ||
+            (!company && !cachedCompany && isNewCompany)
+          }
         >
           Continue{' '}
           <SVG src="/icons/chevron-right.svg" className="ml-2 h-4 w-4" />
@@ -341,4 +358,9 @@ const updateCompany = async ({ id, ...company }: Partial<CompanyType>) => {
     formData
   );
   return data;
+};
+
+const getCompanies = async () => {
+  const { data } = await axios.get<ListResponse<CompanyType>>(`/companies/`);
+  return data.results;
 };

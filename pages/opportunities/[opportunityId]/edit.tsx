@@ -12,11 +12,7 @@ import {
   OpportunityDetails,
   OpportunityType,
 } from 'views/Opportunities/edit';
-import {
-  CompanyType,
-  ListResponse,
-  OpportunityType as Opportunity,
-} from 'types';
+import { OpportunityType as Opportunity } from 'types';
 import { axios } from 'lib/axios';
 import { useRouter } from 'next/router';
 import { useOpportunity } from '.';
@@ -41,7 +37,6 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
       ? EditStepsEnum.COMPANY_INFORMATION
       : EditStepsEnum.TYPE
   );
-  const [initialCompany, setInitialCompany] = React.useState<CompanyType>();
   const [opportunity, setOpportunity] = React.useState<
     Opportunity<string> | undefined
   >();
@@ -50,7 +45,6 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
     opportunityId,
     onSuccess: (data) => {
       if (data) {
-        setInitialCompany(data.company_info);
         setOpportunity({ ...data, company_info: data.company_info.id });
       }
     },
@@ -94,7 +88,6 @@ const Edit: React.FC<Props> = ({ opportunityId }) => {
       step: 2,
       component: (
         <CompanyInformation
-          initialCompany={initialCompany}
           opportunity={opportunity}
           onSubmit={(opportunity) => {
             handleOpportunity(opportunity);
