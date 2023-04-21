@@ -59,7 +59,7 @@ export const Container: React.FC<ContainerProps> & {
 
   return (
     <>
-      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto] xl:min-w-[1200px]">
+      <div className="flex w-full flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto] xl:w-[1200px]">
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col xl:max-w-fit">

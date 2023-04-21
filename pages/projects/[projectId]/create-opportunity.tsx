@@ -117,7 +117,7 @@ const Edit: React.FC<Props> = ({ projectId }) => {
 
   return (
     <Layout variant="plain" showMobileSidebar={false} className="!px-2">
-      <div className="flex flex-col grow space-y-6">
+      <div className="flex flex-col w-full xl:w-[1200px] xl:mx-[auto] space-y-6">
         <div className="border-transparent flex justify-center lg:border-b lg:border-b-indigoGray-20">
           <div className="px-4 pb-4 pt-6 flex space-x-3 items-center grow max-w-[730px] xl:max-w-[930px] lg:pt-16 lg:px-0">
             <Link href={`/projects/${projectId}`}>

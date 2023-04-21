@@ -34,6 +34,7 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
     enabled: !!opportunityId,
   });
 
+  console.log(applicants);
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
       <div className="flex flex-col space-y-4 px-4 pt-4 xl:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pb-[95px] xl:pt-16 xl:mx-[auto]">

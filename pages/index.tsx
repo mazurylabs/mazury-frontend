@@ -19,8 +19,8 @@ const Home = () => {
 
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
-      <div className="flex flex-col w-full lg:items-center pt-6 pb-4 lg:px-0 xl:pt-16">
-        <div className="lg:w-[1000px] space-y-4">
+      <div className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0 xl:pt-16">
+        <div className="w-full xl:w-[1200px] space-y-4">
           <h1 className="font-demi text-4xl text-indigoGray-90">
             Search for opportunities
           </h1>
@@ -46,7 +46,10 @@ const Home = () => {
             </div>
 
             <div className="p-2 pl-3 space-x-4 flex items-center rounded-lg bg-indigoGray-5">
-              <SVG src="/icons/search.svg" className="h-6 w-6" />
+              <SVG
+                src="/icons/search.svg"
+                className="h-6 w-6 text-indigoGray-90"
+              />
               <input
                 type="text"
                 placeholder="Search"

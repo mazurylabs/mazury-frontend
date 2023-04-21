@@ -52,7 +52,12 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
 
           <Link href="/search" passHref>
             <span className="sr-only">Search</span>
-            <SVG src="/icons/search.svg" width={24} height={24} />
+            <SVG
+              src="/icons/search.svg"
+              width={24}
+              height={24}
+              className="text-indigoGray-90"
+            />
           </Link>
 
           {!!profile && !!storedUser ? (
