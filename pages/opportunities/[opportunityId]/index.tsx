@@ -299,7 +299,7 @@ const ApplicantView: React.FC<{ opportunityId: string }> = ({
         >
           {isSuccess ? (
             <div className="h-[calc(100vh-90px)] lg:h-fit max-w-[370px] flex items-center">
-              <div className="rounded-lg bg-white shadow-base border-[0.6px] lg:rounded-none lg:bg-transparent lg:shadow-none lg:border-none">
+              <div className="rounded-lg bg-white shadow-base border-[0.6px]">
                 <div className="p-4 pb-0">
                   <div className="sticky top-0 flex justify-end">
                     <Popover.Close aria-label="Close">
