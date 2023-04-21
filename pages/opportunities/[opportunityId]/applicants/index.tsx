@@ -16,10 +16,25 @@ interface Props {
   opportunityId: string;
 }
 
-type ProjectTableRows = ProjectProfile & {
-  socials?: string;
-  onClick?: () => void;
-};
+interface Applicant {
+  applicant_profile: {
+    eth_address: string;
+    username: string;
+    avatar: string;
+    mazury_talent_verified: boolean;
+    location: string;
+    github: string;
+    twitter: string;
+    followers_count: string;
+    lens_handle: string;
+  };
+}
+
+type ProjectTableRows = Applicant &
+  ProjectProfile & {
+    socials?: string;
+    onClick?: () => void;
+  };
 
 const Applicants: React.FC<Props> = ({ opportunityId }) => {
   const isMobile = useMobile();
@@ -34,7 +49,6 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
     enabled: !!opportunityId,
   });
 
-  console.log(applicants);
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
       <div className="flex flex-col space-y-4 px-4 pt-4 xl:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pb-[95px] xl:pt-16 xl:mx-[auto]">
@@ -66,30 +80,33 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
             },
           }}
           isLoading={isLoading}
-          rows={[]}
+          rows={applicants?.map((applicant: any) => ({
+            ...applicant,
+            onClick: () => {},
+          }))}
           columns={[
             {
               title: 'Name',
               field: 'username',
               width: isMobile ? 25 : 30,
               withSorting: true,
-              Cell: ({ entry: { username, avatar, title } }) => (
+              Cell: ({ entry: { applicant_profile } }) => (
                 <div className="flex items-center space-x-3">
                   <Avatar
-                    src={avatar}
-                    alt={username}
+                    src={applicant_profile.avatar}
+                    alt={applicant_profile.username}
                     className="border border-[1.5px] border-indigoGray-30"
                   />
 
                   <div>
                     <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      {capitalize(username)}
+                      {capitalize(applicant_profile.username)}
                     </p>
-                    {title && (
+                    {/* {title && (
                       <p className="font-sans text-[13px] text-indigoGray-40">
                         {capitalize(title)}
                       </p>
-                    )}
+                    )} */}
                   </div>
                 </div>
               ),
@@ -109,25 +126,25 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
             {
               title: 'Socials',
               field: 'socials',
-              Cell: ({ entry: { twitter, lens_handle, github } }) => (
+              Cell: ({ entry: { applicant_profile } }) => (
                 <div className="flex items-center space-x-2">
-                  {twitter && (
+                  {applicant_profile.twitter && (
                     <LinkIcon
-                      url={`http://twitter.com/${twitter}`}
+                      url={`http://twitter.com/${applicant_profile.twitter}`}
                       icon="/icons/twitter-black.svg"
                     />
                   )}
 
-                  {lens_handle && (
+                  {applicant_profile.lens_handle && (
                     <LinkIcon
-                      url={`https://lenster.xyz/u/${lens_handle}`}
+                      url={`https://lenster.xyz/u/${applicant_profile.lens_handle}`}
                       icon={'/icons/lens.svg'}
                     />
                   )}
 
-                  {github && (
+                  {applicant_profile.github && (
                     <LinkIcon
-                      url={`https://github.com/${github}`}
+                      url={`https://github.com/${applicant_profile.github}`}
                       icon="/icons/github-black.svg"
                     />
                   )}

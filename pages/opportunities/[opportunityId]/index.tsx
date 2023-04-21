@@ -90,6 +90,9 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
 
             {data?.is_recruiter ? (
               <RecruiterView
+                handleViewApplicants={() =>
+                  router.push(`/opportunities/${opportunityId}/applicants`)
+                }
                 handleEdit={() =>
                   router.push(`/opportunities/${opportunityId}/edit`)
                 }
@@ -185,11 +188,13 @@ export default Opportunity;
 interface RecruiterViewProps {
   handleEdit: () => void;
   handleUnpublish: () => void;
+  handleViewApplicants: () => void;
 }
 
 const RecruiterView: React.FC<RecruiterViewProps> = ({
   handleEdit,
   handleUnpublish,
+  handleViewApplicants,
 }) => {
   const isMobile = useMobile();
 
@@ -201,8 +206,14 @@ const RecruiterView: React.FC<RecruiterViewProps> = ({
             <SVG src="/icons/more.svg" className="mr-1" />
           </button>
         </Popover.Trigger>
-        <Button disabled size="medium" className="hidden h-[37px] lg:flex">
-          <SVG src="/icons/user.svg" className="mr-2 h-4 w-4" />0 applications
+        <Button
+          onClick={handleViewApplicants}
+          size="medium"
+          className="hidden h-[37px] lg:flex"
+        >
+          {/* <SVG src="/icons/user.svg" className="mr-2 h-4 w-4" />0 applications */}
+          <SVG src="/icons/user.svg" className="mr-2 h-4 w-4" />
+          applications
         </Button>
       </div>
 
