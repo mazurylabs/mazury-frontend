@@ -88,7 +88,7 @@ const SearchPage: NextPage = () => {
   };
 
   return (
-    <div className="flex grow flex-col w-full xl:w-[1200px] xl:mx-[auto]">
+    <div className="flex grow flex-col w-full xl:w-[1200px] xl:mx-[auto] h-full">
       <div className="flex grow flex-col items-center pr-6 pt-8 md:px-0 lg:pt-16">
         <div
           ref={searchRef}
