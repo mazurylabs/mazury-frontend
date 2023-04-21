@@ -35,12 +35,6 @@ export const Sidebar: React.FC = () => {
   const navItems = {
     secondRow: [
       {
-        name: 'Dashboard',
-        to: '/projects',
-        icon: '/icons/dashboard.svg',
-        active: router.pathname.includes('projects'),
-      },
-      {
         name: 'Opportunities',
         to: '/',
         icon: '/icons/opportunities.svg',
@@ -53,7 +47,13 @@ export const Sidebar: React.FC = () => {
         icon: '/icons/search.svg',
         active: router.pathname.includes('search'),
       },
-    ],
+      storedUser?.is_recruiter && {
+        name: 'Projects',
+        to: '/projects',
+        icon: '/icons/dashboard.svg',
+        active: router.pathname.includes('projects'),
+      },
+    ].filter(Boolean),
     thirdRow: [
       storedUser && {
         name: 'Profile',
@@ -78,6 +78,11 @@ export const Sidebar: React.FC = () => {
         to: `/settings`,
         icon: '/icons/settings.svg',
         active: router.pathname.includes('settings'),
+      },
+      {
+        name: 'Give feedback',
+        icon: '/icons/help-circle.svg',
+        active: false,
       },
       storedUser && {
         name: 'Sign out',

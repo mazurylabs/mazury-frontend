@@ -1,14 +1,15 @@
 import { NextPage } from 'next';
 import * as React from 'react';
 import { toast, Toaster } from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/nextjs';
 
 import { Button, SettingsLayout } from 'components';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
-import { updateProfile } from '@/utils/api';
-
-import * as Sentry from '@sentry/nextjs';
+import { updateProfile } from 'utils/api';
 import { useUser } from 'providers/react-query-auth';
-import { useQueryClient } from '@tanstack/react-query';
+import storage from 'utils/storage';
+import { STORED_USER } from 'config';
 
 const EthAddressPage: NextPage = () => {
   useProtectedRoute();
@@ -22,11 +23,16 @@ const EthAddressPage: NextPage = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const { error } = await updateProfile(profile?.eth_address as string, '', {
-      is_recruiter: isRecruiter,
-    });
+    const { error, data } = await updateProfile(
+      profile?.eth_address as string,
+      '',
+      {
+        is_recruiter: isRecruiter,
+      }
+    );
 
     if (!error) {
+      storage.setToken(data, STORED_USER);
       queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
         ...prev,
         is_recruiter: isRecruiter,
