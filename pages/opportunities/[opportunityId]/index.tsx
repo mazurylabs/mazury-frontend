@@ -110,8 +110,12 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
               size="medium"
               variant="secondary"
               className="lg:hidden w-full bg-transparent"
+              onClick={() =>
+                router.push(`/opportunities/${opportunityId}/applicants`)
+              }
             >
-              See 3 candidates
+              {/* See 3 candidates */}
+              See candidates
               <SVG src="/icons/chevron-right.svg" className="h-4 w-4 ml-2" />
             </Button>
           )}
@@ -123,12 +127,14 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
                   <p className="text-indigoGray-40">Company name</p>
                   <div className="flex space-x-3">
                     <p>{opportunity.company_info.name}</p>
-                    <Link
-                      href={`/opportunities/${opportunityId}/edit?company-id=${opportunity.company_info.id}`}
-                      className=" text-indigo-600"
-                    >
-                      Edit company information
-                    </Link>
+                    {data?.is_recruiter && (
+                      <Link
+                        href={`/opportunities/${opportunityId}/edit?company-id=${opportunity.company_info.id}`}
+                        className=" text-indigo-600"
+                      >
+                        Edit company information
+                      </Link>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
