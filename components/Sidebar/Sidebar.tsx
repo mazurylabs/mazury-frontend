@@ -83,6 +83,8 @@ export const Sidebar: React.FC = () => {
         name: 'Give feedback',
         icon: '/icons/help-circle.svg',
         active: false,
+        onClick: () =>
+          window.open('https://mazury.canny.io/feedback', '_blank'),
       },
       storedUser && {
         name: 'Sign out',
@@ -118,7 +120,7 @@ export const Sidebar: React.FC = () => {
           <div className="flex flex-col">
             <button
               type="button"
-              className="justify-start hover:cursor-pointer"
+              className="justify-start hover:cursor-pointer h-6 w-6"
               aria-label="back"
               onClick={() => setSignInOpen(false)}
             >
@@ -138,7 +140,11 @@ export const Sidebar: React.FC = () => {
           >
             <div className="flex w-full items-center">
               <SidebarItem
-                icon={<SVG src="/new-logo.svg" className="h-8 w-8 shrink-0" />}
+                icon={
+                  <div className="h-8 w-8">
+                    <SVG src="/new-logo.svg" className="h-8 w-8 shrink-0" />
+                  </div>
+                }
                 href="/"
               />
             </div>
