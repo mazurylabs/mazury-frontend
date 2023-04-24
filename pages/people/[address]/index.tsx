@@ -40,7 +40,8 @@ const Profile = ({ ethAddress }: ProfileProps) => {
   );
 
   const navItems = Container.useNavItems({
-    address: ethAddress,
+    ensAddress: ethAddress,
+    address: address,
     activeItem: 'overview',
     profileId: accountInView?.lens_id as string,
   });
@@ -66,7 +67,7 @@ const Profile = ({ ethAddress }: ProfileProps) => {
           profile={accountInView}
         />
         <Idle
-          address={ethAddress}
+          address={address}
           isOwnProfile={isOwnProfile}
           profileSummaryAccordion={profileSummaryAccordion}
           lensId={accountInView?.lens_id || ''}

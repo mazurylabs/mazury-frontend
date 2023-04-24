@@ -82,7 +82,8 @@ const Credentials = ({ ethAddress }: CredentialsProps) => {
   };
 
   const navItems = Container.useNavItems({
-    address: ethAddress,
+    ensAddress: ethAddress,
+    address: address,
     activeItem: 'credentials',
     profileId: accountInView?.lens_id as string,
   });
