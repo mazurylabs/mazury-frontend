@@ -7,8 +7,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Layout } from 'components';
 import { useAlert } from 'components/Alert.tsx';
-import { OpportunityType as Opportunity } from 'types';
+import { OpportunityType as Opportunity, Profile } from 'types';
 import { axios } from 'lib/axios';
+import { useUser } from '@/providers/react-query-auth';
 
 import {
   CompanyInformation,
@@ -32,6 +33,7 @@ const Edit: React.FC<Props> = ({ projectId }) => {
   const router = useRouter();
   const { dispatch } = useAlert({});
   const queryClient = useQueryClient();
+  const { data: user } = useUser();
   const [selectedStep, setSelectedStep] = React.useState<EditStepsEnum>(
     EditStepsEnum.TYPE
   );
@@ -75,6 +77,7 @@ const Edit: React.FC<Props> = ({ projectId }) => {
       step: 2,
       component: (
         <CompanyInformation
+          user={user as Profile}
           opportunity={opportunity}
           onSubmit={(opportunity) => {
             handleOpportunity(opportunity);

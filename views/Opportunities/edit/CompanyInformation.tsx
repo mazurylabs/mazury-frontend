@@ -7,12 +7,13 @@ import clsx from 'clsx';
 
 import { Avatar, Button } from 'components';
 import { CustomInput } from '../CustomInput';
-import { CompanyType, ListResponse, OpportunityType } from 'types';
+import { CompanyType, ListResponse, OpportunityType, Profile } from 'types';
 import { axios } from 'lib/axios';
 import { EditStepsEnum } from 'pages/opportunities/[opportunityId]/edit';
 import { useAlert } from 'components/Alert.tsx';
 
 interface Props {
+  user?: Profile;
   opportunity?: OpportunityType<string>;
   onSubmit: (opportunity: Partial<OpportunityType<string>>) => void;
   onNavigate: (step: EditStepsEnum) => void;
@@ -31,6 +32,7 @@ const generateNewTreeValues = <T extends {}>(originalTree: T, newTree: T) => {
 };
 
 export const CompanyInformation: React.FC<Props> = ({
+  user,
   opportunity,
   onSubmit,
   onNavigate,
@@ -80,8 +82,14 @@ export const CompanyInformation: React.FC<Props> = ({
     mutationFn: () => {
       const payload =
         prevCompany.current && company
-          ? generateNewTreeValues<CompanyType>(prevCompany.current, company)
-          : company;
+          ? generateNewTreeValues<CompanyType>(prevCompany.current, {
+              ...company,
+              contact_email: company.contact_email || user?.email || '',
+            })
+          : {
+              ...company,
+              contact_email: company?.contact_email || user?.email || '',
+            };
 
       return updateCompany({
         ...payload,
@@ -170,12 +178,15 @@ export const CompanyInformation: React.FC<Props> = ({
                 label="Contact e-mail"
                 placeholder="Insert e-mail"
                 value={
-                  company?.contact_email || cachedCompany?.contact_email || ''
+                  company?.contact_email ||
+                  user?.email ||
+                  cachedCompany?.contact_email ||
+                  ''
                 }
                 onChange={(value) => handleChange({ contact_email: value })}
               />
               <CustomInput
-                label="Contact name"
+                label="Company name"
                 placeholder="Insert name"
                 value={company?.name || cachedCompany?.name || ''}
                 onChange={(value) => handleChange({ name: value })}
