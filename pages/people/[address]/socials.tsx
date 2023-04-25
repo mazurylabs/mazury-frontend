@@ -40,6 +40,7 @@ const Profile = ({ ethAddress }: SocialProps) => {
     : accountInView?.eth_address || '';
 
   const navItems = Container.useNavItems({
+    ensAddress: ethAddress,
     address,
     activeItem: 'overview',
     profileId: accountInView?.lens_id as string,
