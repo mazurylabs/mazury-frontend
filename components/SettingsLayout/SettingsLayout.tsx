@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import SVG from 'react-inlinesvg';
 import { Toaster, toast } from 'react-hot-toast';
 
-import { Button, Layout, Sidebar, Pill, Spinner } from 'components';
+import { Button, Layout, Pill, Spinner } from 'components';
 import { Toggle } from '../Toggle';
 import { updateProfile } from 'utils/api';
 import { useLogout, useUser } from 'providers/react-query-auth';
