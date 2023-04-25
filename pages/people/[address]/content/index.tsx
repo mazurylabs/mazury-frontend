@@ -56,8 +56,9 @@ const Writing = ({ ethAddress }: WritingProps) => {
   const isLoading = isLensLoading && isMirrorLoading;
 
   const navItems = Container.useNavItems({
+    ensAddress: ethAddress,
     activeItem: 'content',
-    address: ethAddress,
+    address,
     profileId: accountInView?.lens_id as string,
   });
 

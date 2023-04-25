@@ -143,10 +143,12 @@ const useNavItems = ({
   address,
   activeItem,
   profileId,
+  ensAddress,
 }: {
   address: string;
   activeItem: string;
   profileId: string;
+  ensAddress: string;
 }) => {
   const credentialCount = useCredentialCount(address);
   const { data, isLoading } = useLensPost({ profileId });
@@ -159,20 +161,20 @@ const useNavItems = ({
       +(credentialCount.data?.posts?.total || '0');
 
   const navItems = [
-    { label: 'Overview', isActive: false, href: `/people/${address}` },
+    { label: 'Overview', isActive: false, href: `/people/${ensAddress}` },
     {
       label: 'Credentials',
       isActive: false,
       value: credentialCount.data?.credentials?.total || '0',
       icon: '/icons/credentials.svg',
-      href: `/people/${address}/credentials`,
+      href: `/people/${ensAddress}/credentials`,
     },
     {
       label: 'Content',
       isActive: false,
       value: String(contentCount),
       icon: '/icons/content.svg',
-      href: `/people/${address}/content`,
+      href: `/people/${ensAddress}/content`,
     },
   ];
 

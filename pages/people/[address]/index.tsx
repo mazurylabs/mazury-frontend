@@ -39,7 +39,8 @@ const Profile = ({ ethAddress }: ProfileProps) => {
   );
 
   const navItems = Container.useNavItems({
-    address: ethAddress,
+    ensAddress: ethAddress,
+    address: address,
     activeItem: 'overview',
     profileId: accountInView?.lens_id as string,
   });
