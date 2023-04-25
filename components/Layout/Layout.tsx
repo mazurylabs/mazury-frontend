@@ -1,7 +1,8 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
-import { MobileSidebar, Sidebar } from 'components';
+import { MobileSidebar } from 'components';
+import { Sidebar } from './Sidebar';
 
 interface LayoutProps {
   variant?: 'plain';

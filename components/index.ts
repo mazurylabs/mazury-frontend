@@ -4,7 +4,6 @@ export { Pill } from './Pill';
 export { Input } from './Input';
 export { WalletRequestModal } from './WalletRequestModal';
 export { Progress } from './Progress';
-export { Sidebar } from './Sidebar';
 export { SettingsLayout } from './SettingsLayout';
 export { Error } from './Error';
 export { Table } from './Table';
