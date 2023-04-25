@@ -72,7 +72,7 @@ const Profile = ({ ethAddress }: ProfileProps) => {
           <Projects profileAddress={accountInView?.eth_address} />
         ) : (
           <Idle
-            address={ethAddress}
+            address={address}
             isOwnProfile={isOwnProfile}
             profileSummaryAccordion={profileSummaryAccordion}
             lensId={accountInView?.lens_id || ''}
