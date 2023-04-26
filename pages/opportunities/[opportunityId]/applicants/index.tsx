@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Avatar, Layout, Table } from 'components';
 import { ProjectProfile } from 'types';
 import { LinkIcon, Notes, StatusTags, Opportunity } from 'views/Opportunities';
-import { capitalize } from 'utils';
+import { capitalize, truncateString } from 'utils';
 import { useMobile } from 'hooks';
 import { useOpportunity } from '..';
 import { axios } from 'lib/axios';
@@ -27,7 +27,12 @@ interface Applicant {
     twitter: string;
     followers_count: string;
     lens_handle: string;
+    title: string;
+    website: string;
   };
+  resume: string;
+  email: string;
+  message: string;
 }
 
 type ProjectTableRows = Applicant &
@@ -82,7 +87,6 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
           isLoading={isLoading}
           rows={applicants?.map((applicant: any) => ({
             ...applicant,
-            onClick: () => {},
           }))}
           columns={[
             {
@@ -92,22 +96,26 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
               withSorting: true,
               Cell: ({ entry: { applicant_profile } }) => (
                 <div className="flex items-center space-x-3">
-                  <Avatar
-                    src={applicant_profile.avatar}
-                    alt={applicant_profile.username}
-                    className="border border-[1.5px] border-indigoGray-30"
-                  />
+                  <Link href={`/people/${applicant_profile.eth_address}`}>
+                    <Avatar
+                      src={applicant_profile.avatar}
+                      alt={applicant_profile.username}
+                      className="border border-[1.5px] border-indigoGray-30"
+                    />
+                  </Link>
 
-                  <div>
-                    <p className="font-sans text-sm font-medium text-indigoGray-90">
-                      {capitalize(applicant_profile.username)}
-                    </p>
-                    {/* {title && (
-                      <p className="font-sans text-[13px] text-indigoGray-40">
-                        {capitalize(title)}
+                  <Link href={`/people/${applicant_profile.eth_address}`}>
+                    <div>
+                      <p className="font-sans text-sm font-medium text-indigoGray-90">
+                        {capitalize(applicant_profile.username)}
                       </p>
-                    )} */}
-                  </div>
+                      {applicant_profile.title && (
+                        <p className="font-sans text-[13px] text-indigoGray-40">
+                          {capitalize(applicant_profile.title)}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
                 </div>
               ),
             },
@@ -121,27 +129,33 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
               title: 'Location',
               withSorting: true,
               field: 'location',
-              Cell: ({ entry }) => <>{capitalize(entry.location || 'N/A')}</>,
+              Cell: ({ entry: { applicant_profile } }) => (
+                <>{capitalize(applicant_profile.location || '—')}</>
+              ),
             },
             {
               title: 'Socials',
               field: 'socials',
               Cell: ({ entry: { applicant_profile } }) => (
                 <div className="flex items-center space-x-2">
+                  {applicant_profile.website && (
+                    <LinkIcon
+                      url={applicant_profile.website}
+                      icon="/icons/link.svg"
+                    />
+                  )}
                   {applicant_profile.twitter && (
                     <LinkIcon
                       url={`http://twitter.com/${applicant_profile.twitter}`}
                       icon="/icons/twitter-black.svg"
                     />
                   )}
-
                   {applicant_profile.lens_handle && (
                     <LinkIcon
                       url={`https://lenster.xyz/u/${applicant_profile.lens_handle}`}
                       icon={'/icons/lens.svg'}
                     />
                   )}
-
                   {applicant_profile.github && (
                     <LinkIcon
                       url={`https://github.com/${applicant_profile.github}`}
@@ -152,8 +166,34 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
               ),
             },
             {
-              title: 'Number of followers',
-              field: 'followers',
+              title: 'Email',
+              field: 'email',
+              Cell: ({ entry }) => (
+                <Link target="_blank" href={`mailto:${entry.email}`}>
+                  {entry.email}
+                </Link>
+              ),
+            },
+            {
+              title: 'Resume',
+              field: 'resume',
+              Cell: ({ entry }) => (
+                <Link target="_blank" href={entry.resume}>
+                  <SVG
+                    src="/icons/external-link.svg"
+                    className="text-indigoGray-90 hover:bg-indigoGray-20 w-6 h-6 rounded-full p-1"
+                    height={12}
+                    width={12}
+                  />
+                </Link>
+              ),
+            },
+            {
+              title: 'Message',
+              field: 'message',
+              Cell: ({ entry }) => (
+                <>{entry.message ? truncateString(entry.message, 10) : '—'}</>
+              ),
             },
             {
               title: 'Comments',
@@ -184,5 +224,5 @@ const getApplicants = async (opportunityId?: string) => {
   const { data } = await axios.get<any>(
     `/opportunities/${opportunityId}/applicants/`
   );
-  return data;
+  return data.applicants;
 };
