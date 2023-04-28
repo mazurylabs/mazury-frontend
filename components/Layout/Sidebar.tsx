@@ -161,7 +161,7 @@ export const Sidebar: React.FC = () => {
               ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {navItems.thirdRow.map((item) => (
                 <SidebarItem
                   key={item.name}
@@ -208,7 +208,7 @@ const SidebarItem = ({
     <Component
       {...props}
       className={clsx(
-        'transition-all rounded-md flex items-center space-x-3 font-sans text-sm font-semibold overflow-hidden w-full',
+        'transition-all rounded-md flex items-center space-x-3 font-sans text-sm font-medium overflow-hidden w-full',
         label && 'p-3 h-10',
         label && !active && 'hover:bg-indigoGray-10 hover:text-indigoGray-50',
         active
