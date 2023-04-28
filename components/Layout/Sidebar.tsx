@@ -213,8 +213,12 @@ const SidebarItem = ({
       className={clsx(
         'transition-all rounded-md flex items-center space-x-3 font-sans text-sm font-medium overflow-hidden w-full',
         variant === 'lg' ? 'h-10' : 'h-[16px]',
-        label && 'p-3',
-        label && !active && 'hover:bg-indigoGray-10 hover:text-indigoGray-50',
+        label && 'px-3',
+        label &&
+          !active &&
+          variant === 'lg' &&
+          'hover:bg-indigoGray-10 hover:text-indigoGray-50',
+        label && !active && variant === 'sm' && 'hover:text-indigoGray-50',
         active
           ? 'bg-indigoGray-90 text-indigo-50'
           : 'bg-transparent text-indigoGray-90'
