@@ -266,7 +266,7 @@ const GroupList: React.FC<{
                 key={project.id}
                 passHref
                 className={clsx(
-                  'overflow-hidden grow w-full rounded-lg lg:grow-0 shrink-0 lg:w-[calc(50%-16px)] bg-indigoGray-5 lg:odd:mr-4 mb-4',
+                  'overflow-hidden grow w-full rounded-lg lg:grow-0 shrink-0 lg:w-[calc(50%-16px)] bg-indigoGray-5 hover:bg-indigoGray-10 lg:odd:mr-4 mb-4',
                   isArchived && 'pointer-events-none'
                 )}
               >

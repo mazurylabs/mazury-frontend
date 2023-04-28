@@ -12,9 +12,6 @@ import { axios } from 'lib/axios';
 import { CompanyType, ListResponse, OpportunityType } from 'types';
 
 const Home = () => {
-  const isMobile = useMobile();
-  const router = useRouter();
-
   const { data, isLoading } = useOpportunities({ withId: false });
 
   return (
@@ -60,91 +57,7 @@ const Home = () => {
 
             <div className="space-y-3">
               {data?.results.map((opportunity) => (
-                <div
-                  key={opportunity.id}
-                  className="py-3 px-6 bg-indigoGray-5 space-y-3 rounded-lg"
-                >
-                  <div className="flex space-x-3">
-                    <Avatar
-                      src={opportunity.company_info.logo}
-                      alt={opportunity.company_info.name}
-                      variant="md"
-                      className="h-10 w-10 rounded-lg"
-                    />
-                    <div className="space-y-1">
-                      <p className="font-semibold font-sans text-sm text-indigoGray-90">
-                        {opportunity.company_info.name}
-                      </p>
-                      <p className="font-sans text-sm text-indigoGray-90">
-                        {truncateString(
-                          opportunity.company_info.description,
-                          isMobile ? 62 : 170
-                        )}
-                      </p>
-                      <div className="flex items-center space-x-2">
-                        <SVG src="/icons/user.svg" className="w-4 h-4" />
-                        <p className="font-sans text-xs font-medium text-indigoGray-90">
-                          {opportunity.company_info.size} people work here
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
-                    <div className=" font-sans font-medium flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className={clsx(
-                            'py-[2px] px-2 rounded-[32px]',
-                            opportunity.type === 'job'
-                              ? 'bg-sky-600'
-                              : 'bg-teal-600'
-                          )}
-                        >
-                          <p className="text-indigoGray-5 text-xs">
-                            {capitalize(opportunity.type)}
-                          </p>
-                        </div>
-
-                        <div className="space-y-1">
-                          <p className="text-sm text-indigoGray-90">
-                            {opportunity.title}
-                          </p>
-                          <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
-                            <p className="flex items-center">
-                              <SVG
-                                src="/icons/location.svg"
-                                className="h-4 w-4 mr-1"
-                              />
-                              {opportunity.location}
-                            </p>
-
-                            <p>{opportunity.work_mode}</p>
-
-                            <p className="flex items-center">
-                              <SVG
-                                src="/icons/history-alt.svg"
-                                className="h-4 w-4 mr-1"
-                              />
-                              {dayjs(opportunity.created_at).fromNow()}
-                            </p>
-
-                            <p>{opportunity.salary}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() =>
-                          router.push(`/opportunities/${opportunity.id}`)
-                        }
-                        className="max-h-[29px]"
-                      >
-                        Apply
-                      </Button>
-                    </div>
-                    {/* <div className="h-[1px] w-full bg-indigoGray-20 my-3" /> */}
-                  </div>
-                </div>
+                <Opportunity key={opportunity.id} opportunity={opportunity} />
               ))}
             </div>
           </div>
@@ -155,6 +68,87 @@ const Home = () => {
 };
 
 export default Home;
+
+type Opportunity = OpportunityType<CompanyType> & {
+  created_at: string;
+};
+
+const Opportunity = ({ opportunity }: { opportunity: Opportunity }) => {
+  const isMobile = useMobile();
+  const router = useRouter();
+  return (
+    <div className="py-3 px-6 bg-indigoGray-5 hover:bg-indigoGray-10 space-y-3 rounded-lg">
+      <div className="flex space-x-3">
+        <Avatar
+          src={opportunity.company_info.logo}
+          alt={opportunity.company_info.name}
+          variant="md"
+          className="h-10 w-10 rounded-lg"
+        />
+        <div className="space-y-1">
+          <p className="font-semibold font-sans text-sm text-indigoGray-90">
+            {opportunity.company_info.name}
+          </p>
+          <p className="font-sans text-sm text-indigoGray-90">
+            {truncateString(
+              opportunity.company_info.description,
+              isMobile ? 62 : 170
+            )}
+          </p>
+          <div className="flex items-center space-x-2">
+            <SVG src="/icons/user.svg" className="w-4 h-4" />
+            <p className="font-sans text-xs font-medium text-indigoGray-90">
+              {opportunity.company_info.size} people work here
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
+        <div className=" font-sans font-medium flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div
+              className={clsx(
+                'py-[2px] px-2 rounded-[32px]',
+                opportunity.type === 'job' ? 'bg-sky-600' : 'bg-teal-600'
+              )}
+            >
+              <p className="text-indigoGray-5 text-xs">
+                {capitalize(opportunity.type)}
+              </p>
+            </div>
+
+            <div className="space-y-1">
+              <p className="text-sm text-indigoGray-90">{opportunity.title}</p>
+              <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
+                <p className="flex items-center">
+                  <SVG src="/icons/location.svg" className="h-4 w-4 mr-1" />
+                  {opportunity.location}
+                </p>
+
+                <p>{opportunity.work_mode}</p>
+
+                <p className="flex items-center">
+                  <SVG src="/icons/history-alt.svg" className="h-4 w-4 mr-1" />
+                  {dayjs(opportunity.created_at).fromNow()}
+                </p>
+
+                <p>{opportunity.salary}</p>
+              </div>
+            </div>
+          </div>
+          <Button
+            onClick={() => router.push(`/opportunities/${opportunity.id}`)}
+            className="max-h-[29px]"
+          >
+            Apply
+          </Button>
+        </div>
+        {/* <div className="h-[1px] w-full bg-indigoGray-20 my-3" /> */}
+      </div>
+    </div>
+  );
+};
 
 const getOpportunitites = async (projectId?: string) => {
   const { data } = await axios.get<

@@ -147,7 +147,12 @@ export const CompanyInformation: React.FC<Props> = ({
           </button>
         ))}
 
-      <div className="border rounded-lg border-indigoGray-20 w-full space-y-4 pb-3">
+      <div
+        className={clsx(
+          'border rounded-lg border-indigoGray-20 w-full space-y-4 pb-3',
+          !isNewCompany && 'hover:border-indigoGray-30'
+        )}
+      >
         <button
           type="button"
           className="flex items-center space-x-4 px-4 pt-3 w-full"

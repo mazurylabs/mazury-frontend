@@ -69,7 +69,7 @@ const Profile = ({ ethAddress }: ProfileProps) => {
           profile={accountInView}
         />
         {isSaveProfileView ? (
-          <Projects profileAddress={accountInView?.eth_address} />
+          <Projects profileAddress={address} />
         ) : (
           <Idle
             address={address}
