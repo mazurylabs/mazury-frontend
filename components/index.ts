@@ -7,7 +7,6 @@ export { Progress } from './Progress';
 export { SettingsLayout } from './SettingsLayout';
 export { Error } from './Error';
 export { Table } from './Table';
-export { MobileSidebar } from './MobileSidebar';
 export * from './Button';
 export * from './Checkbox';
 export * from './Modal';
