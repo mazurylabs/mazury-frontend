@@ -170,6 +170,7 @@ export const Sidebar: React.FC = () => {
                   href={item.to}
                   onClick={item.onClick}
                   active={item.active}
+                  variant="sm"
                 />
               ))}
             </div>
@@ -194,12 +195,14 @@ type SidebarItemProps = {
   active?: boolean;
   href: string;
   onClick?: () => void;
+  variant?: 'sm' | 'lg';
 };
 
 const SidebarItem = ({
   label,
   icon,
   active = false,
+  variant = 'lg',
   ...props
 }: SidebarItemProps) => {
   const Component = props.href ? Link : 'button';
@@ -209,7 +212,8 @@ const SidebarItem = ({
       {...props}
       className={clsx(
         'transition-all rounded-md flex items-center space-x-3 font-sans text-sm font-medium overflow-hidden w-full',
-        label && 'p-3 h-10',
+        variant === 'lg' ? 'h-10' : 'h-[16px]',
+        label && 'p-3',
         label && !active && 'hover:bg-indigoGray-10 hover:text-indigoGray-50',
         active
           ? 'bg-indigoGray-90 text-indigo-50'
