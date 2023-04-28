@@ -4,6 +4,7 @@ import NextHead from 'next/head';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { Inter } from '@next/font/google';
 dayjs.extend(relativeTime);
 
 import {
@@ -20,6 +21,8 @@ import { useLogout } from 'providers/react-query-auth';
 
 import { REFRESH_TOKEN_KEY } from 'config';
 import storage from 'utils/storage';
+
+const inter = Inter({ subsets: ['latin'] });
 
 const queryConfig: DefaultOptions = {
   queries: {
@@ -41,7 +44,9 @@ const App = (props: AppProps) => {
         <link rel="icon" href="/new-logo.svg" />
       </NextHead>
 
-      <SessionAuthenticator {...props} />
+      <div className={inter.className}>
+        <SessionAuthenticator {...props} />
+      </div>
     </AppProvider>
   );
 };
