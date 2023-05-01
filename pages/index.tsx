@@ -22,26 +22,6 @@ const Home = () => {
             Search for opportunities
           </h1>
           <div className="space-y-2">
-            <div className="flex space-x-4">
-              <Button size="medium" className="max-w-[66px] max-h-[37px]">
-                All <span>18</span>
-              </Button>
-              <Button
-                size="large"
-                className="max-w-[66px] font-medium max-h-[37px]"
-                variant="tertiary"
-              >
-                Job <span className="text-indigoGray-40">18</span>
-              </Button>
-              <Button
-                size="large"
-                className="max-w-[66px] font-medium max-h-[37px]"
-                variant="tertiary"
-              >
-                Other <span className="text-indigoGray-40">18</span>
-              </Button>
-            </div>
-
             <div className="p-2 pl-3 space-x-4 flex items-center rounded-lg bg-indigoGray-5">
               <SVG
                 src="/icons/search.svg"
@@ -86,18 +66,18 @@ const Opportunity = ({ opportunity }: { opportunity: Opportunity }) => {
           className="h-10 w-10 rounded-lg"
         />
         <div className="space-y-1">
-          <p className="font-semibold font-sans text-sm text-indigoGray-90">
+          <p className="font-medium font-sans text-sm text-indigoGray-90">
             {opportunity.company_info.name}
           </p>
-          <p className="font-sans text-sm text-indigoGray-90">
+          <p className="font-sans text-sm text-indigoGray-90 font-light">
             {truncateString(
               opportunity.company_info.description,
-              isMobile ? 62 : 170
+              isMobile ? 62 : 160
             )}
           </p>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 bg-indigoGray-10 max-w-max px-2 py-0.5 rounded-3xl">
             <SVG src="/icons/user.svg" className="w-4 h-4" />
-            <p className="font-sans text-xs font-medium text-indigoGray-90">
+            <p className="font-sans text-xs font-normal text-indigoGray-90">
               {opportunity.company_info.size} people work here
             </p>
           </div>
@@ -105,7 +85,7 @@ const Opportunity = ({ opportunity }: { opportunity: Opportunity }) => {
       </div>
 
       <div className="py-2 px-4 border border-indigoGray-20 rounded-md">
-        <div className=" font-sans font-medium flex items-center justify-between">
+        <div className=" font-sans font-normal flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div
               className={clsx(

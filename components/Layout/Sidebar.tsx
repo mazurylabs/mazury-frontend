@@ -211,8 +211,8 @@ const SidebarItem = ({
     <Component
       {...props}
       className={clsx(
-        'transition-all rounded-md flex items-center space-x-3 font-sans text-sm font-medium overflow-hidden w-full',
-        variant === 'lg' ? 'h-10' : 'h-[16px]',
+        'transition-all rounded-md flex items-center space-x-3 font-sans text-sm overflow-hidden w-full',
+        variant === 'lg' ? 'h-10 font-medium' : 'h-[16px] font-normal',
         label && 'px-3',
         label &&
           !active &&
