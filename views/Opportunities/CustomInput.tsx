@@ -21,7 +21,6 @@ export const CustomInput: React.FC<
             )}
           </div>
         }
-        className="!text-indigoGray-50"
         {...props}
         onChange={onChange}
       />
