@@ -14,6 +14,7 @@ interface Props {
   externalUrl?: string;
   candidatesUrl?: string;
   opportunityUrl?: string;
+  applicants_count: number;
 }
 
 export const Opportunity: React.FC<Props> = ({
@@ -25,6 +26,7 @@ export const Opportunity: React.FC<Props> = ({
   salary,
   externalUrl,
   companyName,
+  applicants_count,
 }) => {
   return (
     <div
@@ -73,14 +75,18 @@ export const Opportunity: React.FC<Props> = ({
       </div>
 
       {(opportunityUrl || candidatesUrl) && (
-        <div className="flex space-x-3 font-sans text-sm font-semibold text-indigoGray-90">
-          {candidatesUrl && (
+        <div className="flex space-x-3 font-sans text-sm font-medium text-indigoGray-90">
+          {candidatesUrl && applicants_count > 0 ? (
             <Link
               href={candidatesUrl}
               className="p-2 border-[1.5px] border-transparent rounded-lg"
             >
-              See 3 candidates
+              See {applicants_count} candidates
             </Link>
+          ) : (
+            <p className="p-2 border-[1.5px] border-transparent rounded-lg text-indigoGray-50">
+              No candidates yet
+            </p>
           )}
           {opportunityUrl && (
             <Link

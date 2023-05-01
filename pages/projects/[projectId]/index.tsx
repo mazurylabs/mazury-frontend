@@ -71,6 +71,7 @@ const Project = ({ projectId }: ProfileProps) => {
             logo={opportunity.company_info.logo}
             opportunityUrl={`/opportunities/${opportunity.id}`}
             candidatesUrl={`/opportunities/${opportunity.id}/applicants`}
+            applicants_count={opportunity.applicants_count}
           />
         ) : (
           <Link

@@ -281,7 +281,7 @@ const GroupList: React.FC<{
                 <div className="px-6 py-3 bg-indigoGray-10 border-t border-t-indigoGray-20 flex items-center justify-between">
                   {!project.saved_profiles_preview_count ? (
                     <p className="text-indigoGray-40 font-sans text-sm">
-                      No users saved
+                      No profiles saved
                     </p>
                   ) : (
                     <div className="flex items-center">
@@ -313,16 +313,16 @@ const GroupList: React.FC<{
                           <p className="text-indigoGray-50 text-[10px] font-sans">
                             +
                             {project.saved_profiles_preview_count -
-                              project.saved_profiles_preview.length}
+                              project.saved_profiles_preview.length}{' '}
+                            profiles saved
                           </p>
                         )}
                       </div>
                     </div>
                   )}
-                  <p className="font-sans text-[13px] text-indigoGray-90">
-                    {project.saved_profiles_preview_count} candidate
-                    {project.saved_profiles_preview_count !== 1 && 's'}
-                  </p>
+                  {/* <p className="font-sans text-[13px] text-indigoGray-90">
+                    Opportunity live
+                  </p> */}
                 </div>
               </Link>
             ))}
