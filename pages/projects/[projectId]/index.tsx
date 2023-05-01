@@ -10,12 +10,11 @@ import { useRouter } from 'next/router';
 import { Avatar, Layout, Table } from 'components';
 import { useClickOutside, useMobile } from 'hooks';
 import { capitalize, truncateString } from 'utils';
-import { Project, ProjectProfile } from 'types';
+import { CompanyType, OpportunityType, Project, ProjectProfile } from 'types';
 import { axios } from 'lib/axios';
 import { useAlert } from 'components/Alert.tsx';
 import { useUser } from 'providers/react-query-auth';
 import { LinkIcon, Notes, Opportunity, StatusTags } from 'views/Opportunities';
-import { useOpportunities } from '@/pages';
 
 type ProjectTableRows = ProjectProfile & {
   socials?: string;
@@ -29,6 +28,8 @@ const Project = ({ projectId }: ProfileProps) => {
   const { data: user } = useUser();
   const router = useRouter();
   const [projectTitle, setProjectTitle] = React.useState('Untitled project');
+  const [opportunity, setOpportunity] =
+    React.useState<OpportunityType<CompanyType>>();
   const prevTitle = React.useRef<string>(projectTitle);
   const { dispatch } = useAlert({});
 
@@ -38,16 +39,16 @@ const Project = ({ projectId }: ProfileProps) => {
     enabled: !!projectId,
     onSuccess: (data) => {
       setProjectTitle(data.project.name);
+      getOpportunity(data.project.opportunity_id);
       prevTitle.current = data.project.name;
     },
   });
 
-  const { data: opportunities, isLoading: isProjectLoading } = useOpportunities(
-    {
-      projectId,
-      withId: true,
-    }
-  );
+  const getOpportunity = async (opportunityId: string) => {
+    if (opportunityId === null) return;
+    const { data } = await axios.get(`/opportunities/${opportunityId}`);
+    setOpportunity(data);
+  };
 
   return (
     <Layout variant="plain">
@@ -60,19 +61,17 @@ const Project = ({ projectId }: ProfileProps) => {
           ref={prevTitle}
         />
 
-        {opportunities?.count ? (
-          opportunities.results.map((opportunity) => (
-            <Opportunity
-              key={opportunity.id}
-              title={opportunity.title}
-              companyName={opportunity.company_info.name}
-              location={opportunity.location}
-              salary={opportunity.salary}
-              logo={opportunity.company_info.logo}
-              opportunityUrl={`/opportunities/${opportunity.id}`}
-              candidatesUrl={`/opportunities/${opportunity.id}/applicants`}
-            />
-          ))
+        {opportunity ? (
+          <Opportunity
+            key={opportunity.id}
+            title={opportunity.title}
+            companyName={opportunity.company_info.name}
+            location={opportunity.location}
+            salary={opportunity.salary}
+            logo={opportunity.company_info.logo}
+            opportunityUrl={`/opportunities/${opportunity.id}`}
+            candidatesUrl={`/opportunities/${opportunity.id}/applicants`}
+          />
         ) : (
           <Link
             href={`/projects/${projectId}/create-opportunity`}
