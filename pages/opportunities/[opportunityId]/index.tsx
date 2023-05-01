@@ -448,7 +448,8 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                     <CustomInput
                       label="Email"
                       placeholder="Insert email"
-                      value={application?.email || user?.email}
+                      defaultValue={user?.email || ''}
+                      value={application?.email}
                       onChange={(value) => handleChange({ email: value })}
                     />
 
@@ -495,7 +496,8 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                       placeholder="Insert website"
                       info="Own website, Twitter, discord or any other"
                       required={false}
-                      value={application?.website || user?.website}
+                      defaultValue={user?.website || ''}
+                      value={application?.website}
                       onChange={(value) => handleChange({ website: value })}
                     />
 
@@ -521,9 +523,12 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                     className="rounded-t-none sticky w-full left-0 bottom-0"
                     type="submit"
                     loading={isLoading}
-                    disabled={!application?.email || !application.resume}
+                    disabled={
+                      (!application?.email && !user?.email) ||
+                      !application?.resume
+                    }
                   >
-                    Send request
+                    Send application
                   </Button>
                 </form>
               </div>
