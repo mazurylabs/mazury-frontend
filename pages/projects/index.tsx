@@ -94,7 +94,7 @@ const Dashboard = () => {
 
         <div className="h-fit shrink-0 space-y-[40px] font-sans xl:border-l xl:border-l-indigoGray-20 xl:py-6 xl:pl-10">
           <div className="ml-2 mt-4 space-y-2 border-l border-l-indigoGray-20 pl-4 xl:m-0 xl:max-w-[210px] xl:border-none xl:pl-0">
-            <p className="font-semibold text-indigoGray-90">
+            <p className="font-medium text-indigoGray-90">
               Recruiting with Mazury
             </p>
             <p className="text-sm">
@@ -103,14 +103,14 @@ const Dashboard = () => {
             </p>
             <a
               href="#"
-              className="font-sm flex cursor-pointer font-semibold text-indigo-600 hover:bg-indigoGray-5 w-fit xl:px-2 xl:py-1 rounded-lg"
+              className="font-sm flex cursor-pointer font-medium text-indigo-600 hover:bg-indigoGray-5 w-fit xl:px-2 xl:py-1 rounded-lg"
             >
               Contact us
             </a>
           </div>
 
           <div className="ml-2 mt-4 space-y-2 border-l border-l-indigoGray-20 pl-4 xl:m-0 xl:max-w-[210px] xl:border-none xl:pl-0">
-            <p className="font-semibold text-indigoGray-90">
+            <p className="font-medium text-indigoGray-90">
               Candidates open to new positions
             </p>
             <p className="text-sm">
@@ -119,7 +119,7 @@ const Dashboard = () => {
             </p>
             <a
               href="#"
-              className="font-sm flex cursor-pointer font-semibold text-indigo-600 hover:bg-indigoGray-5 w-fit xl:px-2 xl:py-1 rounded-lg"
+              className="font-sm flex cursor-pointer font-medium text-indigo-600 hover:bg-indigoGray-5 w-fit xl:px-2 xl:py-1 rounded-lg"
             >
               Use the filter
             </a>
@@ -148,7 +148,7 @@ const LoadingState = () => {
     >
       <Accordion.Item value={`project-group-1`}>
         <Accordion.Header className="mb-2">
-          <Accordion.Trigger className="data-[state=open]:[&>svg]:text-red-200 font-sans font-medium text-xs text-indigoGray-40 flex items-center">
+          <Accordion.Trigger className="data-[state=open]:[&>svg]:text-red-200 font-sans font-normal text-xs text-indigoGray-40 flex items-center">
             <SVG
               src="/icons/chevron-down-black.svg"
               height={16}
@@ -206,7 +206,7 @@ const EmptyState: React.FC<ProjectEmptyStateType> = ({
   if (isArchived) {
     return (
       <div className="px-6 py-4 space-y-1 font-sans text-indigoGray-90 bg-indigoGray-5 rounded-lg max-w-[423px]">
-        <p className="font-semibold">Nothing to see here</p>
+        <p className="font-medium">Nothing to see here</p>
         <p className="text-sm">
           Once you archive a project you will be able to find it here
         </p>
@@ -220,7 +220,7 @@ const EmptyState: React.FC<ProjectEmptyStateType> = ({
       onClick={handleCreateProject}
       className="flex w-full hover:bg-indigoGray-5 flex-col items-center space-y-2 rounded-md border border-[2px] border-dashed border-[#E2E6F0] px-8 py-6 font-sans lg:py-4 xl:w-[400px] xl:border-solid"
     >
-      <span className="text-black flex items-center font-sans text-lg font-medium">
+      <span className="text-black flex items-center font-sans text-lg font-normal">
         <SVG src="/icons/plus.svg" className="mr-2" />
         Create a project
       </span>
@@ -248,7 +248,7 @@ const GroupList: React.FC<{
           value={`project-group-${index + 1}`}
         >
           <Accordion.Header className="mb-2">
-            <Accordion.Trigger className="data-[state=open]:[&>svg]:text-red-200 font-sans font-medium text-xs text-indigoGray-40 flex items-center">
+            <Accordion.Trigger className="data-[state=open]:[&>svg]:text-red-200 font-sans font-normal text-xs text-indigoGray-40 flex items-center">
               <SVG
                 src="/icons/chevron-down-black.svg"
                 height={16}
@@ -271,7 +271,7 @@ const GroupList: React.FC<{
                 )}
               >
                 <div className="space-y-1 p-6">
-                  <p className="font-sans font-medium text-indigoGray-90">
+                  <p className="font-sans font-normal text-indigoGray-90">
                     {project.name}
                   </p>
                   <p className="text-xs font-sans text-[#646B8B]">
@@ -346,8 +346,8 @@ const TabButton = ({
     className={clsx(
       'rounded-md px-3 py-1 font-sans text-sm',
       active
-        ? 'bg-indigoGray-90 font-semibold text-indigoGray-5'
-        : 'bg-transparent font-medium text-indigoGray-90'
+        ? 'bg-indigoGray-90 font-medium text-indigoGray-5'
+        : 'bg-transparent font-normal text-indigoGray-90'
     )}
     {...props}
   >
