@@ -219,9 +219,9 @@ const SidebarItem = ({
           variant === 'lg' &&
           'hover:bg-indigoGray-10 hover:text-indigoGray-50',
         label && !active && variant === 'sm' && 'hover:text-indigoGray-50',
-        active
-          ? 'bg-indigoGray-90 text-indigo-50'
-          : 'bg-transparent text-indigoGray-90'
+        active && variant === 'lg' && 'bg-indigoGray-90 text-indigo-50',
+        active && variant === 'sm' && 'text-indigoGray-50',
+        !active && variant === 'lg' && 'bg-transparent text-indigoGray-90'
       )}
     >
       {typeof icon === 'string' ? (
