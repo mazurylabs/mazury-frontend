@@ -73,6 +73,7 @@ const Applicants: React.FC<Props> = ({ opportunityId }) => {
             location={`${data?.location}, ${data?.work_mode}`}
             salary={data?.salary}
             logo={data?.company_info.logo}
+            applicants_count={data?.applicants_count}
           />
         )}
 
