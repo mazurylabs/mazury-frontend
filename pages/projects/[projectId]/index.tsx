@@ -10,11 +10,12 @@ import { useRouter } from 'next/router';
 import { Avatar, Layout, Table } from 'components';
 import { useClickOutside, useMobile } from 'hooks';
 import { capitalize, truncateString } from 'utils';
-import { CompanyType, OpportunityType, Project, ProjectProfile } from 'types';
+import { Project, ProjectProfile } from 'types';
 import { axios } from 'lib/axios';
 import { useAlert } from 'components/Alert.tsx';
 import { useUser } from 'providers/react-query-auth';
 import { LinkIcon, Notes, Opportunity, StatusTags } from 'views/Opportunities';
+import { useOpportunity } from '@/pages/opportunities/[opportunityId]';
 
 type ProjectTableRows = ProjectProfile & {
   socials?: string;
@@ -28,8 +29,7 @@ const Project = ({ projectId }: ProfileProps) => {
   const { data: user } = useUser();
   const router = useRouter();
   const [projectTitle, setProjectTitle] = React.useState('Untitled project');
-  const [opportunity, setOpportunity] =
-    React.useState<OpportunityType<CompanyType>>();
+  const [opportunityId, setOpportunityId] = React.useState<string>('');
   const prevTitle = React.useRef<string>(projectTitle);
   const { dispatch } = useAlert({});
 
@@ -39,20 +39,16 @@ const Project = ({ projectId }: ProfileProps) => {
     enabled: !!projectId,
     onSuccess: (data) => {
       setProjectTitle(data.project.name);
-      getOpportunity(data.project.opportunity_id);
+      setOpportunityId(data.project.opportunity_id);
       prevTitle.current = data.project.name;
     },
   });
 
-  const getOpportunity = async (opportunityId: string) => {
-    if (opportunityId === null) return;
-    const { data } = await axios.get(`/opportunities/${opportunityId}`);
-    setOpportunity(data);
-  };
+  const { data: opportunity } = useOpportunity({ opportunityId });
 
   return (
     <Layout variant="plain">
-      <div className="flex flex-col space-y-4 px-4 pt-4 lg:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pt-10 xl:pb-[95px]">
+      <div className="flex flex-col space-y-4 px-4 pt-4 lg:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pt-6 xl:pb-[95px]">
         <ProjectHeader
           value={projectTitle}
           onChange={(value) => setProjectTitle(value)}
