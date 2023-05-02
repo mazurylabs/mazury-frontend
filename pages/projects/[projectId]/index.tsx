@@ -256,7 +256,7 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
 
           <div
             className={clsx(
-              'relative h-8 font-sans text-2xl font-medium text-indigoGray-90'
+              'relative h-8 font-sans text-2xl font-normal text-indigoGray-90'
             )}
           >
             <button

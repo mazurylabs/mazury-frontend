@@ -42,8 +42,8 @@ export const Opportunity: React.FC<Props> = ({
           variant="md"
           className="h-10 w-10 rounded-lg"
         />
-        <div className="space-y-1 font-sans font-medium">
-          <p className="whitespace-nowrap text-sm text-indigoGray-90 font-semibold">
+        <div className="space-y-1 font-sans font-normal">
+          <p className="whitespace-nowrap text-sm text-indigoGray-90 font-medium">
             {title}
           </p>
           <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
@@ -77,7 +77,7 @@ export const Opportunity: React.FC<Props> = ({
       {(opportunityUrl || candidatesUrl) && (
         // Opening Links in new tabs so the user doesn't loose their project context
 
-        <div className="flex space-x-3 font-sans text-sm font-medium text-indigoGray-90">
+        <div className="flex space-x-3 font-sans text-sm font-normal text-indigoGray-90">
           {candidatesUrl && applicants_count > 0 ? (
             <Link
               href={candidatesUrl}
