@@ -66,7 +66,7 @@ const Project = ({ projectId }: ProfileProps) => {
             salary={opportunity.salary}
             logo={opportunity.company_info.logo}
             opportunityUrl={`/opportunities/${opportunity.id}`}
-            candidatesUrl={`/opportunities/${opportunity.id}/applicants`}
+            candidatesUrl={`/opportunities/${opportunity.id}/candidates`}
             applicants_count={opportunity.applicants_count}
           />
         ) : (
@@ -256,7 +256,7 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
 
           <div
             className={clsx(
-              'relative h-8 font-sans text-2xl font-medium text-indigoGray-90'
+              'relative h-8 font-sans text-2xl font-normal text-indigoGray-90'
             )}
           >
             <button

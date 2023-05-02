@@ -112,6 +112,14 @@ export const CompanyInformation: React.FC<Props> = ({
     }
   };
 
+  const handleBackButton = () => {
+    if (isNewCompany) {
+      setIsNewCompany(false);
+    } else {
+      onNavigate(EditStepsEnum.TYPE);
+    }
+  };
+
   return (
     <div className="w-full space-y-4 pb-10">
       {companies?.length &&
@@ -306,7 +314,7 @@ export const CompanyInformation: React.FC<Props> = ({
         <Button
           variant="tertiary"
           size="large"
-          onClick={() => onNavigate(EditStepsEnum.TYPE)}
+          onClick={() => handleBackButton()}
         >
           <SVG src="/icons/chevron-left.svg" className="mr-2 h-4 w-4" />
           Back
