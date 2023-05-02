@@ -2,7 +2,7 @@
 
 exports[`Input disabled 1`] = `
 <input
-  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sansMid text-sm font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 cursor-not-allowed border-indigoGray-40 bg-indigoGray-10 false undefined"
+  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sans text-sm font-normal text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 cursor-not-allowed border-indigoGray-40 bg-indigoGray-10 false undefined"
   disabled=""
   id="input-1"
   placeholder="Placeholder"
@@ -13,7 +13,7 @@ exports[`Input disabled 1`] = `
 
 exports[`Input error 1`] = `
 <input
-  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sansMid text-sm font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 false border-red-500 text-red-500 undefined"
+  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sans text-sm font-normal text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 false border-red-500 text-red-500 undefined"
   id="input-1"
   placeholder="Placeholder"
   type="text"
@@ -23,7 +23,7 @@ exports[`Input error 1`] = `
 
 exports[`Input input with label and placeholder 1`] = `
 <input
-  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sansMid text-sm font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 false false undefined"
+  class="block rounded-lg border border-indigoGray-20 px-4 py-3 font-sans text-sm font-normal text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 false false undefined"
   id="input-1"
   placeholder="Placeholder"
   type="text"
