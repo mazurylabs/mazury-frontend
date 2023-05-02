@@ -187,7 +187,7 @@ const OpportunityView = ({
         {isRecruiter ? (
           <RecruiterView
             handleViewApplicants={() =>
-              router.push(`/opportunities/${opportunityId}/applicants`)
+              router.push(`/opportunities/${opportunityId}/candidates`)
             }
             handleEdit={() =>
               router.push(`/opportunities/${opportunityId}/edit`)
@@ -311,9 +311,8 @@ const RecruiterView: React.FC<RecruiterViewProps> = ({
           className="hidden h-[37px] lg:flex"
           disabled={!handleViewApplicants}
         >
-          {/* <SVG src="/icons/user.svg" className="mr-2 h-4 w-4" />0 applications */}
-          <SVG src="/icons/user.svg" className="mr-2 h-4 w-4" />
-          applications
+          <SVG src="/icons/user.svg" className="mr-1 h-4 w-4" />
+          See candidates
         </Button>
       </div>
 
