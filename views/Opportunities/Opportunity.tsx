@@ -75,22 +75,26 @@ export const Opportunity: React.FC<Props> = ({
       </div>
 
       {(opportunityUrl || candidatesUrl) && (
+        // Opening Links in new tabs so the user doesn't loose their project context
+
         <div className="flex space-x-3 font-sans text-sm font-medium text-indigoGray-90">
           {candidatesUrl && applicants_count > 0 ? (
             <Link
               href={candidatesUrl}
+              target="_blank"
               className="p-2 border-[1.5px] border-transparent rounded-lg"
             >
               See {applicants_count} candidates
             </Link>
           ) : (
-            <p className="p-2 border-[1.5px] border-transparent rounded-lg text-indigoGray-50">
+            <p className="p-2 border-[1.5px] border-transparent rounded-lg text-indigoGray-50 font-normal">
               No candidates yet
             </p>
           )}
           {opportunityUrl && (
             <Link
               href={opportunityUrl}
+              target="_blank"
               className="p-2 border-[1.5px] border-indigoGray-20 rounded-lg"
             >
               See opportunity
