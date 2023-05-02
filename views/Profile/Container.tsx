@@ -65,7 +65,7 @@ export const Container: React.FC<ContainerProps> & {
         <div className="relative flex grow flex-col xl:max-w-fit">
           <div
             className={clsx(
-              'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:pt-10 lg:pb-6',
+              'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:py-6',
               title && 'sticky'
             )}
           >

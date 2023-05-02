@@ -31,7 +31,7 @@ const Skeleton: React.FC<{
   intersectionRef?: React.MutableRefObject<HTMLDivElement>;
 }> = ({ intersectionRef }) => {
   return (
-    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
+    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-6 lg:z-10 lg:mt-6 lg:w-[350px] lg:shrink-0">
       <div className="h-[114px] w-full animate-pulse bg-indigoGray-30" />
       <div className="relative bg-indigoGray-5 px-4 pb-6">
         <div className="relative top-[-26px] mb-[-10px] flex items-center space-x-2">
@@ -95,7 +95,7 @@ export const ProfileSummary = ({
   return (
     <>
       <Toaster />
-      <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
+      <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-6 lg:z-10 lg:mt-6 lg:w-[350px] lg:shrink-0">
         <motion.div
           className={clsx('h-[114px] w-full bg-gradient-3')}
           style={isMobile ? { opacity } : undefined}

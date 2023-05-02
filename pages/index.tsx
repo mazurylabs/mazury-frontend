@@ -16,7 +16,7 @@ const Home = () => {
 
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
-      <div className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0 xl:pt-16">
+      <div className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0">
         <div className="w-full xl:w-[1200px] space-y-4">
           <h1 className="font-demi text-4xl text-indigoGray-90">
             Search for opportunities

@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   return (
     <Layout variant="plain">
-      <div className="flex grow flex-col space-y-8 px-4 pt-4 xl:flex-row lg:px-0 xl:mx-[auto] xl:w-[1200px] xl:space-x-[40px] xl:space-y-0 xl:pt-10 xl:pb-[95px]">
+      <div className="flex grow flex-col space-y-8 px-4 pt-4 xl:flex-row lg:px-0 xl:mx-[auto] xl:w-[1200px] xl:space-x-[40px] xl:space-y-0 xl:pt-6 xl:pb-[95px]">
         <div className="space-y-4 xl:grow">
           <div className="flex justify-between">
             <h1 className="font-demi text-4xl text-indigoGray-90">Dashboard</h1>

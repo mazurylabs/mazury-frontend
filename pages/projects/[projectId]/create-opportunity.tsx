@@ -121,8 +121,8 @@ const Edit: React.FC<Props> = ({ projectId }) => {
   return (
     <Layout variant="plain" showMobileSidebar={false} className="!px-2">
       <div className="flex flex-col w-full xl:w-[1200px] xl:mx-[auto] space-y-6">
-        <div className="border-transparent flex justify-center lg:border-b lg:border-b-indigoGray-20">
-          <div className="px-4 pb-4 pt-6 flex space-x-3 items-center grow max-w-[730px] xl:max-w-[930px] lg:pt-16 lg:px-0">
+        <div className="flex">
+          <div className="px-4 pb-4 pt-6 flex space-x-3 items-center grow max-w-[730px] xl:max-w-[930px] lg:px-0">
             <Link href={`/projects/${projectId}`}>
               <SVG src="/icons/chevron-left.svg" width={24} height={24} />
             </Link>
@@ -132,7 +132,7 @@ const Edit: React.FC<Props> = ({ projectId }) => {
           </div>
         </div>
 
-        <div className="flex grow justify-center">
+        <div className="flex grow">
           <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 grow max-w-[730px] xl:max-w-[930px]">
             <div className="lg:max-w-[230px] lg:grow">
               <p className="font-sans font-medium text-xs text-indigoGray-40">

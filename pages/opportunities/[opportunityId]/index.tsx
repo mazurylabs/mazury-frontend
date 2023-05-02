@@ -42,8 +42,8 @@ const Opportunity: React.FC<Props> = ({ opportunityId }) => {
       showMobileSidebar={false}
       className="!px-4 lg:!px-0"
     >
-      <div className="flex flex-col w-full lg:items-center pb-10 pt-6 lg:px-0 xl:pt-16">
-        <div className="lg:w-[730px] xl:w-[1000px] space-y-6 lg:space-y-4">
+      <div className="flex flex-col w-full lg:items-center pb-10 pt-6 lg:px-0">
+        <div className="lg:w-[730px] xl:w-[1200px] space-y-6 lg:space-y-4">
           {isLoading && !opportunity ? (
             <LoadingView isRecruiter={!!data?.is_recruiter} />
           ) : (
@@ -67,7 +67,7 @@ const LoadingView = ({ isRecruiter }: { isRecruiter: boolean }) => {
     <>
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="h-6 w-[273px] animate-pulse rounded-2xl bg-indigoGray-30" />
+          <div className="h-5 w-[273px] animate-pulse rounded-2xl bg-indigoGray-30" />
           <div className="flex items-center space-x-4">
             <div className="h-8 w-8 animate-pulse rounded-full bg-indigoGray-30" />
             <div className="h-3 w-[147px] animate-pulse rounded-2xl bg-indigoGray-30" />
