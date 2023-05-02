@@ -83,7 +83,7 @@ const LoadingView = ({ isRecruiter }: { isRecruiter: boolean }) => {
         </div>
       </div>
 
-      <div className="xl:w-[700px] space-y-4 lg:space-y-6 font-sans text-sm font-medium text-indigoGray-90">
+      <div className="xl:w-[700px] space-y-4 lg:space-y-6 font-sans text-sm font-normal text-indigoGray-90">
         <div className="flex-col space-y-8 lg:space-y-0 p-4 border border border-indigoGray-20 rounded-lg flex flex lg:flex-row">
           <div className="grow space-y-8 lg:space-y-4">
             <div className="space-y-2">
@@ -114,7 +114,7 @@ const LoadingView = ({ isRecruiter }: { isRecruiter: boolean }) => {
       </div>
 
       <div className="space-y-2">
-        <p className="font-sans font-medium text-sm text-indigoGray-40">
+        <p className="font-sans font-normal text-sm text-indigoGray-40">
           Description
         </p>
         <div className="space-y-3">
@@ -157,7 +157,7 @@ const OpportunityView = ({
               <SVG src="/icons/chevron-left.svg" width={24} height={24} />
               <span className="sr-only">back</span>
             </Link>
-            <p className="font-sans font-medium text-2xl text-indigoGray-90">
+            <p className="font-sans font-normal text-2xl text-indigoGray-90">
               {capitalize(
                 isMobile
                   ? truncateString(opportunity.title, 15)
@@ -173,11 +173,11 @@ const OpportunityView = ({
                 outerClassName="h-8 w-8"
                 className="border-[0.6px] border-indigoGray-30"
               />
-              <p className="font-sans text-sm font-medium text-indigoGray-90">
+              <p className="font-sans text-sm font-normal text-indigoGray-90">
                 {capitalize(opportunity.company_info.name)}
               </p>
             </div>
-            <p className="font-sans font-medium text-sm text-indigoGray-40 flex items-center">
+            <p className="font-sans font-normal text-sm text-indigoGray-40 flex items-center">
               <SVG src="/icons/time.svg" className="mr-1" />
               {dayjs(opportunity.created_at).fromNow()}
             </p>
@@ -216,7 +216,7 @@ const OpportunityView = ({
         </Button>
       )}
 
-      <div className="xl:w-[700px] space-y-4 lg:space-y-6 font-sans text-sm font-medium text-indigoGray-90">
+      <div className="xl:w-[700px] space-y-4 lg:space-y-6 font-sans text-sm font-normal text-indigoGray-90">
         <div className="space-y-4 p-4 border border border-indigoGray-20 rounded-lg">
           <div className="flex flex-col justify-between space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
             <div className="space-y-2 lg:w-[calc(50%-8px)]">
@@ -273,7 +273,7 @@ const OpportunityView = ({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 px-4">
           <p className="text-indigoGray-40">Description</p>
           <p className="text-justify">{capitalize(opportunity.description)}</p>
         </div>
@@ -414,7 +414,7 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                   </div>
                 </div>
 
-                <div className="font-sans font-medium space-y-2 px-8 py-10 flex flex-col items-center">
+                <div className="font-sans font-normal space-y-2 px-8 py-10 flex flex-col items-center">
                   <SVG src="/icons/success.svg" className="h-[60px] w-[60px]" />
                   <p className="text-2xl text-indigoGray-90">
                     Application sent
@@ -435,7 +435,7 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                     </Popover.Close>
                   </div>
 
-                  <p className="font-sans text-base font-medium text-indigoGray-90">
+                  <p className="font-sans text-base font-normal text-indigoGray-90">
                     Apply
                   </p>
                 </div>
@@ -448,7 +448,8 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                     <CustomInput
                       label="Email"
                       placeholder="Insert email"
-                      value={application?.email || user?.email}
+                      defaultValue={user?.email || ''}
+                      value={application?.email}
                       onChange={(value) => handleChange({ email: value })}
                     />
 
@@ -457,11 +458,25 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                         Resume
                       </p>
 
-                      <div className="h-[47px] w-full grow border rounded-lg border-indigoGray-20 px-4 py-3 flex items-center justify-between font-sans text-indigoGray-50 font-medium text-sm">
-                        <p>{application?.resume?.name || 'Upload resume'}</p>
+                      <div
+                        className={
+                          'h-[47px] w-full grow border rounded-lg border-indigoGray-20 px-4 py-3 flex items-center justify-between font-sans text-indigoGray-50 font-normal text-sm'
+                        }
+                      >
+                        <p
+                          className={
+                            application?.resume?.name
+                              ? ' text-indigoGray-90'
+                              : ''
+                          }
+                        >
+                          {application?.resume?.name
+                            ? truncateString(application?.resume?.name, 30)
+                            : 'Upload resume'}
+                        </p>
 
                         <label
-                          className="text-xs font-sans font-medium text-violet-700 cursor-pointer"
+                          className="text-xs font-sans font-normal text-violet-700 cursor-pointer"
                           htmlFor="resume"
                         >
                           Upload file
@@ -481,7 +496,8 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                       placeholder="Insert website"
                       info="Own website, Twitter, discord or any other"
                       required={false}
-                      value={application?.website || user?.website}
+                      defaultValue={user?.website || ''}
+                      value={application?.website}
                       onChange={(value) => handleChange({ website: value })}
                     />
 
@@ -490,7 +506,9 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                         Message
                       </p>
                       <textarea
-                        placeholder="Hi! I’m sending my application. Thanks for your time"
+                        placeholder={`— Write why are you the best candidate for this role
+— Include any relevant links to your past work
+— Flex your proudest crypto achievements`}
                         className="w-full border rounded-lg border-indigoGray-20 grow resize-none bg-transparent px-4 py-3 font-sans text-sm text-indigoGray-90"
                         value={application?.message}
                         onChange={(event) =>
@@ -505,9 +523,12 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
                     className="rounded-t-none sticky w-full left-0 bottom-0"
                     type="submit"
                     loading={isLoading}
-                    disabled={!application?.email || !application.resume}
+                    disabled={
+                      (!application?.email && !user?.email) ||
+                      !application?.resume
+                    }
                   >
-                    Send request
+                    Send application
                   </Button>
                 </form>
               </div>

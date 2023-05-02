@@ -410,6 +410,7 @@ export interface Project {
   saved_profiles_preview: ProjectProfile[];
   saved_profiles_preview_count: number;
   already_in_project: boolean;
+  opportunity_id: string;
 }
 
 export interface OpportunityType<T> {
@@ -424,6 +425,8 @@ export interface OpportunityType<T> {
   published: boolean;
   company_info: T;
   project: string;
+  can_edit: boolean;
+  applicants_count: number;
 }
 
 export interface CompanyType {
