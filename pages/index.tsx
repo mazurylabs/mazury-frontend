@@ -155,6 +155,8 @@ const Search = React.forwardRef<HTMLDivElement, SearchProps>(
   }
 );
 
+Search.displayName = 'Search';
+
 interface FilterProps {
   label: string;
   options: string[];
