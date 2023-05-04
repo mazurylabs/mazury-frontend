@@ -417,6 +417,7 @@ export interface OpportunityType<T> {
   id: string;
   type: 'job' | 'other';
   work_mode: 'remote' | 'hybrid' | 'on-site';
+  job_category: string; // TODO specify the categories
   title: string;
   location: string;
   website: string;

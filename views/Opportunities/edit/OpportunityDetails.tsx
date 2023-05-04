@@ -5,6 +5,7 @@ import { Button } from 'components';
 import { CustomInput } from '../CustomInput';
 import { EditStepsEnum } from 'pages/opportunities/[opportunityId]/edit';
 import { OpportunityType } from 'types';
+import { OpportunityCategoryButton } from './OpportunityCategoryButton';
 import clsx from 'clsx';
 
 interface Props {
@@ -31,6 +32,43 @@ export const OpportunityDetails: React.FC<Props> = ({
           value={opportunity?.title}
           onChange={(value) => onChange({ title: value })}
         />
+        <div className="space-y-1">
+          <p className="font-sans text-sm text-indigoGray-40">
+            Opportunity category
+          </p>
+          <div className="grid grid-cols-3 gap-x-2 gap-y-1">
+            <OpportunityCategoryButton
+              category="backend_developer"
+              categoryName="Backend developer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="frontend_developer"
+              categoryName="Frontend developer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="design"
+              categoryName="Design"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="business_development"
+              categoryName="Business development"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="marketing"
+              categoryName="Marketing"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+          </div>
+        </div>
         <CustomInput
           label="Location"
           placeholder="Insert location"
