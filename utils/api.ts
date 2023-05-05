@@ -133,7 +133,7 @@ export const isValid: (
   } | null>
 > = async (field, value) => {
   try {
-    const res = await axios.post(`/profiles/validate/?type=${field}`, {
+    const res = await axios.post(`/validate?type=${field}`, {
       value,
     });
     return {
