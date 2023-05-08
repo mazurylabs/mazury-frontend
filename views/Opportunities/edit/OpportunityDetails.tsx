@@ -38,32 +38,86 @@ export const OpportunityDetails: React.FC<Props> = ({
           </p>
           <div className="grid grid-cols-3 gap-x-2 gap-y-1">
             <OpportunityCategoryButton
-              category="backend_developer"
-              categoryName="Backend developer"
+              category="frontend_engineer"
+              categoryName="Frontend Engineer"
               opportunity={opportunity}
               onChange={onChange}
             />
             <OpportunityCategoryButton
-              category="frontend_developer"
-              categoryName="Frontend developer"
+              category="backend_engineer"
+              categoryName="Backend Engineer"
               opportunity={opportunity}
               onChange={onChange}
             />
             <OpportunityCategoryButton
-              category="design"
-              categoryName="Design"
+              category="full_stack_engineer"
+              categoryName="Full Stack Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="android_engineer"
+              categoryName="Android Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="ios_engineer"
+              categoryName="iOS Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="product_designer"
+              categoryName="Product Designer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="product_manager"
+              categoryName="Product Manager"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="finance"
+              categoryName="Finance"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="recruiter"
+              categoryName="Recruiter"
               opportunity={opportunity}
               onChange={onChange}
             />
             <OpportunityCategoryButton
               category="business_development"
-              categoryName="Business development"
+              categoryName="Business Development"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="sales"
+              categoryName="Sales"
               opportunity={opportunity}
               onChange={onChange}
             />
             <OpportunityCategoryButton
               category="marketing"
               categoryName="Marketing"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="community"
+              categoryName="Community"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="other"
+              categoryName="Other"
               opportunity={opportunity}
               onChange={onChange}
             />
