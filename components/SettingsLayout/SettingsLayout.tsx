@@ -109,7 +109,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
           <div className="space-y-4 pb-4">
             <SettingsCard title="Account" links={['Ethereum-address']} />
 
-            <Link legacyBehavior href="/pricing-plans">
+            <Link legacyBehavior href="/pricing">
               <a
                 type="button"
                 className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"

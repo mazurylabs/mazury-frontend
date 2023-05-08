@@ -95,7 +95,7 @@ const BillingAndTeams = () => {
                     </p>
                   </div>
                   <Link
-                    href="/pricing-plans"
+                    href="/pricing"
                     className="text-sm font-medium font-sans text-indigoGray-90"
                   >
                     Change plan
