@@ -45,64 +45,6 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
   );
 };
 
-const SettingsLink = ({ title, links }: SettingsLinkProps) => {
-  const { query, asPath, push } = useRouter();
-  const routeArray = asPath.split('/');
-
-  const isActive = links.find((link) => routeArray[3] === link.toLowerCase());
-  const activeRoute = !query.route ? 'Account' : query.route;
-
-  const handlePill = () => {
-    push({ pathname: '/settings', query: { route: title } }, '/settings', {
-      scroll: false,
-    });
-    title === 'Services' && window.scrollTo({ top: 200, behavior: 'smooth' });
-  };
-
-  return (
-    <div className="mb-3">
-      <Pill
-        label={title}
-        color="indigo"
-        onClick={handlePill}
-        active={
-          routeArray.length === 2
-            ? activeRoute === title
-            : routeArray[2] === title.toLowerCase()
-        }
-        isNav={true}
-      />
-
-      <div className={` ${isActive ? 'h-fit' : 'h-0'} overflow-hidden`}>
-        <ul className="list-disc">
-          {links.map((link, index) => (
-            <li
-              key={link + index}
-              className={`my-2.5 font-sans text-sm ${
-                isActive === link
-                  ? 'font-bold text-indigo-700'
-                  : 'text-indigoGray-60'
-              }`}
-            >
-              <Link
-                legacyBehavior
-                href={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
-                as={`/settings/${title.toLowerCase()}/${link.toLowerCase()}`}
-              >
-                <a className="flex items-center pl-6">
-                  <SVG src={'/icons/list-disc.svg'} width="4px" height="4px" />
-
-                  <span className="ml-5">{link.split('-').join(' ')}</span>
-                </a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
-
 export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
   const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
@@ -167,17 +109,21 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
           <div className="space-y-4 pb-4">
             <SettingsCard title="Account" links={['Ethereum-address']} />
 
-            <Link legacyBehavior href="/settings/account/profile-type">
+            <Link legacyBehavior href="/pricing-plans">
               <a
                 type="button"
                 className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
               >
                 <div className="flex flex-col items-start">
                   <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                    Profile type
+                    {'profile?.plan'
+                      ? 'Become a recruiter'
+                      : 'Billing and team'}
                   </p>
                   <p className="font-sansMid text-xs font-medium text-indigo-600">
-                    {profile?.is_recruiter ? 'Recruiter' : 'Talent'}
+                    {!'profile?.plan'
+                      ? 'Individual plan'
+                      : 'Team plan – Coinbase team'}
                   </p>
                 </div>
                 <div>

@@ -234,16 +234,8 @@ export const formatProfileRoute = (url: string, address: string) => {
   };
 };
 
-// export const formatInfiniteQueryResponse = <T extends {}>(
-//   responseData: ListResponse<T>[]
-// ) => {
-//   const response = responseData?.reduce((prev, next) => {
-//     return {
-//       ...prev,
-//       ...next,
-//       results: [...(prev?.results || []), ...next.results],
-//     };
-//   }, {} as ListResponse<T>);
-
-//   return response;
-// };
+export function convertUnicode(input: string) {
+  return input.replace(/\\+u([0-9a-fA-F]{4})/g, (a, b) =>
+    String.fromCharCode(parseInt(b, 16))
+  );
+}

@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 
-import { Avatar, Layout, Table } from 'components';
+import { Avatar, Button, Layout, Table } from 'components';
 import { useClickOutside, useMobile } from 'hooks';
 import { capitalize, truncateString } from 'utils';
 import { Project, ProjectProfile } from 'types';
@@ -288,42 +288,96 @@ const ProjectHeader = React.forwardRef<string, ProjectHeaderProps>(
           </div>
         </div>
 
-        <Popover.Root>
-          <Popover.Trigger asChild>
-            <button
-              type="button"
-              aria-label="settings"
-              className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-indigoGray-10"
-            >
-              <SVG src="/icons/more.svg" height={24} width={24} />
-            </button>
-          </Popover.Trigger>
+        <div className="flex space-x-6">
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <button
+                type="button"
+                aria-label="settings"
+                className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-indigoGray-10"
+              >
+                <SVG src="/icons/more.svg" height={24} width={24} />
+              </button>
+            </Popover.Trigger>
 
-          <Popover.Portal>
-            <Popover.Content align="end" alignOffset={-15} sideOffset={0}>
-              <div className="flex h-[63px] w-[220px] flex-col items-start space-y-[6.5px] rounded-lg bg-white p-[5px] shadow-sm">
-                <button
-                  type="button"
-                  aria-label="rename project"
-                  className="pl-6 font-sans text-sm text-indigoGray-90 outline-none"
-                  onClick={handleView}
-                >
-                  Rename
-                </button>
-                <button
-                  type="button"
-                  aria-label="archive project"
-                  className="pl-6 font-sans text-sm text-indigoGray-90 outline-none"
-                  onClick={() => mutate({ archived: true, projectId })}
-                >
-                  Archive
-                </button>
-              </div>
+            <Popover.Portal>
+              <Popover.Content align="end" alignOffset={-15} sideOffset={0}>
+                <div className="flex h-[63px] w-[220px] flex-col items-start space-y-[5px] rounded-lg bg-white p-[5px] shadow-sm">
+                  <button
+                    type="button"
+                    aria-label="rename project"
+                    className="pl-6 font-sans text-sm text-indigoGray-90 outline-none"
+                    onClick={handleView}
+                  >
+                    Rename
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="archive project"
+                    className="pl-6 font-sans text-sm text-indigoGray-90 outline-none"
+                    onClick={() => mutate({ archived: true, projectId })}
+                  >
+                    Archive
+                  </button>
+                </div>
 
-              <Popover.Arrow fill="white" className="drop-shadow" />
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+                <Popover.Arrow fill="white" className="drop-shadow" />
+              </Popover.Content>
+            </Popover.Portal>
+          </Popover.Root>
+
+          <Popover.Root>
+            <Popover.Trigger className="text-indigoGray-90 font-medium text-sm flex items-center space-x-1">
+              <Button>Share project</Button>
+            </Popover.Trigger>
+
+            <Popover.Portal>
+              <Popover.Content align="end" alignOffset={-15} sideOffset={0}>
+                <div className="flex h-fit w-fit flex-col items-start space-y-[6.5px] rounded-lg bg-white p-[5px] shadow-sm max-w-[240px]">
+                  {false ? (
+                    <>
+                      <p className="font-sans text-sm font-light text-indigoGray-40 pl-2">
+                        You are going to give access to:
+                      </p>
+                      <div className="flex items-center space-x-2 pl-2">
+                        <Avatar
+                          variant="xs"
+                          src="/icons/dummy-avatar.svg"
+                          alt=""
+                        />
+                        <p className="font-sans text-indigoGray-90 text-sm">
+                          Wojtek
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2 pl-2">
+                        <Avatar
+                          variant="xs"
+                          src="/icons/dummy-avatar.svg"
+                          alt=""
+                        />
+                        <p className="font-sans text-indigoGray-90 text-sm">
+                          Wojtek
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="font-sans text-sm font-light text-indigoGray-40 pl-2">
+                      Sharing projects is a feature for Teams. If you wish to
+                      use it,{' '}
+                      <span className="text-indigo-600">upgrade your plan</span>
+                      .
+                    </p>
+                  )}
+                  <Button disabled={true} className="w-[240px]">
+                    Share with team
+                  </Button>
+                </div>
+
+                <Popover.Arrow fill="white" className="drop-shadow" />
+              </Popover.Content>
+            </Popover.Portal>
+          </Popover.Root>
+        </div>
       </div>
     );
   }
