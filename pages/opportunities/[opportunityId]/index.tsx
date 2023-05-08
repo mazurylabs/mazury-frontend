@@ -148,6 +148,41 @@ const OpportunityView = ({
   const isMobile = useMobile(false);
   const { dispatch } = useAlert({});
 
+  const matchCategorySlugToHumanName = (categorySlug: string) => {
+    switch (categorySlug) {
+      case 'frontend_engineer':
+        return 'Frontend Engineer';
+      case 'backend_engineer':
+        return 'Backend Engineer';
+      case 'full_stack_engineer':
+        return 'Full-Stack Engineer';
+      case 'android_engineer':
+        return 'Android Engineer';
+      case 'ios_engineer':
+        return 'iOS Engineer';
+      case 'product_designer':
+        return 'Product Designer';
+      case 'product_manager':
+        return 'Product Manager';
+      case 'finance':
+        return 'Finance';
+      case 'recruiter':
+        return 'Recruiter';
+      case 'business_development':
+        return 'Business Development';
+      case 'sales':
+        return 'Sales';
+      case 'marketing':
+        return 'Marketing';
+      case 'community':
+        return 'Community';
+      case 'other':
+        return 'Other';
+      default:
+        return 'Other';
+    }
+  };
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -269,6 +304,12 @@ const OpportunityView = ({
             <p className="text-indigoGray-40">Company description</p>
             <p className="text-justify">
               {opportunity.company_info.description}
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-indigoGray-40">Category</p>
+            <p className="text-justify font-normal text-indigo-400 py-1 px-2 border border-indigo-300 rounded-lg max-w-max">
+              {matchCategorySlugToHumanName(opportunity.job_category)}
             </p>
           </div>
         </div>

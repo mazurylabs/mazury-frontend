@@ -96,7 +96,7 @@ const Search = React.forwardRef<HTMLDivElement, SearchProps>(
     return (
       <div
         className={clsx(
-          'rounded-tl-lg rounded-tr-lg relative bg-indigoGray-5 shadow-base z-30',
+          'rounded-tl-lg rounded-tr-lg relative bg-indigoGray-5 z-20',
           !focused && 'rounded-bl-lg rounded-br-lg'
         )}
       >
@@ -136,7 +136,7 @@ const Search = React.forwardRef<HTMLDivElement, SearchProps>(
 
         <ul
           className={clsx(
-            'w-full shadow-base h-fit xl:pl-[52px] space-y-3 py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
+            'w-full h-fit xl:pl-[52px] space-y-3 py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
             focused ? 'opacity-100' : 'opacity-0 pointer-events-none'
           )}
         >
@@ -182,12 +182,12 @@ const Filter = ({ label, options, onApply }: FilterProps) => {
         <SVG src="/icons/angle-down.svg" className="h-4 w-4" />
       </Popover.Trigger>
 
-      <Popover.Portal className="z-30">
+      <Popover.Portal className="z-20">
         <Popover.Content
           align="start"
           alignOffset={-25}
           sideOffset={8}
-          className="rounded-lg bg-white shadow-base border border-indigoGray-20"
+          className="rounded-lg bg-white border border-indigoGray-20"
         >
           <div className="h-fit w-[350px] p-6">
             <div className="space-y-2">

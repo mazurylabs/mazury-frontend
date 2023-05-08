@@ -5,6 +5,7 @@ import { Button } from 'components';
 import { CustomInput } from '../CustomInput';
 import { EditStepsEnum } from 'pages/opportunities/[opportunityId]/edit';
 import { OpportunityType } from 'types';
+import { OpportunityCategoryButton } from './OpportunityCategoryButton';
 import clsx from 'clsx';
 
 interface Props {
@@ -31,6 +32,97 @@ export const OpportunityDetails: React.FC<Props> = ({
           value={opportunity?.title}
           onChange={(value) => onChange({ title: value })}
         />
+        <div className="space-y-1">
+          <p className="font-sans text-sm text-indigoGray-40">
+            Opportunity category
+          </p>
+          <div className="grid grid-cols-3 gap-x-2 gap-y-1">
+            <OpportunityCategoryButton
+              category="frontend_engineer"
+              categoryName="Frontend Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="backend_engineer"
+              categoryName="Backend Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="full_stack_engineer"
+              categoryName="Full Stack Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="android_engineer"
+              categoryName="Android Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="ios_engineer"
+              categoryName="iOS Engineer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="product_designer"
+              categoryName="Product Designer"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="product_manager"
+              categoryName="Product Manager"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="finance"
+              categoryName="Finance"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="recruiter"
+              categoryName="Recruiter"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="business_development"
+              categoryName="Business Development"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="sales"
+              categoryName="Sales"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="marketing"
+              categoryName="Marketing"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="community"
+              categoryName="Community"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+            <OpportunityCategoryButton
+              category="other"
+              categoryName="Other"
+              opportunity={opportunity}
+              onChange={onChange}
+            />
+          </div>
+        </div>
         <CustomInput
           label="Location"
           placeholder="Insert location"

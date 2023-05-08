@@ -141,7 +141,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex w-full items-center">
               <SidebarItem
                 icon={
-                  <div className="h-8 w-8">
+                  <div className="ml-1 h-8 w-8">
                     <SVG src="/new-logo.svg" className="h-8 w-8 shrink-0" />
                   </div>
                 }

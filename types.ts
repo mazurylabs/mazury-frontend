@@ -417,6 +417,21 @@ export interface OpportunityType<T> {
   id: string;
   type: 'job' | 'other';
   work_mode: 'remote' | 'hybrid' | 'on-site';
+  job_category:
+    | 'frontend_engineer'
+    | 'backend_engineer'
+    | 'full_stack_engineer'
+    | 'android_engineer'
+    | 'ios_engineer'
+    | 'product_designer'
+    | 'product_manager'
+    | 'finance'
+    | 'recruiter'
+    | 'business_development'
+    | 'sales'
+    | 'marketing'
+    | 'community'
+    | 'other';
   title: string;
   location: string;
   website: string;
