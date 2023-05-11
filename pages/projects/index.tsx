@@ -28,10 +28,10 @@ const Dashboard = () => {
   const [showArchivedProjects, setShowArchivedProjects] = React.useState(false);
   const teamPlanAnnouncement = !!storage.getToken(TEAM_PLAN_ANNOUNCEMENT);
 
-  // const { isLoading, data } = useProjects({
-  //   archived: showArchivedProjects,
-  //   address: user?.eth_address,
-  // });
+  const { isLoading, data } = useProjects({
+    archived: showArchivedProjects,
+    address: user?.eth_address,
+  });
 
   const { mutate } = useMutation({
     onSuccess: (data) => {
@@ -116,7 +116,7 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* <div>
+            <div>
               {isLoading ? (
                 <LoadingState />
               ) : !data?.count ? (
@@ -130,7 +130,7 @@ const Dashboard = () => {
                   isArchived={showArchivedProjects}
                 />
               )}
-            </div> */}
+            </div>
           </div>
         </div>
 
