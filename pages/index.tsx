@@ -11,6 +11,8 @@ import { capitalize, truncateString } from 'utils';
 import { useClickOutside, useMobile } from 'hooks';
 import { axios } from 'lib/axios';
 import { CompanyType, ListResponse, OpportunityType } from 'types';
+import storage from '@/utils/storage';
+import { TEAM_PLAN_ANNOUNCEMENT } from '@/config';
 
 const opportunityTypes = [
   'Backend Developer',
@@ -29,6 +31,7 @@ const tags = ['Job', 'Other'];
 const searchSuggestions = opportunityTypes;
 
 const Home = () => {
+  storage.setToken(true, TEAM_PLAN_ANNOUNCEMENT);
   const containerRef = React.useRef(null!);
 
   const [search, setSearch] = React.useState('');

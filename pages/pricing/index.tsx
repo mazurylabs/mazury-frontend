@@ -67,7 +67,7 @@ const PricingPlans = () => {
     >
       <div className="flex flex-col w-full lg:items-center pb-4 pt-6 lg:px-0">
         <div className="w-full xl:w-[1200px] space-y-6 lg:space-y-4">
-          <div className="flex items-center space-x-2 text-indigoGray-90 pb-5">
+          <div className="flex items-center space-x-2 text-indigoGray-90 xl:pb-5">
             <Link href={'/settings'} className="h-6 w-6">
               <SVG className="h-6 w-6" src="/icons/chevron-left.svg" />
             </Link>
@@ -75,7 +75,7 @@ const PricingPlans = () => {
               Choose your pricing plan
             </h1>
           </div>
-          <div className="border border-indigoGray-20 px-10 py-8 w-full rounded-xl xl:space-x-14 flex">
+          <div className="border border-indigoGray-20 px-10 xl:py-8 w-full rounded-xl divide-y xl:divide-y-0 xl:space-y-0 xl:space-x-14 flex flex-col xl:flex-row">
             {plans.map((plan) => (
               <Plan {...plan} key={plan.title} />
             ))}
@@ -108,7 +108,7 @@ const Plan: React.FC<Plan> = ({
   active,
 }) => {
   return (
-    <div className="space-y-6 flex-1">
+    <div className="space-y-6 flex-1 py-8 xl:py-0">
       {isNewFeature && (
         <div className="py-[2px] px-2 text-green-600 border border-green-600 rounded-md w-fit">
           <p className="font-sans text-xs font-normal">New features</p>
@@ -118,7 +118,7 @@ const Plan: React.FC<Plan> = ({
       <p
         className={clsx(
           'font-sans text-2xl text-indigoGray-90',
-          !isNewFeature && 'mt-12'
+          !isNewFeature && 'mt-0 xl:mt-12'
         )}
       >
         {title}
@@ -156,7 +156,7 @@ const Plan: React.FC<Plan> = ({
           : 'Choose plan '}
       </Button>
 
-      <div className="space-y-4 min-h-[161px]">
+      <div className="space-y-4 xl:min-h-[161px]">
         {features.map((feature) => (
           <div className="flex items-start space-x-2" key={feature}>
             <SVG src="/icons/checked.svg" className="shrink-0" />
@@ -166,7 +166,7 @@ const Plan: React.FC<Plan> = ({
       </div>
 
       {discountedPrice && (
-        <p className="text-center font-sans text-xs font-light text-indigoGray-50">
+        <p className="hidden lg:block text-center font-sans text-xs font-light text-indigoGray-50">
           Discounted price is a limited offer. Users who sign up during the
           offer will see their price lowered for 6 months.
         </p>

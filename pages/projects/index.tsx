@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import * as Accordion from '@radix-ui/react-accordion';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+
 import {
   useMutation,
   useInfiniteQuery,
@@ -16,6 +17,8 @@ import { useUser } from 'providers/react-query-auth';
 import { ListResponse, Project } from 'types';
 import Link from 'next/link';
 import { useAlert } from 'components/Alert.tsx';
+import { TEAM_PLAN_ANNOUNCEMENT } from '@/config';
+import storage from '@/utils/storage';
 
 const Dashboard = () => {
   const { dispatch } = useAlert({});
@@ -23,11 +26,12 @@ const Dashboard = () => {
   const { data: user } = useUser();
   const router = useRouter();
   const [showArchivedProjects, setShowArchivedProjects] = React.useState(false);
+  const teamPlanAnnouncement = !!storage.getToken(TEAM_PLAN_ANNOUNCEMENT);
 
-  const { isLoading, data } = useProjects({
-    archived: showArchivedProjects,
-    address: user?.eth_address,
-  });
+  // const { isLoading, data } = useProjects({
+  //   archived: showArchivedProjects,
+  //   address: user?.eth_address,
+  // });
 
   const { mutate } = useMutation({
     onSuccess: (data) => {
@@ -60,6 +64,44 @@ const Dashboard = () => {
             </button>
           </div>
 
+          {teamPlanAnnouncement && (
+            <div className="rounded-md py-4 px-8 border-[2px] border-indigoGray-20 space-y-2">
+              <div className="flex space-x-2 items-center justify-between">
+                <p className="font-regular font-sans text-lg text-indigoGray-90">
+                  🎉 You are now on the Team plan
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => storage.clearToken(TEAM_PLAN_ANNOUNCEMENT)}
+                >
+                  <SVG src="/icons/x.svg" className="h-4 w-4" />
+                </button>
+              </div>
+
+              <p className="font-sans font-normal text-sm text-indigoGray-50">
+                You can add more users to your team in the Team tab{' '}
+                <span>
+                  <Link
+                    href="/billing"
+                    className="font-sans text-sm font-medium text-indigo-600"
+                  >
+                    here
+                  </Link>
+                </span>
+                . Then you can share projects with the members. Remember that
+                users remain owners of the projects they created even after
+                sharing.
+              </p>
+              <Link
+                href="/billing"
+                className="font-sans text-sm font-medium text-indigo-600"
+              >
+                Manage your team
+              </Link>
+            </div>
+          )}
+
           <div className="space-y-4">
             <div className="flex space-x-3">
               <TabButton
@@ -74,7 +116,7 @@ const Dashboard = () => {
               />
             </div>
 
-            <div>
+            {/* <div>
               {isLoading ? (
                 <LoadingState />
               ) : !data?.count ? (
@@ -88,7 +130,7 @@ const Dashboard = () => {
                   isArchived={showArchivedProjects}
                 />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 

@@ -7,26 +7,59 @@ import * as Popover from '@radix-ui/react-popover';
 import { Avatar, Button, Layout } from 'components';
 import clsx from 'clsx';
 import { convertUnicode } from '@/utils';
-
-const teamMembers = [
-  { role: 'admin', name: 'Wojtek', id: '1' },
-  { role: 'member', name: 'Constance de Archambault', id: '2' },
-];
+import { axios } from '@/lib/axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useUser } from '@/providers/react-query-auth';
+import { TeamMembership, TeamPlans } from '@/types';
+import { useAlert } from '@/components/Alert.tsx';
 
 const BillingAndTeams = () => {
+  const { data: profile } = useUser();
+
+  const { mutate } = useUpdateTeam();
+
+  // const { data } = useQuery({
+  //   queryKey: ['teams'],
+  //   queryFn: async () =>
+  //     getTeamMembers({ teamId: profile?.team_membership.team_data.id }),
+  //   enabled: !!profile?.team_membership.team_data.id,
+  // });
+
   return (
     <Layout
       variant="plain"
       showMobileSidebar={false}
       className="!px-4 lg:!px-0"
     >
-      <div className="flex flex-col w-full lg:items-center pb-4 pt-6 lg:px-0">
-        <div className="w-full xl:w-[1200px] space-y-6 lg:space-y-4">
+      <div className="flex flex-col w-full pb-4 pt-6 lg:px-0 lg:ml-[71px]">
+        <div className="w-full xl:w-[800px] space-y-6 lg:space-y-4">
           <div className="flex items-center justify-between space-x-2  pb-5">
             <h1 className="font-sans text-2xl font-normal text-indigoGray-90">
-              Coinbase team
+              {profile?.team_membership.team_data?.name}
             </h1>
-            <SVG src="/icons/more.svg" className="h-6 w-6" />
+
+            <Popover.Root>
+              <Popover.Trigger className="text-indigoGray-90 font-medium text-sm flex items-center space-x-1">
+                <SVG src="/icons/more.svg" className="h-6 w-6" />
+              </Popover.Trigger>
+
+              <Popover.Portal className="z-30">
+                <Popover.Content
+                  align="center"
+                  sideOffset={8}
+                  className="rounded-lg bg-white shadow-base border border-indigoGray-20"
+                >
+                  <div className="flex-col items-start h-fit flex w-[220px] p-1">
+                    <button className="pl-6 py-1 font-sans font-light text-indigoGray-90 text-sm">
+                      Rename
+                    </button>
+                    <button className="px-6 font-sans font-light text-red-600 text-sm">
+                      Close team
+                    </button>
+                  </div>
+                </Popover.Content>
+              </Popover.Portal>
+            </Popover.Root>
           </div>
           <div className="space-y-2">
             <div className="py-4 px-6 rounded-lg bg-indigoGray-5 w-full space-y-2">
@@ -34,29 +67,30 @@ const BillingAndTeams = () => {
                 Team members
               </p>
 
-              {teamMembers.map((member) => (
+              {/* {data?.map((team) => (
                 <div
-                  key={member.id}
+                  key={team.profile.id}
                   className="py-2 px-4 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-2">
-                    <Avatar src="/icons/dummy-user.svg" alt={member.name} />
+                    <Avatar
+                      src="/icons/dummy-user.svg"
+                      alt={team.profile.username}
+                    />
                     <p className="font-sans font-normal text-sm text-indigoGray-90">
-                      {member.name}
+                      {team.profile.username}
                     </p>
                   </div>
 
-                  {member.role === 'admin' ? (
+                  {team.role === 'admin' ? (
                     <p className="text-indigoGray-90 font-medium text-sm flex items-center space-x-1">
-                      <p>{member.role === 'admin' ? 'Admin' : 'Team member'}</p>
+                      <p>{team.role === 'admin' ? 'Admin' : 'Team member'}</p>
                       <SVG src="/icons/angle-down.svg" className="h-4 w-4" />
                     </p>
                   ) : (
                     <Popover.Root>
                       <Popover.Trigger className="text-indigoGray-90 font-medium text-sm flex items-center space-x-1">
-                        <p>
-                          {member.role === 'admin' ? 'Admin' : 'Team member'}
-                        </p>
+                        <p>Team member</p>
                         <SVG src="/icons/angle-down.svg" className="h-4 w-4" />
                       </Popover.Trigger>
 
@@ -79,7 +113,7 @@ const BillingAndTeams = () => {
                     </Popover.Root>
                   )}
                 </div>
-              ))}
+              ))} */}
             </div>
 
             <div className="py-4 px-6 rounded-lg bg-indigoGray-5 w-full space-y-2">
@@ -135,3 +169,39 @@ const BillingAndTeams = () => {
 };
 
 export default BillingAndTeams;
+
+const getTeamMembers = async ({ teamId }: { teamId?: string }) => {
+  const { data } = await axios.get<TeamMembership[]>(
+    `/teams/${teamId}/members/`
+  );
+  return data;
+};
+
+const updateTeam = async ({
+  teamId,
+  ...body
+}: {
+  teamId: string;
+  name?: string;
+  plan?: TeamPlans;
+  role?: string;
+}) => {
+  await axios.patch(`/teams/${teamId}/`, body);
+};
+
+export const useUpdateTeam = () => {
+  const queryClient = useQueryClient();
+  const { dispatch } = useAlert({});
+
+  return useMutation({
+    onSuccess: (_, variables) => {
+      // queryClient.invalidateQueries(['projects', profileId]);
+    },
+    onError: (error: any) => {
+      if (error?.response) {
+        dispatch({ message: error.response.data.detail, type: 'error' });
+      }
+    },
+    mutationFn: updateTeam,
+  });
+};

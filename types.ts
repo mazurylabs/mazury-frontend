@@ -138,6 +138,27 @@ export type MappedTrimmedRoles<T> = {
   [Key in TrimmedRole]: T;
 };
 
+export interface TeamData {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  plan: string;
+}
+
+export interface TeamProfile {
+  id: string;
+  eth_address: string;
+  ens_name: string;
+  username: string;
+  avatar: string;
+}
+export interface TeamMembership {
+  profile: TeamProfile;
+  team_data: TeamData;
+  role: 'admin' | 'member';
+}
+
 export interface Profile
   extends Partial<MappedSkills<number>>,
     Partial<MappedRoles<boolean>> {
@@ -175,6 +196,7 @@ export interface Profile
   lens_handle?: string;
   cover?: string;
   title?: string;
+  team_membership: TeamMembership;
 }
 
 interface LensProfile {
@@ -452,3 +474,10 @@ export interface CompanyType {
   description: string;
   contact_email: string;
 }
+
+export type TeamPlans =
+  | 'talent'
+  | 'non_paying_recruiter'
+  | 'individual_recruiter'
+  | 'team'
+  | 'enterprise';

@@ -1,21 +1,13 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import * as Sentry from '@sentry/nextjs';
-import { useQueryClient } from '@tanstack/react-query';
 import SVG from 'react-inlinesvg';
-import { Toaster, toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
-import { Button, Layout, Pill, Spinner } from 'components';
-import { Toggle } from '../Toggle';
-import { updateProfile } from 'utils/api';
+import { Layout } from 'components';
 import { useLogout, useUser } from 'providers/react-query-auth';
 
-import {
-  SettingsCardProps,
-  SettingsLayoutProps,
-  SettingsLinkProps,
-} from './SettingsLayout.types';
+import { SettingsCardProps, SettingsLayoutProps } from './SettingsLayout.types';
 
 const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
   const nestedRoute = title.includes('services')
@@ -46,37 +38,9 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ title, links }) => {
 };
 
 export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
-  const queryClient = useQueryClient();
-  const [loading, setLoading] = React.useState(false);
   const logout = useLogout();
   const router = useRouter();
   const { data: profile } = useUser();
-
-  const handleOpenToOpportunities = async () => {
-    const payload = {
-      open_to_opportunities: !profile?.open_to_opportunities,
-    };
-
-    setLoading(true);
-
-    const { error } = await updateProfile(
-      profile?.eth_address as string,
-      '',
-      payload
-    );
-
-    if (!error) {
-      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
-        ...prev,
-        ...payload,
-      }));
-    } else {
-      Sentry.captureException(error);
-      toast.error('Something went wrong');
-    }
-
-    setLoading(false);
-  };
 
   const handleLogOut = () => {
     logout.mutate({}, { onSuccess: () => router.push('/') });
@@ -107,48 +71,66 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ content }) => {
           </div>
         ) : (
           <div className="space-y-4 pb-4">
+            {profile?.is_recruiter && (
+              <Link
+                href="/pricing"
+                className="py-4 px-8 rounded-md border border-indigoGray-20 flex flex-col items-center space-y-2"
+              >
+                <div className="flex space-x-2 items-center text-green-600">
+                  <SVG src="/icons/arrow-up-circle.svg" className="h-6 w-6" />
+                  <p>Upgrade your account to pro</p>
+                </div>
+                <p className="font-sans text-sm font-light text-indigoGray-50 text-center">
+                  Your trial has ended. To continue using recruiter features,
+                  please upgrade your account
+                </p>
+              </Link>
+            )}
+
             <SettingsCard title="Account" links={['Ethereum-address']} />
 
-            <Link legacyBehavior href="/pricing">
-              <a
-                type="button"
-                className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
-              >
-                <div className="flex flex-col items-start">
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                    {'profile?.plan'
-                      ? 'Become a recruiter'
-                      : 'Billing and team'}
-                  </p>
+            <Link
+              className="flex w-full items-center justify-between rounded-lg border border-indigoGray-20 p-4"
+              href={!profile?.is_recruiter ? '/pricing' : '/billing'}
+            >
+              <div className="flex flex-col items-start">
+                <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  {!profile?.is_recruiter
+                    ? 'Become a recruiter'
+                    : 'Billing and team'}
+                </p>
+                {profile?.is_recruiter && (
                   <p className="font-sansMid text-xs font-medium text-indigo-600">
-                    {!'profile?.plan'
+                    {profile?.team_membership.team_data.plan === 'individual'
                       ? 'Individual plan'
-                      : 'Team plan – Coinbase team'}
+                      : `Team plan – ${profile?.team_membership.team_data.name}`}
                   </p>
-                </div>
-                <div>
-                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                </div>
-              </a>
+                )}
+              </div>
+              <div>
+                <SVG src="/icons/angle-right.svg" width={24} height={24} />
+              </div>
             </Link>
 
             <div className="space-y-8 rounded-lg border border-indigoGray-20 p-4">
-              <Link legacyBehavior href="/privacy-policy">
-                <a className="flex w-full justify-between">
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                    Privacy policy
-                  </p>
-                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                </a>
+              <Link
+                className="flex w-full justify-between"
+                href="/privacy-policy"
+              >
+                <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  Privacy policy
+                </p>
+                <SVG src="/icons/angle-right.svg" width={24} height={24} />
               </Link>
 
-              <Link legacyBehavior href="/terms-of-service">
-                <a className="flex w-full justify-between">
-                  <p className="font-sans text-sm font-semibold text-indigoGray-90">
-                    Terms of service
-                  </p>
-                  <SVG src="/icons/angle-right.svg" width={24} height={24} />
-                </a>
+              <Link
+                className="flex w-full justify-between"
+                href="/terms-of-service"
+              >
+                <p className="font-sans text-sm font-semibold text-indigoGray-90">
+                  Terms of service
+                </p>
+                <SVG src="/icons/angle-right.svg" width={24} height={24} />
               </Link>
             </div>
 

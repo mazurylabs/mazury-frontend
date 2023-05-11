@@ -10,3 +10,4 @@ export const IS_NEW_USER = 'isNewUserCredentials'; // isNewUser used for previou
 export const USER_ADDRESS = 'user_address';
 export const isDev = process.env.NODE_ENV === 'development';
 export const STORED_USER = 'stored_user';
+export const TEAM_PLAN_ANNOUNCEMENT = 'team_plan';
