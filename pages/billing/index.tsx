@@ -10,20 +10,21 @@ import { convertUnicode } from '@/utils';
 import { axios } from '@/lib/axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/providers/react-query-auth';
-import { TeamMembership, TeamPlans } from '@/types';
+import { ListResponse, Profile, TeamMembership, TeamPlans } from '@/types';
 import { useAlert } from '@/components/Alert.tsx';
 
 const BillingAndTeams = () => {
   const { data: profile } = useUser();
 
-  const { mutate } = useUpdateTeam();
+  const { mutate: deleteMemberMutation } = useDeleteTeamMember();
+  const { mutate: updateAdminMutation } = useUpdateAdmin();
 
-  // const { data } = useQuery({
-  //   queryKey: ['teams'],
-  //   queryFn: async () =>
-  //     getTeamMembers({ teamId: profile?.team_membership.team_data.id }),
-  //   enabled: !!profile?.team_membership.team_data.id,
-  // });
+  const { data } = useQuery({
+    queryKey: ['teams'],
+    queryFn: async () =>
+      getTeamMembers({ teamId: profile?.team_membership.team_data.id }),
+    enabled: !!profile?.team_membership.team_data.id,
+  });
 
   return (
     <Layout
@@ -67,14 +68,14 @@ const BillingAndTeams = () => {
                 Team members
               </p>
 
-              {/* {data?.map((team) => (
+              {data?.map((team) => (
                 <div
                   key={team.profile.id}
                   className="py-2 px-4 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-2">
                     <Avatar
-                      src="/icons/dummy-user.svg"
+                      src={team.profile.avatar}
                       alt={team.profile.username}
                     />
                     <p className="font-sans font-normal text-sm text-indigoGray-90">
@@ -101,10 +102,26 @@ const BillingAndTeams = () => {
                           className="rounded-lg bg-white shadow-base border border-indigoGray-20"
                         >
                           <div className="h-fit w-[220px] p-1">
-                            <button className="pl-6 py-1 font-sans font-light text-indigoGray-90 text-sm">
+                            <button
+                              className="pl-6 py-1 font-sans font-light text-indigoGray-90 text-sm"
+                              onClick={() =>
+                                updateAdminMutation({
+                                  teamId: team.team_data.id,
+                                  profileId: team.profile.id,
+                                })
+                              }
+                            >
                               Make admin
                             </button>
-                            <button className="px-6 font-sans font-light text-indigoGray-90 text-sm">
+                            <button
+                              className="px-6 font-sans font-light text-indigoGray-90 text-sm"
+                              onClick={() =>
+                                deleteMemberMutation({
+                                  teamId: team.team_data.id,
+                                  profileId: team.profile.id,
+                                })
+                              }
+                            >
                               Remove from team
                             </button>
                           </div>
@@ -113,7 +130,7 @@ const BillingAndTeams = () => {
                     </Popover.Root>
                   )}
                 </div>
-              ))} */}
+              ))}
             </div>
 
             <div className="py-4 px-6 rounded-lg bg-indigoGray-5 w-full space-y-2">
@@ -171,10 +188,10 @@ const BillingAndTeams = () => {
 export default BillingAndTeams;
 
 const getTeamMembers = async ({ teamId }: { teamId?: string }) => {
-  const { data } = await axios.get<TeamMembership[]>(
+  const { data } = await axios.get<ListResponse<TeamMembership>>(
     `/teams/${teamId}/members/`
   );
-  return data;
+  return data.results;
 };
 
 const updateTeam = async ({
@@ -195,7 +212,18 @@ export const useUpdateTeam = () => {
 
   return useMutation({
     onSuccess: (_, variables) => {
-      // queryClient.invalidateQueries(['projects', profileId]);
+      queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
+        ...prev,
+        team_membership: {
+          ...prev?.team_membership,
+          team_data: {
+            ...prev?.team_membership.team_data,
+            name: variables.name || prev?.team_membership.team_data.name,
+            plan: variables.plan || prev?.team_membership.team_data.plan,
+          },
+          role: variables.role || prev?.team_membership.role,
+        },
+      }));
     },
     onError: (error: any) => {
       if (error?.response) {
@@ -203,5 +231,61 @@ export const useUpdateTeam = () => {
       }
     },
     mutationFn: updateTeam,
+  });
+};
+
+const updateAdmin = async ({
+  teamId,
+  profileId,
+}: {
+  teamId: string;
+  profileId: string;
+}) => {
+  await axios.patch(`/teams/${teamId}/members/${profileId}/`, {
+    role: 'admin',
+  });
+};
+
+const useUpdateAdmin = () => {
+  const queryClient = useQueryClient();
+  const { dispatch } = useAlert({});
+
+  return useMutation({
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData<TeamMembership[]>(['teams'], (prev) => {
+        return prev?.map((member) =>
+          member.profile.id === variables.profileId
+            ? { ...member, role: 'admin' }
+            : member
+        );
+      });
+    },
+    mutationFn: updateAdmin,
+  });
+};
+
+const deleteTeamMember = async ({
+  teamId,
+  profileId,
+}: {
+  teamId: string;
+  profileId: string;
+}) => {
+  await axios.delete(`/teams/${teamId}/members/${profileId}/`);
+};
+
+export const useDeleteTeamMember = () => {
+  const queryClient = useQueryClient();
+  const { dispatch } = useAlert({});
+
+  return useMutation({
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData<TeamMembership[]>(['teams'], (prev) => {
+        return prev?.filter(
+          (member) => member.profile.id !== variables.profileId
+        );
+      });
+    },
+    mutationFn: deleteTeamMember,
   });
 };

@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { Button, Layout } from 'components';
 import clsx from 'clsx';
 import { convertUnicode } from '@/utils';
+import { useUpdateTeam } from '../billing';
+import { TeamPlans } from '@/types';
+import { useUser } from '@/providers/react-query-auth';
 
-const plans: Plan[] = [
+const plans: Array<Omit<PlanData, 'onSelect' | 'active'>> = [
   {
-    active: true,
     title: 'Talent',
     description:
       'Built for web3 professionals who want to build their web3 presence',
@@ -21,7 +23,6 @@ const plans: Plan[] = [
     ],
   },
   {
-    active: false,
     title: 'Individual recruiter',
     description: 'For freelancers and one-person recruiting departments',
     isNewFeature: true,
@@ -34,7 +35,6 @@ const plans: Plan[] = [
     ],
   },
   {
-    active: false,
     title: 'Team',
     description: 'Perfect for cooperating on projects for up to 3 recruiters',
     isNewFeature: true,
@@ -46,7 +46,6 @@ const plans: Plan[] = [
     ],
   },
   {
-    active: false,
     title: 'Enterprise',
     description:
       'Personalised support and on-demand features for the most demanding teams',
@@ -59,6 +58,9 @@ const plans: Plan[] = [
 ];
 
 const PricingPlans = () => {
+  const { data: profile } = useUser({});
+  const { mutate } = useUpdateTeam();
+
   return (
     <Layout
       variant="plain"
@@ -77,7 +79,20 @@ const PricingPlans = () => {
           </div>
           <div className="border border-indigoGray-20 px-10 xl:py-8 w-full rounded-xl divide-y xl:divide-y-0 xl:space-y-0 xl:space-x-14 flex flex-col xl:flex-row">
             {plans.map((plan) => (
-              <Plan {...plan} key={plan.title} />
+              <Plan
+                key={plan.title}
+                {...plan}
+                active={
+                  plan.title.toLowerCase() ===
+                  profile?.team_membership.team_data.plan.toLowerCase()
+                }
+                onSelect={(plan) =>
+                  mutate({
+                    plan,
+                    teamId: profile?.team_membership.team_data.id || '',
+                  })
+                }
+              />
             ))}
           </div>
         </div>
@@ -88,17 +103,18 @@ const PricingPlans = () => {
 
 export default PricingPlans;
 
-interface Plan {
+interface PlanData {
   title: 'Talent' | 'Individual recruiter' | 'Team' | 'Enterprise';
   description: string;
   isNewFeature?: boolean;
   features: string[];
   price?: string;
   discountedPrice?: string;
-  active: boolean;
 }
 
-const Plan: React.FC<Plan> = ({
+const Plan: React.FC<
+  PlanData & { active: boolean; onSelect: (plan: TeamPlans) => void }
+> = ({
   title,
   description,
   isNewFeature,
@@ -106,6 +122,7 @@ const Plan: React.FC<Plan> = ({
   price,
   discountedPrice,
   active,
+  onSelect,
 }) => {
   return (
     <div className="space-y-6 flex-1 py-8 xl:py-0">
@@ -146,6 +163,9 @@ const Plan: React.FC<Plan> = ({
         disabled={active}
         className="w-full"
         variant={title === 'Individual recruiter' ? 'primary' : 'secondary'}
+        onClick={() =>
+          onSelect(title.split(' ').join('_').toLowerCase() as TeamPlans)
+        }
       >
         {active
           ? 'Your active plan'
