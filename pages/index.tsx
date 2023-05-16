@@ -49,21 +49,28 @@ const Home = () => {
         className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0"
         ref={containerRef}
       >
-        <div className="w-full xl:w-[1200px] space-y-4">
-          <h1 className="font-demi text-4xl text-indigoGray-90">
-            Search for opportunities
+        <div className="w-full xl:w-[1200px]">
+          <h1 className="font-demi text-4xl text-indigoGray-90 mb-2">
+            Discover the best opportunities in crypto
           </h1>
+          <p className="text-sm font-light">
+            We are curating a set of jobs, grants, events and all kinds of other
+            opportunities in crypto.
+          </p>
+          <p className="mb-4 text-sm font-light">
+            You can apply them with your POAPs and other web3 credentials.
+          </p>
           <div className="space-y-4">
             <Search ref={containerRef} onApply={(value) => setSearch(value)} />
 
             <div className="flex space-x-8 px-3">
               <Filter
-                label="Opportunity type"
+                label="Category"
                 options={opportunityTypes}
                 onApply={setCategories}
               />
 
-              <Filter label="Tags" options={tags} onApply={setTag} />
+              <Filter label="Type" options={tags} onApply={setTag} />
             </div>
 
             <div className="space-y-8">
