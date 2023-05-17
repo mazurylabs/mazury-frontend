@@ -59,7 +59,7 @@ const plans: Array<Omit<PlanData, 'onSelect' | 'active'>> = [
 
 const PricingPlans = () => {
   const { data: profile } = useUser({});
-  const { mutate } = useUpdateTeam();
+  const { mutate } = useUpdateTeam({});
 
   return (
     <Layout
