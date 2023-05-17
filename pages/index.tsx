@@ -30,6 +30,8 @@ const tags = ['Job', 'Other'];
 
 const searchSuggestions = opportunityTypes;
 
+const skeletons = Array(3).fill('skeleton');
+
 const Home = () => {
   storage.setToken(true, TEAM_PLAN_ANNOUNCEMENT);
   const containerRef = React.useRef(null!);
@@ -74,6 +76,24 @@ const Home = () => {
             </div>
 
             <div className="space-y-8">
+              {isLoading &&
+                skeletons.map((_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    className="w-full space-y-3 xl:min-w-[362px] h-[88px] animate-pulse bg-[#F8F9FC] py-3 px-6 rounded-lg"
+                  >
+                    <div className="flex space-x-2">
+                      <div className="h-10 w-10 animate-pulse rounded-lg bg-indigoGray-30" />
+                      <div className="h-full grow space-y-1">
+                        <div className="h-3 w-[40%] animate-pulse rounded-lg bg-indigoGray-30" />
+                        <div className="h-3 w-[40%] animate-pulse rounded-lg bg-indigoGray-30" />
+                      </div>
+                    </div>
+
+                    <div className="h-3 w-[80%] animate-pulse rounded-lg bg-indigoGray-30" />
+                  </div>
+                ))}
+
               {data?.results.map((company) => (
                 <Company key={company.id} company={company} />
               ))}
