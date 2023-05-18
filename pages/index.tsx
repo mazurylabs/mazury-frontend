@@ -15,20 +15,28 @@ import storage from '@/utils/storage';
 import { TEAM_PLAN_ANNOUNCEMENT } from '@/config';
 
 const opportunityTypes = [
-  'Backend Developer',
-  'Frontend Developer',
-  'Fullstack Developer',
-  'Marketing',
-  'Design',
-  'Product',
-  'Community',
-  'Business',
-  'Other',
+  ['frontend_engineer', 'Frontend Engineer'],
+  ['backend_engineer', 'Backend Engineer'],
+  ['full_stack_engineer', 'Full Stack Engineer'],
+  ['android_engineer', 'Android Engineer'],
+  ['ios_engineer', 'iOS Engineer'],
+  ['product_designer', 'Product Designer'],
+  ['product_manager', 'Product Manager'],
+  ['finance', 'Finance'],
+  ['recruiter', 'Recruiter'],
+  ['business_development', 'Business Development'],
+  ['sales', 'Sales'],
+  ['marketing', 'Marketing'],
+  ['community', 'Community'],
+  ['other', 'Other'],
 ];
 
-const tags = ['Job', 'Other'];
+const tags = [
+  ['job', 'Job'],
+  ['other', 'Other'],
+];
 
-const searchSuggestions = opportunityTypes;
+const searchSuggestions = opportunityTypes.map((item) => item[1]);
 
 const skeletons = Array(3).fill('skeleton');
 
@@ -189,7 +197,7 @@ Search.displayName = 'Search';
 
 interface FilterProps {
   label: string;
-  options: string[];
+  options: string[][];
   onApply: (options: string[]) => void;
 }
 
@@ -222,12 +230,15 @@ const Filter = ({ label, options, onApply }: FilterProps) => {
           <div className="h-fit w-[350px] p-6">
             <div className="space-y-2">
               {options.map((option) => (
-                <div key={option} className="flex items-center space-x-4 py-1">
+                <div
+                  key={option[0]}
+                  className="flex items-center space-x-4 py-1"
+                >
                   <Checkbox
-                    id={option}
-                    checked={selectedOptions.includes(option)}
-                    label={option}
-                    setChecked={() => handleSelect(option)}
+                    id={option[0]}
+                    checked={selectedOptions.includes(option[0])}
+                    label={option[1]}
+                    setChecked={() => handleSelect(option[0])}
                   />
                 </div>
               ))}
