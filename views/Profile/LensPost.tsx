@@ -1,3 +1,4 @@
+import { Avatar } from '@/components';
 import * as React from 'react';
 import SVG from 'react-inlinesvg';
 
@@ -31,8 +32,8 @@ export const LensPost = ({
     >
       <div className="space-y-1">
         <div className="flex items-center space-x-2">
-          <img
-            className="h-8 w-8 rounded-full"
+          <Avatar
+            outerClassName="h-8 w-8"
             src={author.avatar}
             alt={author.username}
           />
