@@ -174,14 +174,14 @@ const Search = React.forwardRef<HTMLDivElement, SearchProps>(
 
         <ul
           className={clsx(
-            'w-full h-fit xl:pl-[52px] space-y-3 py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
+            'w-full h-fit py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
             focused ? 'opacity-100' : 'opacity-0 pointer-events-none'
           )}
         >
           {searchSuggestions.map((item) => (
             <li
               key={`suggestion-${item}`}
-              className="font-normal text-indigoGray-90"
+              className="font-normal text-indigoGray-90 hover:bg-indigoGray-10 cursor-pointer xl:pl-[52px] py-1.5"
               onClick={() => setSearchTerm(item)}
             >
               {item}
