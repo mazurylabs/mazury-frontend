@@ -481,3 +481,18 @@ export type TeamPlans =
   | 'individual_recruiter'
   | 'team'
   | 'enterprise';
+
+export interface PricingPlan {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  product_id: string;
+  name: string;
+  description: string;
+  price: {
+    id: string;
+    price_id: string;
+    unit_amount: string;
+    currency: string;
+  };
+}

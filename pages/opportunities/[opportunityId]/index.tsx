@@ -32,6 +32,41 @@ interface Application {
   message?: string;
 }
 
+const matchCategorySlugToHumanName = (categorySlug: string) => {
+  switch (categorySlug) {
+    case 'frontend_engineer':
+      return 'Frontend Engineer';
+    case 'backend_engineer':
+      return 'Backend Engineer';
+    case 'full_stack_engineer':
+      return 'Full-Stack Engineer';
+    case 'android_engineer':
+      return 'Android Engineer';
+    case 'ios_engineer':
+      return 'iOS Engineer';
+    case 'product_designer':
+      return 'Product Designer';
+    case 'product_manager':
+      return 'Product Manager';
+    case 'finance':
+      return 'Finance';
+    case 'recruiter':
+      return 'Recruiter';
+    case 'business_development':
+      return 'Business Development';
+    case 'sales':
+      return 'Sales';
+    case 'marketing':
+      return 'Marketing';
+    case 'community':
+      return 'Community';
+    case 'other':
+      return 'Other';
+    default:
+      return 'Other';
+  }
+};
+
 const Opportunity: React.FC<Props> = ({ opportunityId }) => {
   const { data: opportunity, isLoading } = useOpportunity({ opportunityId });
   const { data } = useUser();
@@ -148,41 +183,6 @@ const OpportunityView = ({
   const isMobile = useMobile(false);
   const { dispatch } = useAlert({});
 
-  const matchCategorySlugToHumanName = (categorySlug: string) => {
-    switch (categorySlug) {
-      case 'frontend_engineer':
-        return 'Frontend Engineer';
-      case 'backend_engineer':
-        return 'Backend Engineer';
-      case 'full_stack_engineer':
-        return 'Full-Stack Engineer';
-      case 'android_engineer':
-        return 'Android Engineer';
-      case 'ios_engineer':
-        return 'iOS Engineer';
-      case 'product_designer':
-        return 'Product Designer';
-      case 'product_manager':
-        return 'Product Manager';
-      case 'finance':
-        return 'Finance';
-      case 'recruiter':
-        return 'Recruiter';
-      case 'business_development':
-        return 'Business Development';
-      case 'sales':
-        return 'Sales';
-      case 'marketing':
-        return 'Marketing';
-      case 'community':
-        return 'Community';
-      case 'other':
-        return 'Other';
-      default:
-        return 'Other';
-    }
-  };
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -236,7 +236,7 @@ const OpportunityView = ({
         )}
       </div>
 
-      {isRecruiter && (
+      {isRecruiter && opportunity.can_edit && (
         <Button
           size="medium"
           variant="secondary"
@@ -258,7 +258,7 @@ const OpportunityView = ({
               <p className="text-indigoGray-40">Company name</p>
               <div className="flex space-x-3">
                 <p>{opportunity.company_info.name}</p>
-                {isRecruiter && (
+                {isRecruiter && opportunity.can_edit && (
                   <Link
                     href={`/opportunities/${opportunityId}/edit?company-id=${opportunity.company_info.id}`}
                     className=" text-indigo-600"
