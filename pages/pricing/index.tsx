@@ -7,7 +7,7 @@ import { Button, Layout } from 'components';
 import clsx from 'clsx';
 import { convertUnicode } from '@/utils';
 import { useUpdateTeam } from '../billing';
-import { ListResponse, PricingPlan, TeamPlans } from '@/types';
+import { ListResponse, PricingPlan, TeamPlans, PlanFeature } from '@/types';
 import { useUser } from '@/providers/react-query-auth';
 import { axios } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
@@ -112,7 +112,7 @@ export default PricingPlans;
 
 interface PlanData {
   isNewFeature?: boolean;
-  features?: string[];
+  features?: PlanFeature[];
   discountedPrice?: string;
   active: boolean;
   onSelect: (plan: TeamPlans) => void;
@@ -182,9 +182,9 @@ const Plan: React.FC<PricingPlan & PlanData> = ({
 
       <div className="space-y-4 xl:min-h-[161px]">
         {features.map((feature) => (
-          <div className="flex items-start space-x-2" key={feature}>
+          <div className="flex items-start space-x-2" key={feature.id}>
             <SVG src="/icons/checked.svg" className="shrink-0" />
-            <p className="text-sm font-light">{feature}</p>
+            <p className="text-sm font-light">{feature.line}</p>
           </div>
         ))}
       </div>

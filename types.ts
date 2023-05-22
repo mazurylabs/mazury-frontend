@@ -482,6 +482,11 @@ export type TeamPlans =
   | 'team'
   | 'enterprise';
 
+export interface PlanFeature {
+  id: string;
+  line: string;
+}
+
 export interface PricingPlan {
   id: string;
   created_at: string;
