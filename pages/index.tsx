@@ -45,12 +45,13 @@ const Home = () => {
   const containerRef = React.useRef(null!);
 
   const [search, setSearch] = React.useState('');
-  const [tag, setTag] = React.useState<string[]>([]);
+  const [jobType, setJobType] = React.useState<string[]>([]);
   const [categories, setCategories] = React.useState<string[]>([]);
 
   const { data, isLoading } = useCompanies({
     search,
     categories: categories.join(','),
+    jobTypes: jobType.join(','),
   });
 
   return (
@@ -78,9 +79,15 @@ const Home = () => {
                 label="Category"
                 options={opportunityTypes}
                 onApply={setCategories}
+                orientation="vertical"
               />
 
-              <Filter label="Type" options={tags} onApply={setTag} />
+              <Filter
+                label="Type"
+                options={tags}
+                onApply={setJobType}
+                orientation="horizontal"
+              />
             </div>
 
             <div className="space-y-8">
@@ -199,10 +206,20 @@ interface FilterProps {
   label: string;
   options: string[][];
   onApply: (options: string[]) => void;
+  orientation: 'vertical' | 'horizontal';
 }
 
-const Filter = ({ label, options, onApply }: FilterProps) => {
+const Filter = ({
+  label,
+  options,
+  onApply,
+  orientation = 'vertical',
+}: FilterProps) => {
+  const containerRef = React.useRef(null!);
+  const [open, setOpen] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
+
+  useClickOutside(containerRef, () => setOpen(false));
 
   const handleSelect = (value: string) => {
     if (selectedOptions.includes(value)) {
@@ -213,9 +230,18 @@ const Filter = ({ label, options, onApply }: FilterProps) => {
       setSelectedOptions((prevOptions) => [...prevOptions, value]);
     }
   };
+
+  const handleApply = () => {
+    onApply(selectedOptions);
+    setOpen(false);
+  };
+
   return (
-    <Popover.Root>
-      <Popover.Trigger className="text-indigoGray-90 font-normal text-sm flex items-center space-x-1">
+    <Popover.Root open={open}>
+      <Popover.Trigger
+        className="text-indigoGray-90 font-normal text-sm flex items-center space-x-1"
+        onClick={() => setOpen(!open)}
+      >
         <p>{label}</p>
         <SVG src="/icons/angle-down.svg" className="h-4 w-4" />
       </Popover.Trigger>
@@ -227,8 +253,19 @@ const Filter = ({ label, options, onApply }: FilterProps) => {
           sideOffset={8}
           className="rounded-lg bg-white border border-indigoGray-20"
         >
-          <div className="h-fit w-[350px] p-6">
-            <div className="space-y-2">
+          <div
+            className={clsx(
+              orientation === 'vertical'
+                ? 'h-fit w-fit p-4'
+                : 'h-fit w-[350px] p-6'
+            )}
+            ref={containerRef}
+          >
+            <div
+              className={clsx(
+                orientation === 'vertical' ? 'grid grid-cols-2' : 'space-y-2'
+              )}
+            >
               {options.map((option) => (
                 <div
                   key={option[0]}
@@ -244,12 +281,8 @@ const Filter = ({ label, options, onApply }: FilterProps) => {
               ))}
             </div>
 
-            <div className="flex justify-end w-full mt-20">
-              <Button
-                size="small"
-                onClick={() => onApply(selectedOptions)}
-                disabled={!selectedOptions.length}
-              >
+            <div className="flex justify-end w-full mt-4">
+              <Button size="small" onClick={handleApply}>
                 Apply
               </Button>
             </div>
@@ -354,13 +387,17 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
 const getCompanies = async ({
   categories,
   search,
+  jobTypes,
 }: {
   categories: string;
   search: string;
+  jobTypes: string;
 }) => {
   const { data } = await axios.get<ListResponse<CompanyOpportunities>>(
-    `/companies?${search ? `search=${search}${categories ? '&' : ''}` : ''}${
-      categories ? `categories=${categories}` : ''
+    `/companies?${
+      search ? `search=${search}${categories || jobTypes ? '&' : ''}` : ''
+    }${categories ? `categories=${categories}${jobTypes ? '&' : ''}` : ''}${
+      jobTypes ? `job_types=${jobTypes}` : ''
     }`
   );
   return data;
@@ -369,12 +406,14 @@ const getCompanies = async ({
 export const useCompanies = ({
   categories,
   search,
+  jobTypes,
 }: {
   categories: string;
   search: string;
+  jobTypes: string;
 }) => {
   return useQuery({
-    queryKey: clsx('companies', categories, search).split(' '),
-    queryFn: async () => getCompanies({ categories, search }),
+    queryKey: clsx('companies', categories, search, jobTypes).split(' '),
+    queryFn: async () => getCompanies({ categories, search, jobTypes }),
   });
 };
