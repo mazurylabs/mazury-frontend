@@ -18,6 +18,7 @@ import { useAccount, useIntersect, useMobile } from 'hooks';
 import { useLensPost } from '@/views/Profile/Container';
 import { ethers } from 'ethers';
 import { formatProfileRoute } from '@/utils';
+import { Projects } from '@/views/Profile/Overview';
 
 interface WritingProps {
   ethAddress: string;
@@ -28,6 +29,8 @@ const skeletons = Array(3).fill('skeleton');
 const Writing = ({ ethAddress }: WritingProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const isMobile = useMobile();
+
+  const [isSaveProfileView, setIsSaveProfileView] = React.useState(false);
 
   const { ref, entry } = useIntersect({
     rootMargin: '56px',
@@ -53,8 +56,9 @@ const Writing = ({ ethAddress }: WritingProps) => {
   const isLoading = isLensLoading && isMirrorLoading;
 
   const navItems = Container.useNavItems({
+    ensAddress: ethAddress,
     activeItem: 'content',
-    address: ethAddress,
+    address,
     profileId: accountInView?.lens_id as string,
   });
 
@@ -62,6 +66,8 @@ const Writing = ({ ethAddress }: WritingProps) => {
     <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
         navItems={navItems}
+        title={isSaveProfileView ? 'Save profile to folders' : undefined}
+        handleGoBack={() => setIsSaveProfileView(false)}
         summary={
           <ProfileSummary
             address={address}
@@ -69,6 +75,7 @@ const Writing = ({ ethAddress }: WritingProps) => {
             user={user}
             isOwnProfile={isOwnProfile}
             intersectionRef={ref}
+            handleSaveProfile={() => setIsSaveProfileView(true)}
           />
         }
       >
@@ -77,8 +84,11 @@ const Writing = ({ ethAddress }: WritingProps) => {
           isVisible={!entry?.isIntersecting}
           profile={accountInView}
         />
-        <div className="space-y-6">
-          {/* <FilterSearch
+        {isSaveProfileView ? (
+          <Projects profileAddress={accountInView?.eth_address} />
+        ) : (
+          <div className="space-y-6">
+            {/* <FilterSearch
             dropdown={{
               onSelect: () => {},
               label: 'writings',
@@ -88,50 +98,51 @@ const Writing = ({ ethAddress }: WritingProps) => {
             resetFilters={false}
           /> */}
 
-          <div
-            className={clsx(
-              isLoading && 'grid grid-cols-1 gap-6 lg:grid-cols-2',
-              (writings.length || lensPost?.items.length) &&
-                'columns-1 gap-6 lg:columns-2',
-              !writings.length &&
-                !lensPost?.items.length &&
-                'flex items-center justify-center'
-            )}
-          >
-            {isLoading ? (
-              skeletons.map((item, index) => <Skeleton key={index + item} />)
-            ) : writings.length || lensPost?.items.length ? (
-              <>
-                {writings?.map((writing) => {
-                  return <MirrorPost key={writing.id} {...writing} />;
-                })}
-                {lensPost?.items.map((post) => {
-                  if (!post?.id) return null;
+            <div
+              className={clsx(
+                isLoading && 'grid grid-cols-1 gap-6 lg:grid-cols-2',
+                (writings.length || lensPost?.items.length) &&
+                  'columns-1 gap-6 lg:columns-2',
+                !writings.length &&
+                  !lensPost?.items.length &&
+                  'flex items-center justify-center'
+              )}
+            >
+              {isLoading ? (
+                skeletons.map((item, index) => <Skeleton key={index + item} />)
+              ) : writings.length || lensPost?.items.length ? (
+                <>
+                  {writings?.map((writing) => {
+                    return <MirrorPost key={writing.id} {...writing} />;
+                  })}
+                  {lensPost?.items.map((post) => {
+                    if (!post?.id) return null;
 
-                  return (
-                    <LensPost
-                      key={post.id}
-                      replies={post.stats.totalAmountOfComments}
-                      quotes={post.stats.totalAmountOfMirrors}
-                      likes={post.stats.totalUpvotes}
-                      saves={post.stats.totalAmountOfCollects}
-                      url={`https://lenster.xyz/posts/${post.id}`}
-                      description={post.metadata.content}
-                      author={{
-                        username: accountInView?.username,
-                        avatar: accountInView?.avatar,
-                      }}
-                    />
-                  );
-                })}
-              </>
-            ) : (
-              <EmptyState emptyMessage="No content to show" />
-            )}
+                    return (
+                      <LensPost
+                        key={post.id}
+                        replies={post.stats.totalAmountOfComments}
+                        quotes={post.stats.totalAmountOfMirrors}
+                        likes={post.stats.totalUpvotes}
+                        saves={post.stats.totalAmountOfCollects}
+                        url={`https://lenster.xyz/posts/${post.id}`}
+                        description={post.metadata.content}
+                        author={{
+                          username: accountInView?.username,
+                          avatar: accountInView?.avatar,
+                        }}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <EmptyState emptyMessage="No content to show" />
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {hasMoreData && (
+        {hasMoreData && !isSaveProfileView && (
           <div className="mt-6 flex justify-center">
             <Button
               className="w-[211px] shrink-0 !border !border-indigoGray-20 !bg-indigoGray-10 !font-semibold !text-indigoGray-90"

@@ -81,13 +81,7 @@ export const Talent = ({ result }: Props) => {
             <a className="flex list-none flex-col space-y-4 rounded-2xl border border-indigoGray-20 p-4 shadow-sm lg:space-y-0">
               <div className="flex items-center">
                 <div>
-                  <Avatar
-                    src={result.avatar}
-                    height={40}
-                    width={40}
-                    alt={result?.username}
-                    className={'object-cover'}
-                  />
+                  <Avatar src={result.avatar} alt={result?.username} />
                 </div>
 
                 <div className="ml-3 flex flex-col items-start space-y-[6px] lg:w-40">

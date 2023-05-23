@@ -28,6 +28,7 @@ export const LensFollowers = ({
                 className={`h-6 w-6 rounded-full`}
                 style={{
                   zIndex: mutuals.length - index,
+                  marginLeft: index ? -4 : 0,
                 }}
               />
             );

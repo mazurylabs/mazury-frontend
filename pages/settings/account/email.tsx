@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NextPage } from 'next';
 import { Button, Input, SettingsLayout, WalletRequestModal } from 'components';
-import { getProfile, updateProfile, verifyEmail } from 'utils/api';
+import { updateProfile, verifyEmail } from 'utils/api';
 import { useIsOnboarded, useProtectedRoute } from 'hooks';
 import { useCountDown } from '@/hooks/useCountDown';
 import { useUser } from 'providers/react-query-auth';

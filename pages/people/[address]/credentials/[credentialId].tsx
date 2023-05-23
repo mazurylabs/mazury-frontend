@@ -63,9 +63,9 @@ const CredentialDetails = ({ ethAddress, credentialId }: HighlightProps) => {
 
   const highlightedCredentials = useHighlightedCredentials(address);
 
-  const cachedData = queryClient.getQueryData(['badges', address]) as
-    | InfiniteData<ListResponse<Badge>>
-    | undefined;
+  const cachedData = queryClient.getQueryData<
+    InfiniteData<ListResponse<Badge>>
+  >(['badges', address]);
 
   const cachedBadge = cachedData?.pages
     .reduce((prev, next) => {

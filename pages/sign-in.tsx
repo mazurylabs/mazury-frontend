@@ -1,4 +1,4 @@
-import { MobileSidebar } from 'components';
+import { MobileSidebar } from '@/components/Layout/MobileSidebar';
 import { NextPage } from 'next';
 import { SignIn } from 'views/SignIn';
 

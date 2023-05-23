@@ -24,13 +24,14 @@ interface ProfileSummaryProps {
   loading?: boolean;
   navItems?: NavItem[];
   intersectionRef?: React.MutableRefObject<HTMLDivElement>;
+  handleSaveProfile?: () => void;
 }
 
 const Skeleton: React.FC<{
   intersectionRef?: React.MutableRefObject<HTMLDivElement>;
 }> = ({ intersectionRef }) => {
   return (
-    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
+    <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-6 lg:z-10 lg:mt-6 lg:w-[350px] lg:shrink-0">
       <div className="h-[114px] w-full animate-pulse bg-indigoGray-30" />
       <div className="relative bg-indigoGray-5 px-4 pb-6">
         <div className="relative top-[-26px] mb-[-10px] flex items-center space-x-2">
@@ -72,6 +73,7 @@ export const ProfileSummary = ({
   isOwnProfile,
   loading,
   intersectionRef,
+  handleSaveProfile,
 }: ProfileSummaryProps) => {
   const router = useRouter();
   const isEditPage = router.asPath?.includes('edit');
@@ -93,7 +95,7 @@ export const ProfileSummary = ({
   return (
     <>
       <Toaster />
-      <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-10 lg:z-10 lg:mt-10 lg:w-[350px] lg:shrink-0">
+      <div className="h-fit overflow-hidden rounded-lg bg-white lg:sticky lg:top-6 lg:z-10 lg:mt-6 lg:w-[350px] lg:shrink-0">
         <motion.div
           className={clsx('h-[114px] w-full bg-gradient-3')}
           style={isMobile ? { opacity } : undefined}
@@ -211,9 +213,9 @@ export const ProfileSummary = ({
               )}
 
             {!!profile?.location && (
-              <div className="mt-4 flex items-center space-x-2">
+              <div className="mt-4 flex items-center space-x-2 text-indigoGray-90">
                 <SVG src="/icons/location.svg" height={16} width={16} />
-                <p className="font-sansSemi text-xs font-semibold text-indigoGray-90">
+                <p className="font-sansSemi text-xs font-semibold">
                   {profile.location}
                 </p>
               </div>
@@ -233,11 +235,16 @@ export const ProfileSummary = ({
                   ? router.push(`/people/${address}/edit`)
                   : handleCopy(window.location.href)
               }
-              className={`grow ${
-                !isOwnProfile && !user?.is_recruiter
-                  ? 'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold'
-                  : ''
-              }`}
+              className={clsx(
+                'grow whitespace-nowrap',
+                !isOwnProfile &&
+                  !user?.is_recruiter &&
+                  'border border-[1.5px] !border-indigoGray-20 !font-sansSemi !font-semibold',
+                !isOwnProfile &&
+                  user?.is_recruiter &&
+                  handleSaveProfile &&
+                  'lg:max-w-[174px]'
+              )}
               disabled={isEditPage}
             >
               {!isOwnProfile && (
@@ -259,10 +266,20 @@ export const ProfileSummary = ({
             {(isOwnProfile || user?.is_recruiter) && (
               <Button
                 variant="tertiary"
-                className="min-w-16 border-[1.5px] border-indigoGray-20"
+                className="max-w-16 min-w-[64px] border-[1.5px] border-indigoGray-20"
                 onClick={() => handleCopy(window.location.href)}
               >
                 <SVG height={16} width={16} src="/icons/share.svg" />
+              </Button>
+            )}
+
+            {!isOwnProfile && user?.is_recruiter && handleSaveProfile && (
+              <Button
+                variant="tertiary"
+                className="max-w-16 min-w-[64px] border-[1.5px] border-indigoGray-20"
+                onClick={handleSaveProfile}
+              >
+                <SVG height={16} width={16} src="/icons/star-unfilled.svg" />
               </Button>
             )}
           </div>

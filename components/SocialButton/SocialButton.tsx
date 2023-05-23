@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { FC, ReactNode } from 'react';
+import SVG from 'react-inlinesvg';
 
 interface SocialButtonProps {
   icon?: ReactNode;
@@ -36,7 +37,9 @@ export const SocialButton: FC<SocialButtonProps> = ({
       onClick={onClick}
     >
       {iconSrc ? (
-        <img src={iconSrc} alt={`${label} icon`} width="16px" height="16px" />
+        <div className="h-4 w-4">
+          <SVG src={iconSrc} className="h-4 w-4" />
+        </div>
       ) : (
         icon
       )}

@@ -3,6 +3,6 @@ export interface ButtonProps
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'tertiary';
   className?: string;
-  size?: 'small' | 'large';
+  size?: 'small' | 'large' | 'medium';
   loading?: boolean;
 }

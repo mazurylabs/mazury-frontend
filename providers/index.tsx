@@ -7,6 +7,7 @@ import { SidebarProvider } from '@/contexts';
 import { ReactQueryProvider } from './react-query';
 import { QueryClient } from '@tanstack/react-query';
 import { ErrorBoundaryProvider } from './errorBoundary/ErrorBoundaryProvider';
+import { AlertProvider } from '@/components/Alert.tsx';
 
 export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
   children,
@@ -18,7 +19,9 @@ export const AppProvider: React.FC<{ queryClient: QueryClient }> = ({
         <SwrProvider>
           <WagmiProvider>
             <SidebarProvider>
-              <ErrorBoundaryProvider>{children}</ErrorBoundaryProvider>
+              {/* <ErrorBoundaryProvider> */}
+              <AlertProvider>{children}</AlertProvider>
+              {/* </ErrorBoundaryProvider> */}
             </SidebarProvider>
           </WagmiProvider>
         </SwrProvider>

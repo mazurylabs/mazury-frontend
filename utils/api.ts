@@ -1,146 +1,8 @@
 import { SiweMessage } from 'siwe';
 
 import { OnboardingFormDataType } from 'contexts';
-import {
-  Activity,
-  APIResponse,
-  Badge,
-  ListResponse,
-  Profile,
-  Referral,
-} from 'types';
-import type { ScopedMutator } from 'swr/dist/types';
+import { APIResponse, Profile } from 'types';
 import { axios } from '../lib/axios';
-
-export const getProfile: (
-  address: string
-) => Promise<APIResponse<Profile>> = async (address: string) => {
-  try {
-    const res = await axios.get(`/profiles/${address}`);
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const getBadges: (
-  address: string,
-  issuer: string
-) => Promise<APIResponse<Profile>> = async (
-  address: string,
-  issuer: string
-) => {
-  try {
-    const res = await axios.get(
-      `badges/?owner=${address}&issuer=${issuer}&limit=4`
-    );
-
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const getBadgeById: (id: string) => Promise<APIResponse<Badge>> = async (
-  id
-) => {
-  try {
-    const res = await axios.get(`badges/${id}`);
-
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const requestConnection: (
-  address: string
-) => Promise<APIResponse<Badge>> = async (address) => {
-  try {
-    const res = await axios.post(
-      `/connections/request/?eth_address=${address}`,
-      {}
-    );
-
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const requestConnectionStatus: (
-  address: string
-) => Promise<APIResponse<Badge>> = async (address) => {
-  try {
-    const res = await axios.get(`/connections/check/?eth_address=${address}`);
-
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error: any) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const getMessageToBeSigned: (
-  address: string
-) => Promise<APIResponse<string | null>> = async (address) => {
-  try {
-    const res = await axios.get(`/auth/message?address=${address}`);
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const mintBadge: (
-  badgeId: string
-) => Promise<APIResponse<{ transaction_id: string }>> = async (badgeId) => {
-  try {
-    const res = await axios.patch(`/badges/${badgeId}/mintnft/`, {});
-
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
 
 export const verifyEmail = async (address: string) => {
   try {
@@ -214,61 +76,6 @@ export const updateProfile: (
   }
 };
 
-export const getActvity: (
-  address?: string
-) => Promise<APIResponse<ListResponse<Activity>>> = async (address) => {
-  try {
-    const res = await axios.get(`/activity?user=${address}`);
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
-export const createReferral: (
-  receiverAddress: string,
-  content: string,
-  skills: string[],
-  authorSignature: string,
-  mutate?: ScopedMutator,
-  authorAddress?: string
-) => Promise<APIResponse<Referral>> = async (
-  receiverAddress,
-  content,
-  skills,
-  authorSignature,
-  mutate,
-  authorAddress
-) => {
-  try {
-    const res = await axios.post('/referrals/', {
-      receiver: receiverAddress,
-      content,
-      skills,
-    });
-    // Revalidate queries
-    mutate?.(`/referrals?receiver=${receiverAddress}`);
-    mutate?.(`/activity?user=${receiverAddress}`);
-    mutate?.(`/referrals?author=${authorAddress}`);
-    mutate?.(`/activity?user=${authorAddress}`);
-    return {
-      data: res.data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
 export const verifyTweet: (tweetURL: string) => Promise<APIResponse> = async (
   tweetURL
 ) => {
@@ -315,23 +122,6 @@ export const connectGithub: (
   }
 };
 
-export const isOnboarded: (
-  address: string
-) => Promise<APIResponse<boolean>> = async (address) => {
-  try {
-    const { data: profile } = await getProfile(address);
-    return {
-      data: !!profile?.onboarded,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null,
-      error,
-    };
-  }
-};
-
 export const isValid: (
   field: 'username' | 'email',
   value: string
@@ -343,7 +133,7 @@ export const isValid: (
   } | null>
 > = async (field, value) => {
   try {
-    const res = await axios.post(`/profiles/validate?type=${field}`, {
+    const res = await axios.post(`/validate?type=${field}`, {
       value,
     });
     return {

@@ -34,7 +34,10 @@ export const Checkbox: FC<CheckboxProps> = ({
         />
       </button>
 
-      <label htmlFor={id} className="text-base font-medium text-indigoGray-70">
+      <label
+        htmlFor={id}
+        className="text-base font-normal text-indigoGray-70 cursor-pointer"
+      >
         {label}
       </label>
       <input

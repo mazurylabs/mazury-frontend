@@ -37,7 +37,7 @@ export const Input: FC<InputProps> = ({
           }
         }}
         placeholder={placeholder}
-        className={`block rounded-lg border border-indigoGray-20 px-4 py-3 font-sansMid text-sm font-medium text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 ${
+        className={`block rounded-lg border border-indigoGray-20 px-4 py-3 font-sans text-sm font-normal text-indigoGray-90 outline-none placeholder:text-indigoGray-50 hover:border-indigoGray-30 focus:border-indigo-600 ${
           disabled && 'cursor-not-allowed border-indigoGray-40 bg-indigoGray-10'
         } ${error && 'border-red-500 text-red-500'} ${className}`}
         disabled={disabled}

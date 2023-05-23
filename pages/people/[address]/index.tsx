@@ -6,20 +6,19 @@ import { Layout } from 'components';
 import { Container, ProfileSummary, ProfileSummaryMobile } from 'views/Profile';
 import { useAccount, useIntersect, useMobile } from 'hooks';
 
-import { Idle } from 'views/Profile/Overview';
+import { Idle, Projects } from 'views/Profile/Overview';
 
 import { ProfileSummaryAccordion } from 'views/Profile/ProfileSummaryAccordion';
-import { formatProfileRoute } from '@/utils';
 
 interface ProfileProps {
   ethAddress: string;
 }
 
-export type OverviewViews = 'idle';
-
 const Profile = ({ ethAddress }: ProfileProps) => {
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);
   const isMobile = useMobile();
+
+  const [isSaveProfileView, setIsSaveProfileView] = React.useState(false);
 
   const { ref, entry } = useIntersect({
     rootMargin: '0px',
@@ -40,7 +39,8 @@ const Profile = ({ ethAddress }: ProfileProps) => {
   );
 
   const navItems = Container.useNavItems({
-    address: ethAddress,
+    ensAddress: ethAddress,
+    address: address,
     activeItem: 'overview',
     profileId: accountInView?.lens_id as string,
   });
@@ -49,6 +49,8 @@ const Profile = ({ ethAddress }: ProfileProps) => {
     <Layout variant="plain" showMobileSidebar={entry?.isIntersecting}>
       <Container
         navItems={navItems}
+        title={isSaveProfileView ? 'Save profile to folders' : undefined}
+        handleGoBack={() => setIsSaveProfileView(false)}
         summary={
           <ProfileSummary
             address={address}
@@ -57,6 +59,7 @@ const Profile = ({ ethAddress }: ProfileProps) => {
             isOwnProfile={isOwnProfile}
             loading={!accountInView}
             intersectionRef={ref}
+            handleSaveProfile={() => setIsSaveProfileView(true)}
           />
         }
       >
@@ -65,16 +68,20 @@ const Profile = ({ ethAddress }: ProfileProps) => {
           isVisible={!entry?.isIntersecting}
           profile={accountInView}
         />
-        <Idle
-          address={ethAddress}
-          isOwnProfile={isOwnProfile}
-          profileSummaryAccordion={profileSummaryAccordion}
-          lensId={accountInView?.lens_id || ''}
-          author={{
-            username: accountInView?.username,
-            avatar: accountInView?.avatar,
-          }}
-        />
+        {isSaveProfileView ? (
+          <Projects profileAddress={address} />
+        ) : (
+          <Idle
+            address={address}
+            isOwnProfile={isOwnProfile}
+            profileSummaryAccordion={profileSummaryAccordion}
+            lensId={accountInView?.lens_id || ''}
+            author={{
+              username: accountInView?.username,
+              avatar: accountInView?.avatar,
+            }}
+          />
+        )}
       </Container>
     </Layout>
   );
