@@ -320,10 +320,10 @@ const TEMPORARY_RECOMMENDED_DATA = [
 
 export const EmptyState = () => {
   return (
-    <div className="mt-3 flex grow flex-col pb-6 font-sans text-sm font-medium text-indigoGray-90">
+    <div className="font-regular mt-3 flex grow flex-col pb-6 font-sans text-sm text-indigoGray-90">
       <div className="flex grow flex-col items-center justify-between pt-[80px] pb-8">
         <div className="space-y-[2px] text-center">
-          <h3 className="indigoGray-80 font-sans text-lg font-bold leading-[27px]">
+          <h3 className="indigoGray-80 font-sans text-lg font-semibold leading-[27px]">
             Let’s try again
           </h3>
           <p>
@@ -333,7 +333,7 @@ export const EmptyState = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-[10px]">
-          <p className="font-sans text-base font-bold leading-6 text-pink-600">
+          <p className="font-sans text-base font-semibold leading-6 text-pink-600">
             or explore our recommended profiles!
           </p>
 

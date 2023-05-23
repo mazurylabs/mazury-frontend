@@ -352,7 +352,7 @@ export const ResultState = () => {
 
         <div className="ml-auto">
           {shouldQuerySearch && (
-            <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
+            <p className="font-regular font-sans text-base leading-6 text-indigoGray-50">
               {commify(searchResults.length)} / {commify(resultCount)} result
               {resultCount === 1 ? '' : 's'}
             </p>
@@ -381,7 +381,7 @@ export const ResultState = () => {
 
                   // onMouseLeave={() => handleSelectFilter('empty')}
                 >
-                  <span className="font-sans text-sm font-semibold leading-[21px] text-indigoGray-90">
+                  <span className="font-sans text-sm font-medium leading-[21px] text-indigoGray-90">
                     {filter}
                   </span>
                   <SVG src="/icons/angle-down.svg" height={16} width={16} />
@@ -415,7 +415,7 @@ export const ResultState = () => {
 
           <div className="ml-auto">
             {shouldQuerySearch && (
-              <p className="font-sans text-base font-medium leading-6 text-indigoGray-50">
+              <p className="font-regular font-sans text-base leading-6 text-indigoGray-50">
                 {commify(searchResults.length)} / {commify(resultCount)} result
                 {resultCount === 1 ? '' : 's'}
               </p>

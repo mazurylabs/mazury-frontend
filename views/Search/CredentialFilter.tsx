@@ -168,7 +168,7 @@ export const CredentialFilter = ({
             <SVG height={24} width={24} src={`/icons/search-black.svg`} />
           </div>
 
-          <div className="grow font-sans text-base font-medium">
+          <div className="font-regular grow font-sans text-base">
             <input
               type="text"
               placeholder="Credential name"
