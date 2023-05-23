@@ -10,6 +10,8 @@ import { useUser } from '@/providers/react-query-auth';
 import { emailRegex } from '@/utils';
 import { updateProfile } from '@/utils/api';
 import { useQueryClient } from '@tanstack/react-query';
+import storage from '@/utils/storage';
+import { STORED_USER } from '@/config';
 
 export const ProfileInformation = () => {
   const queryClient = useQueryClient();
@@ -53,11 +55,16 @@ export const ProfileInformation = () => {
       );
 
       if (!error) {
-        queryClient.setQueryData(['authenticated-user'], (prev: any) => ({
-          ...prev,
-          ...data,
-          onboarded: true,
-        }));
+        queryClient.setQueryData(['authenticated-user'], (prev: any) => {
+          const user = {
+            ...prev,
+            ...data,
+            onboarded: true,
+          };
+
+          storage.setToken(user, STORED_USER);
+          return user;
+        });
       }
 
       handleStep(OnboardingStepsEnum['ALLSET']);
