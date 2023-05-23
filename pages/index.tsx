@@ -42,7 +42,6 @@ const skeletons = Array(3).fill('skeleton');
 
 const Home = () => {
   storage.setToken(true, TEAM_PLAN_ANNOUNCEMENT);
-  const containerRef = React.useRef(null!);
 
   const [search, setSearch] = React.useState('');
   const [jobType, setJobType] = React.useState<string[]>([]);
@@ -56,10 +55,7 @@ const Home = () => {
 
   return (
     <Layout variant="plain" className="!px-4 lg:!px-0">
-      <div
-        className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0"
-        ref={containerRef}
-      >
+      <div className="flex grow w-full lg:justify-center pt-6 pb-4 lg:px-0">
         <div className="w-full xl:w-[1200px]">
           <h1 className="font-demi text-4xl text-indigoGray-90 mb-2">
             Discover the best opportunities in crypto
@@ -72,7 +68,7 @@ const Home = () => {
             You can apply them with your POAPs and other web3 credentials.
           </p>
           <div className="space-y-4">
-            <Search ref={containerRef} onApply={(value) => setSearch(value)} />
+            <Search onApply={(value) => setSearch(value)} />
 
             <div className="flex space-x-8 px-3">
               <Filter
@@ -126,81 +122,89 @@ interface SearchProps {
   onApply: (query: string) => void;
 }
 
-const Search = React.forwardRef<HTMLDivElement, SearchProps>(
-  ({ onApply }, ref) => {
-    const [searchTerm, setSearchTerm] = React.useState('');
-    const [focused, setFocused] = React.useState(false);
+const Search: React.FC<SearchProps> = ({ onApply }) => {
+  const ref = React.useRef(null!);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [focused, setFocused] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null!);
 
-    // useClickOutside(ref as any, () => setFocused(false));
+  useClickOutside(ref, () => setFocused(false));
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      onApply(searchTerm);
-    };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onApply(searchTerm);
+    setFocused(false);
+  };
 
-    return (
-      <div
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (!containerRef.current || containerRef.current.contains(event.target)) {
+      return;
+    }
+    setFocused(false);
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={clsx(
+        'rounded-tl-lg rounded-tr-lg relative bg-indigoGray-5 z-20',
+        !focused && 'rounded-bl-lg rounded-br-lg'
+      )}
+    >
+      <form onSubmit={handleSubmit} className="flex p-2 px-3">
+        <div className="grow space-x-4 flex items-center">
+          <SVG src="/icons/search.svg" className="h-6 w-6 text-indigoGray-90" />
+          <input
+            type="text"
+            placeholder="Search"
+            aria-label="Search"
+            className="grow bg-transparent"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={handleBlur}
+          />
+        </div>
+
+        <div className="h-8 w-8">
+          {focused && (
+            <button type="submit" className="border-none !p-0">
+              <SVG
+                height={32}
+                width={32}
+                src={`/icons/search-forward${
+                  searchTerm ? '' : '-inactive'
+                }.svg`}
+              />
+              <span className="sr-only">Submit</span>
+            </button>
+          )}
+        </div>
+      </form>
+
+      <ul
         className={clsx(
-          'rounded-tl-lg rounded-tr-lg relative bg-indigoGray-5 z-20',
-          !focused && 'rounded-bl-lg rounded-br-lg'
+          'w-full h-fit py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
+          focused ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
       >
-        <form onSubmit={handleSubmit} className="flex p-2 px-3">
-          <div className="grow space-x-4 flex items-center">
-            <SVG
-              src="/icons/search.svg"
-              className="h-6 w-6 text-indigoGray-90"
-            />
-            <input
-              type="text"
-              placeholder="Search"
-              aria-label="Search"
-              className="grow bg-transparent"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-            />
-          </div>
-
-          <div className="h-8 w-8">
-            {focused && (
-              <button type="submit" className="border-none !p-0">
-                <SVG
-                  height={32}
-                  width={32}
-                  src={`/icons/search-forward${
-                    searchTerm ? '' : '-inactive'
-                  }.svg`}
-                />
-                <span className="sr-only">Submit</span>
-              </button>
-            )}
-          </div>
-        </form>
-
-        <ul
-          className={clsx(
-            'w-full h-fit py-4 absolute top-[100%] left-0 bg-indigoGray-5 rounded-bl-lg rounded-br-lg transition-all',
-            focused ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          )}
-        >
-          {searchSuggestions.map((item) => (
-            <li
-              key={`suggestion-${item}`}
-              className="font-normal text-indigoGray-90 hover:bg-indigoGray-10 cursor-pointer xl:pl-[52px] py-1.5"
-              onClick={() => setSearchTerm(item)}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-);
-
-Search.displayName = 'Search';
+        {searchSuggestions.map((item) => (
+          <li
+            key={`suggestion-${item}`}
+            className="font-normal text-indigoGray-90 hover:bg-indigoGray-10 cursor-pointer xl:pl-[52px] py-1.5"
+            onClick={() => {
+              setSearchTerm(item);
+              setFocused(false);
+              onApply(item);
+            }}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 interface FilterProps {
   label: string;
