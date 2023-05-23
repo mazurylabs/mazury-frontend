@@ -39,10 +39,16 @@ export const Container: React.FC<ContainerProps> & {
   const router = useRouter();
 
   const handleBack = () => {
-    if (handleGoBack) {
+    if (handleGoBack && saveWithModal) {
       setToggleSaveModal(true);
       return;
     }
+
+    if (handleGoBack && !saveWithModal) {
+      handleGoBack();
+      return;
+    }
+
     router.back();
   };
 
@@ -53,13 +59,13 @@ export const Container: React.FC<ContainerProps> & {
 
   return (
     <>
-      <div className="flex grow flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto] xl:min-w-[1200px]">
+      <div className="flex w-full flex-col pb-10 lg:flex-row lg:space-x-6 xl:mx-[auto] xl:w-[1200px]">
         <div className={clsx(title && 'hidden lg:block')}>{summary}</div>
 
         <div className="relative flex grow flex-col xl:max-w-fit">
           <div
             className={clsx(
-              'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:pt-10 lg:pb-6',
+              'top-0 z-20 bg-white pb-4 lg:sticky lg:top-0 lg:py-6',
               title && 'sticky'
             )}
           >

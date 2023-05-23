@@ -19,11 +19,6 @@ export type ColorName =
   | 'white'
   | 'black';
 
-export interface Color {
-  name: ColorName;
-  hex: string;
-}
-
 export type ProfileSection =
   | 'Activity'
   | 'Credentials'
@@ -143,6 +138,27 @@ export type MappedTrimmedRoles<T> = {
   [Key in TrimmedRole]: T;
 };
 
+export interface TeamData {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  plan: string;
+}
+
+export interface TeamProfile {
+  id: string;
+  eth_address: string;
+  ens_name: string;
+  username: string;
+  avatar: string;
+}
+export interface TeamMembership {
+  profile: TeamProfile;
+  team_data: TeamData;
+  role: 'admin' | 'member';
+}
+
 export interface Profile
   extends Partial<MappedSkills<number>>,
     Partial<MappedRoles<boolean>> {
@@ -180,6 +196,7 @@ export interface Profile
   lens_handle?: string;
   cover?: string;
   title?: string;
+  team_membership: TeamMembership;
 }
 
 interface LensProfile {
@@ -378,4 +395,109 @@ export interface LensPublication {
       totalUpvotes: string;
     };
   }[];
+}
+
+export type ProjectProfileStatus =
+  | 'contacted'
+  | 'uncontacted'
+  | 'toBeContacted';
+
+export interface ProjectProfile {
+  avatar: string;
+  eth_address: string;
+  status: ProjectProfileStatus;
+  title: string;
+  location: string;
+  comments: string;
+  followers: string;
+  twitter: string;
+  lens_handle: string;
+  github: string;
+  username: string;
+  followers_count: number;
+  mazury_talent_verified: true;
+}
+
+export interface Project {
+  created_at: string;
+  updated_at: string;
+  id: string;
+  name: string;
+  owner: {
+    eth_address: string;
+    username: string;
+    avatar: string;
+    mazury_talent_verified: false;
+  };
+  saved_profiles_preview: ProjectProfile[];
+  saved_profiles_preview_count: number;
+  already_in_project: boolean;
+  opportunity_id: string;
+}
+
+export interface OpportunityType<T> {
+  id: string;
+  type: 'job' | 'other';
+  work_mode: 'remote' | 'hybrid' | 'on-site';
+  job_category:
+    | 'frontend_engineer'
+    | 'backend_engineer'
+    | 'full_stack_engineer'
+    | 'android_engineer'
+    | 'ios_engineer'
+    | 'product_designer'
+    | 'product_manager'
+    | 'finance'
+    | 'recruiter'
+    | 'business_development'
+    | 'sales'
+    | 'marketing'
+    | 'community'
+    | 'other';
+  title: string;
+  location: string;
+  website: string;
+  salary: string;
+  description: string;
+  published: boolean;
+  company_info: T;
+  project: string;
+  can_edit: boolean;
+  applicants_count: number;
+}
+
+export interface CompanyType {
+  id: string;
+  name: string;
+  size: string;
+  logo: string;
+  description: string;
+  contact_email: string;
+}
+
+export type TeamPlans =
+  | 'talent'
+  | 'non_paying_recruiter'
+  | 'individual_recruiter'
+  | 'team'
+  | 'enterprise';
+
+export interface PlanFeature {
+  id: string;
+  line: string;
+}
+
+export interface PricingPlan {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  product_id: string;
+  name: string;
+  description: string;
+  price: {
+    id: string;
+    price_id: string;
+    unit_amount: string;
+    currency: string;
+  };
 }

@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
-import { Button, Checkbox, Input, Layout, Spinner } from 'components';
+import { Avatar, Button, Checkbox, Input, Layout, Spinner } from 'components';
 import { Toggle } from '@/components/Toggle';
 import { Container, ProfileSummary } from 'views/Profile';
 import { useAccount, useMobile } from 'hooks';
@@ -248,10 +248,10 @@ const Edit = ({ ethAddress }: EditProps) => {
               <div className="h-[124px] bg-indigoGray-5 pl-4"></div>
 
               <div className="absolute bottom-0 left-4 w-fit">
-                <img
-                  src={avatar || user?.avatar || '/icons/no-avatar.svg'}
-                  alt="Avatar"
-                  className="h-[150px] w-[150px] rounded-full object-cover"
+                <Avatar
+                  variant="xl"
+                  src={avatar || user?.avatar}
+                  alt={user.username}
                 />
 
                 <ImageButton

@@ -25,8 +25,6 @@ interface CredentialProps {
   onClickExternalUrl: () => void;
 }
 
-export type OverviewViews = 'idle' | 'discover' | 'social';
-
 const Discover = ({ ethAddress }: ProfileProps) => {
   const [selectedFilter, setSelectedFilter] = React.useState('All');
   const { user, accountInView, isOwnProfile } = useAccount(ethAddress);

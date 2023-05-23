@@ -2,7 +2,7 @@
 
 exports[`Button disabled state 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
   disabled=""
   type="button"
 >
@@ -12,7 +12,7 @@ exports[`Button disabled state 1`] = `
 
 exports[`Button multiple children (SVG icon) 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-50 active:text-indigoGray-70 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-50 active:text-indigoGray-70 disabled:text-indigoGray-40 undefined"
   type="button"
 >
   <svg
@@ -38,7 +38,7 @@ exports[`Button multiple children (SVG icon) 1`] = `
 
 exports[`Button renders a button 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
   type="button"
 >
   Button
@@ -47,7 +47,7 @@ exports[`Button renders a button 1`] = `
 
 exports[`Button secondary variant 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
   type="button"
 >
   Button
@@ -56,7 +56,7 @@ exports[`Button secondary variant 1`] = `
 
 exports[`Button size prop works as intended 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-3 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-3 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-indigoGray-90  text-indigoGray-5 active:bg-indigoGray-70 active:text-indigoGray-10  disabled:bg-indigoGray-20 shadow-base hover:bg-indigoGray-50 hover:text-indigoGray-20 disabled:text-indigoGray-40 undefined"
   type="button"
 >
   Button
@@ -65,7 +65,7 @@ exports[`Button size prop works as intended 1`] = `
 
 exports[`Button tertiary variant 1`] = `
 <button
-  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-semibold disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-50 active:text-indigoGray-70 disabled:text-indigoGray-40 undefined"
+  class="flex items-center justify-center gap-2 rounded-[8px] py-2 px-6 font-sans text-sm font-medium disabled:cursor-not-allowed disabled:shadow-none bg-none text-indigoGray-90 shadow-none hover:text-indigoGray-50 active:text-indigoGray-70 disabled:text-indigoGray-40 undefined"
   type="button"
 >
   Button

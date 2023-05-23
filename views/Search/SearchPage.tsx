@@ -88,8 +88,8 @@ const SearchPage: NextPage = () => {
   };
 
   return (
-    <div className="flex grow flex-col">
-      <div className="flex grow flex-col items-center pl-4 pr-6 pt-8 md:px-0 lg:pl-[64px] lg:pt-16">
+    <div className="flex grow flex-col w-full xl:w-[1200px] xl:mx-[auto] h-full">
+      <div className="flex grow flex-col items-center pr-6 pt-6 md:px-0">
         <div
           ref={searchRef}
           onKeyDown={handleKeydown}
