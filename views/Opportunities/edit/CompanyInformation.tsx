@@ -281,7 +281,7 @@ export const CompanyInformation: React.FC<Props> = ({
                     alt={company?.name || cachedCompany?.name || 'logo'}
                   />
                   <label
-                    className={`flex cursor-pointer items-center rounded-[40px] bg-[rgb(248,249,252)]/90 px-4 py-2 font-sansMid text-xs font-medium text-indigoGray-90 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] min-w-[99px]`}
+                    className="whitespace-nowrap flex cursor-pointer items-center rounded-[40px] bg-[rgb(248,249,252)]/90 px-4 py-2 font-sansMid text-xs font-medium text-indigoGray-90 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] min-w-[99px]"
                     htmlFor="logo"
                   >
                     Add picture

@@ -72,7 +72,11 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
               src="/icons/user.svg"
               width={24}
               height={24}
-              className="text-indigoGray-90"
+              className={
+                router.pathname.includes('sign-in')
+                  ? 'text-indigoGray-90'
+                  : 'text-indigoGray-40'
+              }
             />
           </Link>
         )}
@@ -96,6 +100,20 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                 className="h-[106px] w-[200px]"
               >
                 <div className="flex flex-col py-[5px] space-y-[6.5px] items-start h-full w-full flex-col rounded-lg bg-white shadow-base font-sans text-sm text-indigoGray-90">
+                  <Link
+                    href={`/people/${storedUser.eth_address}`}
+                    passHref
+                    className="font-regular pl-4 grow text-sm font-sans text-indigoGray-90 flex items-center space-x-3 w-full grow"
+                  >
+                    <Avatar
+                      src={storedUser.avatar}
+                      alt="user"
+                      variant="xs"
+                      outerClassName="h-4 w-4 shrink-0"
+                    />
+                    <span>Profile</span>
+                  </Link>
+
                   <Link
                     href={'/settings'}
                     passHref

@@ -26,7 +26,13 @@ export const Avatar: React.FC<Props> = ({
   outerClassName,
 }) => {
   return (
-    <div className={clsx(!outerClassName && variants[variant], outerClassName)}>
+    <div
+      className={clsx(
+        !outerClassName && variants[variant],
+        outerClassName,
+        'shrink-0'
+      )}
+    >
       <RadixAvatar.Root
         className={clsx(
           !outerClassName && variants[variant],

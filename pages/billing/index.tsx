@@ -109,9 +109,11 @@ const BillingAndTeams = () => {
                 </div>
               ))}
 
-              <AddTeamMember
-                teamId={profile?.team_membership.team_data.id || ''}
-              />
+              {data && data?.length <= 3 && (
+                <AddTeamMember
+                  teamId={profile?.team_membership.team_data.id || ''}
+                />
+              )}
             </div>
 
             <div className="py-4 px-6 rounded-lg bg-indigoGray-5 w-full space-y-2">
@@ -296,7 +298,7 @@ const AddTeamMember: React.FC<{ teamId: string }> = ({ teamId }) => {
       <input
         value={teamMember}
         onChange={(event) => setTeamMember(event.target.value)}
-        className="py-3 px-4 bg-transparent rounded-lg grow font-sans font-normal text-indigoGray-40 border border-indigoGray-20 h-[34px]"
+        className="py-3 px-4 bg-transparent rounded-lg grow font-sans font-normal text-indigoGray-90 border border-indigoGray-20 h-[34px]"
         placeholder="E-mail, ETH or wallet address"
       />
       <Button

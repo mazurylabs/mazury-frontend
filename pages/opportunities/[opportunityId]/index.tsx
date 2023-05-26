@@ -242,10 +242,9 @@ const OpportunityView = ({
           variant="secondary"
           className="lg:hidden w-full bg-transparent"
           onClick={() =>
-            router.push(`/opportunities/${opportunityId}/applicants`)
+            router.push(`/opportunities/${opportunityId}/candidates`)
           }
         >
-          {/* See 3 candidates */}
           See candidates
           <SVG src="/icons/chevron-right.svg" className="h-4 w-4 ml-2" />
         </Button>
@@ -466,8 +465,8 @@ const ApplicantView: React.FC<{ opportunityId: string; user?: Profile }> = ({
               </div>
             </div>
           ) : (
-            <div className="before:bg-[rgba(255, 255, 255, 0.7)] h-[calc(100vh-90px)] flex flex-col justify-center lg:h-fit lg:block before:absolute before:top-0 before:left-0 before:h-full before:w-full before:opacity-50 backdrop-blur-[5px]">
-              <div className="rounded-lg bg-white shadow-base border-red-200">
+            <div className="h-[calc(100vh-90px)] flex flex-col justify-center lg:h-fit lg:block">
+              <div className="rounded-lg bg-white shadow-base border-red-200 h-full">
                 <div className="p-4 pb-0">
                   <div className="sticky top-0 flex justify-end">
                     <Popover.Close aria-label="Close">

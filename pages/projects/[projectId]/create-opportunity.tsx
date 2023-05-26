@@ -118,6 +118,11 @@ const Edit: React.FC<Props> = ({ projectId }) => {
     },
   };
 
+  if (!user || !user.is_recruiter) {
+    router.push('/');
+    return null;
+  }
+
   return (
     <Layout variant="plain" showMobileSidebar={false} className="!px-2">
       <div className="flex flex-col w-full xl:w-[1200px] xl:mx-[auto] space-y-6">

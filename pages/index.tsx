@@ -12,7 +12,8 @@ import { useClickOutside, useMobile } from 'hooks';
 import { axios } from 'lib/axios';
 import { CompanyType, ListResponse, OpportunityType } from 'types';
 import storage from '@/utils/storage';
-import { TEAM_PLAN_ANNOUNCEMENT } from '@/config';
+import { STORED_USER, TEAM_PLAN_ANNOUNCEMENT } from '@/config';
+import { SidebarContext } from '@/contexts';
 
 const opportunityTypes = [
   ['frontend_engineer', 'Frontend Engineer'],
@@ -191,7 +192,7 @@ const Search: React.FC<SearchProps> = ({ onApply }) => {
         {searchSuggestions.map((item) => (
           <li
             key={`suggestion-${item}`}
-            className="font-normal text-indigoGray-90 hover:bg-indigoGray-10 cursor-pointer xl:pl-[52px] py-1.5"
+            className="font-normal text-indigoGray-90 hover:bg-indigoGray-10 cursor-pointer pl-[52px] py-1.5"
             onClick={() => {
               setSearchTerm(item);
               setFocused(false);
@@ -306,8 +307,11 @@ interface CompanyOpportunities extends CompanyType {
 }
 
 const Company = ({ company }: { company: CompanyOpportunities }) => {
+  const { setSignInOpen } = React.useContext(SidebarContext);
   const isMobile = useMobile();
   const router = useRouter();
+  const storedUser = storage.getToken(STORED_USER);
+
   return (
     <div className="py-3 px-6 bg-indigoGray-5 hover:bg-indigoGray-10 space-y-3 rounded-lg">
       <div className="flex space-x-3">
@@ -315,7 +319,7 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
           src={company.logo}
           alt={company.name}
           variant="md"
-          className="h-10 w-10 rounded-lg"
+          className="h-10 w-10 rounded-lg shrink-0"
         />
         <div className="space-y-1">
           <p className="font-medium font-sans text-sm text-indigoGray-90">
@@ -337,12 +341,12 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
         {company.top_opportunities.map((opportunity) => (
           <div
             key={opportunity.id}
-            className=" font-sans font-normal flex items-center justify-between py-2"
+            className=" font-sans font-normal flex flex-col lg:flex-row lg:items-center lg:justify-between py-2"
           >
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-4">
               <div
                 className={clsx(
-                  'py-[2px] px-2 rounded-[32px]',
+                  'py-[2px] px-2 rounded-[32px] h-fit w-fit',
                   opportunity.type === 'job' ? 'bg-sky-600' : 'bg-teal-600'
                 )}
               >
@@ -355,31 +359,38 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
                 <p className="text-sm text-indigoGray-90">
                   {opportunity.title}
                 </p>
-                <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
-                  <p className="flex items-center">
-                    <SVG src="/icons/location.svg" className="h-4 w-4 mr-1" />
-                    {opportunity.location}
+                <div className="flex flex-col space-y-[2px] lg:flex-row lg:space-x-4 lg:space-y-0">
+                  <div className="flex items-center space-x-4 text-xs text-indigoGray-40">
+                    <p className="flex items-center">
+                      <SVG src="/icons/location.svg" className="h-4 w-4 mr-1" />
+                      {opportunity.location}
+                    </p>
+
+                    <p>{opportunity.work_mode}</p>
+
+                    <p className="flex items-center">
+                      <SVG
+                        src="/icons/history-alt.svg"
+                        className="h-4 w-4 mr-1"
+                      />
+                      {dayjs(opportunity.created_at).fromNow()}
+                    </p>
+                  </div>
+                  <p className="text-xs text-indigoGray-40">
+                    {opportunity.salary}
                   </p>
-
-                  <p>{opportunity.work_mode}</p>
-
-                  <p className="flex items-center">
-                    <SVG
-                      src="/icons/history-alt.svg"
-                      className="h-4 w-4 mr-1"
-                    />
-                    {dayjs(opportunity.created_at).fromNow()}
-                  </p>
-
-                  <p>{opportunity.salary}</p>
                 </div>
               </div>
             </div>
             <Button
-              onClick={() => router.push(`/opportunities/${opportunity.id}`)}
-              className="max-h-[29px]"
+              onClick={() =>
+                !storedUser
+                  ? setSignInOpen(true)
+                  : router.push(`/opportunities/${opportunity.id}`)
+              }
+              className="max-h-[29px] w-fit mt-2 lg:mt-0 whitespace-nowrap"
             >
-              Apply
+              {!storedUser ? 'Sign in to apply' : 'Apply'}
             </Button>
           </div>
         ))}

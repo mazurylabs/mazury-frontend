@@ -35,7 +35,7 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col overflow-hidden py-6 lg:w-[300px]">
+    <div className="flex min-h-screen flex-col overflow-hidden py-6 lg:w-full">
       <h1 className="font-serif text-xl font-bold text-indigoGray-90">
         Choose your method
       </h1>

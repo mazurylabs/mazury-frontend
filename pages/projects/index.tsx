@@ -48,6 +48,11 @@ const Dashboard = () => {
     mutationFn: createProject,
   });
 
+  if (!user || !user.is_recruiter) {
+    router.push('/');
+    return null;
+  }
+
   return (
     <Layout variant="plain">
       <div className="flex grow flex-col space-y-8 px-4 pt-4 xl:flex-row lg:px-0 xl:mx-[auto] xl:w-[1200px] xl:space-x-[40px] xl:space-y-0 xl:pt-6 xl:pb-[95px]">
