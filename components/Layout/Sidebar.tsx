@@ -111,13 +111,13 @@ export const Sidebar: React.FC = () => {
         role="menu"
         className={clsx(
           'h-screen fixed left-0 top-0 z-30 hidden lg:flex bg-white px-2 pt-6 pb-4 border-r border-indigoGray-20',
-          signInOpen && 'w-[335px]'
+          signInOpen && 'w-[335px] px-4'
         )}
         onPointerEnter={() => setIsOpen(true)}
         onPointerLeave={() => !signInOpen && setIsOpen(false)}
       >
         {signInOpen && (
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <button
               type="button"
               className="justify-start hover:cursor-pointer h-6 w-6"

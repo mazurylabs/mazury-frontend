@@ -46,6 +46,11 @@ const Project = ({ projectId }: ProfileProps) => {
 
   const { data: opportunity } = useOpportunity({ opportunityId });
 
+  if (!user || !user.is_recruiter) {
+    router.push('/');
+    return null;
+  }
+
   return (
     <Layout variant="plain">
       <div className="flex flex-col space-y-4 px-4 pt-4 lg:px-0 xl:mx-[auto] h-screen xl:w-[1200px] xl:pt-6 xl:pb-[95px]">

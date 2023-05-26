@@ -326,7 +326,7 @@ const CredentialsSection: React.FC<{
               </p>
             </div>
           )}
-          {!loading && (
+          {!loading && isOwnProfile && (
             <div
               className={clsx(
                 ' w-fit self-center',
@@ -335,7 +335,7 @@ const CredentialsSection: React.FC<{
             >
               <Link
                 href={`/people/${router.query.address}/discover`}
-                className={!isOwnProfile ? 'invisible' : ''}
+                className={clsx(!isOwnProfile && 'invisible')}
               >
                 <div className="flex items-center rounded-lg p-2 text-center font-sans text-xs font-semibold text-indigo-600 hover:bg-indigoGray-10">
                   <p className="rm-2">Discover web3 credentials</p>
