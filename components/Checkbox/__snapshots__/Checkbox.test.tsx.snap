@@ -10,7 +10,7 @@ exports[`Checkbox renders and behaves correctly 1`] = `
     type="button"
   />
   <label
-    class="text-base font-medium text-indigoGray-70"
+    class="text-base font-normal text-indigoGray-70 cursor-pointer"
     for="checkbox-1"
   >
     Label
