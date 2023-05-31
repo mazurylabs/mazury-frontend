@@ -239,3 +239,38 @@ export function convertUnicode(input: string) {
     String.fromCharCode(parseInt(b, 16))
   );
 }
+
+export const matchCategorySlugToHumanName = (categorySlug: string) => {
+  switch (categorySlug) {
+    case 'frontend_engineer':
+      return 'Frontend Engineer';
+    case 'backend_engineer':
+      return 'Backend Engineer';
+    case 'full_stack_engineer':
+      return 'Full-Stack Engineer';
+    case 'android_engineer':
+      return 'Android Engineer';
+    case 'ios_engineer':
+      return 'iOS Engineer';
+    case 'product_designer':
+      return 'Product Designer';
+    case 'product_manager':
+      return 'Product Manager';
+    case 'finance':
+      return 'Finance';
+    case 'recruiter':
+      return 'Recruiter';
+    case 'business_development':
+      return 'Business Development';
+    case 'sales':
+      return 'Sales';
+    case 'marketing':
+      return 'Marketing';
+    case 'community':
+      return 'Community';
+    case 'other':
+      return 'Other';
+    default:
+      return 'Other';
+  }
+};
