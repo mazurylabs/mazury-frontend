@@ -6,7 +6,11 @@ import * as Popover from '@radix-ui/react-popover';
 import dayjs from 'dayjs';
 
 import { Avatar, Button, Layout } from 'components';
-import { capitalize, truncateString } from 'utils';
+import {
+  capitalize,
+  matchCategorySlugToHumanName,
+  truncateString,
+} from 'utils';
 import { useUser } from 'providers/react-query-auth';
 import { useMobile } from 'hooks';
 import { CustomInput } from 'views/Opportunities/CustomInput';
@@ -31,41 +35,6 @@ interface Application {
   website?: string;
   message?: string;
 }
-
-const matchCategorySlugToHumanName = (categorySlug: string) => {
-  switch (categorySlug) {
-    case 'frontend_engineer':
-      return 'Frontend Engineer';
-    case 'backend_engineer':
-      return 'Backend Engineer';
-    case 'full_stack_engineer':
-      return 'Full-Stack Engineer';
-    case 'android_engineer':
-      return 'Android Engineer';
-    case 'ios_engineer':
-      return 'iOS Engineer';
-    case 'product_designer':
-      return 'Product Designer';
-    case 'product_manager':
-      return 'Product Manager';
-    case 'finance':
-      return 'Finance';
-    case 'recruiter':
-      return 'Recruiter';
-    case 'business_development':
-      return 'Business Development';
-    case 'sales':
-      return 'Sales';
-    case 'marketing':
-      return 'Marketing';
-    case 'community':
-      return 'Community';
-    case 'other':
-      return 'Other';
-    default:
-      return 'Other';
-  }
-};
 
 const Opportunity: React.FC<Props> = ({ opportunityId }) => {
   const { data: opportunity, isLoading } = useOpportunity({ opportunityId });

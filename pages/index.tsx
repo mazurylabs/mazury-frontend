@@ -14,7 +14,7 @@ import { CompanyType, ListResponse, OpportunityType } from 'types';
 import storage from '@/utils/storage';
 import { TEAM_PLAN_ANNOUNCEMENT } from '@/config';
 
-const opportunityTypes = [
+export const opportunityTypes = [
   ['frontend_engineer', 'Frontend Engineer'],
   ['backend_engineer', 'Backend Engineer'],
   ['full_stack_engineer', 'Full Stack Engineer'],
@@ -31,7 +31,7 @@ const opportunityTypes = [
   ['other', 'Other'],
 ];
 
-const tags = [
+export const tags = [
   ['job', 'Job'],
   ['other', 'Other'],
 ];
@@ -122,7 +122,7 @@ interface SearchProps {
   onApply: (query: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onApply }) => {
+export const Search: React.FC<SearchProps> = ({ onApply }) => {
   const ref = React.useRef(null!);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [focused, setFocused] = React.useState(false);
@@ -213,7 +213,7 @@ interface FilterProps {
   orientation: 'vertical' | 'horizontal';
 }
 
-const Filter = ({
+export const Filter = ({
   label,
   options,
   onApply,
@@ -255,6 +255,7 @@ const Filter = ({
           align="start"
           alignOffset={-25}
           sideOffset={8}
+          avoidCollisions={false}
           className="rounded-lg bg-white border border-indigoGray-20"
         >
           <div
@@ -333,8 +334,8 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
         </div>
       </div>
 
-      <div className="px-4 border border-indigoGray-20 rounded-md divide-y-[1px]">
-        {company.top_opportunities.map((opportunity) => (
+      <div className="px-4 border border-indigoGray-20 rounded-md divide-y-[1px] flex flex-col">
+        {company.top_opportunities.slice(0, 3).map((opportunity) => (
           <div
             key={opportunity.id}
             className=" font-sans font-normal flex items-center justify-between py-2"
@@ -383,6 +384,16 @@ const Company = ({ company }: { company: CompanyOpportunities }) => {
             </Button>
           </div>
         ))}
+        {!!company.top_opportunities.slice(3).length && (
+          <div className="border-none mb-2 mt-4 mx-[auto]">
+            <button
+              onClick={() => router.push(`/companies/${company.id}`)}
+              className="whitespace-nowrap font-sans text-sm font-medium flex items-center justify-center text-indigoGray-90 border-[1.5px] border-indigoGray-20 bg-indigoGray-10 h-[29px] w-[125px] py-1 px-6 rounded-lg"
+            >
+              See {company.top_opportunities.slice(3).length} more
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
